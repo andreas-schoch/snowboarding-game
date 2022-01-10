@@ -1,0 +1,6 @@
+/**
+ * source       https://opengameart.org/content/5-chiptunes-action
+ * author       SubspaceAudio <juhani.junkala@musician.org>
+ * license      https://creativecommons.org/publicdomain/zero/1.0/
+ * notes        The short track "Title screen" (renamed to "theme") is used as the theme of the game
+ */
