@@ -1,0 +1,5 @@
+/**
+ * source       https://www.glitchthegame.com/
+ * author       Tiny Spec (Slack)
+ * license      https://creativecommons.org/publicdomain/zero/1.0/
+ */

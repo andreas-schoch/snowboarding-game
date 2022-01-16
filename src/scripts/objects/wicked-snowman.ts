@@ -4,19 +4,163 @@ import * as Pl from 'planck-js';
 // TODO
 //  - add mobile controls (use touchscreen areas to replace WASD. E.g If player touches left or right snowman leans left or right)
 //  -
-export class WickedSnowman {
+
+interface IRayCastResult {
+  hit: boolean;
+  point: Pl.Vec2 | null | undefined;
+  normal: Pl.Vec2 | null | undefined;
+  fraction: number;
+  lastHitTime: number;
+}
+
+
+class Segment {
+  scene: Ph.Scene;
+  world: Pl.World;
   body: Pl.Body;
 
+  rayLength: number;
+
+  direction: Pl.Vec2 = Pl.Vec2(0, 1);
+  rayCastResult: IRayCastResult = {
+    hit: false,
+    point: null,
+    normal: null,
+    fraction: -1,
+    lastHitTime: -1,
+  };
+
+  rayCastCrashResult: IRayCastResult | null;
+
+  constructor(body: Pl.Body, scene: Ph.Scene, rayLength: number = 1, isNose: boolean = false) {
+    this.body = body;
+    this.scene = scene;
+    this.world = body.getWorld();
+    this.rayLength = rayLength;
+
+    if (isNose) {
+      this.rayCastCrashResult = {
+        hit: false,
+        point: null,
+        normal: null,
+        fraction: -1,
+        lastHitTime: -1,
+      };
+    }
+  }
+
+  update() {
+    this.reset();
+    const direction: Pl.Vec2 = Pl.Vec2(this.body.getWorldVector(this.direction));
+    const pointStart: Pl.Vec2 = this.body.getWorldPoint(Pl.Vec2());
+    const pointEnd: Pl.Vec2 = Pl.Vec2.add(pointStart, Pl.Vec2.mul(direction, 0.5));
+    this.world.rayCast(pointStart, pointEnd, this.callback.bind(this));
+
+    if (this.rayCastCrashResult) {
+      const direction: Pl.Vec2 = Pl.Vec2(this.body.getWorldVector(Pl.Vec2(1, 0)));
+      const pointStart: Pl.Vec2 = this.body.getWorldPoint(Pl.Vec2());
+      const pointEnd: Pl.Vec2 = Pl.Vec2.add(pointStart, Pl.Vec2.mul(direction, 0.35));
+      this.world.rayCast(pointStart, pointEnd, this.callbackCrash.bind(this));
+    }
+  }
+
+  private callback(fixture, point, normal, fraction) {
+    this.rayCastResult.hit = true;
+    this.rayCastResult.point = point;
+    this.rayCastResult.normal = normal;
+    this.rayCastResult.fraction = fraction;
+    this.rayCastResult.lastHitTime = this.scene.game.getTime();
+    return fraction;
+  }
+
+  private callbackCrash(fixture, point, normal, fraction) {
+    if (!this.rayCastCrashResult) return;
+    this.rayCastCrashResult.hit = true;
+    this.rayCastCrashResult.point = point;
+    this.rayCastCrashResult.normal = normal;
+    this.rayCastCrashResult.fraction = fraction;
+    this.rayCastCrashResult.lastHitTime = this.scene.game.getTime();
+    return fraction;
+  }
+
+  private reset() {
+    this.rayCastResult.hit = false;
+    this.rayCastResult.point = null;
+    this.rayCastResult.normal = null;
+    this.rayCastResult.fraction = -1;
+
+    if (this.rayCastCrashResult) {
+      this.rayCastCrashResult.hit = false;
+      this.rayCastCrashResult.point = null;
+      this.rayCastCrashResult.normal = null;
+      this.rayCastCrashResult.fraction = -1;
+    }
+  }
+}
+
+
+interface ISnowboard {
+  numSegments: number;
+  segmentLength: number;
+  segmentThickness: number;
+  segments: Segment[];
+  leftBinding?: Pl.Body;
+  rightBinding?: Pl.Body;
+}
+
+
+// TODO Add a hat which gets lost once player touches the ground with it.
+// TODO Try to add a scarf out of box2d chains and a phaser rope to display it. Could the scarf have some purpose like it does in alto?
+// TODO Experiment with an "umbrella mechanic" which will slow down a fall. Could help player cross ravines or not land in other undesirable spots
+//      It activates when pressing "up" twice after being in the air for at least 0.5 seconds
+//      Maybe instead of umbrella it could be a high tech snowboard feature. Would also make the opposite more plausible when pressing "down"
+//      Since we're at it why not add a force shield that player can activate in emergency.
+//      Both could be actions which drain the snowboard energy. Player can replenish it by collecting energy packs along the way.
+//      OR maybe the snowboard is fueled by "wickedness". It won't work if player stops doing wicked tricks and combos.
+// TODO Try to fix the board segment problem by adding hidden Edges underneath board: __[]__[]__[]__
+//      When keeping the rectangles there is always a chance that a corner will get stuck. Maybe collision response can be overridden?
+//      ---
+//      Alternatively try to change segments to circles and add edges connecting them --o--o--o--
+//      Circles are probably more reliable. If obstacle hits between circles it will simply collide with the hidden edge.
+//      circle bottom should probably not be perfectly aligned with edges, as we want circles to collide first and edges only as backup.
+//      ---
+//      Another alternative would be to replace rectangles with rectangular polygons with rounded edges.
+//      Since the segments don't collide with their neighbours they can overlap. Only the problematic corners need to be rounded.
+// TODO Try adjusting the friction depending on how many segments touch the ground. When only 1 segment touches the ground, it means that the snow
+//      Is being compressed more and the friction at that point should be higher to motivate player to keep board flat.
+//      Reason for this is that I want to introduce a "buttering" mechanic and there needs to be some downsides to constantly buttering around
+// TODO Implement Combo System. There will probably be some class which listens to snowman state & actions to keep track of combo counter.
+//      Once combo timer runs out. The combo score will be calculated and added to the total score.
+// TODO Experiment with "drag". We might want to account for snowboard position in relation to velocity while in air.
+//      Maybe airtime is increased while board is positioned correctly. Like an airplane wing. Same for the opposite (might make frontflips less fun)
+export class WickedSnowman {
+  body: Pl.Body;
+  isCrashed: boolean = false;
+  lostHead: Boolean;
+
+  jump: number = 280 * 0.6;
+  boost: number = 30;
+
   private cursors: Ph.Types.Input.Keyboard.CursorKeys;
-  private scene: Ph.Scene;
+  private readonly scene: Ph.Scene;
 
   private readonly worldScale: number;
   private readonly world: Pl.World;
-  // private mouseJoint: Pl.MouseJoint | null;
 
   private jointDistLeft: Pl.DistanceJoint | null;
   private jointDistRight: Pl.DistanceJoint | null;
-  private board: Pl.Body; // TODO create snowboard class (public method to get 2 anchor points)
+
+  private bindingJointLeft: Pl.RevoluteJoint | null;
+  private bindingJointRight: Pl.RevoluteJoint | null;
+
+  // TODO Maybe create a dedicated Snowboard class for all the related code and logic?
+  private board: ISnowboard = {
+    numSegments: 10,
+    segmentLength: 28 * 0.6,
+    segmentThickness: 28 * 0.6 * 0.4,
+    segments: [],
+  };
+  private neckJoint: Pl.RevoluteJoint | null;
 
   constructor(scene: Ph.Scene, world: Pl.World, worldScale: number) {
     this.scene = scene;
@@ -26,53 +170,42 @@ export class WickedSnowman {
 
   async create() {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    // @ts-ignore
-    this.cursors = this.scene.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
-      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
-    });
 
-    const numBoardSegments = 10;
-    const boardSegmentLength = 28 * 0.6;
-    const boardSegmentThickness = boardSegmentLength * 0.4;
-    const oX = 700;
-    const oY = 300;
+    const oX = 500;
+    const oY = 100;
+    const {numSegments, segmentLength, segmentThickness} = this.board;
 
-    // TODO generate snowboard iteratively
-    const box1 = this.createBox(oX + boardSegmentLength * 1, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box2 = this.createBox(oX + boardSegmentLength * 2, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box3 = this.createBox(oX + boardSegmentLength * 3, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box4 = this.createBox(oX + boardSegmentLength * 4, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box5 = this.createBox(oX + boardSegmentLength * 5, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    this.board = box5;
-    const box6 = this.createBox(oX + boardSegmentLength * 6, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box7 = this.createBox(oX + boardSegmentLength * 7, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box8 = this.createBox(oX + boardSegmentLength * 8, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box9 = this.createBox(oX + boardSegmentLength * 9, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const box10 = this.createBox(oX + boardSegmentLength * 10, oY, 0, boardSegmentLength, boardSegmentThickness, true, 0x46B6C9);
-    const anchor12 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 1) / this.worldScale, oY / this.worldScale);
-    const anchor23 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 2) / this.worldScale, oY / this.worldScale);
-    const anchor34 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 3) / this.worldScale, oY / this.worldScale);
-    const anchor45 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 4) / this.worldScale, oY / this.worldScale);
-    const anchor56 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 5) / this.worldScale, oY / this.worldScale);
-    const anchor67 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 6) / this.worldScale, oY / this.worldScale);
-    const anchor78 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 7) / this.worldScale, oY / this.worldScale);
-    const anchor89 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 8) / this.worldScale, oY / this.worldScale);
-    const anchor910 = Pl.Vec2((oX + (boardSegmentLength / 2) + boardSegmentLength * 9) / this.worldScale, oY / this.worldScale);
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35}, box1, box2, anchor12));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25}, box2, box3, anchor23));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 6}, box3, box4, anchor34));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 8}, box4, box5, anchor45));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 12}, box5, box6, anchor56));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 8}, box6, box7, anchor67));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 6}, box7, box8, anchor78));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25}, box8, box9, anchor89));
-    this.world.createJoint(Pl.WeldJoint({dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35}, box9, box10, anchor910));
+    // generate board segments...
+    const color = 0xD5365E;
+    for (let i = 1; i <= this.board.numSegments; i++) {
+      const body = this.createBox(oX + segmentLength * i, oY, 0, segmentLength, segmentThickness, true, color);
+      this.board.segments.push(new Segment(body, this.scene, 0.5, i === this.board.numSegments));
+      body.getFixtureList()?.getNext()?.setFriction(1);
 
+    }
+    this.board.leftBinding = this.board.segments[3].body;
+    this.board.rightBinding = this.board.segments[6].body;
+
+    const weldConfigs: Pl.WeldJointOpt[] = [
+      {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35},
+      {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25},
+      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 12, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25},
+      {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35},
+    ];
+
+    // ...weld them together
+    for (let i = 0; i < numSegments - 1; i++) {
+      const [a, b] = this.board.segments.slice(i, i + 2);
+      const anchorAB = Pl.Vec2((oX + (segmentLength / 2) + segmentLength * (i + 1)) / this.worldScale, oY / this.worldScale);
+      this.world.createJoint(Pl.WeldJoint(weldConfigs[i], a.body, b.body, anchorAB));
+    }
+
+    // TODO make everything adjust itself when changing bodyRadius. Get rid of hardcoded * 0.6 overrides
     const bodyRadius = 50 * 0.6;
     const headRadius = bodyRadius * 0.7;
     const legHeight = bodyRadius * 0.7;
@@ -82,11 +215,25 @@ export class WickedSnowman {
     const armHeight = bodyRadius * 0.7;
     const armWidth = bodyRadius * 0.3;
 
-    const bodyPos = Pl.Vec2(oX + boardSegmentLength * ((numBoardSegments / 2) + legBodyRadians), oY - (bodyRadius * 2) - (bodyRadius / 2));
-    const head = this.createCircle(bodyPos.x, bodyPos.y - bodyRadius - headRadius, 0, headRadius, true);
-    this.body = this.createCircle(bodyPos.x, bodyPos.y, 0, bodyRadius, true);
+    const bodyPos = Pl.Vec2(oX + segmentLength * ((this.board.numSegments / 2) + legBodyRadians), oY - (bodyRadius * 2) - (bodyRadius / 2));
+    const head = this.createCircle(bodyPos.x, bodyPos.y - bodyRadius - headRadius, 0, headRadius, true, 0xC8E1EB);
+
+    this.body = this.createCircle(bodyPos.x, bodyPos.y, 0, bodyRadius, true, 0xC8E1EB);
     const anchorNeck = this.body.getWorldPoint(Pl.Vec2(0, -1).mul(bodyRadius / this.worldScale));
-    this.world.createJoint(Pl.RevoluteJoint({lowerAngle: -0.1, upperAngle: 0.1, enableLimit: true}, head, this.body, anchorNeck));
+    this.neckJoint = this.world.createJoint(Pl.RevoluteJoint({lowerAngle: -0.25, upperAngle: 0.25, enableLimit: true}, this.body, head, anchorNeck));
+
+    this.world.on('post-solve', (contact, impulse) => {
+      if (this.isCrashed && this.lostHead) return;
+      if (contact.getFixtureA().getBody() === head || contact.getFixtureB().getBody() === head) {
+        // @ts-ignore
+        const maxImpulse = Math.max(...impulse.normalImpulses);
+        if (maxImpulse > 7) {
+          this.lostHead = true;
+          this.isCrashed = true;
+        }
+      }
+    });
+
     // -----------------------------------------------------------
     // Leg Left - Upper
     const legUpperLeftDir = new Ph.Math.Vector2(0, 1).rotate(legBodyRadians);
@@ -102,7 +249,7 @@ export class WickedSnowman {
     this.world.createJoint(Pl.RevoluteJoint({lowerAngle: -1.5, upperAngle: legBodyRadians * 0.75, enableLimit: true}, legUpperLeft, legLowerLeft, anchorKneeLeft));
     // Leg Left - foot
     const anchorAnkleLeft = Pl.Vec2(legLowerLeftPos).add(Pl.Vec2(0, legHeight / 2)).mul(1 / this.worldScale);
-    this.world.createJoint(Pl.RevoluteJoint({}, legLowerLeft, box4, anchorAnkleLeft));
+    this.bindingJointLeft = this.world.createJoint(Pl.RevoluteJoint({}, legLowerLeft, this.board.leftBinding, anchorAnkleLeft));
     // -----------------------------------------------------------
     // Leg Right - Upper
     const legUpperRightDir = new Ph.Math.Vector2(0, 1).rotate(-legBodyRadians);
@@ -118,11 +265,12 @@ export class WickedSnowman {
     this.world.createJoint(Pl.RevoluteJoint({lowerAngle: -legBodyRadians * 0.75, upperAngle: 1.5, enableLimit: true}, legUpperRight, legLowerRight, anchorKneeRight));
     // Leg Right - foot
     const anchorAnkleRight = Pl.Vec2(legLowerRightPos).add(Pl.Vec2(0, legHeight / 2)).mul(1 / this.worldScale);
-    this.world.createJoint(Pl.RevoluteJoint({}, legLowerRight, box7, anchorAnkleRight));
+    this.bindingJointRight = this.world.createJoint(Pl.RevoluteJoint({}, legLowerRight, this.board.rightBinding, anchorAnkleRight));
     // -----------------------------------------------------------
     // DISTANCE
-    this.jointDistLeft = this.world.createJoint(Pl.DistanceJoint({length: (80 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, box7, anchorHipLeft, anchorAnkleLeft));
-    this.jointDistRight = this.world.createJoint(Pl.DistanceJoint({length: (80 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, box4, anchorHipRight, anchorAnkleRight));
+    // FIXME Since pre v0.1, I swapped left and right bindings accidentally without noticing. I kind of feel like it plays better while swapped. Compare behaviour in detail
+    this.jointDistLeft = this.world.createJoint(Pl.DistanceJoint({length: (65 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.rightBinding, anchorHipLeft, anchorAnkleLeft));
+    this.jointDistRight = this.world.createJoint(Pl.DistanceJoint({length: (65 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.leftBinding, anchorHipRight, anchorAnkleRight));
     // -----------------------------------------------------------
     // Arm Left - Upper
     const baseRotLeft = (Math.PI / 180) * 90;
@@ -154,23 +302,14 @@ export class WickedSnowman {
     const anchorElbowRight = Pl.Vec2(armLowerRightPos).add(Pl.Vec2(-armHeight / 1.75, 0)).mul(1 / this.worldScale);
     this.world.createJoint(Pl.RevoluteJoint({lowerAngle: -0.75, upperAngle: 0.75, enableLimit: true}, armUpperRight, armLowerRight, anchorElbowRight));
     // -----------------------------------------------------------
-
-    // this.box1 = box5;
-    // const def = new Pl.MouseJoint({}, this.terrainFixtures, this.box1, this.box1.getPosition());
-    // def.m_collideConnected = true;
-    // def.setMaxForce(this.box1.getMass() * 1500);
-    // def.setDampingRatio(0);
-    // this.box1.setAngularDamping(0.05);
-    // this.mouseJoint = this.world.createJoint(def);
-    // this.box1.setAwake(true);
   }
 
   // TODO refactor into util function or turn physics as a whole into a plugin
-  createBox(posX, posY, angle, width, height, isDynamic, color: number = 0xB68750): Pl.Body {
+  createBox(posX: number, posY: number, angle: number, width: number, height: number, isDynamic: boolean, color: number = 0xB68750): Pl.Body {
     // (angle / 180) * Math.PI
     const body = this.world.createBody({angle: angle, linearDamping: 0.15, angularDamping: 0.1});
     if (isDynamic) body.setDynamic();
-    body.createFixture(Pl.Box(width / 2 / this.worldScale, height / 2 / this.worldScale), {friction: 0.001, restitution: 0.005, density: 0.1});
+    body.createFixture(Pl.Box(width / 2 / this.worldScale, height / 2 / this.worldScale), {friction: 0.001, restitution: 0.005, density: 0.1, isSensor: false});
     body.setPosition(Pl.Vec2(posX / this.worldScale, posY / this.worldScale));
     body.setMassData({mass: 0.5, center: Pl.Vec2(), I: 1});
 
@@ -181,15 +320,15 @@ export class WickedSnowman {
     return body;
   }
 
-  createCircle(posX, posY, angle, radius, isDynamic, color: number = 0xF3D9F4): Pl.Body {
-    const body = this.world.createBody({angle: (angle / 360) * Math.PI, linearDamping: 0.15, angularDamping: 0.2});
+  // TODO introduce the concept of "materials" (metal, wood, Flesh, balloon) with different properties
+  createCircle(posX: number, posY: number, angle: number, radius: number, isDynamic: boolean, color: number = 0xF3D9F4): Pl.Body {
+    const body = this.world.createBody({angle: (angle / 360) * Math.PI, linearDamping: 0.15, angularDamping: 0.1});
     if (isDynamic) body.setDynamic();
     body.createFixture(Pl.Circle(radius / this.worldScale), {friction: 0.5, restitution: 0.1, density: 1});
     body.setPosition(Pl.Vec2(posX / this.worldScale, posY / this.worldScale));
     body.setMassData({mass: 1, center: Pl.Vec2(), I: 1});
 
     const userData = this.scene.add.graphics();
-    // userData.fillGradientStyle(0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 1);
     userData.fillStyle(color);
     userData.fillCircle(0, 0, radius);
     body.setUserData(userData);
@@ -212,47 +351,76 @@ export class WickedSnowman {
     }
   }
 
+  // TODO make update() method a bit more readable. Not sure whether to make the overall control flow event-based yet.
   update() {
-    // const mousePosScaled = Pl.Vec2(this.scene.game.input.mousePointer.worldX / this.worldScale, this.scene.game.input.mousePointer.worldY / this.worldScale);
-    // this.mouseJoint?.setTarget(mousePosScaled);
+    this.board.segments.forEach(s => s.update());
+
+    // TODO refactor to check for max impulse (similar for head) in addition to raycast result
+    const nose = this.board.segments[this.board.segments.length - 1];
+    if (nose.rayCastCrashResult?.hit) {
+      this.bindingJointLeft && this.world.destroyJoint(this.bindingJointLeft);
+      this.bindingJointRight && this.world.destroyJoint(this.bindingJointRight);
+      this.jointDistLeft && this.world.destroyJoint(this.jointDistLeft);
+      this.jointDistRight && this.world.destroyJoint(this.jointDistRight);
+      nose.body.setLinearVelocity(Pl.Vec2(-50, 0));
+      this.isCrashed = true;
+    }
+
+    if (this.lostHead && this.neckJoint) {
+      this.world.destroyJoint(this.neckJoint);
+      this.neckJoint = null;
+    }
+
+    if (this.getTimeInAir() > 150) {
+      this.setDistanceLegs({length: 50 / this.worldScale}, {length: 60 / this.worldScale});
+    }
+
+    if (this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300) {
+      // TODO prevent player from mashing jump button rapidly by throttling it based on timeUp - timeDown
+      // TODO verify whether we can get any info on how "loaded" the weld joints are and if they can be used as a variable for the jump strength
+      this.setDistanceLegs({length: 80 / this.worldScale}, {length: 80 / this.worldScale});
+      const hits = this.board.segments.map(s => s.rayCastResult.hit);
+      const isTailGrounded = hits[0];
+      const isNoseGrounded = hits[hits.length - 1];
+      const isCenterGrounded = hits[4] || hits[5] || hits[6];
+
+      const mod = isCenterGrounded ? 0.6 : 1;
+      let force: Pl.Vec2 | null = null;
+      if (isTailGrounded && !isNoseGrounded) force = Pl.Vec2(0, -this.jump * mod);
+      else if (isNoseGrounded && !isTailGrounded) force = this.body.getWorldVector(Pl.Vec2(0, -this.jump * mod));
+      else if (isCenterGrounded) force = Pl.Vec2(0, -this.jump / 2.8);
+      force && this.body.applyForceToCenter(force, true);
+    }
 
     if (this.cursors.left.isDown) {
-      this.body.applyAngularImpulse(-3.5);
-      this.setDistanceLegs({length: 60 / this.worldScale}, {length: 80 / this.worldScale});
+      this.body.applyAngularImpulse(this.isInAir() ? -3 : -4);
+      this.setDistanceLegs({length: 55 / this.worldScale}, {length: 80 / this.worldScale});
     }
 
     if (this.cursors.right.isDown) {
-      // TODO limit the amount of momentum player can generate while not touching the ground
-      this.body.applyAngularImpulse(3.5);
-      this.setDistanceLegs({length: 80 / this.worldScale}, {length: 60 / this.worldScale});
+      this.body.applyAngularImpulse(this.isInAir() ? 3 : 4);
+      this.setDistanceLegs({length: 80 / this.worldScale}, {length: 55 / this.worldScale});
     }
 
-    if (this.cursors.space.isDown) {
-      this.setDistanceLegs({length: 80 / this.worldScale, dampingRatio: 0.1, frequencyHz: 6}, {dampingRatio: 0.1, frequencyHz: 6, length: 80 / this.worldScale});
-      // TODO improvements:
-      //  - player should only be able to jump if board touches the ground (add a ~0.2s grace period for better UX)
-      //  - make jump force and direction depend on which leg is extended and overall center of mass
-      //  - the flex of the board isn't well simulated yet (e.g in RL before a jump on flat surface you would shift your center towards the tail and use it as a spring)
-      const force = this.body.getWorldVector(Pl.Vec2(0.0, -50.0)).add(Pl.Vec2(0, -100));
-      this.body.applyForceToCenter(force, true);
+    if (!this.isCrashed) {
+      const mod = this.isInAir() ? 0.9 : 1;
+      this.board.segments && this.board.segments[4].body.applyForceToCenter(Pl.Vec2(this.boost * mod, 0), true);
+      this.body.applyForceToCenter(Pl.Vec2(this.boost * mod, 0), true);
     }
-
-    if (this.cursors.up.isDown) {
-      this.setDistanceLegs({length: 80 / this.worldScale, dampingRatio: 0.2, frequencyHz: 10}, {dampingRatio: 0.2, frequencyHz: 10, length: 80 / this.worldScale});
-    }
-
-    // TODO Probably wont be necessary once terrain has a constant downhill slope.
-    //  Need to see it in action with real gravity. Current prototype gameplay feels nice with constant force applied
-    // if (this.cursors.shift.isDown) {
-    this.board.applyForceToCenter(Pl.Vec2(30, 0), true);
-    this.body.applyForceToCenter(Pl.Vec2(30, 0), true);
-    // }
 
     if (this.cursors.down.isDown) {
-      // TODO while pressed it should absorb bumps a bit better.
-      //  Maybe even correct body rotation based on surface normal vector while in air
-      // this.body.applyForceToCenter(Pl.Vec2(0, 25));
+      this.body.applyForceToCenter(Pl.Vec2(0, 10));
       this.setDistanceLegs({length: 50 / this.worldScale}, {length: 50 / this.worldScale});
     }
+  }
+
+  getTimeInAir(): number {
+    if (this.board.segments.some(s => s.rayCastResult.hit)) return -1;
+    const mostRecentHit = Math.max(...this.board.segments.map(s => s.rayCastResult.lastHitTime));
+    return this.scene.game.getTime() - mostRecentHit;
+  }
+
+  isInAir(): boolean {
+    return this.getTimeInAir() !== -1;
   }
 }
