@@ -138,8 +138,8 @@ export class WickedSnowman {
   isCrashed: boolean = false;
   lostHead: Boolean;
 
-  jump: number = 280 * 0.6;
-  boost: number = 30;
+  jump: number = 180;
+  boost: number = 27.5;
 
   private cursors: Ph.Types.Input.Keyboard.CursorKeys;
   private readonly scene: Ph.Scene;
@@ -156,8 +156,8 @@ export class WickedSnowman {
   // TODO Maybe create a dedicated Snowboard class for all the related code and logic?
   private board: ISnowboard = {
     numSegments: 10,
-    segmentLength: 28 * 0.6,
-    segmentThickness: 28 * 0.6 * 0.4,
+    segmentLength: 8.4,
+    segmentThickness: 3.375,
     segments: [],
   };
   private neckJoint: Pl.RevoluteJoint | null;
@@ -171,8 +171,8 @@ export class WickedSnowman {
   async create() {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 
-    const oX = 500;
-    const oY = 100;
+    const oX = 250;
+    const oY = 50;
     const {numSegments, segmentLength, segmentThickness} = this.board;
 
     // generate board segments...
@@ -190,9 +190,9 @@ export class WickedSnowman {
       {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35},
       {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25},
       {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: 0},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: 0},
-      {dampingRatio: 0.5, frequencyHz: 12, referenceAngle: 0},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 10, referenceAngle: 0},
+      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: 0},
       {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: 0},
       {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.25},
       {dampingRatio: 0.5, frequencyHz: 5, referenceAngle: -0.35},
@@ -205,15 +205,14 @@ export class WickedSnowman {
       this.world.createJoint(Pl.WeldJoint(weldConfigs[i], a.body, b.body, anchorAB));
     }
 
-    // TODO make everything adjust itself when changing bodyRadius. Get rid of hardcoded * 0.6 overrides
-    const bodyRadius = 50 * 0.6;
+    const bodyRadius = this.worldScale;
     const headRadius = bodyRadius * 0.7;
     const legHeight = bodyRadius * 0.7;
     const legWidth = bodyRadius * 0.3;
     const legBodyRadians = 0.5;
 
-    const armHeight = bodyRadius * 0.7;
-    const armWidth = bodyRadius * 0.3;
+    const armHeight = legHeight;
+    const armWidth = legWidth;
 
     const bodyPos = Pl.Vec2(oX + segmentLength * ((this.board.numSegments / 2) + legBodyRadians), oY - (bodyRadius * 2) - (bodyRadius / 2));
     const head = this.createCircle(bodyPos.x, bodyPos.y - bodyRadius - headRadius, 0, headRadius, true, 0xC8E1EB);
@@ -269,8 +268,8 @@ export class WickedSnowman {
     // -----------------------------------------------------------
     // DISTANCE
     // FIXME Since pre v0.1, I swapped left and right bindings accidentally without noticing. I kind of feel like it plays better while swapped. Compare behaviour in detail
-    this.jointDistLeft = this.world.createJoint(Pl.DistanceJoint({length: (65 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.rightBinding, anchorHipLeft, anchorAnkleLeft));
-    this.jointDistRight = this.world.createJoint(Pl.DistanceJoint({length: (65 * 0.6) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.leftBinding, anchorHipRight, anchorAnkleRight));
+    this.jointDistLeft = this.world.createJoint(Pl.DistanceJoint({length: (this.worldScale * 1.3) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.rightBinding, anchorHipLeft, anchorAnkleLeft));
+    this.jointDistRight = this.world.createJoint(Pl.DistanceJoint({length: (this.worldScale * 1.3) / this.worldScale, frequencyHz: 15, dampingRatio: 10}, this.body, this.board.leftBinding, anchorHipRight, anchorAnkleRight));
     // -----------------------------------------------------------
     // Arm Left - Upper
     const baseRotLeft = (Math.PI / 180) * 90;
@@ -372,13 +371,13 @@ export class WickedSnowman {
     }
 
     if (this.getTimeInAir() > 150) {
-      this.setDistanceLegs({length: 50 / this.worldScale}, {length: 60 / this.worldScale});
+      this.setDistanceLegs({length: 25 / this.worldScale}, {length: 30 / this.worldScale});
     }
 
     if (this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300) {
       // TODO prevent player from mashing jump button rapidly by throttling it based on timeUp - timeDown
       // TODO verify whether we can get any info on how "loaded" the weld joints are and if they can be used as a variable for the jump strength
-      this.setDistanceLegs({length: 80 / this.worldScale}, {length: 80 / this.worldScale});
+      this.setDistanceLegs({length: 40 / this.worldScale}, {length: 40 / this.worldScale});
       const hits = this.board.segments.map(s => s.rayCastResult.hit);
       const isTailGrounded = hits[0];
       const isNoseGrounded = hits[hits.length - 1];
@@ -394,12 +393,12 @@ export class WickedSnowman {
 
     if (this.cursors.left.isDown) {
       this.body.applyAngularImpulse(this.isInAir() ? -3 : -4);
-      this.setDistanceLegs({length: 55 / this.worldScale}, {length: 80 / this.worldScale});
+      this.setDistanceLegs({length: 27.5 / this.worldScale}, {length: 40 / this.worldScale});
     }
 
     if (this.cursors.right.isDown) {
       this.body.applyAngularImpulse(this.isInAir() ? 3 : 4);
-      this.setDistanceLegs({length: 80 / this.worldScale}, {length: 55 / this.worldScale});
+      this.setDistanceLegs({length: 40 / this.worldScale}, {length: 27.5 / this.worldScale});
     }
 
     if (!this.isCrashed) {
@@ -410,7 +409,7 @@ export class WickedSnowman {
 
     if (this.cursors.down.isDown) {
       this.body.applyForceToCenter(Pl.Vec2(0, 10));
-      this.setDistanceLegs({length: 50 / this.worldScale}, {length: 50 / this.worldScale});
+      this.setDistanceLegs({length: 25 / this.worldScale}, {length: 25 / this.worldScale});
     }
   }
 

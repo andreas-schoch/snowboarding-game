@@ -46,14 +46,14 @@ export default class GameScene extends Ph.Scene {
 
     this.bgLandscapeClouds = this.add.tileSprite(0, 0, width, height, 'bg-landscape-5-clouds').setOrigin(0, 0.3).setScrollFactor(0, 0).setZ(1);
 
-    this.textFPS = this.add.text(this.cameras.main.worldView.x + this.cameras.main.width - 24, 24, '').setScrollFactor(0).setFontSize(32).setOrigin(1, 0);
+    this.textFPS = this.add.text(this.cameras.main.worldView.x + this.cameras.main.width - 24, 24, '').setScrollFactor(0).setFontSize(16).setOrigin(1, 0);
     this.textFPS.setShadow(1, 1, '#000000', 2);
     setInterval(() => this.textFPS.setText(`fps: ${this.game.loop.actualFps.toFixed(1)} (${this.game.loop.targetFps})`), 1000);
 
     this.music = this.sound.add('nightmare');
     setTimeout(() => this.music.play({loop: true, volume: 0.5, detune: 0, rate: 1}), 1250);
 
-    this.worldScale = 30; // FIXME When I change this I expect the rest of the app to adjust
+    this.worldScale = 15; // FIXME When I change this I expect the rest of the app to adjust
     let gravity = Pl.Vec2(0, 9.8); // in m/sec
     this.world = Pl.World(gravity);
 
@@ -63,30 +63,30 @@ export default class GameScene extends Ph.Scene {
 
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-    this.add.text(screenCenterX + 100, screenCenterY - 400, 'WICKED SNOWMAN').setScrollFactor(0.35).setFontSize(80).setOrigin(0.5);
-    this.add.text(screenCenterX + 100, screenCenterY - 200, 'Don\'t lose your head').setScrollFactor(0.35).setFontSize(50).setOrigin(0.5);
+    this.add.text(screenCenterX + 50, screenCenterY - 200, 'WICKED SNOWMAN').setScrollFactor(0.35).setFontSize(40).setOrigin(0.5);
+    this.add.text(screenCenterX + 50, screenCenterY - 100, 'Don\'t lose your head').setScrollFactor(0.35).setFontSize(25).setOrigin(0.5);
     // TODO replace arrow ascii characters with arrow key images. If it is a touchscreen, show a short overlay with the control areas
-    this.add.text(screenCenterX - 70, screenCenterY - 125, ' ↑  jump').setScrollFactor(0.35).setFontSize(40).setOrigin(0);
-    this.add.text(screenCenterX - 70, screenCenterY - 75, '← → control').setScrollFactor(0.35).setFontSize(40).setOrigin(0);
+    this.add.text(screenCenterX - 35, screenCenterY - 62.5, ' ↑  jump').setScrollFactor(0.35).setFontSize(20).setOrigin(0);
+    this.add.text(screenCenterX - 35, screenCenterY - 37.5, '← → control').setScrollFactor(0.35).setFontSize(20).setOrigin(0);
 
     this.playAgainButton = this.add.text(screenCenterX, screenCenterY, 'PLAY AGAIN?')
     .setScrollFactor(0)
-    .setFontSize(50)
+    .setFontSize(25)
     .setOrigin(0.5)
-    .setPadding(24)
+    .setPadding(12)
     .setAlpha(0)
-    .setStyle({backgroundColor: '#223B7B', border: '5px solid red'})
+    .setStyle({backgroundColor: '#223B7B'})
     .setInteractive({useHandCursor: true})
     .on('pointerdown', () => this.restartGame())
     .on('pointerover', () => this.playAgainButton.setStyle({fill: '#5c8dc9'}))
     .on('pointerout', () => this.playAgainButton.setStyle({fill: '#FFF'}));
 
-    this.textDistance = this.add.text(24, 24, 'Travelled: 0m').setScrollFactor(0, 0).setFontSize(32);
+    this.textDistance = this.add.text(12, 12, 'Travelled: 0m').setScrollFactor(0, 0).setFontSize(16);
     this.textDistance.setShadow(1, 1, '#000000', 2);
 
     this.cameras.main.startFollow(this.wickedSnowman.body.getUserData() as Phaser.GameObjects.Graphics, false, 0.8, 0.25);
-    this.cameras.main.followOffset.set(-750, 0);
-    this.cameras.main.setDeadzone(100, 250);
+    this.cameras.main.followOffset.set(-375, 0);
+    this.cameras.main.setDeadzone(50, 125);
     this.cameras.main.setBackgroundColor(0x000000);
     this.cameras.main.setZoom(1, 1);
   }
@@ -114,12 +114,13 @@ export default class GameScene extends Ph.Scene {
       this.textDistance.setText('Travelled: ' + this.metersTravelled + 'm');
     }
 
-    this.backgroundBack.setTilePosition(this.cameras.main.scrollX * 0.001, this.cameras.main.scrollY * 0.001);
-    this.backgroundMid.setTilePosition(this.cameras.main.scrollX * 0.0025, this.cameras.main.scrollY * 0.0025);
-    this.backgroundFront.setTilePosition(this.cameras.main.scrollX * 0.005, this.cameras.main.scrollY * 0.005);
-    this.bgLandscapeClouds.setTilePosition(this.cameras.main.scrollX * 0.25, this.cameras.main.scrollY * 0.25);
-    this.bgLandscapeMountains.setTilePosition(this.cameras.main.scrollX * 0.025, 0);
-    this.bgLandscapeHills.setTilePosition(this.cameras.main.scrollX * 0.035, 0);
+    const {scrollX, scrollY} = this.cameras.main;
+    this.backgroundBack.setTilePosition(scrollX * 0.001, scrollY * 0.001);
+    this.backgroundMid.setTilePosition(scrollX * 0.0025, scrollY * 0.0025);
+    this.backgroundFront.setTilePosition(scrollX * 0.005, scrollY * 0.005);
+    this.bgLandscapeClouds.setTilePosition(scrollX * 0.25, scrollY * 0.25);
+    this.bgLandscapeMountains.setTilePosition(scrollX * 0.025, 0);
+    this.bgLandscapeHills.setTilePosition(scrollX * 0.035, 0);
 
     this.wickedSnowman.update();
     // this.terrainDestructible.update();
@@ -128,12 +129,10 @@ export default class GameScene extends Ph.Scene {
   }
 
   private updatePhysics() {
-    // let timeStep = this.game.loop.delta / 1000;
-    let timeStep = 1 / 40;
-    let velocityIterations = 15;
-    let positionIterations = 15;
+    let timeStep = (Math.round(this.game.loop.delta) / 640);
+    const iterations = Math.floor(Math.max(this.game.loop.actualFps / 3, 2));
 
-    this.world.step(timeStep, velocityIterations, positionIterations);
+    this.world.step(timeStep, iterations, iterations);
     this.world.clearForces(); // recommended after each time step
 
     // iterate through all bodies

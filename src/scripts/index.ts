@@ -1,8 +1,8 @@
 import GameScene from './scenes/game.scene';
 import PreloadScene from './scenes/preload.scene';
 
-const DEFAULT_WIDTH = 1920;
-const DEFAULT_HEIGHT = 1080;
+const DEFAULT_WIDTH = 960;
+const DEFAULT_HEIGHT = 540;
 
 export const gameConfig = {
   type: Phaser.WEBGL,
