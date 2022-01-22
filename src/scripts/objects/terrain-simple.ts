@@ -1,7 +1,6 @@
 import * as Ph from 'phaser';
-import * as Pl from 'planck-js';
 import simplify from 'simplify-js';
-import {gameConfig} from '../index'; // TODO try to only rely on main camera
+import {b2, gameConfig} from '../index';
 
 // TODO experiment with Phaser splines https://phaser.io/examples/v3/view/paths/curves/drag-spline-curve
 //  Might be a good solution to support a simple level editor
@@ -30,7 +29,7 @@ const defaultConfig: ITerrainSimpleConfig = {
   startTerrainHeight: 0.5,
   slopeAmplitude: 400,
   slopeLengthRange: [750, 1500],
-  worldScale: 30,
+  worldScale: 10,
   layers: [
     {color: 0x5c8dc9, width: 0},
     {color: 0x223B7B, width: 35 * 1.3},
@@ -42,24 +41,31 @@ const defaultConfig: ITerrainSimpleConfig = {
 
 // Based on this: https://www.emanueleferonato.com/2021/05/05/endless-physics-random-terrain-with-only-a-bunch-of-bodies-for-your-html5-games-using-phaser-box2d-by-planck-js-and-simplify-js/
 export default class TerrainSimple {
-  private readonly terrainBody: Pl.Body;
+  private readonly terrainBody: Box2D.b2Body;
   private readonly slopeStart: Ph.Math.Vector2;
   private readonly chunks: Ph.GameObjects.Graphics[];
 
-  private readonly world: Pl.World;
+  private readonly world: Box2D.b2World;
   private readonly scene: Ph.Scene;
   private readonly config: ITerrainSimpleConfig;
 
   private slopePoints: { x: number, y: number }[];
+  private debugGraphics: Ph.GameObjects.Graphics;
 
-  constructor(scene: Ph.Scene, world: Pl.World, config: ITerrainSimpleConfig = defaultConfig) {
+  constructor(scene: Ph.Scene, world: Box2D.b2World, config: ITerrainSimpleConfig = defaultConfig) {
     this.scene = scene;
     this.world = world;
     this.config = config;
 
+    this.debugGraphics = this.scene.add.graphics();
+
     this.chunks = [this.scene.add.graphics(), this.scene.add.graphics(), this.scene.add.graphics(), this.scene.add.graphics(), this.scene.add.graphics()];
-    this.terrainBody = this.world.createBody();
     this.slopeStart = new Phaser.Math.Vector2(0, 0);
+
+    const bd = new b2.b2BodyDef();
+    bd.set_type(b2.b2_dynamicBody);
+    bd.set_position(new b2.b2Vec2(0, 0));
+    this.terrainBody = this.world.CreateBody(bd);
     this.generateTerrain();
   }
 
@@ -105,15 +111,24 @@ export default class TerrainSimple {
     }
 
     this.slopePoints = simplify(slopePoints, 1, false);
-    const options: Pl.FixtureOpt = {density: 0, friction: 1};
     const {worldScale} = this.config;
     for (let i = 1; i < this.slopePoints.length; i++) {
-      const fix = this.terrainBody.createFixture(Pl.Edge(
-        Pl.Vec2((this.slopePoints[i - 1].x + this.slopeStart.x) / worldScale, this.slopePoints[i - 1].y / worldScale),
-        Pl.Vec2((this.slopePoints[i].x + this.slopeStart.x) / worldScale, this.slopePoints[i].y / worldScale),
-      ), options);
+      const edge = new b2.b2EdgeShape();
+      edge.SetTwoSided(
+        new b2.b2Vec2((this.slopePoints[i - 1].x + this.slopeStart.x) / worldScale, this.slopePoints[i - 1].y / worldScale),
+        new b2.b2Vec2((this.slopePoints[i].x + this.slopeStart.x) / worldScale, this.slopePoints[i].y / worldScale),
+      );
 
-      fix.setUserData(color);
+      const fd: Box2D.b2FixtureDef = new b2.b2FixtureDef();
+      fd.shape = edge;
+      fd.density = 0;
+      fd.friction = 0.01;
+
+      const fixture = this.terrainBody.CreateFixture(fd);
+      // @ts-ignore
+      fixture._edgeShape = edge;
+
+      b2.destroy(fd);
     }
 
     // Layering based on this: https://www.emanueleferonato.com/2020/10/16/build-a-html5-game-like-risky-road-using-phaser-step-5-drawing-a-better-terrain/
@@ -145,17 +160,32 @@ export default class TerrainSimple {
     this.slopeStart.y = slopeEnd.y;
   }
 
-  private isEdge(shape: Pl.Shape): shape is Pl.Edge {
-    return Boolean((shape as Pl.Edge).m_vertex1);
+  private isEdge(shape: Box2D.b2Shape): shape is Box2D.b2EdgeShape {
+    return shape.GetType() === 1;
   }
 
   private cleanupTerrainFixtures() {
-    for (let body = this.world.getBodyList(); body; body = body.getNext()) {
-      for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-        const shape = fixture.getShape();
-        if (this.isEdge(shape) && shape.m_vertex2.x * defaultConfig.worldScale < this.scene.cameras.main.scrollX - 900) {
-          body.destroyFixture(fixture);
+    this.debugGraphics.clear();
+    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+      for (let fixture = body.GetFixtureList(); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = fixture.GetNext()) {
+        const shape = fixture.GetShape();
+        if (this.isEdge(shape)) {
+          // @ts-ignore
+          const shape = fixture._edgeShape; // FIXME How to cast from b2Shape to b2EdgeShape? (shape as b2EdgeShape).m_vertex1 returns undefined
+          this.debugGraphics.lineStyle(4, 0xff00ff);
+          let v1 = shape.m_vertex1;
+          let v2 = shape.m_vertex2;
+          if (v2.x * defaultConfig.worldScale < this.scene.cameras.main.scrollX) {
+            body.DestroyFixture(fixture); // TODO check if fixtures can be updated. If yes, try to pool them instead of destroying
+            // b2.destroy(fixture);
+          } else {
+            this.debugGraphics.beginPath();
+            this.debugGraphics.moveTo(v1.x * defaultConfig.worldScale, v1.y * defaultConfig.worldScale);
+            this.debugGraphics.lineTo(v2.x * defaultConfig.worldScale, v2.y * defaultConfig.worldScale);
+            this.debugGraphics.strokePath();
+          }
         }
+
       }
     }
   }

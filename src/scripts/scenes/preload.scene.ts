@@ -1,9 +1,15 @@
-export default class PreloadScene extends Phaser.Scene {
+import * as Ph from 'phaser';
+import Box2DFactory from 'box2d-wasm';
+import {initBox2D} from '../index';
+
+export default class PreloadScene extends Ph.Scene {
+  box2d: typeof Box2D & EmscriptenModule;
+
   constructor() {
     super({key: 'PreloadScene'});
   }
 
-  preload() {
+  async preload() {
     // this.load.audio('theme', [
     //   'assets/audio/theme/theme.mp3',
     //   'assets/audio/theme/theme.ogg',
@@ -26,9 +32,15 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('bg-landscape-4-mountain', 'assets/img/bgLandscape/landscape_0003_4_mountain.png');
     this.load.image('bg-landscape-5-clouds', 'assets/img/bgLandscape/landscape_0004_5_clouds.png');
     this.load.image('bg-landscape-6-back', 'assets/img/bgLandscape/landscape_0005_6_background.png');
+
+    console.log('before init b2')
+    await initBox2D();
+    // this.box2d = await Box2DFactory({locateFile: () => `/assets/Box2D.wasm`});
+    console.log('After init b2', this.box2d);
   }
 
-  create() {
-    this.scene.start('GameScene');
+    create() {
+    console.log('create preloadScene')
+      this.scene.start('GameScene', this.box2d);
+    }
   }
-}

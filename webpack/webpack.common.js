@@ -12,19 +12,23 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      fs: false,
+      path: false,
+    },
   },
   module: {
     rules: [
       {
         test: /\.tsx?$|\.jsx?$/,
         include: path.join(__dirname, '../src'),
-        loader: 'ts-loader'
+        loader: 'ts-loader',
       },
       {
         test: /\.worker\.js$/,
-        use: { loader: "worker-loader" },
+        use: {loader: 'worker-loader'},
       },
-      ],
+    ],
   },
   optimization: {
     splitChunks: {
@@ -45,7 +49,11 @@ module.exports = {
       patterns: [
         {from: 'src/assets', to: 'assets'},
         {from: 'src/favicon.ico', to: ''},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: 'assets'},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: 'assets'},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: ''},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: ''},
       ],
-    })
+    }),
   ],
 };

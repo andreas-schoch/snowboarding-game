@@ -1,15 +1,15 @@
 import * as Ph from 'phaser';
-import * as Pl from 'planck-js';
+import {b2, gameConfig} from '../index';
 import TerrainSimple from '../objects/terrain-simple';
 import {WickedSnowman} from '../objects/wicked-snowman';
-import {gameConfig} from '../index';
 
 export default class GameScene extends Ph.Scene {
+  b2: typeof Box2D & EmscriptenModule;
+
   private terrainSimple: TerrainSimple;
   private wickedSnowman: WickedSnowman;
-
   private worldScale: number;
-  private world: Pl.World;
+  private world: Box2D.b2World;
   private textFPS: Phaser.GameObjects.Text;
   private textDistance: Phaser.GameObjects.Text;
   private backgroundBack: Phaser.GameObjects.TileSprite;
@@ -27,6 +27,8 @@ export default class GameScene extends Ph.Scene {
   }
 
   async create() {
+    console.log('create GameScene');
+
     const {width, height} = gameConfig.scale;
     this.backgroundBack = this.add.tileSprite(0, 0, width, height, 'space-back').setOrigin(0).setScrollFactor(0, 0);
     this.backgroundMid = this.add.tileSprite(0, 0, width, height, 'space-mid').setOrigin(0).setScrollFactor(0, 0);
@@ -53,9 +55,10 @@ export default class GameScene extends Ph.Scene {
     this.music = this.sound.add('nightmare');
     setTimeout(() => this.music.play({loop: true, volume: 0.5, detune: 0, rate: 1}), 1250);
 
-    this.worldScale = 30; // FIXME When I change this I expect the rest of the app to adjust
-    let gravity = Pl.Vec2(0, 9.8); // in m/sec
-    this.world = Pl.World(gravity);
+    this.worldScale = 10; // FIXME When I change this I expect the rest of the app to adjust
+    let gravity = new b2.b2Vec2(0, 9.8); // in m/sec
+    this.world = new b2.b2World(gravity);
+    b2.destroy(gravity);
 
     this.terrainSimple = new TerrainSimple(this, this.world);
     this.wickedSnowman = new WickedSnowman(this, this.world, this.worldScale);
@@ -84,11 +87,12 @@ export default class GameScene extends Ph.Scene {
     this.textDistance = this.add.text(24, 24, 'Travelled: 0m').setScrollFactor(0, 0).setFontSize(32);
     this.textDistance.setShadow(1, 1, '#000000', 2);
 
-    this.cameras.main.startFollow(this.wickedSnowman.body.getUserData() as Phaser.GameObjects.Graphics, false, 0.8, 0.25);
+    // @ts-ignore
+    this.cameras.main.startFollow(this.wickedSnowman.body.userData as Phaser.GameObjects.Graphics, false, 0.8, 0.25);
     this.cameras.main.followOffset.set(-750, 0);
     this.cameras.main.setDeadzone(100, 250);
     this.cameras.main.setBackgroundColor(0x000000);
-    this.cameras.main.setZoom(1, 1);
+    this.cameras.main.setZoom(0.5, 0.5);
   }
 
   restartGame(): void {
@@ -97,22 +101,22 @@ export default class GameScene extends Ph.Scene {
   }
 
   update() {
-    if (this.wickedSnowman.isCrashed && !this.playAgainButton.alpha) {
-      this.playAgainButton.setAlpha(1);
-      this.tweens.add({
-        targets: this.music,
-        volume: 0.0,
-        detune: -500,
-        rate: 0.5,
-        duration: 3000,
-        onComplete: tween => this.music.stop(),
-      });
-    }
+    // if (this.wickedSnowman.isCrashed && !this.playAgainButton.alpha) {
+    //   this.playAgainButton.setAlpha(1);
+    //   this.tweens.add({
+    //     targets: this.music,
+    //     volume: 0.0,
+    //     detune: -500,
+    //     rate: 0.5,
+    //     duration: 3000,
+    //     onComplete: tween => this.music.stop(),
+    //   });
+    // }
 
-    if (!this.wickedSnowman.isCrashed) {
-      this.metersTravelled = Math.floor(this.wickedSnowman.body.getPosition().length() / 2);
-      this.textDistance.setText('Travelled: ' + this.metersTravelled + 'm');
-    }
+    // if (!this.wickedSnowman.isCrashed) {
+    //   this.metersTravelled = Math.floor(this.wickedSnowman.body.getPosition().length() / 2);
+    //   this.textDistance.setText('Travelled: ' + this.metersTravelled + 'm');
+    // }
 
     this.backgroundBack.setTilePosition(this.cameras.main.scrollX * 0.001, this.cameras.main.scrollY * 0.001);
     this.backgroundMid.setTilePosition(this.cameras.main.scrollX * 0.0025, this.cameras.main.scrollY * 0.0025);
@@ -121,33 +125,45 @@ export default class GameScene extends Ph.Scene {
     this.bgLandscapeMountains.setTilePosition(this.cameras.main.scrollX * 0.025, 0);
     this.bgLandscapeHills.setTilePosition(this.cameras.main.scrollX * 0.035, 0);
 
+    // console.time('update');
     this.wickedSnowman.update();
     // this.terrainDestructible.update();
     this.terrainSimple.update();
     this.updatePhysics();
+    // console.timeEnd('update');
   }
 
   private updatePhysics() {
+    // console.time('physics');
+
     // let timeStep = this.game.loop.delta / 1000;
     let timeStep = 1 / 40;
-    let velocityIterations = 15;
-    let positionIterations = 15;
+    let velocityIterations = 5;
+    let positionIterations = 5;
 
-    this.world.step(timeStep, velocityIterations, positionIterations);
-    this.world.clearForces(); // recommended after each time step
+    this.world.Step(timeStep, velocityIterations, positionIterations);
+    this.world.ClearForces(); // recommended after each time step
 
     // iterate through all bodies
-    for (let physicsBody = this.world.getBodyList(); physicsBody; physicsBody = physicsBody.getNext()) {
-      if (!physicsBody) continue;
+    for (let physicsBody = this.world.GetBodyList(); b2.getPointer(physicsBody) !== b2.getPointer(b2.NULL); physicsBody = physicsBody.GetNext()) {
+      // for (let physicsBody = this.world.getBodyList(); physicsBody; physicsBody = physicsBody.getNext()) {
+      // @ts-ignore
+      if (!physicsBody || !physicsBody.userData) continue;
 
       // update the visible graphics object attached to the physics body
-      let physicsBodyGraphics = physicsBody.getUserData() as Ph.GameObjects.Graphics;
+      // @ts-ignore
+      let physicsBodyGraphics = physicsBody.userData as Ph.GameObjects.Graphics;
+      // console.log('userData graphics', physicsBodyGraphics, physicsBody);
       if (!physicsBodyGraphics) continue;
 
-      let pos = physicsBody.getPosition();
-      physicsBodyGraphics.x = pos.x * this.worldScale;
-      physicsBodyGraphics.y = pos.y * this.worldScale;
-      physicsBodyGraphics.rotation = physicsBody.getAngle(); // in radians;
+      let pos = physicsBody.GetPosition();
+      physicsBodyGraphics.x = pos.get_x() * this.worldScale;
+      physicsBodyGraphics.y = pos.get_y() * this.worldScale;
+      physicsBodyGraphics.rotation = physicsBody.GetAngle(); // in radians;
+      // physicsBodyGraphics.rotation = physicsBody.GetAngle() * 180 / Math.PI; // in radians;
     }
+
+    // console.timeEnd('physics');
+
   }
 }
