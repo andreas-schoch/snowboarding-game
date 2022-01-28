@@ -3,4 +3,16 @@
             height: 100%;
             margin: 0;
             background-color: black;
-        }</style><script defer="defer" src="vendors.1487531ca065440b1878.bundle.js"></script><script defer="defer" src="main.2e68f6225c8f1ad93147.bundle.js"></script></head><body><div id="phaser-wrapper"></div></body></html>
+        }</style><script defer="defer" src="vendors.c99865b61c2c71ac43ee.bundle.js"></script><script defer="defer" src="main.9899222a785dac13182b.bundle.js"></script></head><body><div id="phaser-wrapper"></div></body><script>setTimeout(() => {
+    const script = document.createElement('script');
+    script.onload = function () {
+      const stats = new Stats();
+      document.body.appendChild(stats.dom);
+      requestAnimationFrame(function loop() {
+        stats.update();
+        requestAnimationFrame(loop);
+      });
+    };
+    script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';
+    document.head.appendChild(script);
+  }, 5000);</script></html>
