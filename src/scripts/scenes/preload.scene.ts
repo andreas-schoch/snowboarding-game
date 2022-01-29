@@ -4,10 +4,10 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio('nightmare', [
-      'assets/audio/nightmare/nightmarechipheavy.mp3',
-      'assets/audio/nightmare/nightmarechipheavy.ogg',
-      'assets/audio/nightmare/nightmarechipheavy.aac',
+    this.load.audio('theme', [
+      'assets/audio/theme/theme.ogg',
+      'assets/audio/theme/theme.mp3',
+      'assets/audio/theme/theme.aac',
     ]);
 
     this.load.image('space-back', 'assets/img/bgSpace/bg_space_seamless.png');
@@ -16,7 +16,6 @@ export default class PreloadScene extends Phaser.Scene {
 
     this.load.image('bg-landscape-3-trees', 'assets/img/bgLandscape/landscape_0002_3_trees.png');
     this.load.image('bg-landscape-4-mountain', 'assets/img/bgLandscape/landscape_0003_4_mountain.png');
-    this.load.image('bg-landscape-5-clouds', 'assets/img/bgLandscape/landscape_0004_5_clouds.png');
   }
 
   create() {

@@ -1,11 +1,13 @@
+import * as Ph from 'phaser';
+
 import GameScene from './scenes/game.scene';
 import PreloadScene from './scenes/preload.scene';
 
 const DEFAULT_WIDTH = 960;
 const DEFAULT_HEIGHT = 540;
 
-export const gameConfig = {
-  type: Phaser.WEBGL,
+const gameConfig: Ph.Types.Core.GameConfig = {
+  type: Ph.WEBGL,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
   fps: {
@@ -15,8 +17,8 @@ export const gameConfig = {
   },
   scale: {
     parent: 'phaser-wrapper',
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Ph.Scale.ENVELOP,
+    autoCenter: Ph.Scale.CENTER_BOTH,
     width: 0 || DEFAULT_WIDTH,
     height: 0 || DEFAULT_HEIGHT,
   },
@@ -24,7 +26,7 @@ export const gameConfig = {
 };
 
 window.addEventListener('load', () => {
-  const game = new Phaser.Game(gameConfig);
+  const game = new Ph.Game(gameConfig);
 });
 
 // TODO Phaser is huge even minified. Figure out how to reduce the bundle size.
