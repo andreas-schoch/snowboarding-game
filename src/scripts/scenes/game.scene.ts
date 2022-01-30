@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import * as Pl from 'planck-js';
+import * as Pl from '@box2d/core';
 import TerrainSimple from '../objects/terrain-simple';
 import {WickedSnowman} from '../objects/wicked-snowman';
 import {Physics} from '../objects/physics';
@@ -24,8 +24,7 @@ export default class GameScene extends Ph.Scene {
     this.music = this.sound.add('theme');
     this.music.play({loop: true, volume: 0.5, rate: 0.9, delay: 1.25});
 
-    let gravity = Pl.Vec2(0, 9.8); // in m/sec
-    this.b2Physics = new Physics(this, 15, gravity);
+    this.b2Physics = new Physics(this, 15, new Pl.b2Vec2(0, 9.8));
 
     this.backdrop = new Backdrop(this);
     this.terrainSimple = new TerrainSimple(this, this.b2Physics);
@@ -54,7 +53,7 @@ export default class GameScene extends Ph.Scene {
     this.textDistance = this.add.text(12, 12, 'Travelled: 0m').setScrollFactor(0, 0).setFontSize(16);
     this.textDistance.setShadow(1, 1, '#000000', 2);
 
-    this.cameras.main.startFollow(this.wickedSnowman.body.getUserData() as Phaser.GameObjects.Image, false, 0.8, 0.25);
+    this.cameras.main.startFollow(this.wickedSnowman.body.GetUserData() as Phaser.GameObjects.Image, false, 0.8, 0.25);
     this.cameras.main.followOffset.set(-375, 0);
     this.cameras.main.setDeadzone(50, 125);
     this.cameras.main.setBackgroundColor(0x000000);
@@ -80,7 +79,7 @@ export default class GameScene extends Ph.Scene {
     }
 
     if (!this.wickedSnowman.isCrashed) {
-      this.metersTravelled = Math.floor(this.wickedSnowman.body.getPosition().length() / 2);
+      this.metersTravelled = Math.floor(this.wickedSnowman.body.GetPosition().Length() / 2);
       this.textDistance.setText('Travelled: ' + this.metersTravelled + 'm');
     }
 

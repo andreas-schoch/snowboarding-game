@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import * as Pl from 'planck-js';
+import * as Pl from '@box2d/core';
 import {Physics} from './physics';
 
 // TODO experiment with Phaser splines https://phaser.io/examples/v3/view/paths/curves/drag-spline-curve
@@ -13,19 +13,10 @@ export interface ITerrainSimpleConfig {
   slopeLengthRange: number[]; // TODO transform into number of points based on slopeDetail
   // horizontal distance between each terrain point
   slopeDetail: number;
-  layers: ITerrainLayer[];
+  layers: { color: number, width: number }[];
 }
 
 
-export interface ITerrainLayer {
-  color: number;
-  width: number;
-}
-
-
-// TODO experiment with shaders to render the terrain. Depending on where the surface is it should be possible to render colors just like here or even textures
-// TODO experiment with a single phaser rope to render the surface with a seamless texture instead of drawing multiple offset layers
-//      (Instead of a rope any other method allowing a texture to be rendered and warped along a path would work just as well)
 const defaultConfig: ITerrainSimpleConfig = {
   startTerrainHeight: 0.5,
   slopeAmplitude: 200,
@@ -40,9 +31,8 @@ const defaultConfig: ITerrainSimpleConfig = {
   ],
 };
 
-// Based on this: https://www.emanueleferonato.com/2021/05/05/endless-physics-random-terrain-with-only-a-bunch-of-bodies-for-your-html5-games-using-phaser-box2d-by-planck-js-and-simplify-js/
 export default class TerrainSimple {
-  private readonly terrainBody: Pl.Body;
+  private readonly terrainBody: Pl.b2Body;
   private readonly slopeStart: Ph.Math.Vector2;
   private readonly chunks: Ph.GameObjects.Graphics[];
 
@@ -51,7 +41,7 @@ export default class TerrainSimple {
   private readonly config: ITerrainSimpleConfig;
 
   private readonly pointsPool: { x: number, y: number }[];
-  private readonly vec2Pool: Pl.Vec2[];
+  private readonly vec2Pool: Pl.b2Vec2[];
   private yOffset = 0;
 
   constructor(scene: Ph.Scene, physics: Physics, config: ITerrainSimpleConfig = defaultConfig) {
@@ -64,7 +54,7 @@ export default class TerrainSimple {
     this.pointsPool = [];
     for (let i = 0; i < maxSlopePoints; i++) this.pointsPool.push({x: 0, y: 0});
     this.vec2Pool = [];
-    for (let i = 0; i < maxSlopePoints; i++) this.vec2Pool.push(Pl.Vec2(0, 0));
+    for (let i = 0; i < maxSlopePoints; i++) this.vec2Pool.push(new Pl.b2Vec2(0, 0));
 
     this.chunks = [
       this.scene.add.graphics(),
@@ -76,7 +66,7 @@ export default class TerrainSimple {
       this.scene.add.graphics(),
       this.scene.add.graphics(),
     ];
-    this.terrainBody = this.b2Physics.world.createBody();
+    this.terrainBody = this.b2Physics.world.CreateBody();
     this.slopeStart = new Phaser.Math.Vector2(0, 0);
     this.update();
   }
@@ -98,7 +88,7 @@ export default class TerrainSimple {
   // TODO make this a bit more readable
   updateChunk() {
     const slopePoints: { x: number, y: number }[] = [];
-    const chainPoints: Pl.Vec2[] = [];
+    const chainPoints: Pl.b2Vec2[] = [];
     const {slopeDetail} = this.config;
     const worldScale = this.b2Physics.worldScale;
 
@@ -115,7 +105,7 @@ export default class TerrainSimple {
 
     let i = 0;
     let point: { x: number, y: number };
-    let chainPoint: Pl.Vec2;
+    let chainPoint: Pl.b2Vec2;
     const {startTerrainHeight, slopeAmplitude} = this.config;
     const base = this.scene.cameras.main.height * startTerrainHeight;
     const slopeLength = slopeEnd.x - slopeStart.x;
@@ -139,9 +129,10 @@ export default class TerrainSimple {
       i++;
     }
 
-    const chain = Pl.Chain(chainPoints);
-    this.terrainBody.createFixture(chain, {density: 0, friction: 0});
-    this.terrainBody.createFixture(chain, {density: 0, friction: 0});
+    const chain = new Pl.b2ChainShape();
+    chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1]);
+    const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
+    this.terrainBody.CreateFixture(fd);
 
     // Draw terrain layers
     // based on this: https://www.emanueleferonato.com/2020/10/16/build-a-html5-game-like-risky-road-using-phaser-step-5-drawing-a-better-terrain/

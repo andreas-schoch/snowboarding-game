@@ -17,7 +17,7 @@ const gameConfig: Ph.Types.Core.GameConfig = {
   },
   scale: {
     parent: 'phaser-wrapper',
-    mode: Ph.Scale.ENVELOP,
+    mode: Ph.Scale.FIT,
     autoCenter: Ph.Scale.CENTER_BOTH,
     width: 0 || DEFAULT_WIDTH,
     height: 0 || DEFAULT_HEIGHT,

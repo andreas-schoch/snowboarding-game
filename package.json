@@ -34,7 +34,7 @@
     "workbox-webpack-plugin": "^6.4.2"
   },
   "dependencies": {
-    "phaser": "^3.55.2",
-    "planck-js": "^0.3.31"
+    "@box2d/core": "^0.9.0",
+    "phaser": "^3.55.2"
   }
 }
