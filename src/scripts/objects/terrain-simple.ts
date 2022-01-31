@@ -10,9 +10,10 @@ export interface ITerrainSimpleConfig {
   // The higher the value, the higher the hills
   slopeAmplitude: number;
   // slope length range, in pixels
-  slopeLengthRange: number[]; // TODO transform into number of points based on slopeDetail
+  slopeLengthRange: [number, number];
   // horizontal distance between each terrain point
-  slopeDetail: number;
+  gridDensity: number;
+  // visual representation of the terrain
   layers: { color: number, width: number }[];
 }
 
@@ -21,7 +22,7 @@ const defaultConfig: ITerrainSimpleConfig = {
   startTerrainHeight: 0.5,
   slopeAmplitude: 200,
   slopeLengthRange: [375, 750],
-  slopeDetail: 64,
+  gridDensity: 64,
   layers: [
     {color: 0xC8E1EB, width: 5}, // top layer of snow
     {color: 0x5c8dc9, width: 22},
@@ -31,16 +32,18 @@ const defaultConfig: ITerrainSimpleConfig = {
   ],
 };
 
+// Loosely based on: https://www.emanueleferonato.com/2020/10/16/build-a-html5-game-like-risky-road-using-phaser-step-5-drawing-a-better-terrain/
 export default class TerrainSimple {
   private readonly terrainBody: Pl.b2Body;
-  private readonly slopeStart: Ph.Math.Vector2;
+  private slopeStart: Pl.XY;
+  private slopeEnd: Pl.XY;
   private readonly chunks: Ph.GameObjects.Graphics[];
 
   private readonly b2Physics: Physics;
   private readonly scene: Ph.Scene;
   private readonly config: ITerrainSimpleConfig;
 
-  private readonly pointsPool: { x: number, y: number }[];
+  private readonly pointsPool: Pl.XY[];
   private readonly vec2Pool: Pl.b2Vec2[];
   private yOffset = 0;
 
@@ -71,52 +74,79 @@ export default class TerrainSimple {
     this.update();
   }
 
-  interpolate(vFrom, vTo, delta) {
-    let interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
-    return vFrom * (1 - interpolation) + vTo * interpolation;
-  }
-
   update() {
     const {zoom, width, worldView} = this.scene.cameras.main;
     while (this.slopeStart.x < worldView.x + width + 500 * (1 / zoom)) {
-      console.time('TerrainSimple#generateSlope()');
       this.updateChunk();
-      console.timeEnd('TerrainSimple#generateSlope()');
     }
   }
 
-  // TODO make this a bit more readable
-  updateChunk() {
+  private updateChunk(): void {
+    const [slopePoints, chainPoints] = this.generatePoints();
+
+    this.createTerrainColliders(chainPoints);
+
+    this.drawTerrain(slopePoints);
+    this.drawDecoration(slopePoints);
+    this.drawObstacles(slopePoints);
+  }
+
+  private createTerrainColliders(chainPoints: Pl.b2Vec2[]): void {
+    const chain = new Pl.b2ChainShape();
+    chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1]);
+    const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
+    this.terrainBody.CreateFixture(fd);
+  }
+
+  private drawTerrain(slopePoints: Pl.XY[]): void {
+    const chunk = this.chunks.shift();
+    if (!chunk) return;
+    this.chunks.push(chunk);
+    chunk.clear();
+
+    const lastIndex = slopePoints.length - 1;
+    const end = Math.max(slopePoints[0].y, slopePoints[lastIndex].y) + this.scene.cameras.main.height * 2;
+    let offset = 0;
+    slopePoints.push({x: slopePoints[lastIndex].x, y: end}, {x: slopePoints[0].x, y: end});
+    for (const {color, width} of this.config.layers) {
+      chunk.translateCanvas(0, offset);
+      chunk.fillStyle(color);
+      chunk.fillPoints(slopePoints, true, true);
+      chunk.translateCanvas(0, 0);
+      offset = width;
+    }
+  }
+
+  private drawDecoration(slopePoints: Pl.XY[]): void {
+    // TODO
+  }
+
+  private drawObstacles(slopePoints: Pl.XY[]): void {
+    // TODO
+  }
+
+  private generatePoints(): [Pl.XY[], Pl.b2Vec2[]] {
+    this.slopeEnd = this.getNextSlopeEnd();
     const slopePoints: { x: number, y: number }[] = [];
     const chainPoints: Pl.b2Vec2[] = [];
-    const {slopeDetail} = this.config;
     const worldScale = this.b2Physics.worldScale;
 
-    let slopeStart = new Phaser.Math.Vector2(0, this.slopeStart.y);
-    let slopeLengthRange = Phaser.Math.Between(defaultConfig.slopeLengthRange[0], defaultConfig.slopeLengthRange[1]);
-    slopeLengthRange = Math.round(slopeLengthRange / slopeDetail) * slopeDetail;
-
-    this.yOffset += slopeLengthRange > this.config.slopeLengthRange[1] * 0.8 ? 0.2 : 0.05;
-    const amptlitudeModifier = slopeLengthRange <= this.config.slopeLengthRange[1] / 2 ? 0.75 : 0.75;
-    let slopeEnd = (this.slopeStart.x === 0)
-      ? {x: slopeStart.x + defaultConfig.slopeLengthRange[1] * 1.5, y: 0}
-      : {x: slopeStart.x + slopeLengthRange, y: (Math.random() * amptlitudeModifier) + this.yOffset};
-    let pointX = 0;
-
+    let pointX = this.slopeStart.x;
     let i = 0;
-    let point: { x: number, y: number };
-    let chainPoint: Pl.b2Vec2;
     const {startTerrainHeight, slopeAmplitude} = this.config;
     const base = this.scene.cameras.main.height * startTerrainHeight;
-    const slopeLength = slopeEnd.x - slopeStart.x;
-
+    const slopeLength = this.slopeEnd.x - this.slopeStart.x;
     const slopeStartX = this.slopeStart.x;
-    while (pointX <= slopeEnd.x) {
-      let interpolationVal = this.interpolate(slopeStart.y, slopeEnd.y, (pointX - slopeStart.x) / slopeLength);
+    const slopeStartY = this.slopeStart.y;
+    const slopeEndY = this.slopeEnd.y;
+    let point: { x: number, y: number };
+    let chainPoint: Pl.b2Vec2;
+    while (pointX <= this.slopeEnd.x) {
+      let interpolationVal = this.interpolate(slopeStartY, slopeEndY, (pointX - slopeStartX) / slopeLength);
       let pointY = base + interpolationVal * slopeAmplitude;
 
       point = this.pointsPool[i];
-      point.x = pointX + slopeStartX;
+      point.x = pointX;
       point.y = pointY;
       slopePoints.push(point);
 
@@ -125,37 +155,29 @@ export default class TerrainSimple {
       chainPoint.y = point.y / worldScale;
       chainPoints.push(chainPoint);
 
-      pointX += slopeDetail;
+      pointX += this.config.gridDensity;
       i++;
     }
-
-    const chain = new Pl.b2ChainShape();
-    chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1]);
-    const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
-    this.terrainBody.CreateFixture(fd);
-
-    // Draw terrain layers
-    // based on this: https://www.emanueleferonato.com/2020/10/16/build-a-html5-game-like-risky-road-using-phaser-step-5-drawing-a-better-terrain/
-    // TODO revisit chunking system. It's a bit wonky with the shift() and push(). Probably better to use a phaser group.
-    const chunk = this.chunks.shift();
-    if (!chunk) return;
-    this.chunks.push(chunk);
-
-    chunk.clear();
-    const length = slopePoints.length;
-    const end = Math.max(slopePoints[0].y, slopePoints[length - 1].y) + this.scene.cameras.main.height * 2;
-    let offset = 0;
-    slopePoints.push({x: slopePoints[length - 1].x, y: end}, {x: slopeStartX, y: end});
-    for (const {color, width} of this.config.layers) {
-      chunk.translateCanvas(0, offset);
-      chunk.fillStyle(color);
-      chunk.fillPoints(slopePoints, true, true);
-      chunk.translateCanvas(0, 0);
-      offset = width;
-    }
-
     // prepare for next slope
-    this.slopeStart.x += pointX - slopeDetail;
-    this.slopeStart.y = slopeEnd.y;
+    this.slopeStart.x = this.slopeEnd.x;
+    this.slopeStart.y = this.slopeEnd.y;
+    return [slopePoints, chainPoints];
+  }
+
+  private getNextSlopeEnd(): Pl.XY {
+    const {gridDensity, slopeLengthRange} = this.config;
+    let slopeLength = Phaser.Math.Between(slopeLengthRange[0], slopeLengthRange[1]);
+    slopeLength = Math.round(slopeLength / gridDensity) * gridDensity; // round to next grid value
+
+    this.yOffset += slopeLength > this.config.slopeLengthRange[1] * 0.8 ? 0.2 : 0.05;
+    const amplitudeModifier = slopeLength <= this.config.slopeLengthRange[1] / 2 ? 0.75 : 0.75;
+    return (this.slopeStart.x === 0)
+      ? {x: Math.round(defaultConfig.slopeLengthRange[1] * 1.5 / gridDensity) * gridDensity, y: 0}
+      : {x: this.slopeStart.x + slopeLength, y: (Math.random() * amplitudeModifier) + this.yOffset};
+  }
+
+  private interpolate(vFrom, vTo, delta): number {
+    let interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
+    return vFrom * (1 - interpolation) + vTo * interpolation;
   }
 }

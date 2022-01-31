@@ -153,7 +153,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   }
 
   update() {
-    console.time('Physics#update()');
+    // console.time('Physics#update()');
     let timeStep = (Math.round(this.scene.game.loop.delta) / 640);
     const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 2));
     this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
@@ -169,8 +169,9 @@ export class Physics extends Phaser.Events.EventEmitter {
       let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
       if (bodyRepresentation) {
         let {x, y} = body.GetPosition();
-        bodyRepresentation.setPosition(x * worldScale, y * worldScale);
-        bodyRepresentation.setRotation(body.GetAngle()); // in radians;
+        bodyRepresentation.x = x * worldScale;
+        bodyRepresentation.y = y * worldScale;
+        bodyRepresentation.rotation = body.GetAngle(); // in radians;
       } else {
         // Cleanup terrain fixtures which are out of sight
         for (let fixture = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
@@ -179,7 +180,7 @@ export class Physics extends Phaser.Events.EventEmitter {
         }
       }
     }
-    console.timeEnd('Physics#update()');
+    // console.timeEnd('Physics#update()');
   }
 
   isEdge(shape: Pl.b2Shape): shape is Pl.b2EdgeShape {
