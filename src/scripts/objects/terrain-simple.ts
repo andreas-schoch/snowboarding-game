@@ -115,14 +115,32 @@ export default class TerrainSimple {
       chunk.translateCanvas(0, 0);
       offset = width;
     }
+
+    slopePoints.length -= 2;
   }
 
   private drawDecoration(slopePoints: Pl.XY[]): void {
     // TODO
+    //  - Experiment with adding different type of decorations: trees, bushes
   }
 
   private drawObstacles(slopePoints: Pl.XY[]): void {
-    // TODO
+    const pointStart = slopePoints[0];
+    const pointEnd = slopePoints[slopePoints.length - 1];
+
+    // TODO this works fairly well. To improve:
+    //  - add a min distance between obstacles, so player doesn get overwhelmed immediately
+    //  - increase likelihood of spawning each 500-1000m of travel distance (roughly 40-60s). Start with 0.4 after 3000m it should remain around 0.8
+    //  - after 3000m start decreasing the min distance every 500-1000m. It should be very hard to reach 10km (8-10min playtime)
+    //  - reuse obstacles by pre-allocating them in a pool and simply updating their positions
+    //  - Replace the box with a polygon colored so it matches the surface. Either generate it or use physics editor to import image with manually drawn collision
+    //    Benefit of that is that collision can be smoothed out while img can have rougher edges.
+    //  - Ask 5 people to playtest. On average I want them to reach a PB of ~2500-4000m within the 20mins timeframe
+    //    tweak the difficulty according to the results afterwards.
+    const length = pointEnd.x - pointStart.x;
+    if (Math.abs(pointStart.y - pointEnd.y) <= 50 && length >= this.config.slopeLengthRange[1] * 0.8 && Math.random() > 0.5) {
+      this.b2Physics.createBox(pointEnd.x, pointEnd.y, 0, 50, 50, false);
+    }
   }
 
   private generatePoints(): [Pl.XY[], Pl.b2Vec2[]] {

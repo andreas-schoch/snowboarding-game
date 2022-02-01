@@ -39,6 +39,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly userDataGraphics: Ph.GameObjects.Graphics;
   private readonly textureKeys: Set<string> = new Set();
   private readonly ZERO: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
+  private bulletTime: number = 1;
 
   constructor(scene: Ph.Scene, worldScale: number, gravity: Pl.b2Vec2) {
     super();
@@ -55,6 +56,12 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.world.SetAllowSleeping(false);
     this.world.SetWarmStarting(true);
     this.userDataGraphics = scene.add.graphics();
+  }
+
+  enterBulletTime(duration: number, rate: number): void {
+    this.bulletTime = rate;
+
+    if (duration !== -1) setTimeout(() => this.bulletTime = 1, duration);
   }
 
   createBox(posX: number, posY: number, angle: number, width: number, height: number, isDynamic: boolean, color: number = 0xB68750): Pl.b2Body {
@@ -154,7 +161,7 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   update() {
     // console.time('Physics#update()');
-    let timeStep = (Math.round(this.scene.game.loop.delta) / 640);
+    let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime;
     const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 2));
     this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
     this.world.ClearForces(); // recommended after each time step

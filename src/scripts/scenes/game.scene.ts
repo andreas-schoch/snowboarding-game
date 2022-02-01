@@ -22,7 +22,7 @@ export default class GameScene extends Ph.Scene {
 
   async create() {
     this.music = this.sound.add('theme');
-    this.music.play({loop: true, volume: 0.5, rate: 0.9, delay: 1.25});
+    this.music.play({loop: true, volume: 0.3, rate: 0.9, delay: 1.25});
 
     this.b2Physics = new Physics(this, 15, new Pl.b2Vec2(0, 9.8));
 
@@ -83,9 +83,9 @@ export default class GameScene extends Ph.Scene {
       this.textDistance.setText('Travelled: ' + this.metersTravelled + 'm');
     }
 
+    this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
     this.backdrop.update();
     this.wickedSnowman.update();
     this.terrainSimple.update();
-    this.b2Physics.update();
   }
 }

@@ -15,6 +15,8 @@ const gameConfig: Ph.Types.Core.GameConfig = {
     target: 60,
     smoothStep: true,
   },
+  // pixelArt: true,
+  roundPixels: true,
   scale: {
     parent: 'phaser-wrapper',
     mode: Ph.Scale.FIT,

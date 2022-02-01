@@ -1,150 +1,17 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {IDistanceJointConfig, Physics} from './physics';
+import {ComboComponent} from './combo-system';
+import {WickedSnowboard} from './snowboard';
 
 
-interface IRayCastResult {
-  hit: boolean;
-  point: Pl.b2Vec2 | null | undefined;
-  normal: Pl.b2Vec2 | null | undefined;
-  fraction: number;
-  lastHitTime: number;
-}
-
-
-class Segment {
-  snowman: WickedSnowman;
-  scene: Ph.Scene;
-  world: Pl.b2World;
-  body: Pl.b2Body;
-
-  rayLength: Pl.XY;
-
-  rawRayDirection: Pl.b2Vec2 = new Pl.b2Vec2(0, 1);
-  rawCrashRayDirection: Pl.b2Vec2 = new Pl.b2Vec2(1);
-
-  rayCastResult: IRayCastResult = {
-    hit: false,
-    point: null,
-    normal: null,
-    fraction: -1,
-    lastHitTime: -1,
-  };
-
-  rayCastCrashResult: IRayCastResult | null;
-
-  private rayDirection: Ph.Math.Vector2 = new Ph.Math.Vector2(0, 0);
-  private pointStart: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-  private pointEnd: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-
-  constructor(body: Pl.b2Body, snowman: WickedSnowman, rayLength: Pl.XY = {x: 0.5, y: 0.5}, isNose: boolean = false) {
-    this.body = body;
-    this.snowman = snowman;
-    this.world = snowman.b2Physics.world;
-    this.scene = snowman.scene;
-    this.rayLength = rayLength;
-
-    if (isNose) {
-      this.rayCastCrashResult = {
-        hit: false,
-        point: null,
-        normal: null,
-        fraction: -1,
-        lastHitTime: -1,
-      };
-    }
-  }
-
-  update() {
-    this.reset();
-    this.body.GetWorldVector(this.rawRayDirection, this.rayDirection).multiply(this.rayLength);
-    this.body.GetWorldPoint(Pl.b2Vec2.ZERO, this.pointStart);
-    this.body.GetWorldPoint(this.rayDirection, this.pointEnd);
-    this.world.RayCast(this.pointStart, this.pointEnd, this.callback.bind(this));
-
-    if (this.rayCastCrashResult) {
-      this.body.GetWorldVector(this.rawCrashRayDirection, this.rayDirection).multiply(this.rayLength);
-      this.body.GetWorldPoint(this.rayDirection, this.pointEnd);
-      this.world.RayCast(this.pointStart, this.pointEnd, this.callbackCrash.bind(this));
-    }
-  }
-
-  private callback(fixture, point, normal, fraction) {
-    this.rayCastResult.hit = true;
-    this.rayCastResult.point = point;
-    this.rayCastResult.normal = normal;
-    this.rayCastResult.fraction = fraction;
-    this.rayCastResult.lastHitTime = this.scene.game.getTime();
-    // if (this.rayCastCrashResult) this.body.SetAngularVelocity(2);
-    return fraction;
-  }
-
-  private callbackCrash(fixture, point, normal, fraction) {
-    if (!this.rayCastCrashResult) return;
-    this.rayCastCrashResult.hit = true;
-    this.rayCastCrashResult.point = point;
-    this.rayCastCrashResult.normal = normal;
-    this.rayCastCrashResult.fraction = fraction;
-    this.rayCastCrashResult.lastHitTime = this.scene.game.getTime();
-    return fraction;
-  }
-
-  private reset() {
-    this.rayCastResult.hit = false;
-    this.rayCastResult.point = null;
-    this.rayCastResult.normal = null;
-    this.rayCastResult.fraction = -1;
-
-    if (this.rayCastCrashResult) {
-      this.rayCastCrashResult.hit = false;
-      this.rayCastCrashResult.point = null;
-      this.rayCastCrashResult.normal = null;
-      this.rayCastCrashResult.fraction = -1;
-    }
-  }
-}
-
-
-interface ISnowboard {
-  numSegments: number;
-  segmentLength: number;
-  segmentThickness: number;
-  segments: Segment[];
-  nose?: Segment;
-  leftBinding?: Pl.b2Body;
-  rightBinding?: Pl.b2Body;
-}
-
-
-// TODO Add a hat which gets lost once player touches the ground with it.
-// TODO Try to add a scarf out of box2d chains and a phaser rope to display it. Could the scarf have some purpose like it does in alto?
-// TODO Experiment with an "umbrella mechanic" which will slow down a fall. Could help player cross ravines or not land in other undesirable spots
-//      It activates when pressing "up" twice after being in the air for at least 0.5 seconds
-//      Maybe instead of umbrella it could be a high tech snowboard feature. Would also make the opposite more plausible when pressing "down"
-//      Since we're at it why not add a force shield that player can activate in emergency.
-//      Both could be actions which drain the snowboard energy. Player can replenish it by collecting energy packs along the way.
-//      OR maybe the snowboard is fueled by "wickedness". It won't work if player stops doing wicked tricks and combos.
-// TODO Try to fix the board segment problem by adding hidden Edges underneath board: __[]__[]__[]__
-//      When keeping the rectangles there is always a chance that a corner will get stuck. Maybe collision response can be overridden?
-//      ---
-//      Alternatively try to change segments to circles and add edges connecting them --o--o--o--
-//      Circles are probably more reliable. If obstacle hits between circles it will simply collide with the hidden edge.
-//      circle bottom should probably not be perfectly aligned with edges, as we want circles to collide first and edges only as backup.
-//      ---
-//      Another alternative would be to replace rectangles with rectangular polygons with rounded edges.
-//      Since the segments don't collide with their neighbours they can overlap. Only the problematic corners need to be rounded.
-// TODO Try adjusting the friction depending on how many segments touch the ground. When only 1 segment touches the ground, it means that the snow
-//      Is being compressed more and the friction at that point should be higher to motivate player to keep board flat.
-//      Reason for this is that I want to introduce a "buttering" mechanic and there needs to be some downsides to constantly buttering around
-// TODO Implement Combo System. There will probably be some class which listens to snowman state & actions to keep track of combo counter.
-//      Once combo timer runs out. The combo score will be calculated and added to the total score.
-// TODO Experiment with "drag". We might want to account for snowboard position in relation to velocity while in air.
-//      Maybe airtime is increased while board is positioned correctly. Like an airplane wing. Same for the opposite (might make frontflips less fun)
 export class WickedSnowman {
+  debug: boolean = false; // TODO make this toggleable
   body: Pl.b2Body;
   isCrashed: boolean = false;
   lostHead: Boolean;
 
+  crashIgnoredBodies: Pl.b2Body[] = [];
   readonly scene: Ph.Scene;
   readonly b2Physics: Physics;
   private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys;
@@ -161,14 +28,10 @@ export class WickedSnowman {
   private jointDistRight: Pl.b2DistanceJoint | null;
   private bindingJointLeft: Pl.b2RevoluteJoint | null;
   private bindingJointRight: Pl.b2RevoluteJoint | null;
-  private crashIgnoredBodies: Pl.b2Body[] = [];
 
-  private board: ISnowboard = {
-    numSegments: 10,
-    segmentLength: 8.4,
-    segmentThickness: 3.375,
-    segments: [],
-  };
+  private board: WickedSnowboard;
+
+  private readonly comboComponent: ComboComponent;
 
   constructor(scene: Ph.Scene, b2Physics: Physics) {
     this.scene = scene;
@@ -178,42 +41,45 @@ export class WickedSnowman {
 
     const oX = 250;
     const oY = 50;
-    this.generateSnowboard(oX, oY);
+    this.board = new WickedSnowboard(this, oX, oY);
     this.generateSnowmanBody(oX, oY);
+    this.comboComponent = new ComboComponent(this);
   }
 
   update() {
-    this.board.segments.forEach(s => s.update());
     this.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.lostHead && this.detachHead(); // joints cannot be destroyed within post-solve callback
     this.getTimeInAir() > 100 && this.resetLegs();
 
-    // Touch/Mouse input
-    if (this.scene.input.activePointer?.isDown) {
-      const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
-      pointer.motionFactor = 0.2;
-      this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward() : this.leanForward();
-      pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 300 && this.jump();
-    } else {
-      this.scene.input.activePointer.motionFactor = 0.8;
-    }
+    if (!this.isCrashed) {
+      this.board.update();
+      this.comboComponent.update();
 
-    // Keyboard input
-    this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300 && this.jump();
-    this.cursors.left.isDown && this.leanBackward();
-    this.cursors.right.isDown && this.leanForward();
-    this.cursors.down.isDown && this.leanCenter();
-    !this.isCrashed && this.boost();
+      // Touch/Mouse input
+      if (this.scene.input.activePointer?.isDown) {
+        const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
+        pointer.motionFactor = 0.2;
+        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward() : this.leanForward();
+        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 300 && this.jump();
+      } else {
+        this.scene.input.activePointer.motionFactor = 0.8;
+      }
+
+      // Keyboard input
+      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300 && this.jump();
+      this.cursors.left.isDown && this.leanBackward();
+      this.cursors.right.isDown && this.leanForward();
+      this.cursors.down.isDown && this.leanCenter();
+      this.boost();
+    }
   }
 
   getTimeInAir(): number {
-    if (this.board.segments.some(s => s.rayCastResult.hit)) return -1;
-    const mostRecentHit = Math.max(...this.board.segments.map(s => s.rayCastResult.lastHitTime));
-    return this.scene.game.getTime() - mostRecentHit;
+    return this.board.getTimeInAir();
   }
 
   isInAir(): boolean {
-    return this.getTimeInAir() !== -1;
+    return this.board.isInAir();
   }
 
   private detachBoard() {
@@ -260,7 +126,7 @@ export class WickedSnowman {
 
   private jump() {
     this.setDistanceLegs(40, 40);
-    const hits = this.board.segments.map(s => s.rayCastResult.hit);
+    const hits = this.board.segments.map(s => s.groundRayResult.hit);
     const isTailGrounded = hits[0];
     const isNoseGrounded = hits[hits.length - 1];
     const isCenterGrounded = hits[4] || hits[5] || hits[6];
@@ -291,46 +157,7 @@ export class WickedSnowman {
     }
   }
 
-  private generateSnowboard(oX: number, oY: number) {
-    const {numSegments, segmentLength, segmentThickness} = this.board;
-
-    // generate board segments...
-    const color = 0xD5365E;
-    for (let i = 1; i <= this.board.numSegments; i++) {
-      const body = this.b2Physics.createBox(oX + segmentLength * i, oY, 0, segmentLength, segmentThickness, true, color);
-      this.board.segments.push(new Segment(body, this, {x: 0.5, y: 0.5}, i === this.board.numSegments));
-    }
-
-    this.board.nose = this.board.segments[this.board.segments.length - 1];
-    this.board.leftBinding = this.board.segments[3].body;
-    this.board.rightBinding = this.board.segments[6].body;
-
-    const weldConfigs: { dampingRatio: number, frequencyHz: number, referenceAngle: number }[] = [
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.35},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.25},
-      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: -0.05},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: -0.025},
-      {dampingRatio: 0.5, frequencyHz: 10, referenceAngle: 0},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: -0.025},
-      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: -0.05},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.25},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.35},
-    ];
-
-    // ...weld them together
-    for (let i = 0; i < numSegments - 1; i++) {
-      const [a, b] = this.board.segments.slice(i, i + 2);
-      const anchorAB = new Pl.b2Vec2((oX + (segmentLength / 2) + segmentLength * (i + 1)) / this.b2Physics.worldScale, oY / this.b2Physics.worldScale);
-      const {dampingRatio, frequencyHz, referenceAngle} = weldConfigs[i];
-      const jd = new Pl.b2WeldJointDef();
-      jd.Initialize(a.body, b.body, anchorAB);
-      jd.referenceAngle = referenceAngle;
-      Pl.b2AngularStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
-      this.b2Physics.world.CreateJoint(jd);
-    }
-  }
-
-  private generateSnowmanBody(oX, oY) {
+  private generateSnowmanBody(oX: number, oY: number) {
     if (!this.board.leftBinding || !this.board.rightBinding) return;
     const bodyRadius = this.b2Physics.worldScale;
     const headRadius = bodyRadius * 0.7;
@@ -364,7 +191,7 @@ export class WickedSnowman {
           }
         } else if (boardNose && (bodyA === boardNose.body || bodyB === boardNose.body)) {
           const maxImpulse = Math.max(...impulse.normalImpulses);
-          if (maxImpulse > 7 && boardNose.rayCastCrashResult?.hit) this.isCrashed = true;
+          if (maxImpulse > 7 && boardNose.crashRayResult?.hit) this.isCrashed = true;
         }
       },
     );
@@ -436,3 +263,29 @@ export class WickedSnowman {
     this.crashIgnoredBodies.push(armLowerRight);
   }
 }
+
+
+// TODO Add a hat which gets lost once player touches the ground with it.
+// TODO Try to add a scarf out of box2d chains and a phaser rope to display it. Could the scarf have some purpose like it does in alto?
+// TODO Experiment with an "umbrella mechanic" which will slow down a fall. Could help player cross ravines or not land in other undesirable spots
+//      It activates when pressing "up" twice after being in the air for at least 0.5 seconds
+//      Maybe instead of umbrella it could be a high tech snowboard feature. Would also make the opposite more plausible when pressing "down"
+//      Since we're at it why not add a force shield that player can activate in emergency.
+//      Both could be actions which drain the snowboard energy. Player can replenish it by collecting energy packs along the way.
+//      OR maybe the snowboard is fueled by "wickedness". It won't work if player stops doing wicked tricks and combos.
+// TODO Try to fix the board segment problem by adding hidden Edges underneath board: __[]__[]__[]__
+//      When keeping the rectangles there is always a chance that a corner will get stuck. Maybe collision response can be overridden?
+//      ---
+//      Alternatively try to change segments to circles and add edges connecting them --o--o--o--
+//      Circles are probably more reliable. If obstacle hits between circles it will simply collide with the hidden edge.
+//      circle bottom should probably not be perfectly aligned with edges, as we want circles to collide first and edges only as backup.
+//      ---
+//      Another alternative would be to replace rectangles with rectangular polygons with rounded edges.
+//      Since the segments don't collide with their neighbours they can overlap. Only the problematic corners need to be rounded.
+// TODO Try adjusting the friction depending on how many segments touch the ground. When only 1 segment touches the ground, it means that the snow
+//      Is being compressed more and the friction at that point should be higher to motivate player to keep board flat.
+//      Reason for this is that I want to introduce a "buttering" mechanic and there needs to be some downsides to constantly buttering around
+// TODO Implement Combo System. There will probably be some class which listens to snowman state & actions to keep track of combo counter.
+//      Once combo timer runs out. The combo score will be calculated and added to the total score.
+// TODO Experiment with "drag". We might want to account for snowboard position in relation to velocity while in air.
+//      Maybe airtime is increased while board is positioned correctly. Like an airplane wing. Same for the opposite (might make frontflips less fun)
