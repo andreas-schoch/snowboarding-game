@@ -16,6 +16,8 @@ export default class PreloadScene extends Phaser.Scene {
 
     this.load.image('bg-landscape-3-trees', 'assets/img/bgLandscape/landscape_0002_3_trees.png');
     this.load.image('bg-landscape-4-mountain', 'assets/img/bgLandscape/landscape_0003_4_mountain.png');
+
+    this.load.image('rock-01', 'assets/img/rock-01.png');
   }
 
   create() {

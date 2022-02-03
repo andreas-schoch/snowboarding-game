@@ -7,6 +7,8 @@ const DEFAULT_WIDTH = 960;
 const DEFAULT_HEIGHT = 540;
 
 const gameConfig: Ph.Types.Core.GameConfig = {
+  title: 'Wicked Snowman',
+  version: '0.3.1',
   type: Ph.WEBGL,
   backgroundColor: '#ffffff',
   disableContextMenu: true,

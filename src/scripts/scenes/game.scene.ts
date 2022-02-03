@@ -22,7 +22,7 @@ export default class GameScene extends Ph.Scene {
 
   async create() {
     this.music = this.sound.add('theme');
-    this.music.play({loop: true, volume: 0.3, rate: 0.9, delay: 1.25});
+    this.music.play({loop: true, volume: 0.2, rate: 0.9, delay: 1.25});
 
     this.b2Physics = new Physics(this, 15, new Pl.b2Vec2(0, 9.8));
 

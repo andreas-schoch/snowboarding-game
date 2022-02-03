@@ -159,6 +159,15 @@ export class Physics extends Phaser.Events.EventEmitter {
     return this.world.CreateJoint(djd);
   }
 
+  setDistanceJointLength(joint: Pl.b2DistanceJoint, length: number, minLength?: number, maxLength?: number): void {
+    // Note for some reason length does not update when min/max length aren't updated as well
+    // min/max need to be called before SetLength, otherwise the hertz & damping settings of joint seem to be ignored
+    if (!joint) return;
+    joint.SetMinLength(minLength ? minLength / this.worldScale : joint.GetMinLength());
+    joint.SetMaxLength(maxLength ? maxLength / this.worldScale : joint.GetMaxLength());
+    joint.SetLength(length / this.worldScale);
+  }
+
   update() {
     // console.time('Physics#update()');
     let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime;
@@ -180,7 +189,7 @@ export class Physics extends Phaser.Events.EventEmitter {
         bodyRepresentation.y = y * worldScale;
         bodyRepresentation.rotation = body.GetAngle(); // in radians;
       } else {
-        // Cleanup terrain fixtures which are out of sight
+        // Cleanup terrain fixtures which are out of sight // TODO this doesn't need to be executed every frame
         for (let fixture = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
           const shape = fixture.GetShape();
           this.isChain(shape) && shape.m_vertices[shape.m_vertices.length - 1].x * worldScale < outOfBoundsX && body.DestroyFixture(fixture);

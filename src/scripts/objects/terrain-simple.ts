@@ -18,6 +18,17 @@ export interface ITerrainSimpleConfig {
 }
 
 
+// TODO write loader for physics editor json export instead of hardcoding it
+const rock01Points = [
+  {x: 2, y: 82},
+  {x: 7, y: 14},
+  {x: 20, y: 6},
+  {x: 41, y: 2},
+  {x: 89, y: 11},
+  {x: 137, y: 52},
+  {x: 147, y: 82},
+];
+
 const defaultConfig: ITerrainSimpleConfig = {
   startTerrainHeight: 0.5,
   slopeAmplitude: 200,
@@ -46,6 +57,7 @@ export default class TerrainSimple {
   private readonly pointsPool: Pl.XY[];
   private readonly vec2Pool: Pl.b2Vec2[];
   private yOffset = 0;
+  private lastRockSpawnX = 0;
 
   constructor(scene: Ph.Scene, physics: Physics, config: ITerrainSimpleConfig = defaultConfig) {
     this.scene = scene;
@@ -91,11 +103,12 @@ export default class TerrainSimple {
     this.drawObstacles(slopePoints);
   }
 
-  private createTerrainColliders(chainPoints: Pl.b2Vec2[]): void {
+  private createTerrainColliders(chainPoints: Pl.XY[], type: 'surface' | 'obstacle' = 'surface'): void {
+    // TODO move to Physics class. Can be used for all chain chapes
     const chain = new Pl.b2ChainShape();
     chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1]);
     const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
-    this.terrainBody.CreateFixture(fd);
+    this.terrainBody.CreateFixture(fd).SetUserData(type);
   }
 
   private drawTerrain(slopePoints: Pl.XY[]): void {
@@ -128,18 +141,18 @@ export default class TerrainSimple {
     const pointStart = slopePoints[0];
     const pointEnd = slopePoints[slopePoints.length - 1];
 
-    // TODO this works fairly well. To improve:
-    //  - add a min distance between obstacles, so player doesn get overwhelmed immediately
-    //  - increase likelihood of spawning each 500-1000m of travel distance (roughly 40-60s). Start with 0.4 after 3000m it should remain around 0.8
-    //  - after 3000m start decreasing the min distance every 500-1000m. It should be very hard to reach 10km (8-10min playtime)
-    //  - reuse obstacles by pre-allocating them in a pool and simply updating their positions
-    //  - Replace the box with a polygon colored so it matches the surface. Either generate it or use physics editor to import image with manually drawn collision
-    //    Benefit of that is that collision can be smoothed out while img can have rougher edges.
-    //  - Ask 5 people to playtest. On average I want them to reach a PB of ~2500-4000m within the 20mins timeframe
-    //    tweak the difficulty according to the results afterwards.
+    const travelDistance = this.scene.cameras.main.scrollX / (this.b2Physics.worldScale * 2);
+    const minDistanceFromLast = travelDistance < 750 ? 2500 : 1500;
+    const minMaxLengthRange = travelDistance < 3000 ? 0.7 : 0.4;
+
     const length = pointEnd.x - pointStart.x;
-    if (Math.abs(pointStart.y - pointEnd.y) <= 50 && length >= this.config.slopeLengthRange[1] * 0.8 && Math.random() > 0.5) {
-      this.b2Physics.createBox(pointEnd.x, pointEnd.y, 0, 50, 50, false);
+    const heightDifference = Math.abs(pointStart.y - pointEnd.y);
+    const distanceFromLast = pointEnd.x - this.lastRockSpawnX;
+    if (heightDifference <= 50 && length >= this.config.slopeLengthRange[1] * minMaxLengthRange && Math.random() < 0.7 && distanceFromLast > minDistanceFromLast) {
+      this.lastRockSpawnX = pointEnd.x;
+      this.scene.add.image(pointEnd.x, pointEnd.y + 35, 'rock-01');
+      // TODO reuse points and pool images
+      this.createTerrainColliders(rock01Points.map(p => ({x: (p.x - 75 + pointEnd.x) / this.b2Physics.worldScale, y: (p.y - 40 + pointEnd.y) / this.b2Physics.worldScale})), 'obstacle');
     }
   }
 

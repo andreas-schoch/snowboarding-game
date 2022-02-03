@@ -20,8 +20,10 @@ export class WickedSnowman {
   private readonly jumpForce: number = 300;
   private readonly boostVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-  private readonly legMinLength = 25;
-  private readonly legMaxLength = 40;
+
+  readonly bodyRadius: number;
+  private readonly legMinLength;
+  private readonly legMaxLength;
 
   private neckJoint: Pl.b2RevoluteJoint | null;
   private jointDistLeft: Pl.b2DistanceJoint | null;
@@ -36,6 +38,9 @@ export class WickedSnowman {
   constructor(scene: Ph.Scene, b2Physics: Physics) {
     this.scene = scene;
     this.b2Physics = b2Physics;
+    this.bodyRadius = b2Physics.worldScale;
+    this.legMinLength = this.bodyRadius;
+    this.legMaxLength = this.legMinLength * 1.6;
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 
@@ -47,13 +52,13 @@ export class WickedSnowman {
   }
 
   update() {
+    this.comboComponent.update();
     this.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.lostHead && this.detachHead(); // joints cannot be destroyed within post-solve callback
     this.getTimeInAir() > 100 && this.resetLegs();
 
     if (!this.isCrashed) {
       this.board.update();
-      this.comboComponent.update();
 
       // Touch/Mouse input
       if (this.scene.input.activePointer?.isDown) {
@@ -98,34 +103,33 @@ export class WickedSnowman {
   private boost() {
     const mod = this.isInAir() ? 0.6 : 0.9;
     const boostVector = this.boostVector;
-    boostVector.Set(this.boostForce * mod, 0);
+    boostVector.Set(this.boostForce * mod + this.comboComponent.comboBoost, 0);
     this.board.segments && this.board.segments[4].body.ApplyForceToCenter(boostVector, true);
     this.body.ApplyForceToCenter(boostVector, true);
   }
 
   private resetLegs() {
-    this.setDistanceLegs(20, 25);
+    this.setDistanceLegs(this.legMinLength, this.legMinLength);
   }
 
   private leanBackward() {
-    //more force needed to lean back on tail while on ground
     this.body.ApplyAngularImpulse(this.isInAir() ? -3 : -5);
-    this.setDistanceLegs(22.5, 40);
+    this.setDistanceLegs(this.legMinLength, this.legMaxLength);
   }
 
   private leanForward() {
     this.body.ApplyAngularImpulse(this.isInAir() ? 3 : 5);
-    this.setDistanceLegs(40, 22.5);
+    this.setDistanceLegs(this.legMaxLength, this.legMinLength);
   }
 
   private leanCenter() {
     // TODO if wicked meter isn't empty, consume boost similar to SSX
     this.body.ApplyForceToCenter(new Pl.b2Vec2(0, 10));
-    this.setDistanceLegs(25, 25);
+    this.setDistanceLegs(this.legMinLength, this.legMinLength);
   }
 
   private jump() {
-    this.setDistanceLegs(40, 40);
+    this.setDistanceLegs(this.legMaxLength, this.legMaxLength);
     const hits = this.board.segments.map(s => s.groundRayResult.hit);
     const isTailGrounded = hits[0];
     const isNoseGrounded = hits[hits.length - 1];
@@ -141,39 +145,29 @@ export class WickedSnowman {
   }
 
   private setDistanceLegs(lengthLeft: number, lengthRight: number): void {
-    // Note for some reason length does not update when min/max length aren't updated as well
-    // min/max need to be called before SetLength, otherwise the hertz & damping seem to be ignored
-    if (this.jointDistLeft) {
-      const length = lengthLeft / this.b2Physics.worldScale * 0.6;
-      this.jointDistLeft.SetMinLength(this.legMinLength / this.b2Physics.worldScale * 0.6);
-      this.jointDistLeft.SetMaxLength(this.legMaxLength / this.b2Physics.worldScale * 0.6);
-      this.jointDistLeft.SetLength(length);
-    }
-    if (this.jointDistRight) {
-      const length = lengthRight / this.b2Physics.worldScale * 0.6;
-      this.jointDistRight.SetMinLength(this.legMinLength / this.b2Physics.worldScale * 0.6);
-      this.jointDistRight.SetMaxLength(this.legMaxLength / this.b2Physics.worldScale * 0.6);
-      this.jointDistRight.SetLength(length);
-    }
+    this.jointDistLeft && this.b2Physics.setDistanceJointLength(this.jointDistLeft, lengthLeft, this.legMinLength, this.legMaxLength);
+    this.jointDistRight && this.b2Physics.setDistanceJointLength(this.jointDistRight, lengthRight, this.legMinLength, this.legMaxLength);
   }
 
+  // TODO try to automate the creation of bodies to make them swappable using an external editor such as:
+  //  - R.U.B.E: https://www.iforce2d.net/rube/ (seems old, not free, phaser2 had a RUBE-loader plugin but probably need to write loader for phaser3)
+  //  - box2d-editor: https://github.com/MovingBlocks/box2d-editor (seems old, free, exports to JSON need to write loader)
   private generateSnowmanBody(oX: number, oY: number) {
     if (!this.board.leftBinding || !this.board.rightBinding) return;
-    const bodyRadius = this.b2Physics.worldScale;
-    const headRadius = bodyRadius * 0.7;
-    const legHeight = bodyRadius * 0.7;
-    const legWidth = bodyRadius * 0.3;
+    const headRadius = this.bodyRadius * 0.7;
+    const legHeight = this.bodyRadius * 0.7;
+    const legWidth = this.bodyRadius * 0.3;
     const legBodyRadians = 0.5;
 
     const armHeight = legHeight;
     const armWidth = legWidth;
 
-    const bodyPos = new Pl.b2Vec2(oX + this.board.segmentLength * ((this.board.numSegments / 2) + legBodyRadians), oY - (bodyRadius * 2) - (bodyRadius / 2));
-    const head = this.b2Physics.createCircle(bodyPos.x, bodyPos.y - bodyRadius - headRadius, 0, headRadius, {color: 0xC8E1EB, type: Pl.b2BodyType.b2_dynamicBody, linearDamping: 0.15, angularDamping: 0.15});
+    const bodyPos = new Pl.b2Vec2(oX + this.board.segmentLength * ((this.board.numSegments / 2) + legBodyRadians), oY - (this.bodyRadius * 2) - (this.bodyRadius / 2));
+    const head = this.b2Physics.createCircle(bodyPos.x, bodyPos.y - this.bodyRadius - headRadius, 0, headRadius, {color: 0xC8E1EB, type: Pl.b2BodyType.b2_dynamicBody, linearDamping: 0.15, angularDamping: 0.15});
 
-    this.body = this.b2Physics.createCircle(bodyPos.x, bodyPos.y, 0, bodyRadius, {color: 0xC8E1EB, type: Pl.b2BodyType.b2_dynamicBody, linearDamping: 0.15, angularDamping: 0.15});
+    this.body = this.b2Physics.createCircle(bodyPos.x, bodyPos.y, 0, this.bodyRadius, {color: 0xC8E1EB, type: Pl.b2BodyType.b2_dynamicBody, linearDamping: 0.15, angularDamping: 0.15});
     this.crashIgnoredBodies.push(this.body);
-    const anchorNeck = new Ph.Math.Vector2(0, -1).multiply({x: 0, y: bodyRadius}).add(bodyPos);
+    const anchorNeck = new Ph.Math.Vector2(0, -1).multiply({x: 0, y: this.bodyRadius}).add(bodyPos);
     this.neckJoint = this.b2Physics.createRevoluteJoint({bodyA: this.body, bodyB: head, anchor: anchorNeck, lowerAngle: -0.25, upperAngle: 0.25, enableLimit: true});
 
     this.b2Physics.on('post-solve', (contact: Pl.b2Contact, impulse: Pl.b2ContactImpulse) => {
@@ -197,10 +191,10 @@ export class WickedSnowman {
     );
 
     // Leg Left - Upper
-    const offsetLengthLUL = (bodyRadius + (legHeight / 1.75));
+    const offsetLengthLUL = (this.bodyRadius + (legHeight / 1.75));
     const legUpperLeftPos = new Ph.Math.Vector2(0, 1).rotate(legBodyRadians).multiply({x: offsetLengthLUL, y: offsetLengthLUL}).add(bodyPos);
     const legUpperLeft = this.b2Physics.createBox(legUpperLeftPos.x, legUpperLeftPos.y, legBodyRadians, legWidth, legHeight, true);
-    const anchorHipLeft = new Ph.Math.Vector2(0, 1).rotate(legBodyRadians).multiply({x: bodyRadius, y: bodyRadius}).add(bodyPos);
+    const anchorHipLeft = new Ph.Math.Vector2(0, 1).rotate(legBodyRadians).multiply({x: this.bodyRadius, y: this.bodyRadius}).add(bodyPos);
     this.b2Physics.createRevoluteJoint({bodyA: this.body, bodyB: legUpperLeft, anchor: anchorHipLeft, lowerAngle: -0.2, upperAngle: 1, enableLimit: true});
     // Leg Left - Lower
     const legLowerLeftPos = new Ph.Math.Vector2(0, 1).rotate(legBodyRadians - 0.25).multiply({x: legHeight, y: legHeight}).add(legUpperLeftPos);
@@ -212,10 +206,10 @@ export class WickedSnowman {
     this.bindingJointLeft = this.b2Physics.createRevoluteJoint({bodyA: legLowerLeft, bodyB: this.board.leftBinding, anchor: anchorAnkleLeft});
     // -----------------------------------------------------------
     // Leg Right - Upper
-    const offsetLUR = (bodyRadius + (legHeight / 1.75));
+    const offsetLUR = (this.bodyRadius + (legHeight / 1.75));
     const legUpperRightPos = new Ph.Math.Vector2(0, 1).rotate(-legBodyRadians).multiply({x: offsetLUR, y: offsetLUR}).add(bodyPos);
     const legUpperRight = this.b2Physics.createBox(legUpperRightPos.x, legUpperRightPos.y, -legBodyRadians, legWidth, legHeight, true);
-    const anchorHipRight = new Ph.Math.Vector2(0, 1).rotate(-legBodyRadians).multiply({x: bodyRadius, y: bodyRadius}).add(bodyPos);
+    const anchorHipRight = new Ph.Math.Vector2(0, 1).rotate(-legBodyRadians).multiply({x: this.bodyRadius, y: this.bodyRadius}).add(bodyPos);
     this.b2Physics.createRevoluteJoint({bodyA: this.body, bodyB: legUpperRight, anchor: anchorHipRight, lowerAngle: -1, upperAngle: 0.2, enableLimit: true});
     // Leg Right - Lower
     const legLowerRightPos = new Ph.Math.Vector2(0, 1).rotate(-legBodyRadians + 0.25).multiply({x: legHeight, y: legHeight}).add(legUpperRightPos);
@@ -227,7 +221,7 @@ export class WickedSnowman {
     this.bindingJointRight = this.b2Physics.createRevoluteJoint({bodyA: legLowerRight, bodyB: this.board.rightBinding, anchor: anchorAnkleRight});
     // -----------------------------------------------------------
     // DISTANCE
-    const distanceJointConfig: IDistanceJointConfig = {length: this.legMinLength, frequencyHz: 8, dampingRatio: 5};
+    const distanceJointConfig: IDistanceJointConfig = {length: this.legMinLength, minLength: this.legMinLength, maxLength: this.legMaxLength, frequencyHz: 8, dampingRatio: 5};
     // Note swapping bindings was initially an accident but IMO it simply plays better like this, so leaving it for now
     this.jointDistLeft = this.b2Physics.createDistanceJoint(this.body, this.board.rightBinding, anchorHipLeft, anchorAnkleLeft, distanceJointConfig);
     this.jointDistRight = this.b2Physics.createDistanceJoint(this.body, this.board.leftBinding, anchorHipRight, anchorAnkleRight, distanceJointConfig);
@@ -235,9 +229,9 @@ export class WickedSnowman {
     // Arm Left - Upper
     const baseRotLeft = (Math.PI / 180) * 90;
     const armBodyLeftRadians = 0.5;
-    const offsetAUL = (bodyRadius + (armHeight / 1.75));
+    const offsetAUL = (this.bodyRadius + (armHeight / 1.75));
     const armUpperLeftPos = new Ph.Math.Vector2(-1, 0).rotate(armBodyLeftRadians).multiply({x: offsetAUL, y: offsetAUL}).add(bodyPos);
-    const anchorShoulderLeft = new Ph.Math.Vector2(-1, 0).rotate(armBodyLeftRadians).multiply({x: bodyRadius, y: bodyRadius}).add(bodyPos);
+    const anchorShoulderLeft = new Ph.Math.Vector2(-1, 0).rotate(armBodyLeftRadians).multiply({x: this.bodyRadius, y: this.bodyRadius}).add(bodyPos);
     const armUpperLeft = this.b2Physics.createBox(armUpperLeftPos.x, armUpperLeftPos.y, baseRotLeft + armBodyLeftRadians, armWidth, armHeight, true);
     this.b2Physics.createRevoluteJoint({bodyA: this.body, bodyB: armUpperLeft, anchor: anchorShoulderLeft, lowerAngle: -1.25, upperAngle: 0.75, enableLimit: true});
     // // Arm Left - Lower
@@ -250,9 +244,9 @@ export class WickedSnowman {
     // // Arm Right - Upper
     const baseRotRight = -(Math.PI / 180) * 90;
     const armBodyRightRadians = -0.5;
-    const offsetAUR = (bodyRadius + (armHeight / 1.75));
+    const offsetAUR = (this.bodyRadius + (armHeight / 1.75));
     const armUpperRightPos = new Ph.Math.Vector2(1, 0).rotate(armBodyRightRadians).multiply({x: offsetAUR, y: offsetAUR}).add(bodyPos);
-    const anchorShoulderRight = new Ph.Math.Vector2(1, 0).rotate(armBodyRightRadians).multiply({x: bodyRadius, y: bodyRadius}).add(bodyPos);
+    const anchorShoulderRight = new Ph.Math.Vector2(1, 0).rotate(armBodyRightRadians).multiply({x: this.bodyRadius, y: this.bodyRadius}).add(bodyPos);
     const armUpperRight = this.b2Physics.createBox(armUpperRightPos.x, armUpperRightPos.y, baseRotRight + armBodyRightRadians, armWidth, armHeight, true);
     this.b2Physics.createRevoluteJoint({bodyA: this.body, bodyB: armUpperRight, anchor: anchorShoulderRight, lowerAngle: -0.75, upperAngle: 1.25, enableLimit: true});
     // // Arm Right - Lower
