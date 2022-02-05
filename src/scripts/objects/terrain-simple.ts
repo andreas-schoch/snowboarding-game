@@ -56,6 +56,7 @@ export default class TerrainSimple {
 
   private readonly pointsPool: Pl.XY[];
   private readonly vec2Pool: Pl.b2Vec2[];
+  private readonly obstacleImagePool: Ph.GameObjects.Image[];
   private yOffset = 0;
   private lastRockSpawnX = 0;
 
@@ -81,6 +82,18 @@ export default class TerrainSimple {
       this.scene.add.graphics(),
       this.scene.add.graphics(),
     ];
+
+    this.obstacleImagePool = [
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+      this.scene.add.image(-1000, 0, 'rock-01'),
+    ];
+
     this.terrainBody = this.b2Physics.world.CreateBody();
     this.slopeStart = new Phaser.Math.Vector2(0, 0);
     this.update();
@@ -89,6 +102,7 @@ export default class TerrainSimple {
   update() {
     const {zoom, width, worldView} = this.scene.cameras.main;
     while (this.slopeStart.x < worldView.x + width + 500 * (1 / zoom)) {
+      this.cleanupFixtures();
       this.updateChunk();
     }
   }
@@ -103,12 +117,15 @@ export default class TerrainSimple {
     this.drawObstacles(slopePoints);
   }
 
-  private createTerrainColliders(chainPoints: Pl.XY[], type: 'surface' | 'obstacle' = 'surface'): void {
+  private createTerrainColliders(chainPoints: Pl.XY[], type: 'surface' | 'obstacle' = 'surface'): Pl.b2Fixture {
     // TODO move to Physics class. Can be used for all chain chapes
     const chain = new Pl.b2ChainShape();
-    chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1]);
+
+    type === 'surface'
+      ? chain.CreateChain(chainPoints, chainPoints.length, chainPoints[0], chainPoints[chainPoints.length - 1])
+      : chain.CreateLoop(chainPoints, chainPoints.length);
     const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
-    this.terrainBody.CreateFixture(fd).SetUserData(type);
+    return this.terrainBody.CreateFixture(fd);
   }
 
   private drawTerrain(slopePoints: Pl.XY[]): void {
@@ -150,9 +167,14 @@ export default class TerrainSimple {
     const distanceFromLast = pointEnd.x - this.lastRockSpawnX;
     if (heightDifference <= 50 && length >= this.config.slopeLengthRange[1] * minMaxLengthRange && Math.random() < 0.7 && distanceFromLast > minDistanceFromLast) {
       this.lastRockSpawnX = pointEnd.x;
-      this.scene.add.image(pointEnd.x, pointEnd.y + 35, 'rock-01');
-      // TODO reuse points and pool images
-      this.createTerrainColliders(rock01Points.map(p => ({x: (p.x - 75 + pointEnd.x) / this.b2Physics.worldScale, y: (p.y - 40 + pointEnd.y) / this.b2Physics.worldScale})), 'obstacle');
+      const img = this.obstacleImagePool.shift();
+      img?.setPosition(pointEnd.x, pointEnd.y + 35);
+      const fixture = this.createTerrainColliders(
+        rock01Points.map(p => ({x: (p.x - 75 + pointEnd.x) / this.b2Physics.worldScale, y: (p.y - 40 + pointEnd.y) / this.b2Physics.worldScale})),
+        'obstacle',
+      );
+
+      fixture.SetUserData(img);
     }
   }
 
@@ -200,7 +222,7 @@ export default class TerrainSimple {
     let slopeLength = Phaser.Math.Between(slopeLengthRange[0], slopeLengthRange[1]);
     slopeLength = Math.round(slopeLength / gridDensity) * gridDensity; // round to next grid value
 
-    this.yOffset += slopeLength > this.config.slopeLengthRange[1] * 0.8 ? 0.2 : 0.05;
+    this.yOffset += slopeLength > this.config.slopeLengthRange[1] * 0.8 ? 0.3 : 0.05;
     const amplitudeModifier = slopeLength <= this.config.slopeLengthRange[1] / 2 ? 0.75 : 0.75;
     return (this.slopeStart.x === 0)
       ? {x: Math.round(defaultConfig.slopeLengthRange[1] * 1.5 / gridDensity) * gridDensity, y: 0}
@@ -210,5 +232,19 @@ export default class TerrainSimple {
   private interpolate(vFrom, vTo, delta): number {
     let interpolation = (1 - Math.cos(delta * Math.PI)) * 0.5;
     return vFrom * (1 - interpolation) + vTo * interpolation;
+  }
+
+  private cleanupFixtures() {
+    const worldScale = this.b2Physics.worldScale;
+    const outOfBoundsX = this.scene.cameras.main.scrollX - (500 * (1 / this.scene.cameras.main.zoom));
+
+    for (let fixture = this.terrainBody.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+      const shape = fixture.GetShape();
+      if (this.b2Physics.isChain(shape) && shape.m_vertices[shape.m_vertices.length - 1].x * worldScale < outOfBoundsX) {
+        const obstacleImage = fixture.GetUserData() as Ph.GameObjects.Image;
+        obstacleImage && this.obstacleImagePool.push(obstacleImage);
+        this.terrainBody.DestroyFixture(fixture);
+      }
+    }
   }
 }

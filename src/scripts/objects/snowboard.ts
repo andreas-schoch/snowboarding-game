@@ -30,10 +30,15 @@ export class WickedSnowboard {
   numSegments: number = 10;
   segmentLength: number = 8.4;
   segmentThickness: number = 3.375;
-  nose?: ISegment;
 
-  leftBinding?: Pl.b2Body;
-  rightBinding?: Pl.b2Body;
+  nose?: ISegment;
+  leftBinding: Pl.b2Body;
+  rightBinding: Pl.b2Body;
+
+  isTailGrounded: boolean;
+  isNoseGrounded: boolean;
+  isCenterGrounded: boolean;
+
   readonly segments: ISegment[] = [];
 
   private pointStart: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
@@ -50,11 +55,14 @@ export class WickedSnowboard {
     this.b2Physics = player.b2Physics;
 
     this.debugGraphics = this.scene.add.graphics();
-    this.generateSegments(x, y, this.b2Physics.worldScale / 2);
+    const [left, right] = this.generateSegments(x, y, this.b2Physics.worldScale / 2);
+    this.leftBinding = left;
+    this.rightBinding = right;
   }
 
   update() {
     this.player.debug && this.debugGraphics.clear();
+    const segments = this.segments;
 
     for (const segment of this.segments) {
       this.resetSegment(segment);
@@ -70,6 +78,10 @@ export class WickedSnowboard {
         this.player.debug && this.drawDebug(segment.crashRayResult.hit ? 0x0000ff : 0x00ff00);
       }
     }
+
+    this.isTailGrounded = segments[0].groundRayResult.hit;
+    this.isNoseGrounded = segments[segments.length - 1].groundRayResult.hit;
+    this.isCenterGrounded = segments[4].groundRayResult.hit || segments[5].groundRayResult.hit || segments[6].groundRayResult.hit;
   }
 
   getTimeInAir(): number {
@@ -118,7 +130,7 @@ export class WickedSnowboard {
     );
   }
 
-  private generateSegments(x: number, y: number, rayLength: number) {
+  private generateSegments(x: number, y: number, rayLength: number): [Pl.b2Body, Pl.b2Body] {
     const {numSegments, segmentLength, segmentThickness} = this;
     // create segments...
     const color = 0xD5365E;
@@ -140,8 +152,6 @@ export class WickedSnowboard {
     }
 
     this.nose = this.segments[this.segments.length - 1];
-    this.leftBinding = this.segments[3].body;
-    this.rightBinding = this.segments[6].body;
 
     const weldConfigs: { dampingRatio: number, frequencyHz: number, referenceAngle: number }[] = [
       {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.35},
@@ -166,5 +176,7 @@ export class WickedSnowboard {
       Pl.b2AngularStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
       this.b2Physics.world.CreateJoint(jd);
     }
+
+    return [this.segments[3].body, this.segments[6].body];
   }
 }

@@ -13,22 +13,13 @@ export class Backdrop {
 
   constructor(scene: Ph.Scene) {
     this.scene = scene;
-    const {width, height} = this.scene.cameras.main;
-    this.bgSpaceBack = this.scene.add.tileSprite(0, 0, width, height, 'space-back').setOrigin(0).setScrollFactor(0, 0);
-    this.bgSpaceMid = this.scene.add.tileSprite(0, 0, width, height, 'space-mid').setOrigin(0).setScrollFactor(0, 0);
-    this.bgSpaceFront = this.scene.add.tileSprite(0, 0, width, height, 'space-front').setOrigin(0).setScrollFactor(0, 0);
 
-    this.bgLandscapeMountains = this.scene.add.tileSprite(0, 0, width, height, 'bg-landscape-4-mountain')
-    .setZ(2)
-    .setScale(1.25, 2)
-    .setOrigin(0, 0.5)
-    .setScrollFactor(0, 0)
-    .setTint(30, 30, 30, 30);
-    this.bgLandscapeHills = this.scene.add.tileSprite(0, 0, width, height, 'bg-landscape-3-trees')
-    .setScale(1.25, 1.5)
-    .setOrigin(0, 0.25)
-    .setScrollFactor(0, 0).setZ(1)
-    .setTint(50, 50, 50, 50);
+    this.bgSpaceBack = this.registerLayer('space-back');
+    this.bgSpaceMid = this.registerLayer('space-mid');
+    this.bgSpaceFront = this.registerLayer('space-front');
+
+    this.bgLandscapeMountains = this.registerLayer('mountain-back').setTint(30, 30, 30, 30);
+    this.bgLandscapeHills = this.registerLayer('mountain-mid').setTint(50, 50, 50, 50);
   }
 
   update() {
@@ -38,5 +29,13 @@ export class Backdrop {
     this.bgSpaceFront.setTilePosition(scrollX * 0.005, scrollY * 0.005);
     this.bgLandscapeMountains.setTilePosition(scrollX * 0.025, 0);
     this.bgLandscapeHills.setTilePosition(scrollX * 0.035, 0);
+  }
+
+  private registerLayer(key: string, scaleX: number = 1, scaleY: number = 1): Ph.GameObjects.TileSprite {
+    const {width, height, zoomX, zoomY, worldView} = this.scene.cameras.main;
+    return this.scene.add.tileSprite(worldView.x + width / 2, worldView.y + height / 2, width, height, key)
+    .setOrigin(0.5, 0.5)
+    .setScrollFactor(0, 0)
+    .setScale(scaleX * (1 / zoomX), scaleY * (1 / zoomY));
   }
 }

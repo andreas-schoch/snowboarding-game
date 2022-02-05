@@ -1,3 +1,5 @@
+import {DEFAULT_HEIGHT} from '../index';
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({key: 'PreloadScene'});
@@ -10,14 +12,15 @@ export default class PreloadScene extends Phaser.Scene {
       'assets/audio/theme/theme.aac',
     ]);
 
-    this.load.image('space-back', 'assets/img/bgSpace/bg_space_seamless.png');
-    this.load.image('space-mid', 'assets/img/bgSpace/bg_space_seamless_fl1.png');
-    this.load.image('space-front', 'assets/img/bgSpace/bg_space_seamless_fl2.png');
-
-    this.load.image('bg-landscape-3-trees', 'assets/img/bgLandscape/landscape_0002_3_trees.png');
-    this.load.image('bg-landscape-4-mountain', 'assets/img/bgLandscape/landscape_0003_4_mountain.png');
+    const size = this.game.canvas.height === DEFAULT_HEIGHT ? '960x540' : '480x270';
+    this.load.image('space-back', `assets/img/bgSpace/bg-space-back-${size}.png`);
+    this.load.image('space-mid', `assets/img/bgSpace/bg-space-mid-${size}.png`);
+    this.load.image('space-front', `assets/img/bgSpace/bg-space-front-${size}.png`);
+    this.load.image('mountain-back', `assets/img/bgLandscape/mountain-back-${size}.png`);
+    this.load.image('mountain-mid', `assets/img/bgLandscape/mountain-mid-${size}.png`);
 
     this.load.image('rock-01', 'assets/img/rock-01.png');
+    this.load.bitmapFont('atari-classic', 'assets/fonts/bitmap/atari-classic.png', 'assets/fonts/bitmap/atari-classic.xml');
   }
 
   create() {
