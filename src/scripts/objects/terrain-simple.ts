@@ -1,6 +1,7 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {Physics} from './physics';
+import {stats} from '../index';
 
 // TODO experiment with Phaser splines https://phaser.io/examples/v3/view/paths/curves/drag-spline-curve
 //  Might be a good solution to support a simple level editor
@@ -100,11 +101,14 @@ export default class TerrainSimple {
   }
 
   update() {
+    stats.begin('terrain');
     const {zoom, width, worldView} = this.scene.cameras.main;
     while (this.slopeStart.x < worldView.x + width + 500 * (1 / zoom)) {
+      // this.scene.cameras.main.cull()
       this.cleanupFixtures();
       this.updateChunk();
     }
+    stats.end('terrain');
   }
 
   private updateChunk(): void {

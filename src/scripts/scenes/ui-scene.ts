@@ -90,6 +90,20 @@ export default class UIScene extends Ph.Scene {
     if (!this.state.isCrashed) this.textDistance.setText(String(this.state.getTravelDistanceMeters()) + 'm');
   }
 
+  // private setMusicRate(rateStart: number, resetDelay: number, resetDuration: number, resetRate: number) {
+  //   // @ts-ignore
+  //   this.music.rate = rateStart;
+  //
+  //   setTimeout(() => {
+  //     this.tweens.add({
+  //       targets: this.music,
+  //       rate: resetRate,
+  //       duration: resetDuration,
+  //       onComplete: tween => tween.destroy(),
+  //     });
+  //   }, resetDelay);
+  // }
+
   private playAgain() {
     this.music.stop();
     this.restartGame();

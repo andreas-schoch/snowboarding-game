@@ -4,7 +4,7 @@ import TerrainSimple from '../objects/terrain-simple';
 import {WickedSnowman} from '../objects/wicked-snowman';
 import {Physics} from '../objects/physics';
 import {Backdrop} from '../objects/backdrop';
-import {DEFAULT_WIDTH} from '../index';
+import {DEFAULT_WIDTH, stats} from '../index';
 
 export default class GameScene extends Ph.Scene {
   private backdrop: Backdrop;
@@ -48,9 +48,11 @@ export default class GameScene extends Ph.Scene {
   }
 
   update() {
+    stats.begin();
     this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
     this.backdrop.update();
     this.wickedSnowman.update();
     this.terrainSimple.update();
+    stats.end();
   }
 }

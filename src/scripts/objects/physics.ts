@@ -1,5 +1,6 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
+import {stats} from '../index';
 
 
 export interface IRevoluteJointConfig {
@@ -47,10 +48,10 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.worldScale = worldScale;
     this.world = Pl.b2World.Create(gravity);
     this.world.SetContactListener({
-      BeginContact: this.BeginContact.bind(this),
-      EndContact: this.EndContact.bind(this),
-      PreSolve: this.PreSolve.bind(this),
-      PostSolve: this.PostSolve.bind(this),
+      BeginContact: () => null,
+      EndContact: () => null,
+      PreSolve: () => null,
+      PostSolve: (contact, impulse) => this.emit('post-solve', contact, impulse),
     });
 
     this.world.SetAllowSleeping(false);
@@ -60,20 +61,20 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   enterBulletTime(duration: number, rate: number): void {
     this.bulletTime.rate = rate;
-    // // @ts-ignore
+    // @ts-ignore
     // (this.scene as GameScene).music.rate = 0.7;
-    // this.scene.tweens.add({
-    //   delay: duration,
-    // // @ts-ignore
-    //     targets: [this.bulletTime, this.scene.music],
-    //     rate: 0.9,
-    //     duration: 500,
-    //     // onComplete: tween => console.log('done tween'),
-    //   });
+    this.scene.tweens.add({
+      delay: duration,
+      // @ts-ignore
+      targets: [this.bulletTime, this.scene.music],
+      rate: 0.9,
+      duration: 500,
+      // onComplete: tween => console.log('done tween'),
+    });
 
     // this.bulletTime = rate;
 
-    if (duration !== -1) setTimeout(() => this.bulletTime.rate = 1, duration);
+    // if (duration !== -1) setTimeout(() => this.bulletTime.rate = 1, duration);
   }
 
   createBox(posX: number, posY: number, angle: number, width: number, height: number, isDynamic: boolean, color: number = 0xB68750): Pl.b2Body {
@@ -133,11 +134,11 @@ export class Physics extends Phaser.Events.EventEmitter {
     body.CreateFixture(fd);
     body.SetMassData({mass: 1, center: this.ZERO, I: 1});
 
-    this.userDataGraphics.clear();
-    this.userDataGraphics.fillStyle(config.color || 0x333333);
-    this.userDataGraphics.fillCircle(radius, radius, radius);
     const key = `circle-${radius}-${config.color || 0x333333}`;
     if (!this.textureKeys.has(key)) {
+      this.userDataGraphics.clear();
+      this.userDataGraphics.fillStyle(config.color || 0x333333);
+      this.userDataGraphics.fillCircle(radius, radius, radius);
       this.textureKeys.add(key);
       this.userDataGraphics.generateTexture(key, radius * 2, radius * 2);
     }
@@ -181,8 +182,9 @@ export class Physics extends Phaser.Events.EventEmitter {
   }
 
   update() {
+    stats.begin('physics');
     let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime.rate;
-    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 2));
+    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 6));
     this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
     this.world.ClearForces(); // recommended after each time step
 
@@ -201,6 +203,7 @@ export class Physics extends Phaser.Events.EventEmitter {
         bodyRepresentation.rotation = body.GetAngle(); // in radians;
       }
     }
+    stats.end('physics');
   }
 
   isEdge(shape: Pl.b2Shape): shape is Pl.b2EdgeShape {
@@ -217,21 +220,5 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   isCircle(shape: Pl.b2Shape): shape is Pl.b2CircleShape {
     return shape.GetType() === Pl.b2ShapeType.e_circle;
-  }
-
-  private BeginContact(contact: Pl.b2Contact<Pl.b2Shape, Pl.b2Shape>): void {
-    this.emit('begin-contact', contact);
-  }
-
-  private EndContact(contact: Pl.b2Contact<Pl.b2Shape, Pl.b2Shape>): void {
-    this.emit('end-contact', contact);
-  }
-
-  private PreSolve(contact: Pl.b2Contact<Pl.b2Shape, Pl.b2Shape>, oldManifold: Pl.b2Manifold): void {
-    this.emit('pre-solve', contact, oldManifold);
-  }
-
-  private PostSolve(contact: Pl.b2Contact, impulse: Pl.b2ContactImpulse): void {
-    this.emit('post-solve', contact, impulse);
   }
 }

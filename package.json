@@ -1,6 +1,6 @@
 {
   "name": "wicked-snowman",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A physics based snowboarding game.",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@box2d/core": "^0.9.0",
+    "gamestats.js": "^1.0.2",
     "phaser": "^3.55.2"
   }
 }

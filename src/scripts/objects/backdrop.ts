@@ -1,4 +1,5 @@
 import * as Ph from 'phaser';
+import {stats} from '../index';
 
 
 export class Backdrop {
@@ -6,7 +7,6 @@ export class Backdrop {
 
   private bgSpaceBack: Phaser.GameObjects.TileSprite;
   private bgSpaceMid: Phaser.GameObjects.TileSprite;
-  private bgSpaceFront: Phaser.GameObjects.TileSprite;
 
   private bgLandscapeMountains: Phaser.GameObjects.TileSprite;
   private bgLandscapeHills: Phaser.GameObjects.TileSprite;
@@ -16,19 +16,18 @@ export class Backdrop {
 
     this.bgSpaceBack = this.registerLayer('space-back');
     this.bgSpaceMid = this.registerLayer('space-mid');
-    this.bgSpaceFront = this.registerLayer('space-front');
-
     this.bgLandscapeMountains = this.registerLayer('mountain-back').setTint(30, 30, 30, 30);
     this.bgLandscapeHills = this.registerLayer('mountain-mid').setTint(50, 50, 50, 50);
   }
 
   update() {
+    stats.begin('backdrop');
     const {scrollX, scrollY} = this.scene.cameras.main;
     this.bgSpaceBack.setTilePosition(scrollX * 0.001, scrollY * 0.001);
     this.bgSpaceMid.setTilePosition(scrollX * 0.0025, scrollY * 0.0025);
-    this.bgSpaceFront.setTilePosition(scrollX * 0.005, scrollY * 0.005);
     this.bgLandscapeMountains.setTilePosition(scrollX * 0.025, 0);
     this.bgLandscapeHills.setTilePosition(scrollX * 0.035, 0);
+    stats.end('backdrop');
   }
 
   private registerLayer(key: string, scaleX: number = 1, scaleY: number = 1): Ph.GameObjects.TileSprite {

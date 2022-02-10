@@ -3,6 +3,7 @@ import * as Pl from '@box2d/core';
 import {IDistanceJointConfig, Physics} from './physics';
 import {StateComponent} from './state-component';
 import {WickedSnowboard} from './snowboard';
+import {stats} from '../index';
 
 
 export class WickedSnowman {
@@ -14,8 +15,9 @@ export class WickedSnowman {
   readonly b2Physics: Physics;
   private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys;
 
-  private readonly boostForce: number = 27.5;
-  private readonly jumpForce: number = 300;
+  private readonly boostForce: number = 27.5 * 60;
+  private readonly jumpForce: number = 300 * 60;
+  private leanForce: number = 5 * 60;
   private readonly boostVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
 
@@ -40,6 +42,7 @@ export class WickedSnowman {
   }
 
   update() {
+    stats.begin('snowman');
     this.stateComponent.update();
     this.stateComponent.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.stateComponent.lostHead && this.detachHead(); // joints cannot be destroyed within post-solve callback
@@ -47,24 +50,26 @@ export class WickedSnowman {
 
     if (!this.stateComponent.isCrashed) {
       this.board.update();
+      const delta = this.scene.game.loop.delta / 1000; // TODO take bulletTime into account
 
       // Touch/Mouse input
       if (this.scene.input.activePointer?.isDown) {
         const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
         pointer.motionFactor = 0.2;
-        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward() : this.leanForward();
-        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 300 && this.jump();
+        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward(delta) : this.leanForward(delta);
+        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 300 && this.jump(delta);
       } else {
         this.scene.input.activePointer.motionFactor = 0.8;
       }
 
       // Keyboard input
-      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300 && this.jump();
-      this.cursors.left.isDown && this.leanBackward();
-      this.cursors.right.isDown && this.leanForward();
+      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 300 && this.jump(delta);
+      this.cursors.left.isDown && this.leanBackward(delta);
+      this.cursors.right.isDown && this.leanForward(delta);
       this.cursors.down.isDown && this.leanCenter();
-      this.boost();
+      this.boost(delta);
     }
+    stats.end('snowman');
   }
 
   getTimeInAir(): number {
@@ -88,10 +93,10 @@ export class WickedSnowman {
     this.parts.jointNeck = null;
   }
 
-  private boost() {
-    const mod = this.isInAir() ? 0.6 : 0.9;
+  private boost(delta: number) {
+    const mod = this.isInAir() ? 0.6 : 1;
     const boostVector = this.boostVector;
-    boostVector.Set(this.boostForce * mod + this.stateComponent.comboBoost, 0);
+    boostVector.Set((this.boostForce * delta * mod) + this.stateComponent.comboBoost, 0);
     this.board.segments && this.board.segments[4].body.ApplyForceToCenter(boostVector, true);
     this.parts.body.ApplyForceToCenter(boostVector, true);
   }
@@ -100,13 +105,15 @@ export class WickedSnowman {
     this.setDistanceLegs(this.legMinLength, this.legMinLength);
   }
 
-  private leanBackward() {
-    this.parts.body.ApplyAngularImpulse(this.isInAir() ? -3 : -5);
+  private leanBackward(delta: number) {
+    const mod = this.isInAir() ? 0.6 : 1;
+    this.parts.body.ApplyAngularImpulse(-this.leanForce * delta);
     this.setDistanceLegs(this.legMinLength, this.legMaxLength);
   }
 
-  private leanForward() {
-    this.parts.body.ApplyAngularImpulse(this.isInAir() ? 3 : 5);
+  private leanForward(delta: number) {
+    const mod = this.isInAir() ? 0.6 : 1;
+    this.parts.body.ApplyAngularImpulse(this.leanForce * delta);
     this.setDistanceLegs(this.legMaxLength, this.legMinLength);
   }
 
@@ -116,23 +123,21 @@ export class WickedSnowman {
     this.setDistanceLegs(this.legMinLength, this.legMinLength);
   }
 
-  private jump() {
+  private jump(delta: number) {
     this.setDistanceLegs(this.legMaxLength, this.legMaxLength);
-    const hits = this.board.segments.map(s => s.groundRayResult.hit);
-    const isTailGrounded = hits[0];
-    const isNoseGrounded = hits[hits.length - 1];
-    const isCenterGrounded = hits[4] || hits[5] || hits[6];
+    const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
 
     const mod = isCenterGrounded ? 0.6 : 1;
+    const force = this.jumpForce * delta;
     const jumpVector = this.jumpVector;
-    jumpVector.Set(this.boostForce * mod, 0);
-    if (isTailGrounded && !isNoseGrounded) jumpVector.y = -this.jumpForce * mod;
-    else if (isNoseGrounded && !isTailGrounded) this.parts.body.GetWorldVector({x: 0, y: -this.jumpForce * mod}, jumpVector);
-    else if (isCenterGrounded) jumpVector.y = -this.jumpForce / 2.8;
+    jumpVector.Set(0, 0);
+    if (isTailGrounded && !isNoseGrounded) jumpVector.y = -force * mod;
+    else if (isNoseGrounded && !isTailGrounded) this.parts.body.GetWorldVector({x: 0, y: -force * mod}, jumpVector);
+    else if (isCenterGrounded) jumpVector.y = -force / 2.8;
     this.parts.body.ApplyForceToCenter(jumpVector, true);
   }
 
-  private setDistanceLegs(lengthLeft: number, lengthRight: number): void {
+  private setDistanceLegs(lengthLeft: number, lengthRight: number) {
     this.parts.jointDistanceLeft && this.b2Physics.setDistanceJointLength(this.parts.jointDistanceLeft, lengthLeft, this.legMinLength, this.legMaxLength);
     this.parts.jointDistanceRight && this.b2Physics.setDistanceJointLength(this.parts.jointDistanceRight, lengthRight, this.legMinLength, this.legMaxLength);
   }
