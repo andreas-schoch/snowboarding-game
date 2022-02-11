@@ -12,7 +12,6 @@ export class StateComponent extends Phaser.Events.EventEmitter {
   landedBackFlips = 0;
 
   private snowman: WickedSnowman;
-  private snowmanBodyImage: Ph.GameObjects.Image;
   private state: 'in-air' | 'grounded' | 'crashed';
 
   private totalTrickScore: number = 0;
@@ -34,14 +33,11 @@ export class StateComponent extends Phaser.Events.EventEmitter {
     super();
     this.snowman = snowman;
     this.parts = snowman.parts;
-    this.snowmanBodyImage = this.parts.body.GetUserData() as Ph.GameObjects.Image;
     this.crashIgnoredParts = [this.parts.armLowerLeft, this.parts.armLowerRight, this.parts.body];
     this.state = snowman.isInAir() ? 'in-air' : 'grounded';
     this.registerCollisionListener();
 
-    this.on('enter-in-air', () => {
-      this.state = 'in-air';
-    });
+    this.on('enter-in-air', () => this.state = 'in-air');
 
     this.on('enter-grounded', () => {
         this.state = 'grounded';
@@ -58,9 +54,8 @@ export class StateComponent extends Phaser.Events.EventEmitter {
           this.emit('combo-change', this.comboAccumulatedScore, this.comboMultiplier);
           this.emit('score-change', this.totalTrickScore);
 
-          this.comboLeewayTween.seek(0);
+          this.comboLeewayTween.resetTweenData(true);
           this.comboLeewayTween.play();
-          this.comboLeewayTween.restart();
         }
 
         this.totalRotation = 0;
@@ -108,13 +103,13 @@ export class StateComponent extends Phaser.Events.EventEmitter {
       const boardNose = this.snowman.board.nose;
       if (bodyA === this.parts.head || bodyB === this.parts.head) {
         const maxImpulse = Math.max(...impulse.normalImpulses);
-        if (maxImpulse > 7) {
+        if (maxImpulse > 8) {
           this.lostHead = true;
           this.isCrashed = true;
         }
       } else if (boardNose && (bodyA === boardNose.body || bodyB === boardNose.body)) {
         const maxImpulse = Math.max(...impulse.normalImpulses);
-        if (maxImpulse > 7 && boardNose.crashRayResult?.hit) this.isCrashed = true;
+        if (maxImpulse > 10 && boardNose.crashRayResult?.hit) this.isCrashed = true;
       }
     });
   }

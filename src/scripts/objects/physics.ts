@@ -59,22 +59,40 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.userDataGraphics = scene.add.graphics();
   }
 
+  update() {
+    stats.begin('physics');
+    let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime.rate;
+    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 6));
+    this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
+    this.world.ClearForces(); // recommended after each time step
+
+    // iterate through all bodies
+    const worldScale = this.worldScale;
+    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
+      if (!body) continue;
+
+      // update the visible graphics object attached to the physics body
+      // TODO turn user data into an object ---> {type: 'dynamic|obstacle', representation: Image|Graphics|null}
+      let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
+      if (bodyRepresentation) {
+        let {x, y} = body.GetPosition();
+        bodyRepresentation.x = x * worldScale;
+        bodyRepresentation.y = y * worldScale;
+        bodyRepresentation.rotation = body.GetAngle(); // in radians;
+      }
+    }
+    stats.end('physics');
+  }
+
   enterBulletTime(duration: number, rate: number): void {
     this.bulletTime.rate = rate;
-    // @ts-ignore
-    // (this.scene as GameScene).music.rate = 0.7;
     this.scene.tweens.add({
       delay: duration,
-      // @ts-ignore
-      targets: [this.bulletTime, this.scene.music],
+      targets: [this.bulletTime],
       rate: 0.9,
       duration: 500,
       // onComplete: tween => console.log('done tween'),
     });
-
-    // this.bulletTime = rate;
-
-    // if (duration !== -1) setTimeout(() => this.bulletTime.rate = 1, duration);
   }
 
   createBox(posX: number, posY: number, angle: number, width: number, height: number, isDynamic: boolean, color: number = 0xB68750): Pl.b2Body {
@@ -179,31 +197,6 @@ export class Physics extends Phaser.Events.EventEmitter {
     joint.SetMinLength(minLength ? minLength / this.worldScale : joint.GetMinLength());
     joint.SetMaxLength(maxLength ? maxLength / this.worldScale : joint.GetMaxLength());
     joint.SetLength(length / this.worldScale);
-  }
-
-  update() {
-    stats.begin('physics');
-    let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime.rate;
-    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 6));
-    this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
-    this.world.ClearForces(); // recommended after each time step
-
-    // iterate through all bodies
-    const worldScale = this.worldScale;
-    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
-      if (!body) continue;
-
-      // update the visible graphics object attached to the physics body
-      // TODO turn user data into an object ---> {type: 'dynamic|obstacle', representation: Image|Graphics|null}
-      let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
-      if (bodyRepresentation) {
-        let {x, y} = body.GetPosition();
-        bodyRepresentation.x = x * worldScale;
-        bodyRepresentation.y = y * worldScale;
-        bodyRepresentation.rotation = body.GetAngle(); // in radians;
-      }
-    }
-    stats.end('physics');
   }
 
   isEdge(shape: Pl.b2Shape): shape is Pl.b2EdgeShape {
