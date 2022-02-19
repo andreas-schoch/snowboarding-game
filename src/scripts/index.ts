@@ -7,6 +7,18 @@ import GameStats from 'gamestats.js';
 export const DEFAULT_WIDTH = 960;
 export const DEFAULT_HEIGHT = 540;
 
+
+export const enum renderDepth {
+  BACKDROP,
+  TREE_BACKGROUND,
+  TERRAIN,
+  MISC,
+  TREE_PHYSICS,
+  BOULDER,
+  COIN,
+  SNOWMAN,
+}
+
 const gameConfig: Ph.Types.Core.GameConfig = {
   title: 'Wicked Snowman',
   version: '0.4.2',
@@ -24,8 +36,8 @@ const gameConfig: Ph.Types.Core.GameConfig = {
     parent: 'phaser-wrapper',
     mode: Ph.Scale.FIT,
     autoCenter: Ph.Scale.CENTER_BOTH,
-    width: 0 || DEFAULT_WIDTH,
-    height: 0 || DEFAULT_HEIGHT,
+    width: DEFAULT_WIDTH,
+    height: DEFAULT_HEIGHT,
   },
   scene: [PreloadScene, GameScene, UIScene],
 };
@@ -35,7 +47,7 @@ const config = {
   targetFPS: 60, /* the target max FPS */
   redrawInterval: 200, /* the interval in MS for redrawing the FPS graph */
   maximumHistory: 200, /* the length of the visual graph history in frames */
-  scale: 1.25, /* the scale of the canvas */
+  scale: 1, /* the scale of the canvas */
   memoryUpdateInterval: 100, /* the interval for measuring the memory */
   memoryMaxHistory: 60 * 10, /* the max amount of memory measures */
 

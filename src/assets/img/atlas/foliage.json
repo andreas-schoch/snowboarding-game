@@ -1,0 +1,356 @@
+{
+	"textures": [
+		{
+			"image": "foliage.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 268,
+				"h": 1020
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "dead-tree-03.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 119,
+						"h": 512
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 119,
+						"h": 512
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 119,
+						"h": 512
+					}
+				},
+				{
+					"filename": "boulder-01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 150
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 150
+					},
+					"frame": {
+						"x": 1,
+						"y": 515,
+						"w": 150,
+						"h": 150
+					}
+				},
+				{
+					"filename": "dead-tree-01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 145,
+						"h": 504
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 145,
+						"h": 504
+					},
+					"frame": {
+						"x": 122,
+						"y": 1,
+						"w": 145,
+						"h": 504
+					}
+				},
+				{
+					"filename": "dead-tree-02.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 89,
+						"h": 512
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 89,
+						"h": 512
+					},
+					"frame": {
+						"x": 153,
+						"y": 507,
+						"w": 89,
+						"h": 512
+					}
+				},
+				{
+					"filename": "tree-segment-01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 77,
+						"h": 45
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 77,
+						"h": 45
+					},
+					"frame": {
+						"x": 1,
+						"y": 667,
+						"w": 77,
+						"h": 45
+					}
+				},
+				{
+					"filename": "snowman-body.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 30,
+						"h": 30
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 30,
+						"h": 30
+					},
+					"frame": {
+						"x": 1,
+						"y": 714,
+						"w": 30,
+						"h": 30
+					}
+				},
+				{
+					"filename": "tree-segment-02.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 88,
+						"h": 29
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 88,
+						"h": 29
+					},
+					"frame": {
+						"x": 1,
+						"y": 746,
+						"w": 88,
+						"h": 29
+					}
+				},
+				{
+					"filename": "tree-segment-03.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 84,
+						"h": 22
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 84,
+						"h": 22
+					},
+					"frame": {
+						"x": 33,
+						"y": 714,
+						"w": 84,
+						"h": 22
+					}
+				},
+				{
+					"filename": "tree-segment-08.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 60,
+						"h": 10
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 60,
+						"h": 10
+					},
+					"frame": {
+						"x": 80,
+						"y": 667,
+						"w": 60,
+						"h": 10
+					}
+				},
+				{
+					"filename": "coin.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 22,
+						"h": 22
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 22,
+						"h": 22
+					},
+					"frame": {
+						"x": 80,
+						"y": 679,
+						"w": 22,
+						"h": 22
+					}
+				},
+				{
+					"filename": "snowman-head.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 21,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 104,
+						"y": 679,
+						"w": 21,
+						"h": 21
+					}
+				},
+				{
+					"filename": "tree-segment-04.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 83,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 83,
+						"h": 21
+					},
+					"frame": {
+						"x": 1,
+						"y": 777,
+						"w": 83,
+						"h": 21
+					}
+				},
+				{
+					"filename": "tree-segment-05.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 21
+					},
+					"frame": {
+						"x": 1,
+						"y": 800,
+						"w": 80,
+						"h": 21
+					}
+				},
+				{
+					"filename": "snowman-leg.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 21
+					},
+					"frame": {
+						"x": 1,
+						"y": 823,
+						"w": 9,
+						"h": 21
+					}
+				},
+				{
+					"filename": "tree-segment-06.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 79,
+						"h": 18
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 79,
+						"h": 18
+					},
+					"frame": {
+						"x": 1,
+						"y": 846,
+						"w": 79,
+						"h": 18
+					}
+				},
+				{
+					"filename": "tree-segment-07.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 75,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 75,
+						"h": 16
+					},
+					"frame": {
+						"x": 12,
+						"y": 823,
+						"w": 75,
+						"h": 16
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:07c97d559f10c7e9459fdc1c0660e4a7:f25dbfd467a86c68d3ba521522fc5f5b:58f5b0f641552b8bba8abbc299816f47$"
+	}
+}

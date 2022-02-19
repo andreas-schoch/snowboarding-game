@@ -1,9 +1,9 @@
 import * as Ph from 'phaser';
-import {StateComponent} from '../objects/state-component';
 import {DEFAULT_WIDTH} from '../index';
+import {BoostBar} from '../components/boost-bar';
 
 export default class UIScene extends Ph.Scene {
-  private state: StateComponent;
+  private observer: Phaser.Events.EventEmitter;
   private restartGame: () => void;
 
   private playAgainButton: Phaser.GameObjects.BitmapText;
@@ -13,13 +13,14 @@ export default class UIScene extends Ph.Scene {
   private textCombo: Phaser.GameObjects.BitmapText;
   private textScore: Phaser.GameObjects.BitmapText;
   private comboLeewayChart: Ph.GameObjects.Graphics;
+  private boostBar: BoostBar;
 
   constructor() {
     super({key: 'UIScene'});
   }
 
-  init([state, restartGameCB]: [StateComponent, () => void]) {
-    this.state = state;
+  init([observer, restartGameCB]: [Ph.Events.EventEmitter, () => void]) {
+    this.observer = observer;
     this.restartGame = restartGameCB;
   }
 
@@ -37,7 +38,8 @@ export default class UIScene extends Ph.Scene {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-    // TODO create leaderboard component
+    this.boostBar = new BoostBar(this, this.observer, 10, 100);
+
     this.playAgainButton = this.add.bitmapText(screenCenterX, screenCenterY * 1.5, 'atari-classic', 'PLAY AGAIN?')
     .setScrollFactor(0)
     .setFontSize(FONTSIZE_BUTTON)
@@ -60,12 +62,13 @@ export default class UIScene extends Ph.Scene {
     this.add.bitmapText(screenCenterX * 2 - PADDING, PADDING, 'atari-classic', 'SCORE').setScrollFactor(0, 0).setOrigin(1, 0).setFontSize(FONTSIZE_TITLE);
     this.textScore = this.add.bitmapText(screenCenterX * 2 - PADDING, FONTSIZE_TITLE + (PADDING * 2), 'atari-classic', '0').setScrollFactor(0, 0).setFontSize(FONTSIZE_VALUE).setOrigin(1, 0);
 
-    this.state.on('combo-change', (accumulated, multiplier) => this.textCombo.setText(accumulated ? (accumulated + 'x' + multiplier) : '-'));
-    this.state.on('score-change', (score) => this.textScore.setText(score));
+    this.observer.on('combo-change', (accumulated, multiplier) => this.textCombo.setText(accumulated ? (accumulated + 'x' + multiplier) : '-'));
+    this.observer.on('score-change', score => this.textScore.setText(score));
+    this.observer.on('distance-change', distance => this.textDistance.setText(String(distance) + 'm'));
 
     this.comboLeewayChart = this.add.graphics();
 
-    this.state.on('combo-leeway-update', (value) => {
+    this.observer.on('combo-leeway-update', (value) => {
       this.comboLeewayChart
       .clear()
       .fillStyle(0xffffff)
@@ -73,7 +76,7 @@ export default class UIScene extends Ph.Scene {
       .fillPath();
     });
 
-    this.state.on('enter-crashed', () => {
+    this.observer.on('enter-crashed', () => {
       this.playAgainButton.setAlpha(1);
       this.tweens.add({
         targets: this.music,
@@ -87,22 +90,7 @@ export default class UIScene extends Ph.Scene {
   }
 
   update() {
-    if (!this.state.isCrashed) this.textDistance.setText(String(this.state.getTravelDistanceMeters()) + 'm');
   }
-
-  // private setMusicRate(rateStart: number, resetDelay: number, resetDuration: number, resetRate: number) {
-  //   // @ts-ignore
-  //   this.music.rate = rateStart;
-  //
-  //   setTimeout(() => {
-  //     this.tweens.add({
-  //       targets: this.music,
-  //       rate: resetRate,
-  //       duration: resetDuration,
-  //       onComplete: tween => tween.destroy(),
-  //     });
-  //   }, resetDelay);
-  // }
 
   private playAgain() {
     this.music.stop();

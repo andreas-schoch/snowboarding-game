@@ -1,7 +1,9 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
+import {b2BodyType} from '@box2d/core';
 import {Physics} from './physics';
 import {WickedSnowman} from './wicked-snowman';
+import GameScene from '../scenes/game.scene';
 
 
 interface IRayCastResult {
@@ -29,7 +31,7 @@ export interface ISegment {
 export class WickedSnowboard {
   numSegments: number = 10;
   segmentLength: number = 8.4;
-  segmentThickness: number = 3.375;
+  segmentThickness: number = 3.75;
 
   nose?: ISegment;
   leftBinding: Pl.b2Body;
@@ -46,7 +48,7 @@ export class WickedSnowboard {
   private debugGraphics: Ph.GameObjects.Graphics;
 
   private readonly player: WickedSnowman;
-  private readonly scene: Ph.Scene;
+  private readonly scene: GameScene;
   private readonly b2Physics: Physics;
 
   constructor(player: WickedSnowman, x: number = 250, y: number = 50) {
@@ -136,7 +138,7 @@ export class WickedSnowboard {
     const color = 0xD5365E;
     const temp: IRayCastResult = {hit: false, point: null, normal: null, fraction: -1, lastHitTime: -1};
     for (let i = 1; i <= this.numSegments; i++) {
-      const body = this.b2Physics.createBox(x + segmentLength * i, y, 0, segmentLength, segmentThickness, true, color);
+      const body = this.b2Physics.createBox(x + segmentLength * i, y, 0, segmentLength, segmentThickness, {color, type: b2BodyType.b2_dynamicBody});
       const isNose = i === this.numSegments;
       const groundHitResult = {...temp};
       const crashHitResult = {...temp};

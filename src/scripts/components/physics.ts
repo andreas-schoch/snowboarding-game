@@ -1,6 +1,8 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {stats} from '../index';
+import {b2BodyType} from '@box2d/core';
+import {renderDepth, stats} from '../index';
+import GameScene from '../scenes/game.scene';
 
 
 export interface IRevoluteJointConfig {
@@ -30,11 +32,33 @@ export interface IBodyConfig {
   linearDamping?: number;
   angularDamping?: number;
   type?: Pl.b2BodyType;
+  enabled?: boolean;
+  isSensor?: boolean;
+  fixedRotation?: boolean;
+  texture?: string;
+  textureKey?: string;
+  depth?: number;
+}
+
+
+export interface IChainConfig {
+  points: Pl.XY[];
+  pointsScaled?: boolean;
+  type: 'terrain' | 'physics-tree' | 'boulder';
+  texture?: string;
+  textureKey?: string;
+  color?: number;
+  body?: Pl.b2Body;
+  disabled?: boolean;
+  friction?: number;
+  depth?: number;
+  angle?: number;
+  isDynamic?: boolean;
 }
 
 
 export class Physics extends Phaser.Events.EventEmitter {
-  private scene: Ph.Scene;
+  private scene: GameScene;
   worldScale: number;
   world: Pl.b2World;
   private readonly userDataGraphics: Ph.GameObjects.Graphics;
@@ -42,13 +66,13 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly ZERO: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private bulletTime: { rate: number } = {rate: 1};
 
-  constructor(scene: Ph.Scene, worldScale: number, gravity: Pl.b2Vec2) {
+  constructor(scene: GameScene, worldScale: number, gravity: Pl.b2Vec2) {
     super();
     this.scene = scene;
     this.worldScale = worldScale;
     this.world = Pl.b2World.Create(gravity);
     this.world.SetContactListener({
-      BeginContact: () => null,
+      BeginContact: contact => this.emit('begin-contact', contact),
       EndContact: () => null,
       PreSolve: () => null,
       PostSolve: (contact, impulse) => this.emit('post-solve', contact, impulse),
@@ -61,9 +85,11 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   update() {
     stats.begin('physics');
-    let timeStep = (Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime.rate;
-    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 6));
-    this.world.Step(timeStep, {positionIterations: iterations, velocityIterations: iterations});
+    // timestep is tricky. It is recommended to be static but I want the game to work with fps fluctuations
+    // Currently it is dynamic but capped so it doesn't get too large and prevent collisions to be missed
+    // let timeStep = Math.min((Math.round(this.scene.game.loop.delta) / 640) * this.bulletTime.rate, 0.025);
+    const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 9));
+    this.world.Step(1 / 38.5, {positionIterations: iterations, velocityIterations: iterations});
     this.world.ClearForces(); // recommended after each time step
 
     // iterate through all bodies
@@ -75,10 +101,15 @@ export class Physics extends Phaser.Events.EventEmitter {
       // TODO turn user data into an object ---> {type: 'dynamic|obstacle', representation: Image|Graphics|null}
       let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
       if (bodyRepresentation) {
-        let {x, y} = body.GetPosition();
-        bodyRepresentation.x = x * worldScale;
-        bodyRepresentation.y = y * worldScale;
-        bodyRepresentation.rotation = body.GetAngle(); // in radians;
+        if (body.IsEnabled()) {
+          let {x, y} = body.GetPosition();
+          !bodyRepresentation.visible && bodyRepresentation.setVisible(true);
+          bodyRepresentation.x = x * worldScale;
+          bodyRepresentation.y = y * worldScale;
+          bodyRepresentation.rotation = body.GetAngle(); // in radians;
+        } else {
+          bodyRepresentation.visible && bodyRepresentation.setVisible(false);
+        }
       }
     }
     stats.end('physics');
@@ -95,55 +126,106 @@ export class Physics extends Phaser.Events.EventEmitter {
     });
   }
 
-  createBox(posX: number, posY: number, angle: number, width: number, height: number, isDynamic: boolean, color: number = 0xB68750): Pl.b2Body {
+  createBox(posX: number, posY: number, angle: number, width: number, height: number, config: IBodyConfig = {}): Pl.b2Body {
     const shape = new Pl.b2PolygonShape();
     shape.SetAsBox(width / 2 / this.worldScale, height / 2 / this.worldScale);
 
     const fd: Pl.b2FixtureDef = {
       shape,
-      density: 0.1,
-      friction: 0.001,
-      restitution: 0.005,
+      isSensor: config.isSensor || false,
+      density: config.density || 0.1,
+      friction: config.friction || 0.001,
+      restitution: config.restitution || 0.005,
     };
 
     const body = this.world.CreateBody({
+      enabled: config.enabled || true,
+      fixedRotation: config.fixedRotation,
       awake: true,
       position: {x: posX / this.worldScale, y: posY / this.worldScale},
       angle: angle,
-      linearDamping: 0.15,
-      angularDamping: 0.1,
-      type: isDynamic ? Pl.b2BodyType.b2_dynamicBody : Pl.b2BodyType.b2_staticBody,
+      linearDamping: config.linearDamping || 0.15,
+      angularDamping: config.angularDamping || 0.1,
+      type: config.type,
     });
     body.CreateFixture(fd);
     body.SetMassData({mass: 0.5, center: new Pl.b2Vec2(), I: 1});
 
-    let userData = this.scene.add.graphics();
-    userData.fillStyle(color);
-    userData.fillRect(-width / 2, -height / 2, width * 2, height * 2);
-    const key = `box-${width}-${height}-${color}`;
-    if (!this.textureKeys.has(key)) {
-      this.textureKeys.add(key);
-      userData.generateTexture(key, width, height);
+    let img: Ph.GameObjects.Image;
+    if (!config.texture) {
+      const color = config.color || 0xB68750;
+      let userData = this.scene.add.graphics().setDepth(config.depth || renderDepth.MISC);
+      userData.fillStyle(color);
+      userData.fillRect(-width / 2, -height / 2, width * 2, height * 2);
+      const key = `box-${width}-${height}-${color}`;
+      if (!this.textureKeys.has(key)) {
+        this.textureKeys.add(key);
+        userData.generateTexture(key, width, height);
+      }
+      img = this.scene.add.image(posX, posY, key);
+    } else {
+      img = this.scene.add.image(posX, posY, config.texture, config.textureKey);
+      img.displayHeight = height;
+      img.displayWidth = width;
     }
-    const img = this.scene.add.image(posX, posY, key);
+    img.setDepth(config.depth || renderDepth.MISC);
     body.SetUserData(img);
     return body;
   }
 
-  createCircle(posX: number, posY: number, angle: number, radius: number, config: IBodyConfig = {}): Pl.b2Body {
+  createChain(posX: number, posY: number, config: IChainConfig): [Pl.b2Body, Pl.b2Fixture] {
+    const chain = new Pl.b2ChainShape();
+
+    config.type === 'terrain'
+      ? chain.CreateChain(config.points, config.points.length, config.points[0], config.points[config.points.length - 1])
+      : chain.CreateLoop(config.points, config.points.length);
+
+    const fd: Pl.b2FixtureDef = {shape: chain, density: 0, friction: 0};
+    // this.scene.add.graphics().strokePoints(config.points.map(p => ({x: p.x * this.worldScale + posX, y: p.y * this.worldScale + posY}))).setDepth(100);
+
+    let body;
+    if (!config.body) {
+      body = this.world.CreateBody({
+        enabled: !config.disabled,
+        angle: config.angle || 0,
+        position: {x: posX / this.worldScale, y: posY / this.worldScale},
+        linearDamping: 0.8,
+        angularDamping: 0.8,
+        type: config.isDynamic ? Pl.b2BodyType.b2_dynamicBody : Pl.b2BodyType.b2_staticBody,
+      });
+    } else {
+      body = config.body;
+    }
+
+    const fixture = body.CreateFixture(fd);
+    !config.body && body.SetMassData({mass: 0.5, center: new Pl.b2Vec2(), I: 1});
+
+    if (config.type !== 'terrain' && config.texture) {
+      const img = this.scene.add.image(posX, posY, config.texture, config.textureKey).setDepth(config.depth || renderDepth.MISC).setVisible(!config.disabled);
+      body.SetUserData(img);
+      // fixture.SetUserData(img); // WARNING: setting data to a fixture causes a b2_dynamicBody to stay static !? Is this a bug?
+    }
+
+    return [body, fixture];
+  }
+
+  createCircle(posX: number, posY: number, angle: number, radius: number, config: IBodyConfig = {type: b2BodyType.b2_dynamicBody, fixedRotation: false}): Pl.b2Body {
     const shape = new Pl.b2CircleShape();
     shape.m_radius = radius / this.worldScale;
 
     const fd: Pl.b2FixtureDef = {
       shape,
-      density: 1,
-      friction: 0.001,
-      restitution: 0.005,
+      isSensor: config.isSensor,
+      density: config.density || 1,
+      friction: config.friction || 0.001,
+      restitution: config.restitution || 0.005,
     };
 
     const body = this.world.CreateBody({
+      enabled: config.enabled || true,
       position: {x: posX / this.worldScale, y: posY / this.worldScale},
       angle: angle,
+      fixedRotation: config.fixedRotation,
       linearDamping: config.linearDamping,
       angularDamping: config.angularDamping,
       type: config.type,
@@ -152,15 +234,25 @@ export class Physics extends Phaser.Events.EventEmitter {
     body.CreateFixture(fd);
     body.SetMassData({mass: 1, center: this.ZERO, I: 1});
 
-    const key = `circle-${radius}-${config.color || 0x333333}`;
-    if (!this.textureKeys.has(key)) {
-      this.userDataGraphics.clear();
-      this.userDataGraphics.fillStyle(config.color || 0x333333);
-      this.userDataGraphics.fillCircle(radius, radius, radius);
-      this.textureKeys.add(key);
-      this.userDataGraphics.generateTexture(key, radius * 2, radius * 2);
+    let img: Ph.GameObjects.Image;
+    if (!config.texture) {
+      const color = config.color || 0xB68750;
+      const key = `circle-${radius}-${color}`;
+      this.userDataGraphics
+      .clear()
+      .fillStyle(color)
+      .fillCircle(radius, radius, radius)
+      .generateTexture(key, radius * 2, radius * 2);
+      if (!this.textureKeys.has(key)) {
+        this.textureKeys.add(key);
+      }
+      img = this.scene.add.image(posX, posY, key);
+    } else {
+      img = this.scene.add.image(posX, posY, config.texture, config.textureKey);
+      img.displayHeight = radius * 2;
+      img.displayWidth = radius * 2;
     }
-    const img = this.scene.add.image(posX, posY, key);
+    img.setDepth(config.depth || renderDepth.MISC);
     body.SetUserData(img);
 
     return body;
