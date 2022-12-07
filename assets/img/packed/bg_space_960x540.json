@@ -1,16 +1,16 @@
 {
 	"textures": [
 		{
-			"image": "packed-960x540.png",
+			"image": "bg_space_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 960,
-				"h": 1620
+				"w": 966,
+				"h": 1638
 			},
-			"scale": 1,
+			"scale": 0.75,
 			"frames": [
 				{
-					"filename": "bg-space-back.png",
+					"filename": "bg_space_back.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -24,14 +24,14 @@
 						"h": 540
 					},
 					"frame": {
-						"x": 0,
-						"y": 0,
+						"x": 3,
+						"y": 3,
 						"w": 960,
 						"h": 540
 					}
 				},
 				{
-					"filename": "mountain-back.png",
+					"filename": "bg_space_mid.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -45,16 +45,16 @@
 						"h": 540
 					},
 					"frame": {
-						"x": 0,
-						"y": 540,
+						"x": 3,
+						"y": 549,
 						"w": 960,
 						"h": 540
 					}
 				},
 				{
-					"filename": "mountain-mid.png",
+					"filename": "bg_space_front.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
 						"w": 960,
 						"h": 540
@@ -62,13 +62,13 @@
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 960,
+						"w": 957,
 						"h": 540
 					},
 					"frame": {
-						"x": 0,
-						"y": 1080,
-						"w": 960,
+						"x": 3,
+						"y": 1095,
+						"w": 957,
 						"h": 540
 					}
 				}
@@ -78,6 +78,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:f0bac2ce451d1cacfbbdde4d0c7c6494:7dcbb97bbae0223f40893ce64919b4ff:b81ccefc638fe588bc313b73d9f3050d$"
+		"smartupdate": "$TexturePacker:SmartUpdate:0b1cafeebe549ced25d26ea9131be4a8:a88a525cb2ac2f05f05b4e3ba7cb6e01:3d4c8a5f12af39864db0a060f40370c9$"
 	}
 }
