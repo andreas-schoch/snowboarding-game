@@ -195,7 +195,7 @@ class PlayerController {
         this.jumpForce = 650 * 60;
         this.leanForce = 2.5 * 60;
         this.jumpVector = new _box2d_core__WEBPACK_IMPORTED_MODULE_0__.b2Vec2(0, 0);
-        this.debug = true;
+        this.debug = false;
         this.scene = scene;
         this.b2Physics = b2Physics;
         this.cursors = this.scene.input.keyboard.createCursorKeys();
