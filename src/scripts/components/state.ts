@@ -1,7 +1,8 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {IBodyParts, WickedSnowman} from './wicked-snowman';
 import {Physics} from './physics';
+import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
+import {IBodyParts, PlayerController} from './wicked-snowman';
 
 
 export class State {
@@ -18,7 +19,7 @@ export class State {
   timeGrounded: number = 0;
 
   private readonly b2Physics: Physics;
-  private snowman: WickedSnowman;
+  private playerController: PlayerController;
   private state: 'in-air' | 'grounded' | 'crashed';
 
   private totalTrickScore: number = 0;
@@ -32,27 +33,29 @@ export class State {
   private pendingFrontFlips: number = 0;
   private pendingBackFlips: number = 0;
   private readonly parts: IBodyParts;
-  private readonly crashIgnoredParts: Pl.b2Body[];
-  private readonly ignoredSensorBodies: Set<Pl.b2Body> = new Set();
+  // private readonly crashIgnoredParts: Pl.b2Body[];
+  // private readonly ignoredSensorBodies: Set<Pl.b2Body> = new Set();
+  private readonly pickupsToProcess: Set<Pl.b2Body & RubeEntity> = new Set();
   private comboMultiplier: number = 0;
   private comboLeewayTween: Phaser.Tweens.Tween;
 
   private readonly alreadyCollectedCoins: Set<Pl.b2Fixture> = new Set();
   private lastDistance: number;
 
-  constructor(snowman: WickedSnowman) {
-    this.snowman = snowman;
-    this.parts = snowman.parts;
-    this.b2Physics = snowman.b2Physics;
-    this.crashIgnoredParts = [this.parts.armLowerLeft, this.parts.armLowerRight, this.parts.body];
-    this.state = snowman.isInAir() ? 'in-air' : 'grounded';
+  constructor(playerController: PlayerController) {
+    this.playerController = playerController;
+    this.parts = playerController.parts;
+
+    this.b2Physics = playerController.b2Physics;
+    // this.crashIgnoredParts = [this.parts.armLowerLeft, this.parts.armLowerRight, this.parts.body];
+    this.state = playerController.board.isInAir() ? 'in-air' : 'grounded';
     this.registerCollisionListeners();
 
-    this.snowman.scene.observer.on('enter-in-air', () => this.state = 'in-air');
+    this.playerController.scene.observer.on('enter-in-air', () => this.state = 'in-air');
 
-    this.snowman.scene.observer.on('enter-grounded', () => {
+    this.playerController.scene.observer.on('enter-grounded', () => {
         this.state = 'grounded';
-        this.timeGrounded = this.snowman.scene.game.getTime();
+        this.timeGrounded = this.playerController.scene.game.getTime();
         this.landedFrontFlips += this.pendingFrontFlips;
         this.landedBackFlips += this.pendingBackFlips;
 
@@ -63,10 +66,10 @@ export class State {
 
           this.comboAccumulatedScore += trickScore * 0.1;
           this.comboMultiplier++;
-          this.gainBoost(1, numFlips * 5);
-          this.snowman.scene.observer.emit('combo-change', this.comboAccumulatedScore, this.comboMultiplier);
-          this.snowman.scene.observer.emit('score-change', this.totalTrickScore);
-          this.snowman.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
+          // this.gainBoost(1, numFlips * 5);
+          this.playerController.scene.observer.emit('combo-change', this.comboAccumulatedScore, this.comboMultiplier);
+          this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
+          this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
 
           this.comboLeewayTween.resetTweenData(true);
           this.comboLeewayTween.play();
@@ -79,23 +82,23 @@ export class State {
       },
     );
 
-    this.snowman.scene.observer.on('enter-crashed', () => {
+    this.playerController.scene.observer.on('enter-crashed', () => {
       this.state = 'crashed';
       if (this.comboLeewayTween.isPlaying() || this.comboLeewayTween.isPaused()) {
         this.comboLeewayTween.stop();
       }
     });
 
-    this.comboLeewayTween = this.snowman.scene.tweens.addCounter({
+    this.comboLeewayTween = this.playerController.scene.tweens.addCounter({
       paused: true,
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 1000,
-      onUpdate: (tween) => this.snowman.scene.observer.emit('combo-leeway-update', tween.getValue()),
+      onUpdate: (tween) => this.playerController.scene.observer.emit('combo-leeway-update', tween.getValue()),
       onComplete: tween => {
         this.totalTrickScore += this.comboAccumulatedScore * this.comboMultiplier;
-        this.snowman.scene.observer.emit('score-change', this.totalTrickScore);
-        this.snowman.scene.observer.emit('combo-change', 0, 0);
+        this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
+        this.playerController.scene.observer.emit('combo-change', 0, 0);
         this.protoTrickScore = 0;
         this.comboAccumulatedScore = 0;
         this.comboMultiplier = 0;
@@ -108,14 +111,14 @@ export class State {
   }
 
   getTravelDistanceMeters(): number {
-    const distance = this.parts.body.GetPosition().Length() / 2;
+    const distance = this.parts.body.GetPosition().Length();
     return Math.floor(distance / 50) * 50;
   }
 
   gainBoost(delta: number, boostUnits: number): number {
     const boost = Math.min(this.maxBoost, (this.BASE_BOOST_FLOW * boostUnits * delta) + this.availableBoost);
     this.availableBoost = boost;
-    this.snowman.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
+    this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
     return boost;
   }
 
@@ -123,67 +126,77 @@ export class State {
     if (this.availableBoost <= 0) return 0;
     const boost = Math.min(this.availableBoost, this.BASE_BOOST_FLOW * boostUnits * delta);
     this.availableBoost -= boost * (boostUnits > 1 ? 1.5 : 1);
-    this.snowman.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
+    this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
     return boost;
   }
 
   private registerCollisionListeners() {
-    this.snowman.b2Physics.on('post-solve', (contact: Pl.b2Contact, impulse: Pl.b2ContactImpulse) => {
-      if (this.isCrashed && this.lostHead) return;
+    this.playerController.b2Physics.on('post-solve', (contact: Pl.b2Contact, impulse: Pl.b2ContactImpulse) => {
+      if (this.isCrashed) return;
       const bodyA = contact.GetFixtureA().GetBody();
       const bodyB = contact.GetFixtureB().GetBody();
-      if (this.crashIgnoredParts.includes(bodyA) || this.crashIgnoredParts.includes(bodyB)) return;
-
-      const boardNose = this.snowman.board.nose;
-      if (bodyA === this.parts.head || bodyB === this.parts.head) {
-        const maxImpulse = Math.max(...impulse.normalImpulses);
-        if (maxImpulse > 8) {
-          this.lostHead = true;
-          this.isCrashed = true;
-        }
-      } else if (boardNose && (bodyA === boardNose.body || bodyB === boardNose.body)) {
-        const maxImpulse = Math.max(...impulse.normalImpulses);
-        if (maxImpulse > 10 && boardNose.crashRayResult?.hit) this.isCrashed = true;
-      }
+      if (bodyA === bodyB) return;
+      this.isCrashed = (bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...impulse.normalImpulses) > 8;
     });
 
-    this.snowman.b2Physics.on('begin-contact', (contact: Pl.b2Contact) => {
-      const fixtureA = contact.GetFixtureA();
-      const fixtureB = contact.GetFixtureB();
+    this.playerController.b2Physics.on('begin-contact', (contact: Pl.b2Contact) => {
+      const fixtureA: Pl.b2Fixture & RubeEntity = contact.GetFixtureA();
+      const fixtureB: Pl.b2Fixture & RubeEntity = contact.GetFixtureB();
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
 
-      if (fixtureA.IsSensor() && bodyA.IsEnabled() && !this.ignoredSensorBodies.has(bodyA)) {
-        this.ignoredSensorBodies.add(bodyA);
-        this.gainBoost(1, 0.25);
-        this.totalTrickScore += 25;
-        this.snowman.scene.observer.emit('collected-coin', bodyA);
-        this.snowman.scene.observer.emit('score-change', this.totalTrickScore);
-        setTimeout(() => bodyA.SetEnabled(false)); // cannot change bodies within contact listeners
-
-      } else if (fixtureB.IsSensor() && bodyB.IsEnabled() && !this.ignoredSensorBodies.has(bodyB)) {
-        this.ignoredSensorBodies.add(bodyB);
-        this.gainBoost(1, 0.25);
-        this.totalTrickScore += 25;
-        this.snowman.scene.observer.emit('collected-coin', bodyB);
-        this.snowman.scene.observer.emit('score-change', this.totalTrickScore);
-        setTimeout(() => bodyB.SetEnabled(false)); // cannot change bodies within contact listeners
+      if (fixtureA.IsSensor() && !this.pickupsToProcess.has(bodyA) && fixtureA.customPropertiesMap?.phaserSensorType === 'pickup_present') {
+        console.log('-------------pickup A', fixtureA.name);
+        this.pickupsToProcess.add(bodyA);
+        // setTimeout(() => bodyA.SetEnabled(false)); // cannot change bodies within contact listeners
+        // setTimeout(() => this.b2Physics.world.DestroyBody(bodyA));
+      } else if (fixtureB.IsSensor() && !this.pickupsToProcess.has(bodyB) && fixtureB.customPropertiesMap?.phaserSensorType === 'pickup_present') {
+        this.pickupsToProcess.add(bodyB);
+        console.log('-------------pickup B', fixtureB.name);
+        // setTimeout(() => bodyB.SetEnabled(false)); // cannot change bodies within contact listeners
+        // setTimeout(() => this.b2Physics.world.DestroyBody(bodyB));
       }
+
+      // if (fixtureA.IsSensor() && bodyA.IsEnabled() && !this.ignoredSensorBodies.has(bodyA)) {
+      //   this.ignoredSensorBodies.add(bodyA);
+      //   this.totalTrickScore += 25;
+      //   this.playerController.scene.observer.emit('collected-coin', bodyA);
+      //   this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
+      //   setTimeout(() => bodyA.SetEnabled(false)); // cannot change bodies within contact listeners
+      //
+      // } else if (fixtureB.IsSensor() && bodyB.IsEnabled() && !this.ignoredSensorBodies.has(bodyB)) {
+      //   this.ignoredSensorBodies.add(bodyB);
+      //   // this.gainBoost(1, 0.25);
+      //   this.totalTrickScore += 25;
+      //   this.playerController.scene.observer.emit('collected-coin', bodyB);
+      //   this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
+      //   setTimeout(() => bodyB.SetEnabled(false)); // cannot change bodies within contact listeners
+      // }
     });
   }
 
   update(delta: number): void {
-    this.ignoredSensorBodies.clear();
-    const isInAir = this.snowman.isInAir();
-    if (this.state !== 'crashed' && this.isCrashed) this.snowman.scene.observer.emit('enter-crashed');
-    if (this.state === 'grounded' && isInAir && !this.isCrashed) this.snowman.scene.observer.emit('enter-in-air');
-    else if (this.state === 'in-air' && !isInAir && !this.isCrashed) this.snowman.scene.observer.emit('enter-grounded');
+    this.pickupsToProcess.size && console.log('pickups', this.pickupsToProcess.size);
+
+    for (const body of this.pickupsToProcess) {
+      const img: Ph.GameObjects.Image = body.GetUserData();
+      this.b2Physics.world.DestroyBody(body);
+      img.destroy();
+      this.playerController.scene.observer.emit('pickup_present');
+    }
+
+    this.pickupsToProcess.clear();
+    const isInAir = this.playerController.board.isInAir();
+    if (this.state !== 'crashed' && this.isCrashed) this.playerController.scene.observer.emit('enter-crashed');
+    if (this.state === 'grounded' && isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter-in-air');
+    else if (this.state === 'in-air' && !isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter-grounded');
     this.updateTrickCounter();
     this.updateComboLeeway();
     this.updateDistance();
   }
 
   private updateTrickCounter() {
+    // console.log('-----state', this.state);
     if (this.state === 'in-air') {
       const currentAngle = Ph.Math.Angle.Normalize(this.parts.body.GetAngle());
 
@@ -204,7 +217,7 @@ export class State {
 
   private updateComboLeeway() {
     if (this.comboLeewayTween.isPlaying() || this.comboLeewayTween.isPaused()) {
-      if (this.state === 'in-air' || !this.snowman.board.isCenterGrounded) {
+      if (this.state === 'in-air' || !this.playerController.board.isCenterGrounded) {
         this.comboLeewayTween.pause();
       } else {
         this.comboLeewayTween.resume();
@@ -224,7 +237,7 @@ export class State {
   private updateDistance() {
     const distance = this.getTravelDistanceMeters();
     if (distance !== this.lastDistance) {
-      this.snowman.scene.observer.emit('distance-change', distance);
+      this.playerController.scene.observer.emit('distance-change', distance);
       this.lastDistance = distance;
     }
   }
