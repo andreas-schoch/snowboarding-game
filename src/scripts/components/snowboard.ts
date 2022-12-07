@@ -1,9 +1,8 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {b2BodyType} from '@box2d/core';
 import {Physics} from './physics';
-import {WickedSnowman} from './wicked-snowman';
 import GameScene from '../scenes/game.scene';
+import {PlayerController} from './wicked-snowman';
 
 
 interface IRayCastResult {
@@ -29,13 +28,7 @@ export interface ISegment {
 
 
 export class WickedSnowboard {
-  numSegments: number = 10;
-  segmentLength: number = 8.4;
-  segmentThickness: number = 3.75;
-
   nose?: ISegment;
-  leftBinding: Pl.b2Body;
-  rightBinding: Pl.b2Body;
 
   isTailGrounded: boolean;
   isNoseGrounded: boolean;
@@ -47,22 +40,21 @@ export class WickedSnowboard {
   private pointEnd: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private debugGraphics: Ph.GameObjects.Graphics;
 
-  private readonly player: WickedSnowman;
+  private readonly player: PlayerController;
   private readonly scene: GameScene;
   private readonly b2Physics: Physics;
 
-  constructor(player: WickedSnowman, x: number = 250, y: number = 50) {
+  constructor(player: PlayerController) {
     this.player = player;
     this.scene = player.scene;
     this.b2Physics = player.b2Physics;
 
     this.debugGraphics = this.scene.add.graphics();
-    const [left, right] = this.generateSegments(x, y, this.b2Physics.worldScale / 2);
-    this.leftBinding = left;
-    this.rightBinding = right;
+    this.initRays(this.b2Physics.worldScale / 4);
+
   }
 
-  update() {
+  update(delta: number) {
     this.player.debug && this.debugGraphics.clear();
     const segments = this.segments;
 
@@ -83,7 +75,7 @@ export class WickedSnowboard {
 
     this.isTailGrounded = segments[0].groundRayResult.hit;
     this.isNoseGrounded = segments[segments.length - 1].groundRayResult.hit;
-    this.isCenterGrounded = segments[4].groundRayResult.hit || segments[5].groundRayResult.hit || segments[6].groundRayResult.hit;
+    this.isCenterGrounded = segments[2].groundRayResult.hit || segments[3].groundRayResult.hit || segments[4].groundRayResult.hit;
   }
 
   getTimeInAir(): number {
@@ -98,6 +90,7 @@ export class WickedSnowboard {
 
   private rayCallbackFactory(hitResult: IRayCastResult) {
     return (fixture, point, normal, fraction) => {
+      this.b2Physics.rubeLoader.getCustomProperty(fixture, 'bool', 'phaserCrashSensorIgnore', false);
       hitResult.hit = true;
       hitResult.point = point;
       hitResult.normal = normal;
@@ -126,59 +119,31 @@ export class WickedSnowboard {
     const scale = this.b2Physics.worldScale;
     this.debugGraphics.lineBetween(
       this.pointStart.x * scale,
-      this.pointStart.y * scale,
+      -this.pointStart.y * scale,
       this.pointEnd.x * scale,
-      this.pointEnd.y * scale,
+      -this.pointEnd.y * scale,
     );
   }
 
-  private generateSegments(x: number, y: number, rayLength: number): [Pl.b2Body, Pl.b2Body] {
-    const {numSegments, segmentLength, segmentThickness} = this;
-    // create segments...
-    const color = 0xD5365E;
+  private initRays(rayLength: number) {
     const temp: IRayCastResult = {hit: false, point: null, normal: null, fraction: -1, lastHitTime: -1};
-    for (let i = 1; i <= this.numSegments; i++) {
-      const body = this.b2Physics.createBox(x + segmentLength * i, y, 0, segmentLength, segmentThickness, {color, type: b2BodyType.b2_dynamicBody});
-      const isNose = i === this.numSegments;
+    for (const segment of this.player.parts.boardSegments) {
+      const segmentIndex = this.b2Physics.rubeLoader.getCustomProperty(segment, 'int', 'phaserBoardSegmentIndex', -1);
+      const isNose = segmentIndex === this.player.parts.boardSegments.length - 1;
       const groundHitResult = {...temp};
       const crashHitResult = {...temp};
       this.segments.push({
-        body: body,
-        groundRayDirection: new Pl.b2Vec2(0, rayLength / this.b2Physics.worldScale),
+        body: segment,
+        groundRayDirection: new Pl.b2Vec2(0, -rayLength / this.b2Physics.worldScale),
         groundRayResult: groundHitResult,
         groundRayCallback: this.rayCallbackFactory(groundHitResult),
-        crashRayDirection: isNose ? new Pl.b2Vec2(rayLength / this.b2Physics.worldScale, 0) : undefined,
+        crashRayDirection: isNose ? new Pl.b2Vec2((isNose ? rayLength * 2 : rayLength) / this.b2Physics.worldScale, 0) : undefined,
         crashRayResult: isNose ? crashHitResult : undefined,
         crashRayCallback: isNose ? this.rayCallbackFactory(crashHitResult) : undefined,
       });
+
+      if (isNose) this.nose = this.segments[this.segments.length - 1];
     }
 
-    this.nose = this.segments[this.segments.length - 1];
-
-    const weldConfigs: { dampingRatio: number, frequencyHz: number, referenceAngle: number }[] = [
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.35},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.25},
-      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: -0.05},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: -0.025},
-      {dampingRatio: 0.5, frequencyHz: 10, referenceAngle: 0},
-      {dampingRatio: 0.5, frequencyHz: 8, referenceAngle: -0.025},
-      {dampingRatio: 0.5, frequencyHz: 7, referenceAngle: -0.05},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.25},
-      {dampingRatio: 0.5, frequencyHz: 6, referenceAngle: -0.35},
-    ];
-
-    // ...weld them together TODO move creation of weld joint to Physics class
-    for (let i = 0; i < numSegments - 1; i++) {
-      const [a, b] = this.segments.slice(i, i + 2);
-      const anchorAB = new Pl.b2Vec2((x + (segmentLength / 2) + segmentLength * (i + 1)) / this.b2Physics.worldScale, y / this.b2Physics.worldScale);
-      const {dampingRatio, frequencyHz, referenceAngle} = weldConfigs[i];
-      const jd = new Pl.b2WeldJointDef();
-      jd.Initialize(a.body, b.body, anchorAB);
-      jd.referenceAngle = referenceAngle;
-      Pl.b2AngularStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
-      this.b2Physics.world.CreateJoint(jd);
-    }
-
-    return [this.segments[3].body, this.segments[6].body];
   }
 }

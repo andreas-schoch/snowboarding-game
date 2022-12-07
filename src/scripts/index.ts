@@ -1,34 +1,25 @@
 import * as Ph from 'phaser';
 import PreloadScene from './scenes/preload.scene';
 import GameScene from './scenes/game.scene';
-import UIScene from './scenes/ui-scene';
 import GameStats from 'gamestats.js';
+import UiScene from './scenes/ui.scene';
 
-export const DEFAULT_WIDTH = 960;
-export const DEFAULT_HEIGHT = 540;
+export const DEFAULT_WIDTH = 1280;
+export const DEFAULT_HEIGHT = 720;
+export const DEFAULT_ZOOM = 1;
+export const RESOLUTION_SCALE = 1;
 
 
-export const enum renderDepth {
-  BACKDROP,
-  TREE_BACKGROUND,
-  TERRAIN,
-  MISC,
-  TREE_PHYSICS,
-  BOULDER,
-  COIN,
-  SNOWMAN,
-}
-
-const gameConfig: Ph.Types.Core.GameConfig = {
-  title: 'Wicked Snowman',
-  version: '0.4.2',
+export const gameConfig: Ph.Types.Core.GameConfig = {
+  title: 'Snowboarding Game',
+  version: '1.0.0',
   type: Ph.WEBGL,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
   fps: {
     min: 50,
     target: 60,
-    // smoothStep: true,
+    smoothStep: true,
   },
   // roundPixels: true,
   // pixelArt: true,
@@ -36,10 +27,10 @@ const gameConfig: Ph.Types.Core.GameConfig = {
     parent: 'phaser-wrapper',
     mode: Ph.Scale.FIT,
     autoCenter: Ph.Scale.CENTER_BOTH,
-    width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
+    width: DEFAULT_WIDTH * RESOLUTION_SCALE,
+    height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
   },
-  scene: [PreloadScene, GameScene, UIScene],
+  scene: [PreloadScene, GameScene, UiScene],
 };
 
 const config = {
@@ -68,5 +59,3 @@ window.addEventListener('load', () => {
   stats = new GameStats(config);
   document.body.appendChild(stats.dom);
 });
-
-// TODO Phaser is huge even minified. Figure out how to reduce the bundle size.

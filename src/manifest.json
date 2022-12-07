@@ -1,6 +1,6 @@
 {
-  "short_name": "Wicked Snowman",
-  "name": "Wicked Snowman",
+  "short_name": "Snowboarding Game",
+  "name": "Snowboarding Game",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#ffffff",

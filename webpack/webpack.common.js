@@ -40,13 +40,10 @@ module.exports = {
   },
   plugins: [
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({gameName: 'Wicked Snowman', template: 'src/index.html'}),
+    new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
     new CopyWebpackPlugin({
       patterns: [
-        {from: 'src/assets/fonts', to: 'assets/fonts'},
-        {from: 'src/assets/audio', to: 'assets/audio'},
-        {from: 'src/assets/img/atlas', to: 'assets/img/atlas'},
-        {from: 'src/assets/img/icons', to: 'assets/img/icons'},
+        {from: 'src/assets', to: 'assets'}, // TODO only add packed
         {from: 'src/favicon.ico', to: ''},
         {from: 'src/manifest.json', to: ''},
       ],
