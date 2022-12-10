@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: ['./src/scripts/index.ts'],
+  entry: ['./src/src/index.ts'],
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].bundle.js',
@@ -19,11 +19,7 @@ module.exports = {
         test: /\.tsx?$|\.jsx?$/,
         include: path.join(__dirname, '../src'),
         loader: 'ts-loader'
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: "worker-loader" },
-      },
+      }
       ],
   },
   optimization: {
@@ -43,6 +39,7 @@ module.exports = {
     new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
     new CopyWebpackPlugin({
       patterns: [
+        // {from: 'src/assets/packed', to: 'assets'}, // TODO only add packed
         {from: 'src/assets', to: 'assets'}, // TODO only add packed
         {from: 'src/favicon.ico', to: ''},
         {from: 'src/manifest.json', to: ''},

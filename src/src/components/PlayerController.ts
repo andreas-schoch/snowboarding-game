@@ -1,11 +1,10 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {Physics} from './physics';
-import {stats} from '../index';
-import GameScene from '../scenes/game.scene';
-import {b2BodyType} from '@box2d/core';
-import {WickedSnowboard} from './snowboard';
-import {State} from './state';
+import {Physics} from './Physics';
+import {DEBUG, stats} from '../index';
+import GameScene from '../scenes/GameScene';
+import {WickedSnowboard} from './Snowboard';
+import {State} from './State';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
 import {DebugMouseJoint} from '../util/DebugMouseJoint';
 
@@ -14,7 +13,6 @@ export class PlayerController {
   readonly scene: GameScene;
   readonly b2Physics: Physics;
   private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys;
-  private readonly debugCursors: Ph.Types.Input.Keyboard.CursorKeys;
 
   parts: IBodyParts;
   board: WickedSnowboard;
@@ -23,20 +21,20 @@ export class PlayerController {
   private readonly jumpForce: number = 650 * 60;
   private leanForce: number = 2.5 * 60;
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-  debug = false;
+  private debugControls: Phaser.Cameras.Controls.SmoothedKeyControl;
 
   constructor(scene: GameScene, b2Physics: Physics) {
     this.scene = scene;
     this.b2Physics = b2Physics;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    // this.cursorsWASD = this.scene.input.keyboard.addKeys({
-    //   'up': Phaser.Input.Keyboard.KeyCodes.W,
-    //   'left': Phaser.Input.Keyboard.KeyCodes.A,
-    //   'down': Phaser.Input.Keyboard.KeyCodes.S,
-    //   'right': Phaser.Input.Keyboard.KeyCodes.D,
-    //   // 'shift': Phaser.Input.Keyboard.KeyCodes.SHIFT,
-    //   // 'space': Phaser.Input.Keyboard.KeyCodes.SPACE,
-    // });
+
+    this.cursors.space.on('down', () => {
+      if (this.state.isCrashed) return; // cannot pause after crash. It will show the "Your score" panel;
+      this.b2Physics.isPaused = !this.b2Physics.isPaused;
+      this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused);
+    });
+
+    this.scene.observer.on('resume-game', () => this.b2Physics.isPaused = false);
 
     this.cursors.up.on('down', () => {
       console.log('up down');
@@ -46,40 +44,55 @@ export class PlayerController {
     this.initBodyParts();
     this.board = new WickedSnowboard(this);
     this.state = new State(this);
-    this.debug && new DebugMouseJoint(scene, b2Physics);
+
+    if (DEBUG) {
+      new DebugMouseJoint(scene, b2Physics);
+      this.scene.cameras.main.useBounds = false;
+      this.debugControls = new Phaser.Cameras.Controls.SmoothedKeyControl({
+        camera: this.scene.cameras.main,
+        left: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        right: this.cursors.right,
+        up: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+        down: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        zoomIn: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+        zoomOut: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+        acceleration: 0.05,
+        drag: 0.0015,
+        maxSpeed: 1.0,
+        zoomSpeed: 0.005,
+        maxZoom: 0.75,
+        minZoom: 0.1,
+      });
+    }
   }
 
   update(delta: number) {
+    if (this.b2Physics.isPaused) return;
     stats.begin('snowman');
+    this.debugControls && this.debugControls.update(delta);
 
     this.state.update(delta);
     this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
-        this.board.getTimeInAir() > 100 && this.resetLegs();
-
-
-    // Debug input
-    // this.cursors.up.isDown && (this.scene.cameras.main.scrollY -= 15);
-    // this.cursors.left.isDown && (this.scene.cameras.main.scrollX -= 15);
-    // this.cursors.right.isDown && (this.scene.cameras.main.scrollX += 15);
-    // this.cursors.down.isDown && (this.scene.cameras.main.scrollY += 15);
+    this.board.getTimeInAir() > 100 && this.resetLegs();
 
     if (!this.state.isCrashed) {
       this.board.update(delta);
       // Touch/Mouse input
-      // if (this.scene.input.activePointer?.isDown) {
-      //   const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
-      //   pointer.motionFactor = 0.2;
-      //   this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward(delta) : this.leanForward(delta);
-      //   pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 300 && this.jump(delta);
-      // } else {
-      //   this.scene.input.activePointer.motionFactor = 0.8;
-      // }
+      if (this.scene.input.activePointer?.isDown && this.scene.input.activePointer.wasTouch) {
+        const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
+        pointer.motionFactor = 0.2;
+        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward(delta) : this.leanForward(delta);
+        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 250 && this.jump(delta);
+      } else {
+        this.scene.input.activePointer.motionFactor = 0.8;
+      }
 
       // Keyboard input
-      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
+      this.cursors.up.isDown && this.leanUp(delta);
       this.cursors.left.isDown && this.leanBackward(delta);
       this.cursors.right.isDown && this.leanForward(delta);
       this.cursors.down.isDown && this.leanCenter(delta);
+      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
     }
     stats.end('snowman');
   }
@@ -96,8 +109,7 @@ export class PlayerController {
     // prevents player from jumping too quickly after a landing
     if (this.scene.game.getTime() - this.state.timeGrounded < 100) return; // TODO change to numStepsGrounded
 
-    this.parts.distanceLegLeft?.SetLength(0.8);
-    this.parts.distanceLegRight?.SetLength(0.8);
+    this.leanUp(delta);
 
     const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
@@ -110,7 +122,7 @@ export class PlayerController {
     }
   }
 
-    private resetLegs() {
+  private resetLegs() {
     this.parts.distanceLegLeft?.SetLength(0.65);
     this.parts.distanceLegRight?.SetLength(0.65);
   }
@@ -134,6 +146,13 @@ export class PlayerController {
   private leanCenter(delta: number) {
     this.parts.distanceLegLeft?.SetLength(0.55);
     this.parts.distanceLegRight?.SetLength(0.55);
+    // @ts-ignore
+    this.parts.weldCenter.m_referenceAngle = 0;
+  }
+
+  private leanUp(delta: number) {
+    this.parts.distanceLegLeft?.SetLength(0.8);
+    this.parts.distanceLegRight?.SetLength(0.8);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = 0;
   }
@@ -170,5 +189,4 @@ export interface IBodyParts {
   distanceLegLeft: Pl.b2DistanceJoint & RubeEntity | null;
   distanceLegRight: Pl.b2DistanceJoint & RubeEntity | null;
   weldCenter: Pl.b2WeldJoint & RubeEntity | null;
-
 }

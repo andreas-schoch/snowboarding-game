@@ -1,12 +1,13 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {stats} from '../index';
-import GameScene from '../scenes/game.scene';
+import GameScene from '../scenes/GameScene';
 import {RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
 import {RubeLoader} from '../util/RUBE/RubeLoader';
 
 
 export class Physics extends Phaser.Events.EventEmitter {
+  isPaused: boolean = false;
   private scene: GameScene;
   worldScale: number;
   world: Pl.b2World;
@@ -46,8 +47,9 @@ export class Physics extends Phaser.Events.EventEmitter {
   }
 
   update() {
-    stats.begin('physics');
+    if (this.isPaused) return;
 
+    stats.begin('physics');
     // const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 9));
     this.world.Step(1 / 60, {positionIterations: 12, velocityIterations: 12});
     this.world.ClearForces(); // recommended after each time step

@@ -1,8 +1,8 @@
-import {Physics} from '../components/physics';
+import {Physics} from '../components/Physics';
 import Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {b2BodyType} from '@box2d/core';
-import GameScene from '../scenes/game.scene';
+import GameScene from '../scenes/GameScene';
 
 
 export class DebugMouseJoint {
@@ -22,20 +22,16 @@ export class DebugMouseJoint {
   }
 
   MouseMove(p: Pl.XY, leftDrag: boolean): void {
-    // this.m_mouseWorld.Copy(p);
-
     if (leftDrag && this.mouseJoint) {
       this.mouseJoint.SetTarget(p);
     }
   }
 
   MouseUp(p: Pl.XY): void {
-
     if (this.mouseJoint) {
       this.b2Physics.world.DestroyJoint(this.mouseJoint);
       this.mouseJoint = null;
     }
-
   }
 
   MouseDown(p: Pl.XY): void {
@@ -66,7 +62,7 @@ export class DebugMouseJoint {
       jd.bodyA = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
       jd.bodyB = body;
       jd.target.Copy(p);
-      jd.maxForce = 600 * body.GetMass();
+      jd.maxForce = 700 * body.GetMass();
       Pl.b2LinearStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
 
       this.mouseJoint = this.b2Physics.world.CreateJoint(jd) as Pl.b2MouseJoint;

@@ -6,6 +6,7 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {RubeBody, RubeFixture, RubeEntity, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
+import {DEBUG} from '../../index';
 
 
 export class RubeLoader {
@@ -206,7 +207,7 @@ export class RubeLoader {
     if (!pos) return null;
 
     const texture = this.getCustomProperty(imageJson, 'string', 'phaserTexture', '');
-    const textureFallback = (file || '').split("/").reverse()[0];
+    const textureFallback = (file || '').split('/').reverse()[0];
     const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', undefined);
     console.log('------------- texture', texture, textureFrame);
     // console.log('textureFallback', textureFallback);
@@ -326,26 +327,27 @@ export class RubeLoader {
       const shape = new Pl.b2CircleShape();
       shape.Set(this.rubeToXY(fixtureJso.circle.center), fixtureJso.circle.radius);
       const bodyPos = body.GetPosition().Clone().Add(shape.m_p).Scale(this.worldSize);
-      // this.debugGraphics.strokeCircle(bodyPos.x, -bodyPos.y, fixtureJso.circle.radius * this.worldSize);
+      DEBUG && this.debugGraphics.strokeCircle(bodyPos.x, -bodyPos.y, fixtureJso.circle.radius * this.worldSize);
       return {shape};
     } else if (fixtureJso.hasOwnProperty('polygon') && fixtureJso.polygon) {
       const verts = this.pointsFromSeparatedVertices(fixtureJso.polygon.vertices).reverse();
       const bodyPos = body.GetPosition();
-      const pxVerts = verts
-      .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
-      .map(({x, y}) => ({x: x, y: -y}));
-
-      // this.debugGraphics.strokePoints(pxVerts, true).setDepth(100);
+      if (DEBUG) {
+        const pxVerts = verts
+        .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
+        .map(({x, y}) => ({x: x, y: -y}));
+        this.debugGraphics.strokePoints(pxVerts, true).setDepth(100);
+      }
       return {shape: new Pl.b2PolygonShape().Set(verts, verts.length)};
     } else if (fixtureJso.hasOwnProperty('chain') && fixtureJso.chain) {
       const verts = this.pointsFromSeparatedVertices(fixtureJso.chain.vertices).reverse();
       const bodyPos = body.GetPosition();
-      const pxVerts = verts
-      .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
-      .map(({x, y}) => ({x: x, y: -y}));
-      // this.debugGraphics.strokePoints(pxVerts).setDepth(100);
-      // console.log('-----------draw', verts, pxVerts);
-
+      if (DEBUG) {
+        const pxVerts = verts
+        .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
+        .map(({x, y}) => ({x: x, y: -y}));
+        this.debugGraphics.strokePoints(pxVerts).setDepth(100);
+      }
       const isLoop = fixtureJso.chain.hasNextVertex && fixtureJso.chain.hasPrevVertex && fixtureJso.chain.nextVertex && fixtureJso.chain.prevVertex;
       // TODO should polygon create loop chain instead to avoid ghost collisions? https://box2d.org/posts/2020/06/ghost-collisions/
       const shape = isLoop
@@ -353,8 +355,7 @@ export class RubeLoader {
         : new Pl.b2ChainShape().CreateChain(verts, verts.length, this.rubeToXY(fixtureJso.chain.prevVertex), this.rubeToXY(fixtureJso.chain.nextVertex));
       return {shape};
     } else {
-      // console.log('Could not find shape type for fixture');
-      throw Error('Could not find shape type for fixture');
+      throw new Error('Could not find shape type for fixture');
     }
   }
 
