@@ -1,0 +1,1171 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet">
+
+<style>
+  /*@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,700');*/
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  /*@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');*/
+
+  :root {
+    --game-ui-padding: 0.4rem;
+
+    --blue-800: #123684;
+    --blue-900: #01256E;
+
+    --grey-400: #F7F7F7;
+    --grey-500: #E8E8E8;
+    --grey-600: #A8A8A8;
+    --grey-700: #6A6A6A;
+
+    --green: var(--blue-900);
+    --red: #D5365E;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', sans-serif;
+    /*font-family: 'Raleway', sans-serif;*/
+    /*font-size: 1rem;*/
+    /*font-family: 'VT323', sans-serif;*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
+  }
+
+  .bolder {
+    font-weight: bolder;
+  }
+
+  /* =============== */
+  /* = Grid System = */
+  /* =============== */
+  .col .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+  }
+
+  .row {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+
+  .row.last {
+    margin-bottom: 0;
+  }
+
+  .col.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .col.flex-right {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .row .col {
+    float: left;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 0.75rem;
+    min-height: 1px;
+    margin-left: auto;
+    left: auto;
+    right: auto;
+  }
+
+  .row .col-1 {
+    width: 8.3333333333%;
+  }
+
+  .row .col-2 {
+    width: 16.6666666667%;
+  }
+
+  .row .col-3 {
+    width: 25%;
+  }
+
+  .row .col-4 {
+    width: 33.3333333333%;
+  }
+
+  .row .col-5 {
+    width: 41.6666666667%;
+  }
+
+  .row .col-6 {
+    width: 50%;
+  }
+
+  .row .col-7 {
+    width: 58.3333333333%;
+  }
+
+  .row .col-8 {
+    width: 66.6666666667%;
+  }
+
+  .row .col-9 {
+    width: 75%;
+  }
+
+  .row .col-10 {
+    width: 83.3333333333%;
+  }
+
+  .row .col-11 {
+    width: 91.6666666667%;
+  }
+
+  .row .col-12 {
+    width: 100%;
+  }
+
+  /*****************************/
+  /** MATERIALIZE RADIO STYLES**/
+  /*****************************/
+  [type="radio"]:not(:checked),
+  [type="radio"]:checked {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [type="radio"]:not(:checked) + span,
+  [type="radio"]:checked + span {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.7rem;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  [type="radio"] + span:before,
+  [type="radio"] + span:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 4px;
+    width: 16px;
+    height: 16px;
+    z-index: 0;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+  }
+
+  /* Unchecked styles */
+  [type="radio"]:not(:checked) + span:before,
+  [type="radio"]:not(:checked) + span:after,
+  [type="radio"]:checked + span:before,
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:before,
+  [type="radio"].with-gap:checked + span:after {
+    border-radius: 50%;
+  }
+
+  [type="radio"]:not(:checked) + span:before,
+  [type="radio"]:not(:checked) + span:after {
+    border: 2px solid #5a5a5a;
+  }
+
+  [type="radio"]:not(:checked) + span:after {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  /* Checked styles */
+  [type="radio"]:checked + span:before {
+    border: 2px solid transparent;
+  }
+
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:before,
+  [type="radio"].with-gap:checked + span:after {
+    border: 2px solid var(--green);
+  }
+
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:after {
+    background-color: var(--green);
+  }
+
+  [type="radio"]:checked + span:after {
+    -webkit-transform: scale(1.02);
+    transform: scale(1.02);
+  }
+
+  /* Radio With gap */
+  [type="radio"].with-gap:checked + span:after {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+
+  /* Focused styles */
+  [type="radio"].tabbed:focus + span:before {
+    -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Disabled Radio With gap */
+  [type="radio"].with-gap:disabled:checked + span:before {
+    border: 2px solid rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"].with-gap:disabled:checked + span:after {
+    border: none;
+    background-color: rgba(0, 0, 0, 0.42);
+  }
+
+  /* Disabled style */
+  [type="radio"]:disabled:not(:checked) + span:before,
+  [type="radio"]:disabled:checked + span:before {
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled + span {
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled:not(:checked) + span:before {
+    border-color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled:checked + span:after {
+    background-color: rgba(0, 0, 0, 0.42);
+    border-color: #949494;
+  }
+
+  .range-field {
+    position: relative;
+  }
+
+  input[type=range],
+  input[type=range] + .thumb {
+    cursor: pointer;
+  }
+
+  input[type=range] {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    margin: 15px 0;
+    padding: 0;
+  }
+
+  input[type=range]:focus {
+    outline: none;
+  }
+
+  input[type=range] + .thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    border: none;
+    height: 0;
+    width: 0;
+    border-radius: 50%;
+    background-color: var(--green);
+    margin-left: 7px;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+
+  input[type=range] + .thumb .value {
+    display: block;
+    width: 30px;
+    text-align: center;
+    color: var(--green);
+    font-size: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  input[type=range] + .thumb.active {
+    border-radius: 50% 50% 50% 0;
+  }
+
+  input[type=range] + .thumb.active .value {
+    color: #fff;
+    margin-left: -1px;
+    margin-top: 8px;
+    font-size: 10px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 3px;
+    background: #c2c0c2;
+    border: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+    -webkit-appearance: none;
+    background-color: var(--green);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    margin: -5px 0 0 0;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-webkit-slider-thumb {
+    -webkit-box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+  input[type=range] {
+    /* fix for FF unable to apply focus style bug  */
+    border: 1px solid white;
+    /*required for proper track sizing in FF*/
+  }
+
+  input[type=range]::-moz-range-track {
+    height: 3px;
+    background: #c2c0c2;
+    border: none;
+  }
+
+  input[type=range]::-moz-focus-inner {
+    border: 0;
+  }
+
+  input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+    margin-top: -5px;
+  }
+
+  input[type=range]:-moz-focusring {
+    outline: 1px solid #fff;
+    outline-offset: -1px;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-moz-range-thumb {
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+  input[type=range]::-ms-track {
+    height: 3px;
+    background: transparent;
+    border-color: transparent;
+    border-width: 6px 0;
+    /*remove default tick marks*/
+    color: transparent;
+  }
+
+  input[type=range]::-ms-fill-lower {
+    background: #777;
+  }
+
+  input[type=range]::-ms-fill-upper {
+    background: #ddd;
+  }
+
+  input[type=range]::-ms-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-ms-thumb {
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+
+  /* ==================== */
+  /* = Button Overrides = */
+  /* ==================== */
+  .btn {
+    /* color should always be overwritten by primary or default btn class */
+    background-color: salmon;
+    border: 1px solid salmon;
+    border-radius: 4px;
+    display: block;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    font-weight: 400;
+    transition: all 0.2s;
+  }
+
+  .btn > i, .btn > span {
+    pointer-events: none;
+  }
+
+  .btn-primary {
+    background-color: var(--blue-800);
+    border-color: var(--blue-800);
+    color: white;
+  }
+
+  .btn-primary:focus,
+  .btn-primary:hover {
+    background-color: var(--blue-900);
+    border-color: var(--blue-900);
+  }
+
+  .btn-default {
+    background-color: transparent;
+    border-color: var(--grey-600);
+    color: var(--grey-700);
+  }
+
+  .btn-default:focus,
+  .btn-default:hover {
+    background-color: var(--grey-500);
+  }
+
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #424242;
+    cursor: pointer;
+    border-color: transparent;
+    background-color: transparent;
+    height: 40px;
+  }
+
+  .btn-secondary i {
+    margin-right: 0.5rem;
+  }
+
+  /* ======================== */
+  /* = Floating Label Input = */
+  /* ======================== */
+
+  .form-group {
+    position: relative;
+    margin: 0 0 20px 0;
+  }
+
+  .form-text-input {
+    /* Careful when changing any values, highly coupled to floating-label */
+    border: 1px solid var(--grey-600);
+    border-radius: 4px;
+    padding: 5px 6px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 26px;
+    height: 40px; /* Depends on the following: line-height 20px + padding 2x5px + border 2x2px (when focused) = 34px */
+    outline: none;
+    transition: all 0.1s;
+  }
+
+  .form-text-input:not(textarea) {
+    text-overflow: ellipsis;
+  }
+
+  .form-text-input:hover {
+    border: 1px solid var(--grey-700);
+  }
+
+  .form-text-input:focus {
+    padding-left: 5px; /* make it -1px than it was to prevent text wiggling left/right when border-width changes */
+    border: 2px solid var(--blue-900);
+  }
+
+  .form-group .floating-label {
+    /* Careful when changing any values, highly coupled to form-text-input */
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px; /* line-height 14px + padding 2x10px = 34px (needs to equal height of form-text-input)  */
+    padding: 13px 5px;
+    margin: 0;
+    pointer-events: none;
+    color: var(--grey-600);
+    transition: cubic-bezier(0.65, 0.05, 0.36, 1) 0.2s;
+  }
+
+  .form-text-input:focus + .floating-label,
+  .form-text-input:not([value=""]) + .floating-label {
+    background-color: white;
+    /* y-axis: height of form-text-input / 2 = 17px. That is the amount this label needs to move up. since padding-top gets removed, only 7px are left */
+    /* x-axis: depends on padding-left of form-text-input + padding overwrite below */
+    transform: translateY(-7px) translateX(5px);
+    padding: 0 2.5px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .form-text-input:not([value=""]):hover + .floating-label {
+    color: var(--grey-700);
+  }
+
+  /* Floating label not updating with autocomplete */
+  .form-text-input:-webkit-autofill + .floating-label {
+    background-color: white;
+    transform: translateY(-7px) translateX(5px);
+    padding: 0 2.5px;
+    font-size: 10px;
+    font-weight: 500;
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .form-text-input:focus + .floating-label {
+    color: var(--blue-900) !important;
+  }
+
+  .form-group .floating-label::after {
+    content: attr(data-necessity);
+  }
+
+  /* ============================================================================================================= */
+
+  /* =============== */
+  /* = Game UI HUD = */
+  /* =============== */
+  .game-ui {
+    width: 1280px;
+    height: 720px;
+    color: white;
+    font-size: 20px;
+    position: relative;
+  }
+
+  .game-ui-item {
+    position: absolute;
+  }
+
+  .game-ui-item.distance {
+    left: var(--game-ui-padding);
+    top: var(--game-ui-padding);
+  }
+
+  .game-ui-item.combo {
+    left: 50%;
+    top: var(--game-ui-padding);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .game-ui-item.score {
+    right: var(--game-ui-padding);
+    top: var(--game-ui-padding);
+    text-align: right;
+  }
+
+  /* ========= */
+  /* = Panel = */
+  /* ========= */
+
+  .panel {
+    background: white;
+    /*background: repeating-linear-gradient(45deg, #ffd6cc, #ffd6cc 10px, #ffffff 10px, #ffffff 20px);*/
+
+    border: 4px solid black;
+    border-radius: 6px;
+    width: 700px;
+    margin: 0;
+    padding: 3rem 1rem 1rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    color: black;
+  }
+
+  .panel.hidden {
+    display: none;
+  }
+
+  .panel-title {
+    color: white;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 4px 8px;
+    background-color: var(--blue-900);
+    /*background-color: var(--red);*/
+    /*background: repeating-linear-gradient(45deg, #ffd6cc, #ffd6cc 10px, #ffffff 10px, #ffffff 20px);*/
+
+    border: 4px solid black;
+    border-radius: 5px;
+    margin: 0 auto;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .panel-close {
+    border: 4px solid black;
+    border-radius: 50%;
+    position: absolute;
+    right: -16px;
+    top: -16px;
+    background: var(--red);
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+  }
+
+  /* ==================== */
+  /* = Panel Pause Menu = */
+  /* ==================== */
+  #panel-pause-menu {
+    width: 500px;
+  }
+
+  /* ====================== */
+  /* = Panel Select Level = */
+  /* ====================== */
+  #panel-select-level {
+    /*width: 500px;*/
+  }
+
+  /* ====================== */
+  /* = Panel Leaderboards = */
+  /* ====================== */
+
+  .scrollbar {
+    overflow-y: auto;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar {
+    /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
+    /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
+    mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+    mask-size: 100% 20000px;
+    mask-position: left bottom;
+    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
+    -webkit-mask-size: 100% 20000px;
+    -webkit-mask-position: left bottom;
+    transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+    /*scrollbar-width: 8px;*/
+  }
+
+  .scrollbar:hover {
+    -webkit-mask-position: left top;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    cursor: grab;
+    border-radius: 4px;
+    background-color: var(--grey-600);
+  }
+
+  #panel-leaderboards {
+    /*width: 500px;*/
+  }
+
+  .leaderboard-header {
+    font-size: 14px;
+  }
+
+  .leaderboard-scrollable {
+    max-height: 350px;
+  }
+
+  .leaderboard-item {
+    font-size: 14px;
+  }
+
+  /* ==================== */
+  /* = Panel Your Score = */
+  /* ==================== */
+  .summary > span:first-of-type {
+    color: #424242;
+    font-weight: normal;
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .summary > span:last-of-type {
+    color: #424242;
+    font-weight: normal;
+    font-size: 12px;
+    text-align: right;
+  }
+
+  .summary.summary-total {
+    margin-top: 2rem;
+  }
+
+  .summary.summary-total > span {
+    color: black;
+    font-size: 16px;
+    font-weight: bolder;
+  }
+
+  .submit-score button {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .play-again {
+    margin-bottom: 0;
+  }
+
+  /* ================== */
+  /* = Panel Settings = */
+  /* ================== */
+  #panel-settings {
+    font-size: 10px;
+  }
+
+  .settings-resolution-radios {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ================= */
+  /* = Panel Credits = */
+  /* ================= */
+  #panel-credits {
+    width: 600px;
+  }
+
+  #panel-credits .credits-scrollable {
+    max-height: 400px;
+    padding: 1rem 0;
+    font-size: 12px;
+  }
+
+  #panel-credits .credits-title {
+    font-weight: bolder;
+    font-size: 16px;
+  }
+
+  #panel-credits .credits-name {
+
+  }
+
+  #panel-credits .credits-link {
+    font-size: 10px;
+  }
+
+</style>
+
+<div class="game-ui">
+
+  <!----------------->
+  <!-- GAME UI HUD -->
+  <!----------------->
+  <div class="game-ui-item distance">
+    <div class="label">Distance</div>
+    <div class="value" id="hud-distance">0m</div>
+  </div>
+  <div class="game-ui-item combo">
+    <div class="label">Combo</div>
+    <div class="value" id="hud-combo">-</div>
+  </div>
+  <div class="game-ui-item score">
+    <div class="label">Score</div>
+    <div class="value" id="hud-score">0</div>
+  </div>
+
+  <!---------------------->
+  <!-- PANEL PAUSE MENU -->
+  <!---------------------->
+  <div class="panel" id="panel-pause-menu">
+    <div class="panel-title">Pause Menu</div>
+    <div class="row">
+      <button class="col col-12 btn btn-primary" id="btn-resume-game">Resume</button>
+    </div>
+    <div class="row">
+      <button class="col col-12 btn btn-default" id="btn-goto-select-level">Select Level</button>
+    </div>
+    <div class="row">
+      <button class="col col-12 btn btn-default" id="btn-goto-leaderboards">View Leaderboards</button>
+    </div>
+    <div class="row">
+      <button class="col col-12 btn btn-default" id="btn-goto-settings">Settings</button>
+    </div>
+    <div class="row">
+      <button class="col col-12 btn btn-default" id="btn-goto-credits">Credits</button>
+    </div>
+  </div>
+
+  <!------------------------>
+  <!-- PANEL SELECT LEVEL -->
+  <!------------------------>
+  <div class="panel panel-select-level" id="panel-select-level">
+    <div class="panel-title">Select Level</div>
+    <!-- BACK-->
+    <div class="row last">
+      <div class="col col-12 flex-center">
+        <button class="btn btn-secondary" id="btn-goto-pause-menu">
+          <i class="material-icons">chevron_left</i>
+          <span>Back to main menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!------------------------>
+  <!-- PANEL LEADERBOARDS -->
+  <!------------------------>
+  <div class="panel" id="panel-leaderboards">
+    <div class="panel-title">Leaderboards</div>
+
+    <div class="row leaderboard-header">
+      <span class="col col-2 bolder leaderboard">#</span>
+      <span class="col col-7 bolder leaderboard">Name</span>
+      <span class="col col-3 bolder leaderboard flex-right">Score</span>
+    </div>
+
+    <div class="leaderboard-scrollable scrollbar">
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">1</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">2</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">3</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">4</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">5</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">6</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">7</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">8</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">9</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">10</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">11</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">12</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">13</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+
+      <div class="row leaderboard-item">
+        <span class="col col-2">14</span>
+        <span class="col col-7">AndiOver9000</span>
+        <span class="col col-3 flex-right">9001</span>
+      </div>
+    </div>
+
+    <!-- BACK-->
+    <div class="row last">
+      <div class="col col-12 flex-center">
+        <button class="btn btn-secondary" id="btn-goto-pause-menu">
+          <i class="material-icons">chevron_left</i>
+          <span>Back to menu</span>
+        </button>
+      </div>
+    </div>
+    </span>
+  </div>
+
+  <!-------------------->
+  <!-- PANEL SETTINGS -->
+  <!-------------------->
+  <div class="panel" id="panel-settings">
+    <div class="panel-title">Settings</div>
+    <i class="panel-close material-icons" id="btn-close-settings">close</i>
+    <form action="#" name="settings-form" id="settings-form">
+      <!-- RESOLUTION -->
+      <div class="row">
+        <span class="col col-3 settings-name">Resolution</span>
+        <span class="col col-9 settings-resolution-radios">
+        <label>
+          <input class="with-gap" name="resolution" type="radio" value="0.5"/>
+          <span>640x360</span>
+        </label>
+        <label>
+          <input class="with-gap" name="resolution" type="radio" value="0.75"/>
+          <span>960x540</span>
+        </label>
+        <label>
+          <input class="with-gap" name="resolution" type="radio" value="1" checked/>
+          <span>1280x720</span>
+        </label>
+    </span>
+      </div>
+      <!-- VOLUME MUSIC -->
+      <div class="row">
+        <span class="col col-3 settings-name">Volume Music</span>
+        <span class="col col-9">
+        <div class="range-field">
+          <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value="80"/>
+        </div>
+      </span>
+      </div>
+      <!-- VOLUME SFX -->
+      <div class="row">
+        <span class="col col-3 settings-name">Volume SFX</span>
+        <span class="col col-9">
+        <div class="range-field">
+          <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value="80"/>
+        </div>
+      </span>
+      </div>
+      <!-- SAVE SETTINGS -->
+      <div class="row">
+        <div class="col col-12 flex-center">
+          <button type="submit" class="btn btn-primary btn-save-settings" id="btn-save-settings">Save Settings</button>
+        </div>
+      </div>
+    </form>
+    <!-- BACK-->
+    <div class="row last">
+      <div class="col col-12 flex-center">
+        <button class="btn btn-secondary" id="btn-goto-pause-menu">
+          <i class="material-icons">chevron_left</i>
+          <span>Back to main menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!------------------->
+  <!-- PANEL CREDITS -->
+  <!------------------->
+  <div class="panel" id="panel-credits">
+    <div class="panel-title">Credits</div>
+
+    <div class="credits-scrollable scrollbar">
+      <span class="row credits-title"><span class="col col-12 flex-center">Developed by</span></span>
+      <span class="row">
+        <span class="col col-6 credits-name">Andreas Schoch</span>
+        <a class="col col-3 credits-link" href="https://github.com/andreas-schoch">Github</a>
+        <a class="col col-3 credits-link" href="https://www.linkedin.com/in/andreas-schoch/">Linkedin</a>
+      </span>
+
+      <span class="row credits-title"><span class="col col-12 flex-center">Music by</span></span>
+      <span class="row">
+        <span class="col col-6 credits-name">Matthew Pablo</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/riverside-ride">Source</a>
+        <a class="col col-3 credits-link" href="http://www.matthewpablo.com">Website</a>
+      </span>
+
+      <span class="row credits-title"><span class="col col-12 flex-center">Soundeffects by</span></span>
+      <span class="row">
+        <span class="col col-6 credits-name">independent.nu</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/8-wet-squish-slurp-impacts">Source</a>
+        <span class="col col-3"></span>
+      </span>
+
+      <span class="row credits-title"><span class="col col-12 flex-center">Assets by</span></span>
+      <span class="row">
+        <span class="col col-6">Tokegameart</span>
+        <a class="col col-3 credits-link" href="https://tokegameart.net/item/santa-claus/">Source</a>
+        <a class="col col-3 credits-link" href="https://tokegameart.net">Website</a>
+      </span>
+
+      <span class="row">
+        <span class="col col-6">Lukas Mrazik</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/space-background-7">Source</a>
+        <span class="col col-3"></span>
+      </span>
+
+      <span class="row">
+        <span class="col col-6">pzUH</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/winter-platformer-game-tileset">Source</a>
+        <span class="col col-3"></span>
+      </span>
+
+      <span class="row">
+        <span class="col col-6">Svgsilh</span>
+        <span class="col col-3"></span>
+        <a class="col col-3 credits-link" href="https://svgsilh.com">Website</a>
+      </span>
+
+      <span class="row">
+        <span class="col col-6">Andreas Schoch</span>
+        <span class="col col-3"></span>
+        <span class="col col-3"></span>
+      </span>
+
+      <span class="row credits-title"><span class="col col-12 flex-center">Special Thanks to</span></span>
+      <span class="row">
+        <span class="col col-6">Chris Campbell</span>
+        <span class="col col-3"></span>
+        <a class="col col-3 credits-link" href="https://www.iforce2d.net/rube/">Website</a>
+      </span>
+      <span class="row"><span class="col col-12">For the awesome R.U.B.E Editor which made it so much easier to create box2d levels.</span></span>
+
+      <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
+      <span class="">
+        <span>The game itself is released under the open-source MIT license: </span>
+        <a class="credits-link" href="https://github.com/andreas-schoch">Source</a>
+      </span>
+
+      <span class="row">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span>
+      <span class="row"></span>
+    </div>
+
+
+    <!-- BACK-->
+    <div class="row last">
+      <div class="col col-12 flex-center">
+        <button class="btn btn-secondary" id="btn-goto-pause-menu">
+          <i class="material-icons">chevron_left</i>
+          <span>Back to main menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!---------------------->
+  <!-- PANEL YOUR SCORE -->
+  <!---------------------->
+  <div class="panel" id="panel-your-score">
+    <div class="panel-title">Your Score</div>
+    <!--SCORE SUMMARY-->
+    <div class="row summary summary-distance">
+      <span class="col col-8">Distance travelled</span>
+      <span class="col col-4" id="your-score-distance">1150m</span>
+    </div>
+    <div class="row summary summary-presents">
+      <span class="col col-8">Presents collected</span>
+      <span class="col col-4" id="your-score-coins">87x100</span>
+    </div>
+    <div class="row summary summary-trick">
+      <span class="col col-8">Trick score</span>
+      <span class="col col-4" id="your-score-trick-score">3400</span>
+    </div>
+    <div class="row summary summary-total">
+      <span class="col col-8">Total</span>
+      <span class="col col-4" id="your-score-total">6570</span>
+    </div>
+    <!--  SUBMIT SCORE -->
+    <div class="row submit-score">
+      <div class="col col-8">
+        <div class="form-group">
+          <input id="username" class="form-text-input" name="username" value="" type="text" autofocus autocomplete="off" onkeyup="this.setAttribute('value', this.value)">
+          <label for="username" class="floating-label">Your Name in Leaderboards</label>
+        </div>
+      </div>
+      <button class="col col-4 btn btn-primary" id="btn-score-submit">Submit Score</button>
+    </div>
+    <!-- BACK / REPLAY -->
+    <div class="row play-again">
+      <div class="col col-12">
+        <button class="col col-6 btn btn-secondary" id="btn-select-level">
+          <i class="material-icons">chevron_left</i>
+          <span>Select Level</span>
+        </button>
+        <button class="col col-6 btn btn-secondary" id="btn-play-again">
+          <i class="material-icons">replay</i>
+          <span>Replay Level</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

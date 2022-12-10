@@ -1,5 +1,5 @@
 /**
  * source       https://opengameart.org/content/space-background-7
- * author       drakzlin
+ * author       Lukas Mrazik (drakzlin)
  * license      https://creativecommons.org/publicdomain/zero/1.0/
  */

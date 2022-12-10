@@ -1,4 +1,4 @@
-import {DEFAULT_HEIGHT, DEFAULT_WIDTH, RESOLUTION_SCALE} from '../index';
+import {DEFAULT_HEIGHT, RESOLUTION_SCALE} from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -6,6 +6,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.html('dom_game_ui', 'assets/html/game_ui.html');
+
     this.load.audio('riverside_ride', [
       'assets/audio/riverside_ride/riverside_ride.ogg',
       'assets/audio/riverside_ride/riverside_ride.mp3',
@@ -16,14 +18,24 @@ export default class PreloadScene extends Phaser.Scene {
       'assets/audio/sfx/boink.wav',
     ]);
 
-        this.load.audio('pickup_present', [
+    this.load.audio('pickup_present', [
       'assets/audio/sfx/pickupgem.wav',
+    ]);
+
+    this.load.audio('death', [
+      'assets/audio/sfx/death2.ogg',
+    ]);
+
+        this.load.audio('grunt', [
+      'assets/audio/sfx/grunt.wav',
     ]);
 
     this.load.json('santa', 'assets/santa-v01.json');
 
-    const size = `${DEFAULT_WIDTH * RESOLUTION_SCALE}x${DEFAULT_HEIGHT * RESOLUTION_SCALE}`;
-    this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
+    const height = DEFAULT_HEIGHT * RESOLUTION_SCALE;
+    const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
+    const sizes = {360: '640x360',540: '960x540',720: '1280x720'};
+    this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${sizes[closestSize]}.png`, `assets/img/packed/bg_space_${sizes[closestSize]}.json`);
 
     // TODO create packed for everything needed
     this.load.image('ice_spikes', 'assets/img/obstacles/ice_spikes.png');

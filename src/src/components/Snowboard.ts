@@ -1,8 +1,9 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {Physics} from './physics';
-import GameScene from '../scenes/game.scene';
-import {PlayerController} from './wicked-snowman';
+import {Physics} from './Physics';
+import GameScene from '../scenes/GameScene';
+import {PlayerController} from './PlayerController';
+import {DEBUG} from '../index';
 
 
 interface IRayCastResult {
@@ -55,7 +56,7 @@ export class WickedSnowboard {
   }
 
   update(delta: number) {
-    this.player.debug && this.debugGraphics.clear();
+    DEBUG && this.debugGraphics.clear();
     const segments = this.segments;
 
     for (const segment of this.segments) {
@@ -63,19 +64,19 @@ export class WickedSnowboard {
       segment.body.GetWorldPoint(Pl.b2Vec2.ZERO, this.pointStart);
       segment.body.GetWorldPoint(segment.groundRayDirection, this.pointEnd);
       this.b2Physics.world.RayCast(this.pointStart, this.pointEnd, segment.groundRayCallback);
-      this.player.debug && this.drawDebug(segment.groundRayResult.hit ? 0x0000ff : 0x00ff00);
+      DEBUG && this.drawDebug(segment.groundRayResult.hit ? 0x0000ff : 0x00ff00);
 
       if (segment.crashRayResult && segment.crashRayCallback && segment.crashRayDirection) {
         segment.body.GetWorldPoint(Pl.b2Vec2.ZERO, this.pointStart);
         segment.body.GetWorldPoint(segment.crashRayDirection, this.pointEnd);
         this.b2Physics.world.RayCast(this.pointStart, this.pointEnd, segment.crashRayCallback);
-        this.player.debug && this.drawDebug(segment.crashRayResult.hit ? 0x0000ff : 0x00ff00);
+        DEBUG && this.drawDebug(segment.crashRayResult.hit ? 0x0000ff : 0x00ff00);
       }
     }
 
     this.isTailGrounded = segments[0].groundRayResult.hit;
     this.isNoseGrounded = segments[segments.length - 1].groundRayResult.hit;
-    this.isCenterGrounded = segments[2].groundRayResult.hit || segments[3].groundRayResult.hit || segments[4].groundRayResult.hit;
+    this.isCenterGrounded = segments[3].groundRayResult.hit;
   }
 
   getTimeInAir(): number {
@@ -90,7 +91,8 @@ export class WickedSnowboard {
 
   private rayCallbackFactory(hitResult: IRayCastResult) {
     return (fixture, point, normal, fraction) => {
-      this.b2Physics.rubeLoader.getCustomProperty(fixture, 'bool', 'phaserCrashSensorIgnore', false);
+      // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
+      if (fixture.IsSensor()) return;
       hitResult.hit = true;
       hitResult.point = point;
       hitResult.normal = normal;

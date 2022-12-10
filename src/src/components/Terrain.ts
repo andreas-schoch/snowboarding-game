@@ -1,7 +1,7 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {Physics} from './physics';
-import GameScene from '../scenes/game.scene';
+import {Physics} from './Physics';
+import GameScene from '../scenes/GameScene';
 
 export default class Terrain {
   private readonly terrainBody: Pl.b2Body;

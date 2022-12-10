@@ -1,18 +1,15 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {Physics} from './physics';
+import {Physics} from './Physics';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
-import {IBodyParts, PlayerController} from './wicked-snowman';
+import {IBodyParts, PlayerController} from './PlayerController';
 
 
 export class State {
-  // TODO add particle effect when boost enabled
-  private readonly BASE_BOOST_FLOW: number = 22.5 * 60;
-  private readonly BASE_TRICK_POINTS: number = 200;
-  maxBoost: number = this.BASE_BOOST_FLOW * 25; // 25 seconds worth of boost
-  availableBoost: number = this.maxBoost;
+  private readonly TRICK_POINTS: number = 200;
+  private readonly TRICK_POINTS_COMBO_FRACTION: number = 0.2;
+  private readonly BASE_COIN_POINTS: number = 100;
 
-  lostHead: Boolean;
   isCrashed: boolean;
   landedFrontFlips = 0;
   landedBackFlips = 0;
@@ -20,24 +17,22 @@ export class State {
 
   private readonly b2Physics: Physics;
   private playerController: PlayerController;
+  private readonly parts: IBodyParts;
   private state: 'in-air' | 'grounded' | 'crashed';
 
   private totalTrickScore: number = 0;
-  private protoTrickScore: number = 0;
   private comboAccumulatedScore: number = 0;
-  private anglePreviousUpdate: number = 0;
-
-  private totalRotation: number = 0; // total rotation while in air without touching the ground
-  private currentFlipRotation: number = 0; // set to 0 after each flip
-
-  private pendingFrontFlips: number = 0;
-  private pendingBackFlips: number = 0;
-  private readonly parts: IBodyParts;
-  // private readonly crashIgnoredParts: Pl.b2Body[];
-  // private readonly ignoredSensorBodies: Set<Pl.b2Body> = new Set();
-  private readonly pickupsToProcess: Set<Pl.b2Body & RubeEntity> = new Set();
   private comboMultiplier: number = 0;
   private comboLeewayTween: Phaser.Tweens.Tween;
+
+  private anglePreviousUpdate: number = 0;
+  private totalRotation: number = 0; // total rotation while in air without touching the ground
+  private currentFlipRotation: number = 0; // set to 0 after each flip
+  private pendingFrontFlips: number = 0;
+  private pendingBackFlips: number = 0;
+
+  private totalCollectedPresents = 0;
+  private readonly pickupsToProcess: Set<Pl.b2Body & RubeEntity> = new Set();
 
   private readonly alreadyCollectedCoins: Set<Pl.b2Fixture> = new Set();
   private lastDistance: number;
@@ -61,16 +56,12 @@ export class State {
 
         const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
         if (numFlips >= 1) {
-          const trickScore = numFlips * numFlips * this.BASE_TRICK_POINTS;
+          const trickScore = numFlips * numFlips * this.TRICK_POINTS;
           this.totalTrickScore += trickScore;
-
-          this.comboAccumulatedScore += trickScore * 0.1;
+          this.comboAccumulatedScore += trickScore * this.TRICK_POINTS_COMBO_FRACTION;
           this.comboMultiplier++;
-          // this.gainBoost(1, numFlips * 5);
           this.playerController.scene.observer.emit('combo-change', this.comboAccumulatedScore, this.comboMultiplier);
-          this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
-          this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
-
+          this.playerController.scene.observer.emit('score-change', this.getCurrentScore());
           this.comboLeewayTween.resetTweenData(true);
           this.comboLeewayTween.play();
         }
@@ -93,17 +84,20 @@ export class State {
       paused: true,
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
-      duration: 1000,
+      duration: 4000,
       onUpdate: (tween) => this.playerController.scene.observer.emit('combo-leeway-update', tween.getValue()),
       onComplete: tween => {
         this.totalTrickScore += this.comboAccumulatedScore * this.comboMultiplier;
-        this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
+        this.playerController.scene.observer.emit('score-change', this.getCurrentScore());
         this.playerController.scene.observer.emit('combo-change', 0, 0);
-        this.protoTrickScore = 0;
         this.comboAccumulatedScore = 0;
         this.comboMultiplier = 0;
       },
     });
+  }
+
+  getCurrentScore(): number {
+    return this.totalTrickScore + (this.totalCollectedPresents * this.BASE_COIN_POINTS) + this.getTravelDistanceMeters();
   }
 
   getState(): 'grounded' | 'in-air' | 'crashed' {
@@ -113,21 +107,6 @@ export class State {
   getTravelDistanceMeters(): number {
     const distance = this.parts.body.GetPosition().Length();
     return Math.floor(distance / 50) * 50;
-  }
-
-  gainBoost(delta: number, boostUnits: number): number {
-    const boost = Math.min(this.maxBoost, (this.BASE_BOOST_FLOW * boostUnits * delta) + this.availableBoost);
-    this.availableBoost = boost;
-    this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
-    return boost;
-  }
-
-  consumeBoost(delta: number, boostUnits: number): number {
-    if (this.availableBoost <= 0) return 0;
-    const boost = Math.min(this.availableBoost, this.BASE_BOOST_FLOW * boostUnits * delta);
-    this.availableBoost -= boost * (boostUnits > 1 ? 1.5 : 1);
-    this.playerController.scene.observer.emit('boost-change', this.availableBoost, this.maxBoost);
-    return boost;
   }
 
   private registerCollisionListeners() {
@@ -144,50 +123,20 @@ export class State {
       const fixtureB: Pl.b2Fixture & RubeEntity = contact.GetFixtureB();
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
-
       if (fixtureA.IsSensor() && !this.pickupsToProcess.has(bodyA) && fixtureA.customPropertiesMap?.phaserSensorType === 'pickup_present') {
-        console.log('-------------pickup A', fixtureA.name);
         this.pickupsToProcess.add(bodyA);
-        // setTimeout(() => bodyA.SetEnabled(false)); // cannot change bodies within contact listeners
-        // setTimeout(() => this.b2Physics.world.DestroyBody(bodyA));
       } else if (fixtureB.IsSensor() && !this.pickupsToProcess.has(bodyB) && fixtureB.customPropertiesMap?.phaserSensorType === 'pickup_present') {
         this.pickupsToProcess.add(bodyB);
-        console.log('-------------pickup B', fixtureB.name);
-        // setTimeout(() => bodyB.SetEnabled(false)); // cannot change bodies within contact listeners
-        // setTimeout(() => this.b2Physics.world.DestroyBody(bodyB));
       }
-
-      // if (fixtureA.IsSensor() && bodyA.IsEnabled() && !this.ignoredSensorBodies.has(bodyA)) {
-      //   this.ignoredSensorBodies.add(bodyA);
-      //   this.totalTrickScore += 25;
-      //   this.playerController.scene.observer.emit('collected-coin', bodyA);
-      //   this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
-      //   setTimeout(() => bodyA.SetEnabled(false)); // cannot change bodies within contact listeners
-      //
-      // } else if (fixtureB.IsSensor() && bodyB.IsEnabled() && !this.ignoredSensorBodies.has(bodyB)) {
-      //   this.ignoredSensorBodies.add(bodyB);
-      //   // this.gainBoost(1, 0.25);
-      //   this.totalTrickScore += 25;
-      //   this.playerController.scene.observer.emit('collected-coin', bodyB);
-      //   this.playerController.scene.observer.emit('score-change', this.totalTrickScore);
-      //   setTimeout(() => bodyB.SetEnabled(false)); // cannot change bodies within contact listeners
-      // }
     });
   }
 
   update(delta: number): void {
-    this.pickupsToProcess.size && console.log('pickups', this.pickupsToProcess.size);
+    this.processPickups();
 
-    for (const body of this.pickupsToProcess) {
-      const img: Ph.GameObjects.Image = body.GetUserData();
-      this.b2Physics.world.DestroyBody(body);
-      img.destroy();
-      this.playerController.scene.observer.emit('pickup_present');
-    }
-
-    this.pickupsToProcess.clear();
     const isInAir = this.playerController.board.isInAir();
-    if (this.state !== 'crashed' && this.isCrashed) this.playerController.scene.observer.emit('enter-crashed');
+    if (this.state !== 'crashed' && this.isCrashed) this.playerController.scene.observer
+    .emit('enter-crashed', this.getTravelDistanceMeters(), this.totalCollectedPresents, this.totalTrickScore, '12x240', this.getCurrentScore());
     if (this.state === 'grounded' && isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter-in-air');
     else if (this.state === 'in-air' && !isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter-grounded');
     this.updateTrickCounter();
@@ -195,8 +144,20 @@ export class State {
     this.updateDistance();
   }
 
+  private processPickups() {
+    for (const body of this.pickupsToProcess) {
+      const img: Ph.GameObjects.Image = body.GetUserData();
+      this.b2Physics.world.DestroyBody(body);
+      img.destroy();
+      this.totalCollectedPresents++;
+      this.playerController.scene.observer.emit('pickup_present', this.totalCollectedPresents);
+      this.playerController.scene.observer.emit('score-change', this.getCurrentScore());
+
+    }
+    this.pickupsToProcess.clear();
+  }
+
   private updateTrickCounter() {
-    // console.log('-----state', this.state);
     if (this.state === 'in-air') {
       const currentAngle = Ph.Math.Angle.Normalize(this.parts.body.GetAngle());
 
@@ -205,11 +166,11 @@ export class State {
       this.currentFlipRotation += diff;
       this.anglePreviousUpdate = currentAngle;
 
-      if (this.currentFlipRotation >= Math.PI * (this.pendingFrontFlips === 0 ? 1.25 : 2)) {
-        this.pendingFrontFlips++;
-        this.currentFlipRotation = 0;
-      } else if (this.currentFlipRotation <= Math.PI * -(this.pendingBackFlips === 0 ? 1.25 : 2)) {
+      if (this.currentFlipRotation >= Math.PI * (this.pendingBackFlips === 0 ? 1.25 : 2)) {
         this.pendingBackFlips++;
+        this.currentFlipRotation = 0;
+      } else if (this.currentFlipRotation <= Math.PI * -(this.pendingFrontFlips === 0 ? 1.25 : 2)) {
+        this.pendingFrontFlips++;
         this.currentFlipRotation = 0;
       }
     }

@@ -1,6 +1,6 @@
 import * as Ph from 'phaser';
 import {stats} from '../index';
-import GameScene from '../scenes/game.scene';
+import GameScene from '../scenes/GameScene';
 
 
 export class Backdrop {

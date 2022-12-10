@@ -1,5 +1,0 @@
-/**
- * source       https://opengameart.org/content/5-chiptunes-action
- * author       SubspaceAudio <juhani.junkala@musician.org>
- * license      https://creativecommons.org/publicdomain/zero/1.0/
- */
