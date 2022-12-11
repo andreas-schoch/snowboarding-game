@@ -1,0 +1,6 @@
+/**
+ * source       https://www.iforce2d.net/rube/loaders/rube-phaser-sample.zip
+ * author       unknown
+ * license      unknown
+ * notes        Part of an example project showing how to load RUBE files into phaser.
+ */
