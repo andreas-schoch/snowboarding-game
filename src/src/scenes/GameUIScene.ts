@@ -1,5 +1,7 @@
 import * as Ph from 'phaser';
-import {DEFAULT_WIDTH, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {DEFAULT_WIDTH, POINTS_PER_COIN, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {IScore} from '../components/State';
+import {calculateTotalScore} from '../util/calculateTotalScore';
 
 
 enum PanelIds {
@@ -29,6 +31,7 @@ export default class GameUIScene extends Ph.Scene {
   private sfx_pickup_present: Phaser.Sound.BaseSound;
   private sfx_death: Phaser.Sound.BaseSound;
   private sfx_grunt: Phaser.Sound.BaseSound;
+  private sfx_applause: Phaser.Sound.BaseSound;
 
   private comboLeewayChart: Ph.GameObjects.Graphics;
   private resolutionMod: number;
@@ -65,6 +68,7 @@ export default class GameUIScene extends Ph.Scene {
     this.sfx_pickup_present = this.sound.add('pickup_present', {detune: 100, rate: 1.1, volume: sfxVolume});
     this.sfx_death = this.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume});
     this.sfx_grunt = this.sound.add('grunt', {detune: 700, rate: 1.25, volume: sfxVolume * 0.6});
+    this.sfx_applause = this.sound.add('applause', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
 
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
@@ -73,25 +77,24 @@ export default class GameUIScene extends Ph.Scene {
     this.setPanelVisibility(PanelIds.NONE);
 
     this.observer.on('toggle_pause', (paused) => {
-      console.log('------toggle pause', this.panelPauseMenu?.classList);
       paused
         ? this.setPanelVisibility(PanelIds.PANEL_PAUSE_MENU)
         : this.setPanelVisibility(PanelIds.NONE);
     });
     this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.1}));
-    this.observer.on('pickup_present', total => this.sfx_pickup_present.play());
-    this.observer.on('combo-change', (accumulated, multiplier) => {
+    this.observer.on('pickup_present', total => {
+      if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
+      this.sfx_pickup_present.play();
+    });
+    this.observer.on('combo_change', (accumulated, multiplier) => {
       if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-';
     });
-    this.observer.on('score-change', score => {
-      if (this.hudScore) this.hudScore.innerText = score;
-    });
-    this.observer.on('distance-change', distance => {
-      if (this.hudDistance) this.hudDistance.innerText = String(distance) + 'm';
+    this.observer.on('score_change', score => {
+      if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score));
     });
 
     this.comboLeewayChart = this.add.graphics();
-    this.observer.on('combo-leeway-update', (value) => {
+    this.observer.on('combo_leeway_update', (value) => {
       this.comboLeewayChart
       .clear()
       .fillStyle(0xffffff)
@@ -99,9 +102,11 @@ export default class GameUIScene extends Ph.Scene {
       .fillPath();
     });
 
-    this.observer.on('enter-crashed', (distance: number, coins: number, trickScore: number, bestCombo: string, total: number) => {
+    this.observer.on('enter_crashed', (score: IScore) => {
       this.sfx_death.play();
       this.sfx_grunt.play();
+      this.comboLeewayChart.clear();
+      if (this.hudCombo) this.hudCombo.innerText = '-';
       this.tweens.add({
         targets: this.music,
         volume: 0.0,
@@ -110,7 +115,22 @@ export default class GameUIScene extends Ph.Scene {
         duration: 2000,
         onComplete: tween => {
           this.music.stop();
-          this.updateYourScorePanelData(distance, coins, trickScore, bestCombo, total);
+          this.updateYourScorePanelData(score);
+          this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
+        },
+      });
+    });
+
+    this.observer.on('level_finish', (score: IScore) => {
+      this.sfx_applause.play();
+      this.comboLeewayChart.clear();
+      this.tweens.add({
+        targets: this.music,
+        volume: 0,
+        duration: 2000,
+        onComplete: tween => {
+          this.music.stop();
+          this.updateYourScorePanelData(score);
           this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
         },
       });
@@ -129,7 +149,6 @@ export default class GameUIScene extends Ph.Scene {
 
     const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
     const radios: HTMLInputElement[] = Array.from(document.querySelectorAll('#settings-form input[name="resolution"]'));
-    console.log('--------------settings page', val, radios);
     for (const radio of radios) if (radio.value === val) radio.checked = true;
     const valVolumeMusic = localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || '80';
     const inputVolumeMusic: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeMusic"]');
@@ -177,7 +196,7 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'btn-resume-game': {
             this.setPanelVisibility(PanelIds.NONE);
-            this.observer.emit('resume-game');
+            this.observer.emit('resume_game');
             break;
           }
           case 'btn-goto-select-level': {
@@ -196,6 +215,12 @@ export default class GameUIScene extends Ph.Scene {
             this.setPanelVisibility(PanelIds.PANEL_CREDITS);
             break;
           }
+          case 'pause-game-icon': {
+            if (this.panelPauseMenu?.classList.contains('hidden')) {
+              this.observer.emit('pause_game_icon_pressed');
+            }
+            break;
+          }
           case 'btn-save-settings': {
             evt.preventDefault();
             const settingsForm = this.panelSettings?.querySelector('form');
@@ -212,7 +237,7 @@ export default class GameUIScene extends Ph.Scene {
             break;
           }
           default: {
-            console.log('--------clicked default invalid target id', evt.target.id);
+            console.log('non-interactable target id', evt.target.id);
           }
 
         }
@@ -232,7 +257,6 @@ export default class GameUIScene extends Ph.Scene {
 
     const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
     const radios: HTMLInputElement[] = Array.from(document.querySelectorAll('#settings-form input[name="resolution"]'));
-    console.log('--------------settings page', val, radios);
     for (const radio of radios) if (radio.value === val) radio.checked = true;
 
     const valVolumeMusic = localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || '80';
@@ -270,12 +294,7 @@ export default class GameUIScene extends Ph.Scene {
   }
 
   private setPanelVisibility(panelId: PanelIds) {
-    console.log('-----set panel visible', panelId);
     this.panels.forEach(p => {
-      if (panelId === PanelIds.NONE) {
-        // TODO unpause game
-      }
-      console.log('--set panel visible', p.id, p.id === panelId);
       if (p.id === panelId) {
         p.classList.remove('hidden');
       } else {
@@ -286,17 +305,23 @@ export default class GameUIScene extends Ph.Scene {
 
   }
 
-  private updateYourScorePanelData(distance: number, coins: number, trickScore: number, bestCombo: string, total: number) {
+  private updateYourScorePanelData(score: IScore) {
     if (this.panelYourScore) {
       const elDistance = document.getElementById('your-score-distance');
       const elCoins = document.getElementById('your-score-coins');
       const elTricks = document.getElementById('your-score-trick-score');
+      const elTricksBestCombo = document.getElementById('your-score-best-combo');
       const elTotal = document.getElementById('your-score-total');
 
-      if (elDistance) elDistance.innerText = String(distance) + 'm';
-      if (elCoins) elCoins.innerText = `${coins}x100`;
-      if (elTricks) elTricks.innerText = String(trickScore);
-      if (elTotal) elTotal.innerText = String(trickScore);
+      score.finishedLevel
+        ? this.panelYourScore.classList.add('succeeded')
+        : this.panelYourScore.classList.remove('succeeded');
+
+      if (elDistance) elDistance.innerText = String(score.distance) + 'm';
+      if (elCoins) elCoins.innerText = `${score.coins}x${POINTS_PER_COIN}`;
+      if (elTricks) elTricks.innerText = String(score.trickScore);
+      if (elTricksBestCombo) elTricksBestCombo.innerText = String(score.bestCombo.accumulator * score.bestCombo.multiplier);
+      if (elTotal) elTotal.innerText = String(calculateTotalScore(score));
     }
   }
 }

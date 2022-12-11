@@ -10,10 +10,19 @@ export const SETTINGS_KEY_RESOLUTION = 'snowboarding_game_resolution';
 export const SETTINGS_KEY_VOLUME_MUSIC = 'snowboarding_game_volume_music';
 export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
 
+export const POINTS_PER_COIN = 100;
+export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
+export const BASE_FLIP_POINTS = 200;
+export const TRICK_POINTS_COMBO_FRACTION = 0.2;
+export const HEAD_MAX_IMPULSE = 8;
+
 export const DEFAULT_WIDTH = 1280;
 export const DEFAULT_HEIGHT = 720;
 export const RESOLUTION_SCALE: number = Number(localStorage.getItem(SETTINGS_KEY_RESOLUTION) || 1);
-export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 1);
+// FIXME there is some kind of floating point precision issue (I assume) where the terrain gets weird once player moves to far from origin
+//  It appears as the resolution and the scale have an influence on this. As temporary workaround I halved the world size and doubled the zoom.
+//  This likely won't be an issue once terrain is split up in chunks (as it was when it used to be procedural before RUBE loader added).
+export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 2);
 export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {

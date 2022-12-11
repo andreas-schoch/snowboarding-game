@@ -107,10 +107,7 @@ export class RubeLoader {
     switch (jointJson.type) {
       case 'revolute': {
         const jd = new Pl.b2RevoluteJointDef();
-        // const {x, y} = bodyA.GetPosition();
         jd.Initialize(bodyA, bodyB, this.rubeToVec2(jointJson.anchorA).Rotate(bodyA.GetAngle()).Add(bodyA.GetPosition()));
-        // console.log(jointJson.anchorA, x, y)
-        // jd.Initialize(bodyA, bodyB, {x: 0.190875, y: -1.31445});
         jd.collideConnected = Boolean(jointJson.collideConnected);
         jd.referenceAngle = jointJson.refAngle || 0;
         jd.enableLimit = Boolean(jointJson.enableLimit);
@@ -141,7 +138,6 @@ export class RubeLoader {
         jd.maxLength = jd.length * 2;
         Pl.b2LinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
         joint = this.world.CreateJoint(jd);
-        console.log('d joint', joint);
         break;
       }
       case 'prismatic': {
@@ -209,8 +205,6 @@ export class RubeLoader {
     const texture = this.getCustomProperty(imageJson, 'string', 'phaserTexture', '');
     const textureFallback = (file || '').split('/').reverse()[0];
     const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', undefined);
-    console.log('------------- texture', texture, textureFrame);
-    // console.log('textureFallback', textureFallback);
     const img: Ph.GameObjects.Image & RubeEntity = this.scene.add.image(pos.x * this.worldSize, pos.y * -this.worldSize, texture || textureFallback, textureFrame);
     img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
     img.scaleY = (this.worldSize / img.height) * scale;

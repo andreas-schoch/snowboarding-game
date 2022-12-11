@@ -27,18 +27,15 @@ export class PlayerController {
     this.scene = scene;
     this.b2Physics = b2Physics;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-
-    this.cursors.space.on('down', () => {
-      if (this.state.isCrashed) return; // cannot pause after crash. It will show the "Your score" panel;
-      this.b2Physics.isPaused = !this.b2Physics.isPaused;
-      this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused);
-    });
-
-    this.scene.observer.on('resume-game', () => this.b2Physics.isPaused = false);
+    this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
+    this.scene.input.keyboard.on('keydown-ESC', () => this.pauseGame());
+    this.cursors.space.on('down', () => this.pauseGame());
+    this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
 
     this.cursors.up.on('down', () => {
-      console.log('up down');
-      this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.scene.observer.emit('jump_start');
+      if (!this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250) {
+        this.scene.observer.emit('jump_start');
+      }
     });
 
     this.initBodyParts();
@@ -66,6 +63,12 @@ export class PlayerController {
     }
   }
 
+  private pauseGame() {
+    if (this.state.isCrashed) return; // cannot pause after crash. It will show the "Your score" panel;
+    this.b2Physics.isPaused = !this.b2Physics.isPaused;
+    this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused);
+  }
+
   update(delta: number) {
     if (this.b2Physics.isPaused) return;
     stats.begin('snowman');
@@ -75,7 +78,7 @@ export class PlayerController {
     this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.board.getTimeInAir() > 100 && this.resetLegs();
 
-    if (!this.state.isCrashed) {
+    if (!this.state.isCrashed && !this.state.levelFinished) {
       this.board.update(delta);
       // Touch/Mouse input
       if (this.scene.input.activePointer?.isDown && this.scene.input.activePointer.wasTouch) {
@@ -103,6 +106,7 @@ export class PlayerController {
     this.parts.distanceLegLeft && this.b2Physics.world.DestroyJoint(this.parts.distanceLegLeft);
     this.parts.distanceLegRight && this.b2Physics.world.DestroyJoint(this.parts.distanceLegRight);
     this.parts.weldCenter && this.b2Physics.world.DestroyJoint(this.parts.weldCenter);
+    this.parts.prismatic && this.b2Physics.world.DestroyJoint(this.parts.prismatic);
   }
 
   private jump(delta: number) {
@@ -163,18 +167,14 @@ export class PlayerController {
       body: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'body')[0],
       boardSegments: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'boardSegment'),
 
-      boardEdges: this.b2Physics.rubeLoader.getFixturesByCustomProperty('bool', 'phaserBoardEdge', true),
-
       bindingLeft: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0] as Pl.b2RevoluteJoint,
       bindingRight: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0] as Pl.b2RevoluteJoint,
       distanceLegLeft: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0] as Pl.b2DistanceJoint,
       distanceLegRight: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0] as Pl.b2DistanceJoint,
       weldCenter: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0] as Pl.b2WeldJoint,
+      prismatic: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0] as Pl.b2PrismaticJoint,
     };
-
-    console.log('initBodyParts', this.parts);
   }
-
 }
 
 
@@ -182,11 +182,11 @@ export interface IBodyParts {
   head: Pl.b2Body & RubeEntity;
   body: Pl.b2Body & RubeEntity;
   boardSegments: (Pl.b2Body & RubeEntity)[];
-  boardEdges: (Pl.b2Fixture & RubeEntity)[]; // tail and nose edges when hit trigger crash;
 
   bindingLeft: Pl.b2RevoluteJoint & RubeEntity | null;
   bindingRight: Pl.b2RevoluteJoint & RubeEntity | null;
   distanceLegLeft: Pl.b2DistanceJoint & RubeEntity | null;
   distanceLegRight: Pl.b2DistanceJoint & RubeEntity | null;
   weldCenter: Pl.b2WeldJoint & RubeEntity | null;
+  prismatic: Pl.b2PrismaticJoint & RubeEntity | null;
 }

@@ -25,10 +25,10 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.worldScale = worldScale;
     this.world = Pl.b2World.Create(gravity);
     this.world.SetContactListener({
-      BeginContact: contact => this.emit('begin-contact', contact),
+      BeginContact: contact => this.emit('begin_contact', contact),
       EndContact: () => null,
       PreSolve: () => null,
-      PostSolve: (contact, impulse) => this.emit('post-solve', contact, impulse),
+      PostSolve: (contact, impulse) => this.emit('post_solve', contact, impulse),
     });
 
     this.world.SetAllowSleeping(false);

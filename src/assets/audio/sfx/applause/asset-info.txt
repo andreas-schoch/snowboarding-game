@@ -1,0 +1,5 @@
+/**
+ * source       https://opengameart.org/content/applause
+ * author       Blender Foundation
+ * license      https://creativecommons.org/licenses/by/3.0/
+ */

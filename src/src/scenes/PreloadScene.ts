@@ -37,6 +37,10 @@ export default class PreloadScene extends Phaser.Scene {
       'assets/audio/sfx/crash_grunt/grunt.ogg',
       'assets/audio/sfx/crash_grunt/grunt.mp3',
     ]);
+    this.load.audio('applause', [
+      'assets/audio/sfx/applause/applause.ogg',
+      'assets/audio/sfx/applause/applause.mp3',
+    ]);
   }
 
   private loadImg() {
@@ -44,6 +48,7 @@ export default class PreloadScene extends Phaser.Scene {
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
     const sizes = {360: '640x360', 540: '960x540', 720: '1280x720'};
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${sizes[closestSize]}.png`, `assets/img/packed/bg_space_${sizes[closestSize]}.json`);
+    this.load.atlas('atlas-santa', `assets/img/packed/character_santa_640x360.png`, `assets/img/packed/character_santa_640x360.json`);
 
     // TODO create packed for everything needed
     this.load.image('ice_spikes', 'assets/img/obstacles/ice_spikes.png');
@@ -53,11 +58,9 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('cottage.png', 'assets/img/svgsilh/cottage.png');
     this.load.image('santa-board.png', 'assets/img/santa_parts_v01/santa-board.png');
 
-    this.load.atlas('atlas-santa', `assets/img/packed/character-santa.png`, `assets/img/packed/character-santa.json`);
   }
 
   private loadLevels() {
-    // this.load.json('santa', 'assets/levels/santa-v01.json');
     this.load.json('santa', 'assets/levels/santa-v01.json');
   }
 }
