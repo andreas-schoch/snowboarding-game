@@ -14,7 +14,11 @@
   "keywords": [
     "box2d",
     "physics",
-    "snowboard"
+    "snowboard",
+    "game",
+    "fun",
+    "2d",
+    "phaser"
   ],
   "author": "Andreas Schoch",
   "license": "MIT",

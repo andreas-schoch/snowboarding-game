@@ -621,7 +621,7 @@
     color: black;
   }
 
-  .panel.hidden {
+  .hidden {
     display: none;
   }
 
@@ -658,6 +658,15 @@
   /* ==================== */
   /* = Panel Pause Menu = */
   /* ==================== */
+  #pause-game-icon {
+    position: absolute;
+    right: var(--game-ui-padding);
+    bottom: var(--game-ui-padding);
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+  }
+
   #panel-pause-menu {
     width: 500px;
   }
@@ -667,6 +676,12 @@
   /* ====================== */
   #panel-select-level {
     /*width: 500px;*/
+  }
+
+  #panel-select-level .select-level-note {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--grey-700);
   }
 
   /* ====================== */
@@ -732,17 +747,26 @@
   /* = Panel Your Score = */
   /* ==================== */
   .summary > span:first-of-type {
-    color: #424242;
+    color: var(--grey-700);
     font-weight: normal;
-    font-size: 12px;
+    font-size: 14px;
     text-align: left;
   }
 
   .summary > span:last-of-type {
-    color: #424242;
+    color: var(--grey-700);
     font-weight: normal;
-    font-size: 12px;
+    font-size: 14px;
     text-align: right;
+  }
+
+  .summary-trick {
+    font-size: 14px;
+  }
+
+  .summary-trick-combo {
+    font-size: 10px;
+    color: var(--grey-600);
   }
 
   .summary.summary-total {
@@ -751,7 +775,7 @@
 
   .summary.summary-total > span {
     color: black;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: bolder;
   }
 
@@ -762,6 +786,15 @@
 
   .play-again {
     margin-bottom: 0;
+  }
+
+  .submit-score-info {
+    margin-top: 2rem;
+    font-size: 12px;
+    padding-top: 1.5rem;
+    color: var(--grey-700);
+    line-height: 1.5;
+    border-top: 2px solid var(--grey-500);
   }
 
   /* ================== */
@@ -781,6 +814,7 @@
   /* ================= */
   #panel-credits {
     width: 600px;
+    line-height: 1.5;
   }
 
   #panel-credits .credits-scrollable {
@@ -810,8 +844,8 @@
   <!-- GAME UI HUD -->
   <!----------------->
   <div class="game-ui-item distance">
-    <div class="label">Distance</div>
-    <div class="value" id="hud-distance">0m</div>
+    <div class="label">Presents</div>
+    <div class="value" id="hud-distance">0x</div>
   </div>
   <div class="game-ui-item combo">
     <div class="label">Combo</div>
@@ -825,6 +859,9 @@
   <!---------------------->
   <!-- PANEL PAUSE MENU -->
   <!---------------------->
+
+  <i class="material-icons" id="pause-game-icon">pause_circle_outline</i>
+
   <div class="panel" id="panel-pause-menu">
     <div class="panel-title">Pause Menu</div>
     <div class="row">
@@ -849,6 +886,10 @@
   <!------------------------>
   <div class="panel panel-select-level" id="panel-select-level">
     <div class="panel-title">Select Level</div>
+
+    <div class="row">
+      <div class="col col-12 select-level-note">Current version of the game has only 1 level. More may be added within the next few days.</div>
+    </div>
     <!-- BACK-->
     <div class="row last">
       <div class="col col-12 flex-center">
@@ -1042,47 +1083,52 @@
       <span class="row credits-title"><span class="col col-12 flex-center">Developed by</span></span>
       <span class="row">
         <span class="col col-6 credits-name">Andreas Schoch</span>
-        <a class="col col-3 credits-link" href="https://github.com/andreas-schoch">Github</a>
-        <a class="col col-3 credits-link" href="https://www.linkedin.com/in/andreas-schoch/">Linkedin</a>
+        <a class="col col-3 credits-link" href="https://github.com/andreas-schoch" target="_blank">Github</a>
+        <a class="col col-3 credits-link" href="https://www.linkedin.com/in/andreas-schoch/" target="_blank">Linkedin</a>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Music by</span></span>
       <span class="row">
         <span class="col col-6 credits-name">Matthew Pablo</span>
-        <a class="col col-3 credits-link" href="https://opengameart.org/content/riverside-ride">Source</a>
-        <a class="col col-3 credits-link" href="http://www.matthewpablo.com">Website</a>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/riverside-ride" target="_blank">Source</a>
+        <a class="col col-3 credits-link" href="http://www.matthewpablo.com" target="_blank">Website</a>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Soundeffects by</span></span>
       <span class="row">
         <span class="col col-6 credits-name">independent.nu</span>
-        <a class="col col-3 credits-link" href="https://opengameart.org/content/8-wet-squish-slurp-impacts">Source</a>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/8-wet-squish-slurp-impacts" target="_blank">Source</a>
+        <span class="col col-3"></span>
+      </span>
+      <span class="row">
+        <span class="col col-6 credits-name">Blender Foundation</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/applause" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Assets by</span></span>
       <span class="row">
         <span class="col col-6">Tokegameart</span>
-        <a class="col col-3 credits-link" href="https://tokegameart.net/item/santa-claus/">Source</a>
-        <a class="col col-3 credits-link" href="https://tokegameart.net">Website</a>
+        <a class="col col-3 credits-link" href="https://tokegameart.net/item/santa-claus/" target="_blank">Source</a>
+        <a class="col col-3 credits-link" href="https://tokegameart.net" target="_blank">Website</a>
       </span>
 
       <span class="row">
         <span class="col col-6">Lukas Mrazik</span>
-        <a class="col col-3 credits-link" href="https://opengameart.org/content/space-background-7">Source</a>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/space-background-7" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
       <span class="row">
         <span class="col col-6">pzUH</span>
-        <a class="col col-3 credits-link" href="https://opengameart.org/content/winter-platformer-game-tileset">Source</a>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/winter-platformer-game-tileset" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
       <span class="row">
         <span class="col col-6">Svgsilh</span>
         <span class="col col-3"></span>
-        <a class="col col-3 credits-link" href="https://svgsilh.com">Website</a>
+        <a class="col col-3 credits-link" href="https://svgsilh.com" target="_blank">Website</a>
       </span>
 
       <span class="row">
@@ -1093,23 +1139,33 @@
 
       <span class="row credits-title"><span class="col col-12 flex-center">Special Thanks to</span></span>
       <span class="row">
+        <span class="col col-6">Legartis</span>
+        <span class="col col-3"></span>
+        <a class="col col-3 credits-link" href="https://legartis.ai" target="_blank">Website</a>
+      </span>
+      <span class="row"><span class="col col-12">For giving me a chance when I (Andreas Schoch) started out as a professional developer.
+        The 3 years I worked here were amazing and if it wasn't for my travel plans, I wouldn't have left! Consider this game my farewell gift to the whole team :)</span></span>
+
+      <span class="row">
         <span class="col col-6">Chris Campbell</span>
         <span class="col col-3"></span>
-        <a class="col col-3 credits-link" href="https://www.iforce2d.net/rube/">Website</a>
+        <a class="col col-3 credits-link" href="https://www.iforce2d.net/rube/" target="_blank">Website</a>
       </span>
       <span class="row"><span class="col col-12">For the awesome R.U.B.E Editor which made it so much easier to create box2d levels.</span></span>
 
+
       <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
-      <span class="">
-        <span>The game itself is released under the open-source MIT license: </span>
-        <a class="credits-link" href="https://github.com/andreas-schoch">Source</a>
+      <span class="row">
+        <span class="col col-12">
+          <span>The game is released under the open-source MIT license: </span>
+          <a class="credits-link" href="https://github.com/andreas-schoch/snowboarding-game" target="_blank">Source</a>
+        </span>
       </span>
-
-      <span class="row">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span>
-      <span class="row"></span>
+      <span class="row"><span class="col col-12">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span></span>
+      <span class="row"><span class="col col-12">While initially only intended as a small and simple christmas game for legartis, the development will continue independently and remain fully free and open-source.</span></span>
+      <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
+      <span class="row"><span class="col col-12">It would be awesome to enable players to create and upload their own custom levels and build a little community around this game in the future.</span></span>
     </div>
-
-
     <!-- BACK-->
     <div class="row last">
       <div class="col col-12 flex-center">
@@ -1136,7 +1192,10 @@
       <span class="col col-4" id="your-score-coins">87x100</span>
     </div>
     <div class="row summary summary-trick">
-      <span class="col col-8">Trick score</span>
+      <span class="col col-8">
+        <span>Trick score</span>
+        <span class="summary-trick-combo">(Best Combo: <span id="your-score-best-combo">3200</span>)</span>
+      </span>
       <span class="col col-4" id="your-score-trick-score">3400</span>
     </div>
     <div class="row summary summary-total">
@@ -1144,14 +1203,18 @@
       <span class="col col-4" id="your-score-total">6570</span>
     </div>
     <!--  SUBMIT SCORE -->
-    <div class="row submit-score">
-      <div class="col col-8">
-        <div class="form-group">
-          <input id="username" class="form-text-input" name="username" value="" type="text" autofocus autocomplete="off" onkeyup="this.setAttribute('value', this.value)">
-          <label for="username" class="floating-label">Your Name in Leaderboards</label>
+    <div class="submit-score">
+      <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet. Please choose your name.
+        The next time you finish a level, your score will be submitted automatically.</span></div>
+      <div class="row" id="your-score-name-form">
+        <div class="col col-8">
+          <div class="form-group">
+            <input id="username" class="form-text-input" name="username" value="" type="text" autofocus autocomplete="off" onkeyup="this.setAttribute('value', this.value)">
+            <label for="username" class="floating-label">Your name</label>
+          </div>
         </div>
+        <button class="col col-4 btn btn-primary" id="btn-score-submit">Submit Score</button>
       </div>
-      <button class="col col-4 btn btn-primary" id="btn-score-submit">Submit Score</button>
     </div>
     <!-- BACK / REPLAY -->
     <div class="row play-again">

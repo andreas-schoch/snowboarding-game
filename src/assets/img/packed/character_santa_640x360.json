@@ -1,0 +1,146 @@
+{
+	"textures": [
+		{
+			"image": "character_santa_640x360.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 41,
+				"h": 99
+			},
+			"scale": 0.125,
+			"frames": [
+				{
+					"filename": "santa-head-with-face.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 39,
+						"h": 38
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 39,
+						"h": 38
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 39,
+						"h": 38
+					}
+				},
+				{
+					"filename": "santa-body.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 34
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 34
+					},
+					"frame": {
+						"x": 1,
+						"y": 41,
+						"w": 34,
+						"h": 34
+					}
+				},
+				{
+					"filename": "santa upper.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 7,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 7,
+						"h": 16
+					},
+					"frame": {
+						"x": 1,
+						"y": 77,
+						"w": 7,
+						"h": 16
+					}
+				},
+				{
+					"filename": "santa-arm-lower-left.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 15
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 15
+					},
+					"frame": {
+						"x": 10,
+						"y": 77,
+						"w": 9,
+						"h": 15
+					}
+				},
+				{
+					"filename": "board.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 15,
+						"h": 4
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 4
+					},
+					"frame": {
+						"x": 10,
+						"y": 94,
+						"w": 15,
+						"h": 4
+					}
+				},
+				{
+					"filename": "santa-leg-lower.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 9,
+						"h": 15
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 9,
+						"h": 15
+					},
+					"frame": {
+						"x": 21,
+						"y": 77,
+						"w": 9,
+						"h": 15
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:bb760986d604997c55aea1e68390d033:642adda951ed4afe0951314f94e7b32f:be16ff2351b5d4651988a32aa9bdbe9d$"
+	}
+}
