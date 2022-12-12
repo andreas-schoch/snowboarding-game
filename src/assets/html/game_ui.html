@@ -2,12 +2,10 @@
 <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet">
 
 <style>
-  /*@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,500,700');*/
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-  /*@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');*/
 
   :root {
-    --game-ui-padding: 0.4rem;
+    --game-ui-padding: 0.5rem;
 
     --blue-800: #123684;
     --blue-900: #01256E;
@@ -582,6 +580,12 @@
     position: absolute;
   }
 
+  .game-ui-item .label {
+    margin-bottom: 0.4rem;
+    font-size: 12px;
+    color: var(--grey-600);
+  }
+
   .game-ui-item.distance {
     left: var(--game-ui-padding);
     top: var(--game-ui-padding);
@@ -598,6 +602,15 @@
     right: var(--game-ui-padding);
     top: var(--game-ui-padding);
     text-align: right;
+  }
+
+  #unsupported-browser-notice {
+    position: absolute;
+    bottom: var(--game-ui-padding);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    opacity: 0.5;
   }
 
   /* ========= */
@@ -659,11 +672,20 @@
   /* = Panel Pause Menu = */
   /* ==================== */
   #pause-game-icon {
+    color: var(--grey-600);
     position: absolute;
     right: var(--game-ui-padding);
     bottom: var(--game-ui-padding);
-    font-size: 40px;
-    color: white;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  #how-to-play-icon {
+    color: var(--grey-600);
+    position: absolute;
+    left: var(--game-ui-padding);
+    bottom: var(--game-ui-padding);
+    font-size: 30px;
     cursor: pointer;
   }
 
@@ -682,6 +704,51 @@
     font-size: 16px;
     line-height: 1.5;
     color: var(--grey-700);
+  }
+
+  /* ===================== */
+  /* = Panel How to Play = */
+  /* ===================== */
+  #panel-how-to-play {
+    /*width: 500px;*/
+    font-size: 16px;
+    color: var(--grey-600);
+  }
+
+  #panel-how-to-play .scrollbar {
+    max-height: 500px;
+    padding: 1rem 0;
+  }
+
+  #panel-how-to-play .row {
+    margin-bottom: 0;
+  }
+
+  #panel-how-to-play .game-premise {
+    color: var(--grey-600);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  #panel-how-to-play .row.how-to-play-title {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 20px;
+    color: black;
+  }
+
+  #panel-how-to-play .control-img {
+
+  }
+
+  #panel-how-to-play .control-text {
+    display: flex;
+    align-items: center;
+  }
+
+  #panel-how-to-play img {
+    width: 4rem;
+    height: 4rem;
   }
 
   /* ====================== */
@@ -856,22 +923,28 @@
     <div class="value" id="hud-score">0</div>
   </div>
 
+  <div id="unsupported-browser-notice" class="hidden">This game hasn't been optimized for this browser (yet). In case it doesn't run well, consider using Chrome or Edge to play it.</div>
+
   <!---------------------->
   <!-- PANEL PAUSE MENU -->
   <!---------------------->
 
-  <i class="material-icons" id="pause-game-icon">pause_circle_outline</i>
+  <i class="material-icons hidden" id="pause-game-icon">pause_circle_outline</i>
+  <i class="material-icons hidden" id="how-to-play-icon">help_outline</i>
 
-  <div class="panel" id="panel-pause-menu">
+  <div class="panel hidden" id="panel-pause-menu">
     <div class="panel-title">Pause Menu</div>
     <div class="row">
-      <button class="col col-12 btn btn-primary" id="btn-resume-game">Resume</button>
+      <button class="col col-12 btn btn-primary" id="btn-resume-game">Resume Level</button>
     </div>
     <div class="row">
       <button class="col col-12 btn btn-default" id="btn-goto-select-level">Select Level</button>
     </div>
+    <div class="row" style="margin-bottom: 4rem;">
+      <button class="col col-12 btn btn-default" id="btn-goto-leaderboards">Leaderboard</button>
+    </div>
     <div class="row">
-      <button class="col col-12 btn btn-default" id="btn-goto-leaderboards">View Leaderboards</button>
+      <button class="col col-12 btn btn-default" id="btn-goto-how-to-play">How To Play?</button>
     </div>
     <div class="row">
       <button class="col col-12 btn btn-default" id="btn-goto-settings">Settings</button>
@@ -884,7 +957,7 @@
   <!------------------------>
   <!-- PANEL SELECT LEVEL -->
   <!------------------------>
-  <div class="panel panel-select-level" id="panel-select-level">
+  <div class="panel hidden" id="panel-select-level">
     <div class="panel-title">Select Level</div>
 
     <div class="row">
@@ -895,7 +968,70 @@
       <div class="col col-12 flex-center">
         <button class="btn btn-secondary" id="btn-goto-pause-menu">
           <i class="material-icons">chevron_left</i>
-          <span>Back to main menu</span>
+          <span>Back to menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!----------------------->
+  <!-- PANEL HOW TO PLAY -->
+  <!----------------------->
+  <div class="panel hidden" id="panel-how-to-play">
+    <div class="panel-title">How to play</div>
+    <div class="scrollbar">
+      <span class="row how-to-play-title"><span class="col col-12">Premise</span></span>
+      <span class="row game-premise"><span class="col col-12">Santas helpers lost all presents for the kids! Luckily Santa happens to be a pro-snowboarder and is able to collect them quickly while performing cool tricks.</span></span>
+      <span class="row how-to-play-title"><span class="col col-12">Keyboard controls</span></span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img class="img-center" src="assets/img/controls/Arrow_Up_Key_Light.png" alt="keyboard arrow up key">
+        </span>
+        <span class="col col-8 control-text">Jump</span>
+      </span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img src="assets/img/controls/Arrow_Left_Key_Light.png" alt="keyboard arrow left key">
+          <img src="assets/img/controls/Arrow_Right_Key_Light.png" alt="keyboard arrow right key">
+        </span>
+        <span class="col col-8 control-text">Balance and flip</span>
+      </span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img class="img-center" src="assets/img/controls/Arrow_Down_Key_Light.png" alt="keyboard arrow down key">
+        </span>
+        <span class="col col-8 control-text">Center yourself</span>
+      </span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img src="assets/img/controls/Space_Key_Light.png" alt="keyboard space key">
+          <img src="assets/img/controls/Esc_Key_Light.png" alt="keyboard escape key">
+        </span>
+        <span class="col col-8 control-text">toggle pause</span>
+      </span>
+      <span class="row how-to-play-title"><span class="col col-12">Touchscreen controls</span></span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img class="img-center" src="assets/img/controls/Gesture_Swipe_Up.png" alt="gesture swipe up">
+        </span>
+        <span class="col col-8 control-text">Swipe up to jump</span>
+      </span>
+      <span class="row">
+        <span class="col col-4 flex-center control-img">
+          <img src="assets/img/controls/Gesture_Swipe_Left.png" alt="gesture swipe left">
+          <img src="assets/img/controls/Gesture_Swipe_Right.png" alt="gesture swipe right">
+        </span>
+        <span class="col col-8 control-text">Balance and flip by pressing left or right side of screen</span>
+      </span>
+      <span class="row"><span class="col col-12" style="font-size: 12px; margin-top: 2rem;">(Keyboard controls work much better atm)</span></span>
+    </div>
+
+    <!-- BACK-->
+    <div class="row last">
+      <div class="col col-12 flex-center">
+        <button class="btn btn-secondary" id="btn-goto-pause-menu">
+          <i class="material-icons">chevron_left</i>
+          <span>Back to menu</span>
         </button>
       </div>
     </div>
@@ -904,7 +1040,7 @@
   <!------------------------>
   <!-- PANEL LEADERBOARDS -->
   <!------------------------>
-  <div class="panel" id="panel-leaderboards">
+  <div class="panel hidden" id="panel-leaderboards">
     <div class="panel-title">Leaderboards</div>
 
     <div class="row leaderboard-header">
@@ -1015,7 +1151,7 @@
   <!-------------------->
   <!-- PANEL SETTINGS -->
   <!-------------------->
-  <div class="panel" id="panel-settings">
+  <div class="panel hidden" id="panel-settings">
     <div class="panel-title">Settings</div>
     <i class="panel-close material-icons" id="btn-close-settings">close</i>
     <form action="#" name="settings-form" id="settings-form">
@@ -1067,7 +1203,7 @@
       <div class="col col-12 flex-center">
         <button class="btn btn-secondary" id="btn-goto-pause-menu">
           <i class="material-icons">chevron_left</i>
-          <span>Back to main menu</span>
+          <span>Back to menu</span>
         </button>
       </div>
     </div>
@@ -1076,7 +1212,7 @@
   <!------------------->
   <!-- PANEL CREDITS -->
   <!------------------->
-  <div class="panel" id="panel-credits">
+  <div class="panel hidden" id="panel-credits">
     <div class="panel-title">Credits</div>
 
     <div class="credits-scrollable scrollbar">
@@ -1143,15 +1279,15 @@
         <span class="col col-3"></span>
         <a class="col col-3 credits-link" href="https://legartis.ai" target="_blank">Website</a>
       </span>
-      <span class="row"><span class="col col-12">For giving me a chance when I (Andreas Schoch) started out as a professional developer.
-        The 3 years I worked here were amazing and if it wasn't for my travel plans, I wouldn't have left! Consider this game my farewell gift to the whole team :)</span></span>
+      <span class="row"><span class="col col-12" style="color: var(--grey-600)">For giving me a chance when I (Andreas Schoch) started out as a professional developer.
+        The 3 years I worked here were amazing and if it wasn't for my travel plans, I wouldn't have left! Consider this game my farewell gift. Thanks everyone! :)</span></span>
 
-      <span class="row">
+      <span class="row" style="margin-top: 2rem">
         <span class="col col-6">Chris Campbell</span>
         <span class="col col-3"></span>
         <a class="col col-3 credits-link" href="https://www.iforce2d.net/rube/" target="_blank">Website</a>
       </span>
-      <span class="row"><span class="col col-12">For the awesome R.U.B.E Editor which made it so much easier to create box2d levels.</span></span>
+      <span class="row"><span class="col col-12" style="color: var(--grey-600)">For the awesome R.U.B.E Editor which made it so much easier to create box2d levels.</span></span>
 
 
       <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
@@ -1162,16 +1298,16 @@
         </span>
       </span>
       <span class="row"><span class="col col-12">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span></span>
-      <span class="row"><span class="col col-12">While initially only intended as a small and simple christmas game for legartis, the development will continue independently and remain fully free and open-source.</span></span>
+      <span class="row"><span class="col col-12">While initially only intended as a small and simple christmas game for legartis that was built outside of working hours, the development will continue independently. The game will remain fully free and open-source.</span></span>
       <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
-      <span class="row"><span class="col col-12">It would be awesome to enable players to create and upload their own custom levels and build a little community around this game in the future.</span></span>
+      <span class="row"><span class="col col-12">It would be awesome to allow people to create and upload their own custom levels and build a little community around it in the future.</span></span>
     </div>
     <!-- BACK-->
     <div class="row last">
       <div class="col col-12 flex-center">
         <button class="btn btn-secondary" id="btn-goto-pause-menu">
           <i class="material-icons">chevron_left</i>
-          <span>Back to main menu</span>
+          <span>Back to menu</span>
         </button>
       </div>
     </div>
@@ -1180,7 +1316,7 @@
   <!---------------------->
   <!-- PANEL YOUR SCORE -->
   <!---------------------->
-  <div class="panel" id="panel-your-score">
+  <div class="panel hidden" id="panel-your-score">
     <div class="panel-title">Your Score</div>
     <!--SCORE SUMMARY-->
     <div class="row summary summary-distance">

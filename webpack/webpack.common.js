@@ -18,9 +18,9 @@ module.exports = {
       {
         test: /\.tsx?$|\.jsx?$/,
         include: path.join(__dirname, '../src'),
-        loader: 'ts-loader'
-      }
-      ],
+        loader: 'ts-loader',
+      },
+    ],
   },
   optimization: {
     splitChunks: {
@@ -39,11 +39,15 @@ module.exports = {
     new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
     new CopyWebpackPlugin({
       patterns: [
-        // {from: 'src/assets/packed', to: 'assets'}, // TODO only add packed
-        {from: 'src/assets', to: 'assets'}, // TODO only add packed
+        {from: 'src/assets/audio', to: 'assets/audio'},
+        {from: 'src/assets/img/packed', to: 'assets/img/packed'},
+        {from: 'src/assets/img/icons', to: 'assets/img/icons'},
+        {from: 'src/assets/img/controls', to: 'assets/img/controls'},
+        {from: 'src/assets/html', to: 'assets/html'},
+        {from: 'src/assets/levels/export', to: 'assets/levels/export'},
         {from: 'src/favicon.ico', to: ''},
         {from: 'src/manifest.json', to: ''},
       ],
-    })
+    }),
   ],
 };

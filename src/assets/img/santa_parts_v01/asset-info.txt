@@ -2,5 +2,5 @@
  * source       https://tokegameart.net/item/santa-claus/ (Freebie asset)
  * author       Tokegameart
  * license      https://creativecommons.org/licenses/by/2.0
- * notes        Original santa vector parts from Tokegameart were modified by Andreas Schoch - https://github.com/andreas-schoch - for the purposes of this game. There may be additional parts not based on Tokegamearts originals.
+ * notes        Original santa vector parts from Tokegameart were modified by Andreas Schoch for the purposes of this game. There may be additional parts not based on Tokegamearts originals.
  */

@@ -8,13 +8,11 @@ import {RubeLoader} from '../util/RUBE/RubeLoader';
 
 export class Physics extends Phaser.Events.EventEmitter {
   isPaused: boolean = false;
-  private scene: GameScene;
   worldScale: number;
   world: Pl.b2World;
-  private readonly userDataGraphics: Ph.GameObjects.Graphics;
-  private readonly textureKeys: Set<string> = new Set();
-  private readonly ZERO: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-  private bulletTime: { rate: number } = {rate: 1};
+  private readonly scene: GameScene;
+  private readonly stepDeltaTime = 1 / 60;
+  private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
   debugDraw: Ph.GameObjects.Graphics;
   rubeLoader: RubeLoader;
 
@@ -24,16 +22,13 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.scene = scene;
     this.worldScale = worldScale;
     this.world = Pl.b2World.Create(gravity);
+    this.world.SetAutoClearForces(true);
     this.world.SetContactListener({
       BeginContact: contact => this.emit('begin_contact', contact),
       EndContact: () => null,
       PreSolve: () => null,
       PostSolve: (contact, impulse) => this.emit('post_solve', contact, impulse),
     });
-
-    this.world.SetAllowSleeping(false);
-    this.world.SetWarmStarting(true);
-    this.userDataGraphics = scene.add.graphics();
 
     const sceneJso: RubeScene = this.scene.cache.json.get('santa');
     this.rubeLoader = new RubeLoader(this.world, this.scene.add.graphics(), this.scene, this.worldScale);
@@ -51,8 +46,8 @@ export class Physics extends Phaser.Events.EventEmitter {
 
     stats.begin('physics');
     // const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 9));
-    this.world.Step(1 / 60, {positionIterations: 12, velocityIterations: 12});
-    this.world.ClearForces(); // recommended after each time step
+    this.world.Step(this.stepDeltaTime, this.stepConfig);
+    // this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
 
     // iterate through all bodies
     const worldScale = this.worldScale;
@@ -79,16 +74,5 @@ export class Physics extends Phaser.Events.EventEmitter {
       }
     }
     stats.end('physics');
-  }
-
-  enterBulletTime(duration: number, rate: number): void {
-    this.bulletTime.rate = rate;
-    this.scene.tweens.add({
-      delay: duration,
-      targets: [this.bulletTime],
-      rate: 0.9,
-      duration: 500,
-      // onComplete: tween => console.log('done tween'),
-    });
   }
 }

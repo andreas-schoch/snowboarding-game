@@ -4,10 +4,11 @@ import {IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
 
-enum PanelIds {
+export enum PanelIds {
   PANEL_PAUSE_MENU = 'panel-pause-menu',
   PANEL_SELECT_LEVEL = 'panel-select-level',
   PANEL_LEADERBOARDS = 'panel-leaderboards',
+  PANEL_HOW_TO_PLAY = 'panel-how-to-play',
   PANEL_SETTINGS = 'panel-settings',
   PANEL_CREDITS = 'panel-credits',
   PANEL_YOUR_SCORE = 'panel-your-score',
@@ -40,6 +41,7 @@ export default class GameUIScene extends Ph.Scene {
   private panelPauseMenu: HTMLElement | null;
   private panelLeaderboards: HTMLElement | null;
   private panelSelectLevel: HTMLElement | null;
+  private panelHowToPlay: HTMLElement | null;
   private panelSettings: HTMLElement | null;
   private panelCredits: HTMLElement | null;
   private panelYourScore: HTMLElement | null;
@@ -74,14 +76,9 @@ export default class GameUIScene extends Ph.Scene {
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
     this.initDomUi();
-    this.setPanelVisibility(PanelIds.NONE);
 
-    this.observer.on('toggle_pause', (paused) => {
-      paused
-        ? this.setPanelVisibility(PanelIds.PANEL_PAUSE_MENU)
-        : this.setPanelVisibility(PanelIds.NONE);
-    });
-    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.1}));
+    this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
+    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15}));
     this.observer.on('pickup_present', total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();
@@ -157,8 +154,27 @@ export default class GameUIScene extends Ph.Scene {
     const inputVolumeSfx: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeSfx"]');
     if (inputVolumeSfx) inputVolumeSfx.value = valVolumeSfx;
 
+    // The game may not run well on unverified browsers. For example it seems to run quite bad on firefox atm.
+    // For now a text message is shown encouraging user to switch to a different browser if there are issues.
+    // Older v0.5.0 prototype was running fairly well on lowest resolution on a raspberry pi. v1.0.0 can definitely be optimized better.
+    const browser = this.sys.game.device.browser;
+    if (!(browser.chrome || browser.edge || browser.opera)) {
+      const elUnsupportedBrowserNotice = document.getElementById('unsupported-browser-notice');
+      if (!elUnsupportedBrowserNotice) throw new Error('element with id "unsupported-browser-notice" not found');
+      console.warn('Unsupported browser detected. Game may run well but it was not optimized for this particular browser:', browser);
+      elUnsupportedBrowserNotice.classList.remove('hidden');
+    }
+
+    const elPauseIcon = document.getElementById('pause-game-icon');
+    const elHowToPlayIcon = document.getElementById('how-to-play-icon');
+    if (elPauseIcon && elHowToPlayIcon) setTimeout(() => {
+      elPauseIcon.classList.remove('hidden');
+      elHowToPlayIcon.classList.remove('hidden');
+    }, 250); // if not hidden at the start it may show the material icon text for a split second until loaded.
+
     this.panelPauseMenu = document.getElementById(PanelIds.PANEL_PAUSE_MENU);
     this.panelSelectLevel = document.getElementById(PanelIds.PANEL_SELECT_LEVEL);
+    this.panelHowToPlay = document.getElementById(PanelIds.PANEL_HOW_TO_PLAY);
     this.panelLeaderboards = document.getElementById(PanelIds.PANEL_LEADERBOARDS);
     this.panelSettings = document.getElementById(PanelIds.PANEL_SETTINGS);
     this.panelCredits = document.getElementById(PanelIds.PANEL_CREDITS);
@@ -170,6 +186,7 @@ export default class GameUIScene extends Ph.Scene {
 
     if (!this.panelPauseMenu) throw new Error('panelPauseMenu not found');
     if (!this.panelSelectLevel) throw new Error('panelSelectLevel not found');
+    if (!this.panelHowToPlay) throw new Error('panelHowToPlay not found');
     if (!this.panelLeaderboards) throw new Error('panelLeaderboards not found');
     if (!this.panelSettings) throw new Error('panelSettings not found');
     if (!this.panelCredits) throw new Error('panelCredits not found');
@@ -182,6 +199,7 @@ export default class GameUIScene extends Ph.Scene {
     this.panels = [
       this.panelPauseMenu,
       this.panelSelectLevel,
+      this.panelHowToPlay,
       this.panelLeaderboards,
       this.panelSettings,
       this.panelCredits,
@@ -203,6 +221,10 @@ export default class GameUIScene extends Ph.Scene {
             this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
             break;
           }
+          case 'btn-goto-how-to-play': {
+            this.setPanelVisibility(PanelIds.PANEL_HOW_TO_PLAY);
+            break;
+          }
           case 'btn-goto-leaderboards': {
             this.setPanelVisibility(PanelIds.PANEL_LEADERBOARDS);
             break;
@@ -218,6 +240,12 @@ export default class GameUIScene extends Ph.Scene {
           case 'pause-game-icon': {
             if (this.panelPauseMenu?.classList.contains('hidden')) {
               this.observer.emit('pause_game_icon_pressed');
+            }
+            break;
+          }
+          case 'how-to-play-icon': {
+            if (this.panelPauseMenu?.classList.contains('hidden')) {
+              this.observer.emit('how_to_play_icon_pressed');
             }
             break;
           }
@@ -248,52 +276,24 @@ export default class GameUIScene extends Ph.Scene {
 
   }
 
-  private initDomSettings(): Ph.GameObjects.DOMElement {
-    const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
-    const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-
-    const element = this.add.dom(screenCenterX, screenCenterY).createFromCache('settings_form');
-    element.setScale(this.resolutionMod).addListener('click');
-
-    const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
-    const radios: HTMLInputElement[] = Array.from(document.querySelectorAll('#settings-form input[name="resolution"]'));
-    for (const radio of radios) if (radio.value === val) radio.checked = true;
-
-    const valVolumeMusic = localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || '80';
-    const inputVolumeMusic: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeMusic"]');
-    if (inputVolumeMusic) inputVolumeMusic.value = valVolumeMusic;
-
-    const valVolumeSfx = localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || '80';
-    const inputVolumeSfx: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeSfx"]');
-    if (inputVolumeSfx) inputVolumeSfx.value = valVolumeSfx;
-
-    element.on('click', (evt) => {
-      if (evt.target.id === 'settings-form-save') {
-        evt.preventDefault();
-        const settingsForm = document.forms.namedItem('settings-form');
-        if (settingsForm) {
-          const resolution = settingsForm.resolution.value || 1;
-          const volumeMusic = settingsForm.volumeMusic.value;
-          const volumeSfx = settingsForm.volumeSfx.value;
-          localStorage.setItem('snowboarding_game_resolution', resolution);
-          localStorage.setItem('snowboarding_game_volume_music', volumeMusic);
-          localStorage.setItem('snowboarding_game_volume_sfx', volumeSfx);
-          location.reload();
-        }
-      } else if (evt.target.id === 'settings-form-close') {
-        element.visible = false;
-      }
-    });
-
-    return element;
-  }
-
   private playAgain() {
     this.music.stop();
     this.restartGame();
   }
 
   private setPanelVisibility(panelId: PanelIds) {
+    const elPauseIcon = document.getElementById('pause-game-icon');
+    const elHowtoPlay = document.getElementById('how-to-play-icon');
+    if (elPauseIcon && elHowtoPlay) {
+      if (panelId === PanelIds.NONE) {
+        elPauseIcon.classList.remove('hidden');
+        elHowtoPlay.classList.remove('hidden');
+      } else {
+        elPauseIcon.classList.add('hidden');
+        elHowtoPlay.classList.add('hidden');
+      }
+    }
+
     this.panels.forEach(p => {
       if (p.id === panelId) {
         p.classList.remove('hidden');

@@ -165,6 +165,7 @@ export class State {
         break;
       }
       case 'level_finish': {
+        this.playerController.scene.cameras.main.stopFollow();
         console.log('congratulations you reached the end of the level');
         this.handleComboComplete();
         this.levelFinished = true;
