@@ -7,6 +7,11 @@ import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LEVEL_SUCCESS_BONUS_POINTS, TRICK_PO
 
 
 export interface IScore {
+  id?: string;
+  timestamp?: number;
+  username?: string;
+  userId?: string;
+  total?: number; // derived from others
   distance: number;
   coins: number;
   trickScore: number;

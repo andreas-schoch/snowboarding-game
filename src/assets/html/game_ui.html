@@ -22,9 +22,6 @@
   * {
     box-sizing: border-box;
     font-family: 'Press Start 2P', sans-serif;
-    /*font-family: 'Raleway', sans-serif;*/
-    /*font-size: 1rem;*/
-    /*font-family: 'VT323', sans-serif;*/
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     user-select: none;
@@ -563,6 +560,48 @@
     content: attr(data-necessity);
   }
 
+  /* ========================= */
+  /* = Auto hiding scrollbar = */
+  /* ========================= */
+  .scrollbar {
+    overflow-y: auto;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar {
+    /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
+    /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
+    mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+    mask-size: 100% 20000px;
+    mask-position: left bottom;
+    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
+    -webkit-mask-size: 100% 20000px;
+    -webkit-mask-position: left bottom;
+    transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+    /*scrollbar-width: 8px;*/
+  }
+
+  .scrollbar:hover {
+    -webkit-mask-position: left top;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    cursor: grab;
+    border-radius: 4px;
+    background-color: var(--grey-600);
+  }
+
   /* ============================================================================================================= */
 
   /* =============== */
@@ -697,7 +736,7 @@
   /* = Panel Select Level = */
   /* ====================== */
   #panel-select-level {
-    /*width: 500px;*/
+    width: 600px;
   }
 
   #panel-select-level .select-level-note {
@@ -710,8 +749,8 @@
   /* = Panel How to Play = */
   /* ===================== */
   #panel-how-to-play {
-    /*width: 500px;*/
-    font-size: 16px;
+    width: 600px;
+    font-size: 14px;
     color: var(--grey-600);
   }
 
@@ -726,19 +765,15 @@
 
   #panel-how-to-play .game-premise {
     color: var(--grey-600);
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.6;
   }
 
   #panel-how-to-play .row.how-to-play-title {
     margin-top: 2rem;
     margin-bottom: 2rem;
-    font-size: 20px;
+    font-size: 18px;
     color: black;
-  }
-
-  #panel-how-to-play .control-img {
-
   }
 
   #panel-how-to-play .control-text {
@@ -747,55 +782,21 @@
   }
 
   #panel-how-to-play img {
-    width: 4rem;
-    height: 4rem;
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   /* ====================== */
   /* = Panel Leaderboards = */
   /* ====================== */
-
-  .scrollbar {
-    overflow-y: auto;
-  }
-
-  .scrollbar::-webkit-scrollbar-track {
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
-    background-color: var(--grey-400);
-  }
-
-  .scrollbar::-webkit-scrollbar {
-    width: 8px;
-    background-color: var(--grey-400);
-  }
-
-  .scrollbar {
-    /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
-    /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
-    mask-image: linear-gradient(to top, transparent, black),
-    linear-gradient(to left, transparent 17px, black 17px);
-    mask-size: 100% 20000px;
-    mask-position: left bottom;
-    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
-    -webkit-mask-size: 100% 20000px;
-    -webkit-mask-position: left bottom;
-    transition: mask-position 0.3s, -webkit-mask-position 0.3s;
-    /*scrollbar-width: 8px;*/
-  }
-
-  .scrollbar:hover {
-    -webkit-mask-position: left top;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb {
-    cursor: grab;
-    border-radius: 4px;
-    background-color: var(--grey-600);
-  }
-
   #panel-leaderboards {
-    /*width: 500px;*/
+    width: 600px;
+  }
+
+  #panel-leaderboards .leaderboard-note {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--grey-700);
   }
 
   .leaderboard-header {
@@ -808,6 +809,8 @@
 
   .leaderboard-item {
     font-size: 14px;
+    /* FIXME temporary until figuring out what is wrong with grid */
+    padding-right: 0.5rem;
   }
 
   /* ==================== */
@@ -857,17 +860,24 @@
 
   .submit-score-info {
     margin-top: 2rem;
-    font-size: 12px;
+    font-size: 10px;
     padding-top: 1.5rem;
-    color: var(--grey-700);
+    color: var(--grey-600);
     line-height: 1.5;
     border-top: 2px solid var(--grey-500);
+  }
+
+  .submit-score-offline-info {
+    font-size: 10px;
+    color: var(--grey-700);
+    line-height: 1.5;
   }
 
   /* ================== */
   /* = Panel Settings = */
   /* ================== */
   #panel-settings {
+    width: 600px;
     font-size: 10px;
   }
 
@@ -882,6 +892,7 @@
   #panel-credits {
     width: 600px;
     line-height: 1.5;
+    color: var(--grey-700);
   }
 
   #panel-credits .credits-scrollable {
@@ -893,6 +904,8 @@
   #panel-credits .credits-title {
     font-weight: bolder;
     font-size: 16px;
+    color: black;
+
   }
 
   #panel-credits .credits-name {
@@ -959,7 +972,6 @@
   <!------------------------>
   <div class="panel hidden" id="panel-select-level">
     <div class="panel-title">Select Level</div>
-
     <div class="row">
       <div class="col col-12 select-level-note">Current version of the game has only 1 level. More may be added within the next few days.</div>
     </div>
@@ -1042,99 +1054,28 @@
   <!------------------------>
   <div class="panel hidden" id="panel-leaderboards">
     <div class="panel-title">Leaderboards</div>
-
+    <div class="row">
+      <div class="col col-12 leaderboard-note">
+        Current version of the game doesn't have the online leaderboards enabled.
+        It may be added within the next few days. You will currently only see your own past high-scores below.
+      </div>
+    </div>
     <div class="row leaderboard-header">
       <span class="col col-2 bolder leaderboard">#</span>
       <span class="col col-7 bolder leaderboard">Name</span>
       <span class="col col-3 bolder leaderboard flex-right">Score</span>
     </div>
 
-    <div class="leaderboard-scrollable scrollbar">
-
+    <template id="leaderboard-item-template">
       <div class="row leaderboard-item">
-        <span class="col col-2">1</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
+        <span class="col col-2" id="leaderboard-item-rank">1</span>
+        <span class="col col-7" id="leaderboard-item-username">AndiOver9000</span>
+        <span class="col col-3 flex-right" id="leaderboard-item-score">9001</span>
       </div>
+    </template>
 
-      <div class="row leaderboard-item">
-        <span class="col col-2">2</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">3</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">4</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">5</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">6</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">7</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">8</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">9</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">10</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">11</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">12</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">13</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-
-      <div class="row leaderboard-item">
-        <span class="col col-2">14</span>
-        <span class="col col-7">AndiOver9000</span>
-        <span class="col col-3 flex-right">9001</span>
-      </div>
-    </div>
+    <!-- Will be filled in programmatically using the above template -->
+    <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container"></div>
 
     <!-- BACK-->
     <div class="row last">
@@ -1242,7 +1183,7 @@
         <span class="col col-3"></span>
       </span>
 
-      <span class="row credits-title"><span class="col col-12 flex-center">Assets by</span></span>
+      <span class="row credits-title"><span class="col col-12 flex-center">Texture Assets by</span></span>
       <span class="row">
         <span class="col col-6">Tokegameart</span>
         <a class="col col-3 credits-link" href="https://tokegameart.net/item/santa-claus/" target="_blank">Source</a>
@@ -1266,6 +1207,11 @@
         <span class="col col-3"></span>
         <a class="col col-3 credits-link" href="https://svgsilh.com" target="_blank">Website</a>
       </span>
+      <span class="row">
+        <span class="col col-6">Nicolae (Xelu) Berbece</span>
+        <a class="col col-3 credits-link" href="https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack" target="_blank">Source</a>
+        <span class="col col-3"></span>
+      </span>
 
       <span class="row">
         <span class="col col-6">Andreas Schoch</span>
@@ -1280,7 +1226,7 @@
         <a class="col col-3 credits-link" href="https://legartis.ai" target="_blank">Website</a>
       </span>
       <span class="row"><span class="col col-12" style="color: var(--grey-600)">For giving me a chance when I (Andreas Schoch) started out as a professional developer.
-        The 3 years I worked here were amazing and if it wasn't for my travel plans, I wouldn't have left! Consider this game my farewell gift. Thanks everyone! :)</span></span>
+        The 3 years I worked here were amazing and if it wasn't for my upcoming travel plans, I wouldn't have left! Consider this game my farewell gift. Thanks everyone! :)</span></span>
 
       <span class="row" style="margin-top: 2rem">
         <span class="col col-6">Chris Campbell</span>
@@ -1294,13 +1240,13 @@
       <span class="row">
         <span class="col col-12">
           <span>The game is released under the open-source MIT license: </span>
-          <a class="credits-link" href="https://github.com/andreas-schoch/snowboarding-game" target="_blank">Source</a>
+          <a class="credits-link" href="https://github.com/andreas-schoch/snowboarding-game" target="_blank">Source code</a>.
         </span>
       </span>
       <span class="row"><span class="col col-12">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span></span>
-      <span class="row"><span class="col col-12">While initially only intended as a small and simple christmas game for legartis that was built outside of working hours, the development will continue independently. The game will remain fully free and open-source.</span></span>
+      <span class="row"><span class="col col-12">While initially intended as a small and simple christmas game for legartis that was built outside of working hours, the development will continue independently. The game will remain fully free and open-source.</span></span>
       <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
-      <span class="row"><span class="col col-12">It would be awesome to allow people to create and upload their own custom levels and build a little community around it in the future.</span></span>
+      <span class="row"><span class="col col-12">It would be awesome to allow people to create and upload their own custom levels, themes, characters etc. and build a little community around this game in the future.</span></span>
     </div>
     <!-- BACK-->
     <div class="row last">
@@ -1342,6 +1288,7 @@
     <div class="submit-score">
       <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet. Please choose your name.
         The next time you finish a level, your score will be submitted automatically.</span></div>
+      <div class="row submit-score-offline-info"><span class="col col-12">This version of the game has online leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div>
       <div class="row" id="your-score-name-form">
         <div class="col col-8">
           <div class="form-group">

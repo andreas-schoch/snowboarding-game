@@ -35,7 +35,8 @@ export class PlayerController {
     this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
 
     this.cursors.up.on('down', () => {
-      if (!this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250) {
+      // TODO simplify
+      if (!this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && !this.b2Physics.isPaused) {
         this.scene.observer.emit('jump_start');
       }
     });

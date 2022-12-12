@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import {DEFAULT_WIDTH, POINTS_PER_COIN, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
 import {IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
@@ -49,6 +49,9 @@ export default class GameUIScene extends Ph.Scene {
   private hudDistance: HTMLElement | null;
   private hudCombo: HTMLElement | null;
   private hudScore: HTMLElement | null;
+
+  private pendingScore: IScore | null = null;
+  private localScores: IScore[] = [];
 
   constructor() {
     super({key: 'GameUIScene'});
@@ -100,6 +103,7 @@ export default class GameUIScene extends Ph.Scene {
     });
 
     this.observer.on('enter_crashed', (score: IScore) => {
+      this.pendingScore = score;
       this.sfx_death.play();
       this.sfx_grunt.play();
       this.comboLeewayChart.clear();
@@ -119,6 +123,7 @@ export default class GameUIScene extends Ph.Scene {
     });
 
     this.observer.on('level_finish', (score: IScore) => {
+      this.pendingScore = score;
       this.sfx_applause.play();
       this.comboLeewayChart.clear();
       this.tweens.add({
@@ -226,6 +231,8 @@ export default class GameUIScene extends Ph.Scene {
             break;
           }
           case 'btn-goto-leaderboards': {
+            this.localScores = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '[]');
+            this.updateLeaderboardPanelData(this.localScores);
             this.setPanelVisibility(PanelIds.PANEL_LEADERBOARDS);
             break;
           }
@@ -246,6 +253,17 @@ export default class GameUIScene extends Ph.Scene {
           case 'how-to-play-icon': {
             if (this.panelPauseMenu?.classList.contains('hidden')) {
               this.observer.emit('how_to_play_icon_pressed');
+            }
+            break;
+          }
+          case 'btn-score-submit': {
+            const submitScoreForm = document.querySelector('.submit-score');
+            const nameInput: HTMLInputElement | null = document.getElementById('username') as HTMLInputElement;
+            const name = nameInput?.value;
+            if (name && this.pendingScore && submitScoreForm) {
+              this.submitScore(this.pendingScore, name);
+              submitScoreForm.classList.add('hidden');
+
             }
             break;
           }
@@ -312,6 +330,8 @@ export default class GameUIScene extends Ph.Scene {
       const elTricks = document.getElementById('your-score-trick-score');
       const elTricksBestCombo = document.getElementById('your-score-best-combo');
       const elTotal = document.getElementById('your-score-total');
+      const elUsername = document.getElementById('username') as HTMLInputElement;
+      const elSubmitScoreForm = document.querySelector('.submit-score');
 
       score.finishedLevel
         ? this.panelYourScore.classList.add('succeeded')
@@ -322,6 +342,64 @@ export default class GameUIScene extends Ph.Scene {
       if (elTricks) elTricks.innerText = String(score.trickScore);
       if (elTricksBestCombo) elTricksBestCombo.innerText = String(score.bestCombo.accumulator * score.bestCombo.multiplier);
       if (elTotal) elTotal.innerText = String(calculateTotalScore(score));
+
+      const username = localStorage.getItem(KEY_USER_NAME);
+      const userId = localStorage.getItem(KEY_USER_ID);
+      if (elUsername && !username) {
+        // First time player without a username. Score is submitted manually somewhere else after clicking a button.
+        elUsername.value = `Player_${this.pseudoRandomId()}`;
+        elUsername.setAttribute('value', elUsername.value);
+        // This game has no auth. Users are identified by pseudo secret userId which is stored locally and shall not be made public via API
+        // This allows anonymous users to submit scores while making it impossible for others to submit a score in the name of someone else (as long as userId doesn't leak).
+        // Maybe the game will have proper auth at some point in the future. If that happens, an anonymous user can be turned into a "real" user profile.
+        localStorage.setItem(KEY_USER_NAME, elUsername.value);
+        localStorage.setItem(KEY_USER_ID, crypto.randomUUID() || this.pseudoRandomId());
+      } else if (username && userId) {
+        elSubmitScoreForm?.classList.add('hidden');
+        // Score is submitted automatically for users that submitted a score once before from this device and browser.
+        this.submitScore(score, userId);
+      }
+    }
+  }
+
+  private submitScore(score: IScore, userId: string) {
+    // FIXME there are some annoying issues with the firebase based database. The changes will only be committed and pushed when I had time to deal with them...
+    //  For now the game has only a local leaderboard where players can only see their own past scores.
+    //  Scores are preserved locally in such a way that it may be possible to submit them later on when user plays the game again once leaderboards are enabled.
+    const localScores: IScore[] = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '[]');
+    score.id = this.pseudoRandomId();
+    score.timestamp = Date.now();
+    localScores.push(score);
+    this.localScores = localScores;
+    console.log('localScores', localScores);
+    localStorage.setItem(KEY_USER_SCORES, JSON.stringify(localScores));
+  }
+
+  private pseudoRandomId(): string {
+    // fallback is unique enough for purposes of this game atm.
+    return Math.random().toString(36).slice(2);
+  }
+
+  private updateLeaderboardPanelData(localScores: IScore[]) {
+    const leaderboardItemTemplate: HTMLTemplateElement | null = document.getElementById('leaderboard-item-template') as HTMLTemplateElement;
+    const leaderboardItemContainer = document.getElementById('leaderboard-item-container');
+    if (this.panelLeaderboards && leaderboardItemTemplate && leaderboardItemContainer) {
+      localScores = localScores
+      .map(s => ({...s, total: calculateTotalScore(s), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
+      .sort((a, b) => b.total - a.total);
+      for (const [i, score] of localScores.entries()) {
+        const clone: HTMLElement = leaderboardItemTemplate.content.cloneNode(true) as HTMLElement;
+        const cloneElRank = clone.querySelector('#leaderboard-item-rank');
+        const cloneElUsername = clone.querySelector('#leaderboard-item-username');
+        const cloneElScore = clone.querySelector('#leaderboard-item-score');
+        if (cloneElRank) cloneElRank.innerHTML = String(i + 1);
+        if (cloneElUsername) cloneElUsername.innerHTML = String(score.username);
+        if (cloneElScore) cloneElScore.innerHTML = String(score.total);
+
+        leaderboardItemContainer.appendChild(clone);
+
+      }
+
     }
   }
 }
