@@ -10,6 +10,10 @@ export const SETTINGS_KEY_RESOLUTION = 'snowboarding_game_resolution';
 export const SETTINGS_KEY_VOLUME_MUSIC = 'snowboarding_game_volume_music';
 export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
 
+export const KEY_USER_ID = 'snowboarding_game_user_id';
+export const KEY_USER_NAME = 'snowboarding_game_user_name';
+export const KEY_USER_SCORES = 'snowboarding_game_user_scores';
+
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
 export const BASE_FLIP_POINTS = 200;
