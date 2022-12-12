@@ -18,8 +18,8 @@ export default class PreloadScene extends Phaser.Scene {
 
   private loadAudio() {
     this.load.audio('riverside_ride', [
-      'assets/audio/riverside_ride/riverside_ride.ogg',
-      'assets/audio/riverside_ride/riverside_ride.mp3',
+      'assets/audio/music/riverside_ride/riverside_ride.ogg',
+      'assets/audio/music/riverside_ride/riverside_ride.mp3',
     ]);
     this.load.audio('boink', [
       'assets/audio/sfx/jump/boink.ogg',
@@ -46,21 +46,13 @@ export default class PreloadScene extends Phaser.Scene {
   private loadImg() {
     const height = DEFAULT_HEIGHT * RESOLUTION_SCALE;
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
-    const sizes = {360: '640x360', 540: '960x540', 720: '1280x720'};
-    this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${sizes[closestSize]}.png`, `assets/img/packed/bg_space_${sizes[closestSize]}.json`);
-    this.load.atlas('atlas-santa', `assets/img/packed/character_santa_640x360.png`, `assets/img/packed/character_santa_640x360.json`);
-
-    // TODO create packed for everything needed
-    this.load.image('ice_spikes', 'assets/img/obstacles/ice_spikes.png');
-    this.load.image('snowy_rock', 'assets/img/obstacles/snowy_rock.png');
-    this.load.image('present_temp', 'assets/img/present_temp.png');
-    this.load.image('tree_01.png', 'assets/img/svgsilh/tree_01.png');
-    this.load.image('cottage.png', 'assets/img/svgsilh/cottage.png');
-    this.load.image('santa-board.png', 'assets/img/santa_parts_v01/santa-board.png');
-
+    const size = {360: '640x360', 540: '960x540', 720: '1280x720'}[closestSize];
+    this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
+    this.load.atlas('atlas_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
+    this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
   }
 
   private loadLevels() {
-    this.load.json('santa', 'assets/levels/santa-v01.json');
+    this.load.json('santa', 'assets/levels/export/level_001.json');
   }
 }

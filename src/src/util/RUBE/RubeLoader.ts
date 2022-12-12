@@ -203,8 +203,11 @@ export class RubeLoader {
     if (!pos) return null;
 
     const texture = this.getCustomProperty(imageJson, 'string', 'phaserTexture', '');
+    // textureFallback is used when the images in the exported RUBE scene don't define the phaserTexture or phaserTextureFrame custom properties.
+    // It is quite a hassle to set it within RUBE if not done from the start. In the future only the phaserTexture custom prop will be necessary to specify which atlas to use.
+    // The textureFrame will be taken from the image file name.
     const textureFallback = (file || '').split('/').reverse()[0];
-    const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', undefined);
+    const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', textureFallback);
     const img: Ph.GameObjects.Image & RubeEntity = this.scene.add.image(pos.x * this.worldSize, pos.y * -this.worldSize, texture || textureFallback, textureFrame);
     img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
     img.scaleY = (this.worldSize / img.height) * scale;

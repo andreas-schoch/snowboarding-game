@@ -43,27 +43,26 @@ export default class GameScene extends Ph.Scene {
 
     this.backdrop = new Backdrop(this);
 
-    const graphics = this.add.graphics();
-    graphics.lineStyle(5, 0x048708, 1.0);
-    graphics.beginPath();
-    graphics.moveTo(0, 0);
-    graphics.lineTo(40, 0);
-    graphics.closePath();
-    graphics.setDepth(1000);
-    graphics.strokePath();
+    if (DEBUG) {
+      const graphics = this.add.graphics();
+      graphics.lineStyle(5, 0x048708, 1.0);
+      graphics.beginPath();
+      graphics.moveTo(0, 0);
+      graphics.lineTo(40, 0);
+      graphics.closePath();
+      graphics.setDepth(1000);
+      graphics.strokePath();
 
-    graphics.lineStyle(5, 0xba0b28, 1.0);
-    graphics.beginPath();
-    graphics.moveTo(0, 0);
-    graphics.lineTo(0, 40);
-    graphics.closePath();
-    graphics.setDepth(1000);
-    graphics.strokePath();
+      graphics.lineStyle(5, 0xba0b28, 1.0);
+      graphics.beginPath();
+      graphics.moveTo(0, 0);
+      graphics.lineTo(0, 40);
+      graphics.closePath();
+      graphics.setDepth(1000);
+      graphics.strokePath();
+    }
 
-    this.observer.on('enter_crashed', () => {
-      this.cameras.main.shake(200, 0.01);
-      this.b2Physics.enterBulletTime(-1, 0.4);
-    });
+    this.observer.on('enter_crashed', () => this.cameras.main.shake(200, 0.01));
   }
 
   update() {

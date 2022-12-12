@@ -94,7 +94,7 @@
         <key>jxrCompressionLevel</key>
         <uint>0</uint>
         <key>ditherType</key>
-        <enum type="SettingsBase::DitherType">PngQuantMedium</enum>
+        <enum type="SettingsBase::DitherType">PngQuantLow</enum>
         <key>backgroundColor</key>
         <uint>0</uint>
         <key>libGdx</key>
@@ -170,7 +170,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../packed/character_santa_{v}.json</filename>
+                <filename>packed/environment_{v}.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -199,7 +199,7 @@
             <key>scale</key>
             <double>0.25</double>
             <key>scaleMode</key>
-            <enum type="ScaleMode">Fast</enum>
+            <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
             <uint>1</uint>
             <key>trimThreshold</key>
@@ -219,7 +219,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/board.png</key>
+            <key type="filename">obstacles/ice_spikes.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -228,13 +228,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>31,8,61,16</rect>
+                <rect>78,63,155,125</rect>
                 <key>scale9Paddings</key>
-                <rect>31,8,61,16</rect>
+                <rect>78,63,155,125</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/santa upper.png</key>
+            <key type="filename">obstacles/snowy_rock.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -243,13 +243,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>14,31,27,63</rect>
+                <rect>78,56,155,113</rect>
                 <key>scale9Paddings</key>
-                <rect>14,31,27,63</rect>
+                <rect>78,56,155,113</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/santa-arm-lower-left.png</key>
+            <key type="filename">present_temp.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -258,13 +258,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>18,31,36,61</rect>
+                <rect>50,50,100,100</rect>
                 <key>scale9Paddings</key>
-                <rect>18,31,36,61</rect>
+                <rect>50,50,100,100</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/santa-body.png</key>
+            <key type="filename">santa_parts_v01/santa-board.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -273,13 +273,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>69,69,137,137</rect>
+                <rect>157,17,313,33</rect>
                 <key>scale9Paddings</key>
-                <rect>69,69,137,137</rect>
+                <rect>157,17,313,33</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/santa-head-with-face.png</key>
+            <key type="filename">svgsilh/cottage.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -288,13 +288,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>79,76,157,152</rect>
+                <rect>275,288,550,575</rect>
                 <key>scale9Paddings</key>
-                <rect>79,76,157,152</rect>
+                <rect>275,288,550,575</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../../../Desktop/santa pieces v01/santa-leg-lower.png</key>
+            <key type="filename">svgsilh/tree_01.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -303,21 +303,21 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>18,29,36,58</rect>
+                <rect>232,275,463,550</rect>
                 <key>scale9Paddings</key>
-                <rect>18,29,36,58</rect>
+                <rect>232,275,463,550</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../../../../Desktop/santa pieces v01/santa upper.png</filename>
-            <filename>../../../../../../../../Desktop/santa pieces v01/santa-arm-lower-left.png</filename>
-            <filename>../../../../../../../../Desktop/santa pieces v01/santa-body.png</filename>
-            <filename>../../../../../../../../Desktop/santa pieces v01/santa-leg-lower.png</filename>
-            <filename>../../../../../../../../Desktop/santa pieces v01/santa-head-with-face.png</filename>
-            <filename>../../../../../../../../Desktop/santa pieces v01/board.png</filename>
+            <filename>obstacles/ice_spikes.png</filename>
+            <filename>obstacles/snowy_rock.png</filename>
+            <filename>santa_parts_v01/santa-board.png</filename>
+            <filename>svgsilh/cottage.png</filename>
+            <filename>svgsilh/tree_01.png</filename>
+            <filename>present_temp.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

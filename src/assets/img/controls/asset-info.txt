@@ -1,0 +1,5 @@
+/**
+ * source       https://thoseawesomeguys.com/prompts/
+ * author       Nicolae (Xelu) Berbece
+ * license      https://creativecommons.org/publicdomain/zero/1.0/
+ */

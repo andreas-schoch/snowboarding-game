@@ -7,6 +7,7 @@ import {WickedSnowboard} from './Snowboard';
 import {State} from './State';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
 import {DebugMouseJoint} from '../util/DebugMouseJoint';
+import {PanelIds} from '../scenes/GameUIScene';
 
 
 export class PlayerController {
@@ -28,6 +29,7 @@ export class PlayerController {
     this.b2Physics = b2Physics;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
+    this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
     this.scene.input.keyboard.on('keydown-ESC', () => this.pauseGame());
     this.cursors.space.on('down', () => this.pauseGame());
     this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
@@ -63,10 +65,10 @@ export class PlayerController {
     }
   }
 
-  private pauseGame() {
-    if (this.state.isCrashed) return; // cannot pause after crash. It will show the "Your score" panel;
+  private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
+    if (this.state.isCrashed || this.state.levelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.b2Physics.isPaused = !this.b2Physics.isPaused;
-    this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused);
+    this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
   }
 
   update(delta: number) {

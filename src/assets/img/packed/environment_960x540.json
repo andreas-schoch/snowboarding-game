@@ -1,0 +1,146 @@
+{
+	"textures": [
+		{
+			"image": "environment_960x540.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 208,
+				"h": 484
+			},
+			"scale": 0.1875,
+			"frames": [
+				{
+					"filename": "cottage.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 206,
+						"h": 216
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 206,
+						"h": 216
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 206,
+						"h": 216
+					}
+				},
+				{
+					"filename": "tree_01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 174,
+						"h": 206
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 174,
+						"h": 206
+					},
+					"frame": {
+						"x": 1,
+						"y": 219,
+						"w": 174,
+						"h": 206
+					}
+				},
+				{
+					"filename": "santa-board.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 118,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 118,
+						"h": 12
+					},
+					"frame": {
+						"x": 1,
+						"y": 427,
+						"w": 118,
+						"h": 12
+					}
+				},
+				{
+					"filename": "ice_spikes.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 58,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 58,
+						"h": 47
+					},
+					"frame": {
+						"x": 121,
+						"y": 427,
+						"w": 58,
+						"h": 47
+					}
+				},
+				{
+					"filename": "snowy_rock.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 58,
+						"h": 42
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 58,
+						"h": 42
+					},
+					"frame": {
+						"x": 1,
+						"y": 441,
+						"w": 58,
+						"h": 42
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 38,
+						"h": 38
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 38
+					},
+					"frame": {
+						"x": 61,
+						"y": 441,
+						"w": 36,
+						"h": 38
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:d05b175b45e829d03a5d1afaca85e901:e83b6b39992b3435021a42dda654fdbf:f0fdb3729fc83b4a0988f565044acabf$"
+	}
+}
