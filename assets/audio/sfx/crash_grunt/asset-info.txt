@@ -1,0 +1,5 @@
+/**
+ * source       https://opengameart.org/content/11-male-human-paindeath-sounds
+ * author       Michel Baradari
+ * license      https://creativecommons.org/licenses/by/3.0/
+ */

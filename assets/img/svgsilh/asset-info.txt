@@ -1,6 +1,0 @@
-/**
- * source       https://svgsilh.com
- * author       svgsilh
- * license      https://creativecommons.org/publicdomain/zero/1.0/
- * notes        modified and colored
- */
