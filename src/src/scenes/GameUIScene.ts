@@ -1,6 +1,6 @@
 import * as Ph from 'phaser';
 import {DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
-import {IScore} from '../components/State';
+import {IComboTrickScore, IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
 
@@ -80,7 +80,7 @@ export default class GameUIScene extends Ph.Scene {
     this.initDomUi();
 
     this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15}));
+    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
     this.observer.on('pickup_present', total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();
@@ -336,10 +336,12 @@ export default class GameUIScene extends Ph.Scene {
         ? this.panelYourScore.classList.add('succeeded')
         : this.panelYourScore.classList.remove('succeeded');
 
+      const comboScores = score.trickScoreLog.filter(s => s.type === 'combo') as IComboTrickScore[];
+      const bestCombo = comboScores.length ? Math.max(...comboScores.map(s => s.accumulator * s.multiplier)) : 0;
       if (elDistance) elDistance.innerText = String(score.distance) + 'm';
       if (elCoins) elCoins.innerText = `${score.coins}x${POINTS_PER_COIN}`;
       if (elTricks) elTricks.innerText = String(score.trickScore);
-      if (elTricksBestCombo) elTricksBestCombo.innerText = String(score.bestCombo.accumulator * score.bestCombo.multiplier);
+      if (elTricksBestCombo) elTricksBestCombo.innerText = String(bestCombo);
       if (elTotal) elTotal.innerText = String(calculateTotalScore(score));
 
       const username = localStorage.getItem(KEY_USER_NAME);
@@ -383,19 +385,21 @@ export default class GameUIScene extends Ph.Scene {
     const leaderboardItemTemplate: HTMLTemplateElement | null = document.getElementById('leaderboard-item-template') as HTMLTemplateElement;
     const leaderboardItemContainer = document.getElementById('leaderboard-item-container');
     if (this.panelLeaderboards && leaderboardItemTemplate && leaderboardItemContainer) {
+      const localPlayerUsername = localStorage.getItem(KEY_USER_NAME) as string;
       localScores = localScores
+      // TODO don't forget that local scores don't contain username and id when uploaded need to be added when online leaderboard is ready
       .map(s => ({...s, total: calculateTotalScore(s), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
       .sort((a, b) => b.total - a.total);
       leaderboardItemContainer.innerText = '';
       for (const [i, score] of localScores.entries()) {
+        const displayName = localPlayerUsername && localPlayerUsername === score.username ? 'You' : score.username;
         const clone: HTMLElement = leaderboardItemTemplate.content.cloneNode(true) as HTMLElement;
         const cloneElRank = clone.querySelector('#leaderboard-item-rank');
         const cloneElUsername = clone.querySelector('#leaderboard-item-username');
         const cloneElScore = clone.querySelector('#leaderboard-item-score');
         if (cloneElRank) cloneElRank.innerHTML = String(i + 1);
-        if (cloneElUsername) cloneElUsername.innerHTML = String(score.username);
+        if (cloneElUsername) cloneElUsername.innerHTML = String(displayName);
         if (cloneElScore) cloneElScore.innerHTML = String(score.total);
-
         leaderboardItemContainer.appendChild(clone);
       }
     }

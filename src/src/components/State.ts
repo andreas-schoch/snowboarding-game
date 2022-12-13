@@ -3,7 +3,29 @@ import * as Pl from '@box2d/core';
 import {Physics} from './Physics';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
 import {IBodyParts, PlayerController} from './PlayerController';
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LEVEL_SUCCESS_BONUS_POINTS, TRICK_POINTS_COMBO_FRACTION} from '../index';
+import {BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION} from '../index';
+
+
+export interface IBaseTrickScore {
+  type: 'flip' | 'combo';
+  timestamp: number;
+}
+
+
+export interface IComboTrickScore extends IBaseTrickScore {
+  type: 'combo';
+  accumulator: number;
+  multiplier: number;
+}
+
+
+export interface IFlipTrickScore extends IBaseTrickScore {
+  type: 'flip';
+  flips: number;
+}
+
+
+export type TrickScore = IComboTrickScore | IFlipTrickScore;
 
 
 export interface IScore {
@@ -15,7 +37,7 @@ export interface IScore {
   distance: number;
   coins: number;
   trickScore: number;
-  bestCombo: { multiplier: number, accumulator: number };
+  trickScoreLog: TrickScore[];
   finishedLevel: boolean;
   crashed: boolean;
 }
@@ -33,11 +55,12 @@ export class State {
 
   private readonly pickupsToProcess: Set<Pl.b2Body & RubeEntity> = new Set();
   private readonly seenSensors: Set<Pl.b2Body & RubeEntity> = new Set();
-  private comboLeewayTween: Phaser.Tweens.Tween;
+  private comboLeeway: Phaser.Tweens.Tween | null = null;
   private comboAccumulatedScore = 0;
   private comboMultiplier = 0;
   private totalTrickScore = 0;
   private totalCollectedPresents = 0;
+  private trickScoreLog: TrickScore[] = [];
 
   private anglePreviousUpdate = 0;
   private totalRotation = 0; // total rotation while in air without touching the ground
@@ -47,7 +70,6 @@ export class State {
   private landedFrontFlips = 0;
   private landedBackFlips = 0;
   private lastDistance = 0;
-  private bestCombo: IScore['bestCombo'] = {accumulator: 0, multiplier: 0};
 
   constructor(playerController: PlayerController) {
     this.parts = playerController.parts;
@@ -66,14 +88,16 @@ export class State {
 
         const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
         if (numFlips >= 1) {
+          this.trickScoreLog.push({type: 'flip', flips: numFlips, timestamp: Date.now()});
           const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
           this.totalTrickScore += trickScore;
           this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
           this.comboMultiplier++;
           this.playerController.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
           this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
-          this.comboLeewayTween.resetTweenData(true);
-          this.comboLeewayTween.play();
+
+          this.resetComboLeewayTween();
+          this.comboLeeway = this.createComboLeewayTween(false);
         }
 
         this.totalRotation = 0;
@@ -82,9 +106,11 @@ export class State {
         this.pendingFrontFlips = 0;
       },
     );
+  }
 
-    this.comboLeewayTween = this.playerController.scene.tweens.addCounter({
-      paused: true,
+  createComboLeewayTween(paused: boolean = true): Ph.Tweens.Tween {
+    return this.playerController.scene.tweens.addCounter({
+      paused,
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 4000,
@@ -95,14 +121,16 @@ export class State {
 
   reset() {
     this.totalTrickScore = 0;
-    this.comboLeewayTween.stop();
-    // this.comboLeewayTween = undefined;
+    this.trickScoreLog = [];
+    if (this.comboLeeway) {
+      this.comboLeeway.stop();
+      this.comboLeeway = null;
+    }
     this.totalCollectedPresents = 0;
     this.comboMultiplier = 0;
     this.comboAccumulatedScore = 0;
     this.levelFinished = false;
     this.isCrashed = false;
-    this.bestCombo = {accumulator: 0, multiplier: 0};
     this.seenSensors.clear();
     this.pickupsToProcess.clear();
     this.pendingFrontFlips = 0;
@@ -121,9 +149,9 @@ export class State {
       distance: this.getTravelDistanceMeters(),
       coins: this.totalCollectedPresents,
       trickScore: this.totalTrickScore,
-      bestCombo: this.bestCombo,
       finishedLevel: this.levelFinished,
       crashed: this.isCrashed,
+      trickScoreLog: this.trickScoreLog,
     };
   }
 
@@ -143,12 +171,9 @@ export class State {
       const bodyB = contact.GetFixtureB().GetBody();
       if (bodyA === bodyB) return;
       if ((bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...impulse.normalImpulses) > HEAD_MAX_IMPULSE) {
-        !this.isCrashed && this.playerController.scene.observer.emit('enter_crashed', this.getCurrentScore());
         this.isCrashed = true;
-        if (this.comboLeewayTween.isPlaying() || this.comboLeewayTween.isPaused()) {
-          this.comboLeewayTween.stop();
-          this.comboLeewayTween.resetTweenData(true);
-        }
+        this.playerController.scene.observer.emit('enter_crashed', this.getCurrentScore());
+        this.resetComboLeewayTween();
       }
     });
 
@@ -175,8 +200,7 @@ export class State {
         console.log('congratulations you reached the end of the level');
         this.handleComboComplete();
         this.levelFinished = true;
-        this.comboLeewayTween.stop();
-        this.comboLeewayTween.resetTweenData(true);
+        this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
         this.playerController.scene.observer.emit('score_change', currentScore);
         this.playerController.scene.observer.emit('level_finish', currentScore);
@@ -190,7 +214,6 @@ export class State {
 
   update(delta: number): void {
     this.processPickups();
-
     const isInAir = this.playerController.board.isInAir();
     if (this.state === 'grounded' && isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter_in_air');
     else if (this.state === 'in_air' && !isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter_grounded');
@@ -231,14 +254,26 @@ export class State {
     }
   }
 
-  private updateComboLeeway() {
-    if (this.comboLeewayTween.isPlaying() || this.comboLeewayTween.isPaused()) {
-      // checking for centerGrounded allows player to prolong leeway before combo completes while riding only on nose or tail
-      if (this.state === 'in_air' || !this.playerController.board.isCenterGrounded) {
-        this.comboLeewayTween.pause();
+  updateComboLeeway() {
+    // checking for centerGrounded allows player to prolong leeway before combo completes while riding only on nose or tail
+    // TODO In the future we may count the time on ground without center touching it and reward player points instead of just pausing the timer.
+    //  It should continue to accumulate time even if in_air when player manages to land without touching center or doing other tricks.
+    //  Also for this mechanic to not be abused, it should only allow only nose or tail press at the same time while switching is allowed.
+    //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
+    //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
+    if (this.comboLeeway) {
+      if (this.state === 'in_air' || !this.playerController.board.isCenterGrounded || this.b2Physics.isPaused) {
+        this.comboLeeway.isPlaying() && this.comboLeeway.pause() && DEBUG && console.log('pause comboLeeway');
       } else {
-        this.comboLeewayTween.resume();
+        this.comboLeeway.isPaused() && this.comboLeeway.resume() && DEBUG && console.log('resume comboLeeway');
       }
+    }
+  }
+
+  private resetComboLeewayTween() {
+    if (this.comboLeeway) {
+      this.comboLeeway.stop();
+      this.comboLeeway = null;
     }
   }
 
@@ -263,9 +298,8 @@ export class State {
   private handleComboComplete() {
     if (this.levelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
-    const prevBestCombo = this.bestCombo.accumulator * this.bestCombo.multiplier;
-    if (combo > prevBestCombo) this.bestCombo = {accumulator: this.comboAccumulatedScore, multiplier: this.comboMultiplier};
     this.totalTrickScore += combo;
+    this.trickScoreLog.push({type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now()});
     this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
     this.playerController.scene.observer.emit('combo_change', 0, 0);
     this.comboAccumulatedScore = 0;

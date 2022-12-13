@@ -13,7 +13,7 @@ import {PanelIds} from '../scenes/GameUIScene';
 export class PlayerController {
   readonly scene: GameScene;
   readonly b2Physics: Physics;
-  private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys;
+  private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys | undefined;
 
   parts: IBodyParts;
   board: WickedSnowboard;
@@ -27,16 +27,16 @@ export class PlayerController {
   constructor(scene: GameScene, b2Physics: Physics) {
     this.scene = scene;
     this.b2Physics = b2Physics;
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.cursors = this.scene.input.keyboard?.createCursorKeys();
     this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
     this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
-    this.scene.input.keyboard.on('keydown-ESC', () => this.pauseGame());
-    this.cursors.space.on('down', () => this.pauseGame());
+    this.scene.input.keyboard?.on('keydown-ESC', () => this.pauseGame());
+    this.cursors?.space.on('down', () => this.pauseGame());
     this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
 
-    this.cursors.up.on('down', () => {
+    this.cursors?.up.on('down', () => {
       // TODO simplify
-      if (!this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && !this.b2Physics.isPaused) {
+      if (this.cursors && !this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && !this.b2Physics.isPaused) {
         this.scene.observer.emit('jump_start');
       }
     });
@@ -50,12 +50,12 @@ export class PlayerController {
       this.scene.cameras.main.useBounds = false;
       this.debugControls = new Phaser.Cameras.Controls.SmoothedKeyControl({
         camera: this.scene.cameras.main,
-        left: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-        right: this.cursors.right,
-        up: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        down: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-        zoomIn: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-        zoomOut: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+        left: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        right: this.cursors?.right,
+        up: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+        down: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        zoomIn: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+        zoomOut: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.E),
         acceleration: 0.05,
         drag: 0.0015,
         maxSpeed: 1.0,
@@ -69,6 +69,7 @@ export class PlayerController {
   private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
     if (this.state.isCrashed || this.state.levelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.b2Physics.isPaused = !this.b2Physics.isPaused;
+    this.state.updateComboLeeway(); // otherwise it continues during pause.
     this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
   }
 
@@ -94,11 +95,13 @@ export class PlayerController {
       }
 
       // Keyboard input
-      this.cursors.up.isDown && this.leanUp(delta);
-      this.cursors.left.isDown && this.leanBackward(delta);
-      this.cursors.right.isDown && this.leanForward(delta);
-      this.cursors.down.isDown && this.leanCenter(delta);
-      this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
+      if (this.cursors) {
+        this.cursors.up.isDown && this.leanUp(delta);
+        this.cursors.left.isDown && this.leanBackward(delta);
+        this.cursors.right.isDown && this.leanForward(delta);
+        this.cursors.down.isDown && this.leanCenter(delta);
+        this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
+      }
     }
     stats.end('snowman');
   }
@@ -122,6 +125,8 @@ export class PlayerController {
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
       const force = this.jumpForce * delta;
       const jumpVector = this.jumpVector.Set(0, 0);
+      // TODO these kind of values should come from the RUBE export.
+      //  That would make the game somewhat moddable once players can create and download custom levels and characters.
       isCenterGrounded
         ? this.parts.body.GetWorldVector({x: 0, y: force * 0.3}, jumpVector).Add({x: 0, y: force * 1.25})
         : this.parts.body.GetWorldVector({x: 0, y: force * 0.5}, jumpVector).Add({x: 0, y: force * 0.85});

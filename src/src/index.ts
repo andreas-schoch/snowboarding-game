@@ -20,7 +20,7 @@ export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
 
 export const KEY_USER_ID = 'snowboarding_game_user_id';
 export const KEY_USER_NAME = 'snowboarding_game_user_name';
-export const KEY_USER_SCORES = 'snowboarding_game_user_scores';
+export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v2';
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
@@ -39,7 +39,7 @@ export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '1.0.1',
+  version: '1.0.2',
   type: Ph.AUTO,
   backgroundColor: '#ffffff',
   disableContextMenu: true,

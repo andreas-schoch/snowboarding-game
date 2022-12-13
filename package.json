@@ -1,6 +1,6 @@
 {
   "name": "snowboarding-game",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A physics based snowboarding game.",
   "main": "index.js",
   "scripts": {
@@ -39,6 +39,6 @@
   "dependencies": {
     "@box2d/core": "^0.10.0",
     "gamestats.js": "^1.0.4",
-    "phaser": "^3.55.2"
+    "phaser": "^3.60.0-beta.17"
   }
 }
