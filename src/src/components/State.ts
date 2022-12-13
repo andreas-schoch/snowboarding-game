@@ -164,6 +164,7 @@ export class State {
 
   private handleSensor(body: Pl.b2Body & RubeEntity, fixture: Pl.b2Fixture & RubeEntity) {
     this.seenSensors.add(body);
+    if (this.isCrashed || this.levelFinished) return;
     switch (fixture.customPropertiesMap?.phaserSensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);

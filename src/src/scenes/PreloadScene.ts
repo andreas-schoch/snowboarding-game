@@ -1,8 +1,8 @@
-import {DEFAULT_HEIGHT, RESOLUTION_SCALE} from '../index';
+import {DEFAULT_HEIGHT, RESOLUTION_SCALE, SceneKeys} from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
-    super({key: 'PreloadScene'});
+    super({key: SceneKeys.PRELOAD_SCENE});
   }
 
   preload() {

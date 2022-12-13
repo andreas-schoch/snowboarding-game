@@ -2,20 +2,19 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import Terrain from '../components/Terrain';
 import {Physics} from '../components/Physics';
-import {DEBUG, DEFAULT_WIDTH, DEFAULT_ZOOM, stats} from '../index';
-import GameUIScene from './GameUIScene';
+import {DEBUG, DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, stats} from '../index';
 import {Backdrop} from '../components/Backdrop';
 import {PlayerController} from '../components/PlayerController';
 
 export default class GameScene extends Ph.Scene {
-  readonly observer: Phaser.Events.EventEmitter = new Ph.Events.EventEmitter();
+  observer: Phaser.Events.EventEmitter;
   private b2Physics: Physics;
   private terrain: Terrain;
   private playerController: PlayerController;
   private backdrop: Backdrop;
 
   constructor() {
-    super({key: 'GameScene'});
+    super({key: SceneKeys.GAME_SCENE});
   }
 
   private create() {
@@ -25,6 +24,10 @@ export default class GameScene extends Ph.Scene {
     this.cameras.main.setZoom(DEFAULT_ZOOM * resolutionMod);
     this.cameras.main.scrollX -= this.cameras.main.width / 2;
     this.cameras.main.scrollY -= this.cameras.main.height / 2;
+
+    // Ensure that listeners from previous runs are cleared. Otherwise for a single emit it may call the listener multiple times depending on amount of game-over/replays
+    if (this.observer) this.observer.destroy();
+    this.observer = new Ph.Events.EventEmitter();
 
     // FIXME the world size is supposed to be set to 40px per 1m but due to floating point precision issues
     //  it is currently halfed and zoom is doubled temporarily. Visually it looks the same but needs to be fixed.
@@ -36,7 +39,7 @@ export default class GameScene extends Ph.Scene {
 
     this.cameras.main.startFollow(this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserCameraFollow', true)[0].GetUserData() as Phaser.GameObjects.Image, false, 0.8, 0.25);
     this.cameras.main.followOffset.set(-375 / 2, 0);
-    this.scene.launch(GameUIScene.name, [this.observer, () => {
+    this.scene.launch(SceneKeys.GAME_UI_SCENE, [this.observer, () => {
       this.playerController.state.reset();
       this.scene.restart();
     }]);

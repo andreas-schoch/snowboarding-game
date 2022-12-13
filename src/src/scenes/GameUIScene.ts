@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import {DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
 import {IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
@@ -54,8 +54,7 @@ export default class GameUIScene extends Ph.Scene {
   private localScores: IScore[] = [];
 
   constructor() {
-    super({key: 'GameUIScene'});
-
+    super({key: SceneKeys.GAME_UI_SCENE});
   }
 
   init([observer, restartGameCB]: [Ph.Events.EventEmitter, () => void]) {
@@ -114,7 +113,7 @@ export default class GameUIScene extends Ph.Scene {
         detune: -500,
         rate: 0.5,
         duration: 2000,
-        onComplete: tween => {
+        onComplete: () => {
           this.music.stop();
           this.updateYourScorePanelData(score);
           this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
@@ -130,7 +129,7 @@ export default class GameUIScene extends Ph.Scene {
         targets: this.music,
         volume: 0,
         duration: 2000,
-        onComplete: tween => {
+        onComplete: () => {
           this.music.stop();
           this.updateYourScorePanelData(score);
           this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
@@ -353,7 +352,7 @@ export default class GameUIScene extends Ph.Scene {
         // This allows anonymous users to submit scores while making it impossible for others to submit a score in the name of someone else (as long as userId doesn't leak).
         // Maybe the game will have proper auth at some point in the future. If that happens, an anonymous user can be turned into a "real" user profile.
         localStorage.setItem(KEY_USER_NAME, elUsername.value);
-        localStorage.setItem(KEY_USER_ID, crypto.randomUUID() || this.pseudoRandomId());
+        localStorage.setItem(KEY_USER_ID, crypto?.randomUUID ? crypto.randomUUID() : this.pseudoRandomId());
       } else if (username && userId) {
         elSubmitScoreForm?.classList.add('hidden');
         // Score is submitted automatically for users that submitted a score once before from this device and browser.
@@ -387,6 +386,7 @@ export default class GameUIScene extends Ph.Scene {
       localScores = localScores
       .map(s => ({...s, total: calculateTotalScore(s), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
       .sort((a, b) => b.total - a.total);
+      leaderboardItemContainer.innerText = '';
       for (const [i, score] of localScores.entries()) {
         const clone: HTMLElement = leaderboardItemTemplate.content.cloneNode(true) as HTMLElement;
         const cloneElRank = clone.querySelector('#leaderboard-item-rank');
@@ -397,9 +397,7 @@ export default class GameUIScene extends Ph.Scene {
         if (cloneElScore) cloneElScore.innerHTML = String(score.total);
 
         leaderboardItemContainer.appendChild(clone);
-
       }
-
     }
   }
 }
