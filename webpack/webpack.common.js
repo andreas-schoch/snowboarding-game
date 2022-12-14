@@ -38,7 +38,7 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
+    new HtmlWebpackPlugin({gameName: 'Legartis Christmas Game', template: 'src/index.html'}),
     new CopyWebpackPlugin({
       patterns: [
         {from: 'src/assets/audio', to: 'assets/audio'},
@@ -48,7 +48,6 @@ module.exports = {
         {from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails'},
         {from: 'src/assets/html', to: 'assets/html'},
         {from: 'src/assets/levels/export', to: 'assets/levels/export'},
-        {from: 'src/favicon.ico', to: ''},
         {from: 'src/manifest.json', to: ''},
       ],
     }),

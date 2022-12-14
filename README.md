@@ -7,8 +7,8 @@ Work in progress.
 
 ## Run the game locally
 ```shell
- git clone https://github.com/andreas-schoch/snowboarding-game.git
- cd snowboarding-game
+ git clone https://github.com/LegartisTech/christmas-game.git
+ cd christmas-game
  npm i
  npm run start
 ```
