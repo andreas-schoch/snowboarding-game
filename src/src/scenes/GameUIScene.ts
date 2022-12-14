@@ -1,6 +1,6 @@
 import * as Ph from 'phaser';
-import {DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
-import {IComboTrickScore, IScore} from '../components/State';
+import {BASE_FLIP_POINTS, DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {IComboTrickScore, IFlipTrickScore, IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
 
@@ -323,6 +323,17 @@ export default class GameUIScene extends Ph.Scene {
   }
 
   private updateYourScorePanelData(score: IScore) {
+    const trickScore = score.trickScoreLog.reduce((acc, cur) => {
+      if (cur.type === 'combo') {
+        return acc + ((cur as IComboTrickScore).multiplier * (cur as IComboTrickScore).accumulator);
+      } else if (cur.type === 'flip') {
+        return acc + ((cur as IFlipTrickScore).flips * (cur as IFlipTrickScore).flips * BASE_FLIP_POINTS);
+      } else {
+        return acc;
+      }
+    }, 0);
+
+    console.log('trickScore computed', trickScore, score.trickScore);
     if (this.panelYourScore) {
       const elDistance = document.getElementById('your-score-distance');
       const elCoins = document.getElementById('your-score-coins');
@@ -388,7 +399,7 @@ export default class GameUIScene extends Ph.Scene {
       const localPlayerUsername = localStorage.getItem(KEY_USER_NAME) as string;
       localScores = localScores
       // TODO don't forget that local scores don't contain username and id when uploaded need to be added when online leaderboard is ready
-      .map(s => ({...s, total: calculateTotalScore(s), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
+      .map(s => ({...s, total: calculateTotalScore(s, false), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
       .sort((a, b) => b.total - a.total);
       leaderboardItemContainer.innerText = '';
       for (const [i, score] of localScores.entries()) {

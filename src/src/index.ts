@@ -39,7 +39,7 @@ export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '1.0.2',
+  version: '1.0.3',
   type: Ph.AUTO,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
