@@ -23,6 +23,10 @@ export class PlayerController {
   private leanForce: number = 2.5 * 60;
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private debugControls: Phaser.Cameras.Controls.SmoothedKeyControl;
+  private debugKeyLeft: Phaser.Input.Keyboard.Key | undefined;
+  private debugKeyRight: Phaser.Input.Keyboard.Key | undefined;
+  private debugKeyUp: Phaser.Input.Keyboard.Key | undefined;
+  private debugKeyDown: Phaser.Input.Keyboard.Key | undefined;
 
   constructor(scene: GameScene, b2Physics: Physics) {
     this.scene = scene;
@@ -47,21 +51,18 @@ export class PlayerController {
 
     if (DEBUG) {
       new DebugMouseJoint(scene, b2Physics);
-      this.scene.cameras.main.useBounds = false;
+      this.debugKeyLeft = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+      this.debugKeyRight = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+      this.debugKeyUp = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+      this.debugKeyDown = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S);
       this.debugControls = new Phaser.Cameras.Controls.SmoothedKeyControl({
         camera: this.scene.cameras.main,
-        left: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-        right: this.cursors?.right,
-        up: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        down: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S),
         zoomIn: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
         zoomOut: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.E),
         acceleration: 0.05,
         drag: 0.0015,
         maxSpeed: 1.0,
-        zoomSpeed: 0.005,
-        maxZoom: 0.75,
-        minZoom: 0.1,
+        zoomSpeed: 0.02,
       });
     }
   }
@@ -76,7 +77,14 @@ export class PlayerController {
   update(delta: number) {
     if (this.b2Physics.isPaused) return;
     stats.begin('snowman');
-    this.debugControls && this.debugControls.update(delta);
+
+    if (DEBUG) {
+      this.debugControls && this.debugControls.update(delta);
+      if (this.debugKeyLeft?.isDown) this.scene.cameras.main.scrollX -= 300 * delta;
+      if (this.debugKeyRight?.isDown) this.scene.cameras.main.scrollX += 300 * delta;
+      if (this.debugKeyUp?.isDown) this.scene.cameras.main.scrollY -= 300 * delta;
+      if (this.debugKeyDown?.isDown) this.scene.cameras.main.scrollY += 300 * delta;
+    }
 
     this.state.update(delta);
     this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
@@ -84,6 +92,7 @@ export class PlayerController {
 
     if (!this.state.isCrashed && !this.state.levelFinished) {
       this.board.update(delta);
+
       // Touch/Mouse input
       if (this.scene.input.activePointer?.isDown && this.scene.input.activePointer.wasTouch) {
         const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input

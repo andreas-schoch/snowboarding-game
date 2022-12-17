@@ -6,7 +6,7 @@ import {DEFAULT_ZOOM} from '../index';
 
 export default class Terrain {
   private readonly terrainBody: Pl.b2Body;
-  private readonly chunks: Ph.GameObjects.Graphics[];
+  private readonly chunks: ITerrainChunk[] = [];
 
   private readonly b2Physics: Physics;
   private readonly scene: GameScene;
@@ -19,54 +19,85 @@ export default class Terrain {
     {color: 0x3a3232, width: 250 * this.zoomModifier},
   ];
 
-  private readonly pointsPool: Pl.XY[] = [];
-  private readonly vec2Pool: Pl.b2Vec2[] = [];
-
   constructor(scene: GameScene, physics: Physics) {
     this.scene = scene;
     this.b2Physics = physics;
-
-    const poolSize = 2500;
-    for (let i = 0; i < poolSize; i++) this.pointsPool.push({x: 0, y: 0});
-    for (let i = 0; i < poolSize; i++) this.vec2Pool.push(new Pl.b2Vec2(0, 0));
-
-    this.chunks = [
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-      this.scene.add.graphics().setDepth(10),
-    ];
 
     this.terrainBody = this.b2Physics.world.CreateBody();
     const pos = this.terrainBody.GetPosition();
 
     const p = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
     const fix = p.GetFixtureList()?.GetShape() as Pl.b2ChainShape;
-    this.drawTerrain(fix.m_vertices.map(v => ({x: (v.x + pos.x) * this.b2Physics.worldScale, y: -(v.y + pos.y) * this.b2Physics.worldScale})));
+
+    // this.drawTerrain(fix.m_vertices.map(v => ({x: (v.x + pos.x) * this.b2Physics.worldScale, y: -(v.y + pos.y) * this.b2Physics.worldScale})), 0);
+
+    let startX: number = 0;
+    const CHUNK_WIDTH_METERS = 50 * this.b2Physics.worldScale;
+    const chunks: Pl.XY[][] = [];
+    let chunk: Pl.XY[] = [];
+    for (const [i, vert] of [...fix.m_vertices].reverse().entries()) {
+      const vertPixelScale = {x: (vert.x - pos.x) * this.b2Physics.worldScale, y: -(vert.y + pos.y) * this.b2Physics.worldScale};
+      chunk.push(vertPixelScale);
+      if (i === 0) startX = vertPixelScale.x;
+      // When last chunk isn't wide enough, simply make it part of the previous
+      else if (i === fix.m_vertices.length - 1 && chunk.length && chunks.length && vertPixelScale.x - chunk[0].x < CHUNK_WIDTH_METERS) chunks[chunks.length - 1].push(...chunk);
+      if (vertPixelScale.x - startX >= CHUNK_WIDTH_METERS) {
+        // start a new chunk which both share the same vert as their respective starting or ending point
+        chunks.push(chunk);
+        chunk = [vertPixelScale];
+        startX = vertPixelScale.x;
+      }
+    }
+
+    chunks.forEach((chunkPoints, i) => this.drawTerrain(chunkPoints, i));
   }
 
-  private drawTerrain(points: Pl.XY[]): void {
-    const chunk = this.chunks.shift();
-    if (!chunk) return;
-    this.chunks.push(chunk);
-    chunk.clear();
+  update() {
+    // const {zoom, width, worldView} = this.scene.cameras.main;
+    // while (this.slopeStart.x < worldView.x + width + 500 * (1 / zoom)) {
+    //
+    // }
+  }
 
+  private drawTerrain(points: Pl.XY[], chunkIndex: number): void {
     const lastIndex = points.length - 1;
-    const end = Math.max(points[0].y, points[lastIndex].y) + this.scene.cameras.main.height * 2;
+    const chunk: ITerrainChunk = {
+      graphics: this.scene.add.graphics().setDepth(10),
+      index: chunkIndex,
+      vertices: points,
+      firstVert: points[0],
+      lastVert: points[lastIndex],
+    };
+    this.chunks.push(chunk);
+    const end = Math.max(...chunk.vertices.map(p => p.y)) + this.scene.cameras.main.height * 2;
     let offset = 0;
-    points.push({x: points[lastIndex].x, y: end}, {x: points[0].x, y: end});
+    points.push({x: chunk.lastVert.x, y: end}, {x: chunk.firstVert.x, y: end});
     for (const {color, width} of this.layers) {
-      chunk.translateCanvas(0, offset);
-      chunk.fillStyle(color);
-      chunk.fillPoints(points, true, true);
-      chunk.translateCanvas(0, 0);
+      chunk.graphics.translateCanvas(0, offset);
+      chunk.graphics.fillStyle(color);
+      chunk.graphics.fillPoints(points, true, true);
+      chunk.graphics.translateCanvas(0, 0);
       offset = width * 0.5;
     }
 
-    points.length -= 2;
+    // const lowestY = Math.min(...points.map(p => p.y));
+    // const largestY = points[points.length - 1].y;
+    // points.length -= 2;
+    // console.log('---------texture width', points[points.length - 1].x - points[0].x, largestY - lowestY);
+    // chunk.generateTexture(`terrain_chunk_${chunkIndex}`, 7000, largestY - lowestY + 2000);
+    // //
+    // const img = this.scene.add.image(0, this.scene.cameras.main.height, `terrain_chunk_${chunkIndex}`);
+    // console.log(img)
+    // setTimeout(() => img.setVisible(true));
+    // chunk.clear();
   }
+}
+
+
+interface ITerrainChunk {
+  index: number;
+  graphics: Ph.GameObjects.Graphics;
+  vertices: Pl.XY[];
+  firstVert: Pl.XY;
+  lastVert: Pl.XY;
 }

@@ -18,12 +18,12 @@ export default class GameScene extends Ph.Scene {
   }
 
   private create() {
-    this.cameras.main.setDeadzone(50 / 2, 125 / 2);
+    this.cameras.main.setDeadzone(50, 125);
     this.cameras.main.setBackgroundColor(0x555555);
     const resolutionMod = this.cameras.main.width / DEFAULT_WIDTH;
     this.cameras.main.setZoom(DEFAULT_ZOOM * resolutionMod);
-    this.cameras.main.scrollX -= this.cameras.main.width / 2;
-    this.cameras.main.scrollY -= this.cameras.main.height / 2;
+    this.cameras.main.scrollX -= this.cameras.main.width;
+    this.cameras.main.scrollY -= this.cameras.main.height;
 
     // Ensure that listeners from previous runs are cleared. Otherwise for a single emit it may call the listener multiple times depending on amount of game-over/replays
     if (this.observer) this.observer.destroy();
@@ -33,7 +33,7 @@ export default class GameScene extends Ph.Scene {
     //  it is currently halfed and zoom is doubled temporarily. Visually it looks the same but needs to be fixed.
     //  The issue is that the terrain is a single object instead of chunked and gets weird once player moves too far from the origin.
     //  This wasn't an issue when terrain was procedural and chunked, so will likely fix itself once that is optimized again.
-    this.b2Physics = new Physics(this, 20, new Pl.b2Vec2(0, -10));
+    this.b2Physics = new Physics(this, 40, new Pl.b2Vec2(0, -10));
     this.playerController = new PlayerController(this, this.b2Physics);
     this.terrain = new Terrain(this, this.b2Physics);
 
@@ -65,7 +65,7 @@ export default class GameScene extends Ph.Scene {
       graphics.strokePath();
     }
 
-    this.observer.on('enter_crashed', () => this.cameras.main.shake(200, 0.01));
+    this.observer.on('enter_crashed', () => this.cameras.main.shake(200, 0.03 * (1 / resolutionMod)));
   }
 
   update() {
