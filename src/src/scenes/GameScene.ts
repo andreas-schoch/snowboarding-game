@@ -2,7 +2,7 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import Terrain from '../components/Terrain';
 import {Physics} from '../components/Physics';
-import {DEBUG, DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, stats} from '../index';
+import {DEBUG, DEFAULT_WIDTH, DEFAULT_ZOOM, KEY_LEVEL_CURRENT, LevelKeys, SceneKeys, stats} from '../index';
 import {Backdrop} from '../components/Backdrop';
 import {PlayerController} from '../components/PlayerController';
 
@@ -34,6 +34,8 @@ export default class GameScene extends Ph.Scene {
     //  The issue is that the terrain is a single object instead of chunked and gets weird once player moves too far from the origin.
     //  This wasn't an issue when terrain was procedural and chunked, so will likely fix itself once that is optimized again.
     this.b2Physics = new Physics(this, 40, new Pl.b2Vec2(0, -10));
+    const currentLevel = localStorage.getItem(KEY_LEVEL_CURRENT) || LevelKeys.level_001;
+    this.b2Physics.loadRubeScene([LevelKeys.level_001, LevelKeys.level_002].includes(currentLevel as LevelKeys) ? currentLevel : LevelKeys.level_001);
     this.playerController = new PlayerController(this, this.b2Physics);
     this.terrain = new Terrain(this, this.b2Physics);
 

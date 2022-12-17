@@ -30,15 +30,14 @@ export class Physics extends Phaser.Events.EventEmitter {
       PostSolve: (contact, impulse) => this.emit('post_solve', contact, impulse),
     });
 
-    const sceneJso: RubeScene = this.scene.cache.json.get('santa');
     this.rubeLoader = new RubeLoader(this.world, this.scene.add.graphics(), this.scene, this.worldScale);
+  }
 
-    if (this.rubeLoader.loadScene(sceneJso))
-      console.log('RUBE scene loaded successfully.');
-    else
-      throw new Error('Failed to load RUBE scene');
-    this.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
-
+  loadRubeScene(rubeScene: string) {
+    const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
+    if (this.rubeLoader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
+    else throw new Error('Failed to load RUBE scene');
+    // this.update();
   }
 
   update() {

@@ -160,7 +160,12 @@ export class State {
   }
 
   getTravelDistanceMeters(): number {
-    const distance = this.parts.body.GetPosition().Length();
+    // Counting only horizontal distance for now.
+    // Not sure if distance will continue to be part of the score.
+    // It makes it harder for player to see what causes score changes when it
+    // changes every 5m. Would like to add little "toastr" notifications when player
+    // Lands tricks, combo gets applied and coins get collected at some point.
+    const distance = this.parts.body.GetPosition().x;
     return Math.floor(distance / 5) * 5;
   }
 
@@ -171,9 +176,7 @@ export class State {
       const bodyB = contact.GetFixtureB().GetBody();
       if (bodyA === bodyB) return;
       if ((bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...impulse.normalImpulses) > HEAD_MAX_IMPULSE) {
-        this.isCrashed = true;
-        this.playerController.scene.observer.emit('enter_crashed', this.getCurrentScore());
-        this.resetComboLeewayTween();
+        this.setCrashed();
       }
     });
 
@@ -185,6 +188,12 @@ export class State {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && fixtureA.customPropertiesMap?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && fixtureB.customPropertiesMap?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
+  }
+
+  private setCrashed() {
+    this.isCrashed = true;
+    this.playerController.scene.observer.emit('enter_crashed', this.getCurrentScore());
+    this.resetComboLeewayTween();
   }
 
   private handleSensor(body: Pl.b2Body & RubeEntity, fixture: Pl.b2Fixture & RubeEntity) {
@@ -207,6 +216,7 @@ export class State {
         break;
       }
       case 'level_deathzone': {
+        this.setCrashed();
         break;
       }
     }

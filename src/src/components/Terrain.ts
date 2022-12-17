@@ -27,6 +27,8 @@ export default class Terrain {
     const pos = this.terrainBody.GetPosition();
 
     const p = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
+    if (!p) return; // There may be levels where no terrain is present
+
     const fix = p.GetFixtureList()?.GetShape() as Pl.b2ChainShape;
 
     // this.drawTerrain(fix.m_vertices.map(v => ({x: (v.x + pos.x) * this.b2Physics.worldScale, y: -(v.y + pos.y) * this.b2Physics.worldScale})), 0);

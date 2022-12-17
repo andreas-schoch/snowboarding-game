@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import {BASE_FLIP_POINTS, DEFAULT_WIDTH, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
+import {BASE_FLIP_POINTS, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
 import {IComboTrickScore, IFlipTrickScore, IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 
@@ -279,6 +279,15 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'btn-play-again': {
             this.playAgain();
+            break;
+          }
+          case 'level_001':
+          case 'level_002': {
+          // case 'level_003':
+          // case 'level_004':
+          // case 'level_005': {
+            localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
+            this.restartGame();
             break;
           }
           default: {

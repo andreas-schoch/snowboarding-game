@@ -22,6 +22,19 @@ export const KEY_USER_ID = 'snowboarding_game_user_id';
 export const KEY_USER_NAME = 'snowboarding_game_user_name';
 export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v2';
 
+export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
+
+// This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
+// The majority of the levels is expected to be custom made by players and fetched from a server.
+export enum LevelKeys {
+  level_001 = 'level_001',
+  level_002 = 'level_002',
+  level_003 = 'level_003',
+  level_004 = 'level_004',
+  level_005 = 'level_005',
+}
+
+
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
 export const BASE_FLIP_POINTS = 200;
@@ -39,7 +52,7 @@ export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '1.0.3',
+  version: '1.0.5',
   type: Ph.AUTO,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
