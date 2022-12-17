@@ -737,6 +737,7 @@
   /* ====================== */
   #panel-select-level {
     width: 600px;
+    height: 650px;
   }
 
   #panel-select-level .select-level-note {
@@ -744,6 +745,65 @@
     line-height: 1.5;
     color: var(--grey-700);
   }
+
+  #panel-select-level .select-level-scrollable {
+    max-height: 550px;
+  }
+
+  #panel-select-level .level-item {
+    position: relative;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: calc(49.2% - 0.5rem);
+    display: inline-block;
+    margin-right: 0.4rem;
+    margin-bottom: 0.8rem;
+    background-color: #ffd6cc;
+  }
+
+  #panel-select-level .level-item-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+  }
+
+  #panel-select-level .level-number {
+    color: var(--grey-700);
+  }
+
+  #panel-select-level .level-name {
+    font-size: 13px;
+    line-height: 26px;
+  }
+
+  #panel-select-level .level-thumbnail {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-image: url("assets/img/thumbnails/level_001_santas_backyard.png");
+    background-size: cover;
+    border-radius: 5px;
+    5
+  }
+
+  #panel-select-level .level-your-high-score,
+  #panel-select-level .level-your-rank {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4rem 0;
+    color: var(--grey-700);
+    font-size: 10px;
+  }
+
+  #panel-select-level .level-your-high-score-value,
+  #panel-select-level .level-your-rank-value {
+    color: black;
+    font-size: 13px;
+  }
+
 
   /* ===================== */
   /* = Panel How to Play = */
@@ -972,8 +1032,86 @@
   <!------------------------>
   <div class="panel hidden" id="panel-select-level">
     <div class="panel-title">Select Level</div>
-    <div class="row">
-      <div class="col col-12 select-level-note">Current version of the game has only 1 level. More may be added within the next few days.</div>
+
+    <div class="select-level-scrollable scrollbar" id="select-level-item-container">
+
+      <div class="level-item">
+        <span class="level-item-overlay" id="level_001"></span>
+        <div class="level-number">Level 001</div>
+        <div class="level-name">Santas Backyard</div>
+        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
+        <div class="level-your-high-score">
+          <div class="">Personal Best:</div>
+          <div class="level-your-high-score-value">24030</div>
+        </div>
+        <div class="level-your-rank">
+          <div class="">Rank:</div>
+          <div class="level-your-rank-value">3/32</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <span class="level-item-overlay" id="level_002"></span>
+        <div class="level-number">Level 002</div>
+        <div class="level-name">The Rollercoaster</div>
+        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_002_the_rollercoaster.png')"></div>
+        <div class="level-your-high-score">
+          <div class="">Personal Best:</div>
+          <div class="level-your-high-score-value">24030</div>
+        </div>
+        <div class="level-your-rank">
+          <div class="">Rank:</div>
+          <div class="level-your-rank-value">3/32</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <span class="level-item-overlay" id="level_003"></span>
+        <div class="level-number">Level 003</div>
+        <div class="level-name">Rocky Roads</div>
+        <div class="level-thumbnail"></div>
+        <div class="level-your-high-score">
+          <div class="">Personal Best:</div>
+          <div class="level-your-high-score-value">24030</div>
+        </div>
+        <div class="level-your-rank">
+          <div class="">Rank:</div>
+          <div class="level-your-rank-value">3/32</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <span class="level-item-overlay" id="level_004"></span>
+        <div class="level-number">Level 004</div>
+        <div class="level-name">The Slingshot</div>
+        <div class="level-thumbnail"></div>
+        <div class="level-your-high-score">
+          <div class="">Personal Best:</div>
+          <div class="level-your-high-score-value">24030</div>
+        </div>
+        <div class="level-your-rank">
+          <div class="">Rank:</div>
+          <div class="level-your-rank-value">3/32</div>
+        </div>
+      </div>
+
+      <div class="level-item">
+        <span class="level-item-overlay" id="level_005"></span>
+        <div class="level-number">Level 005</div>
+        <div class="level-name">Mission Impossible</div>
+        <div class="level-thumbnail"></div>
+        <div class="level-your-high-score">
+          <div class="">Personal Best:</div>
+          <div class="level-your-high-score-value">24030</div>
+        </div>
+        <div class="level-your-rank">
+          <div class="">Rank:</div>
+          <div class="level-your-rank-value">3/32</div>
+        </div>
+      </div>
+
+      <!-- TODO in the future populate level selection programmatically using a template -->
+
     </div>
     <!-- BACK-->
     <div class="row last">
