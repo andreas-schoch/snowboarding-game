@@ -845,6 +845,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -950,6 +951,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -1055,6 +1057,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -1070,29 +1073,6 @@
 			],
 			"fixture" : 
 			[
-				
-				{
-					"circle" : 
-					{
-						"center" : 
-						{
-							"x" : 0.1646223068237305,
-							"y" : 4.768370217789197e-06
-						},
-						"radius" : 0.08500000089406967
-					},
-					"customProperties" : 
-					[
-						
-						{
-							"bool" : false,
-							"name" : "phaserBoardEdge"
-						}
-					],
-					"density" : 1,
-					"friction" : 0.9,
-					"name" : "fixture9"
-				},
 				
 				{
 					"density" : 30.0,
@@ -1158,17 +1138,40 @@
 							]
 						}
 					}
+				},
+				
+				{
+					"circle" : 
+					{
+						"center" : 
+						{
+							"x" : 0.1646223068237305,
+							"y" : 4.768370217789197e-06
+						},
+						"radius" : 0.08500000089406967
+					},
+					"customProperties" : 
+					[
+						
+						{
+							"bool" : false,
+							"name" : "phaserBoardEdge"
+						}
+					],
+					"density" : 1,
+					"friction" : 0.9,
+					"name" : "fixture9"
 				}
 			],
 			"linearDamping" : 0.05,
 			"linearVelocity" : 0,
-			"massData-I" : 0.02515068836510181,
+			"massData-I" : 0.02515069022774696,
 			"massData-center" : 
 			{
-				"x" : 0.002433402463793755,
-				"y" : 7.035521321085980e-08
+				"x" : 0.002433401066809893,
+				"y" : 7.048485883842659e-08
 			},
-			"massData-mass" : 1.535542488098145,
+			"massData-mass" : 1.535542607307434,
 			"name" : "body0",
 			"position" : 
 			{
@@ -1183,6 +1186,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -1288,6 +1292,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -1415,6 +1420,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
@@ -1520,6 +1526,7 @@
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
+			"bullet" : true,
 			"customProperties" : 
 			[
 				
