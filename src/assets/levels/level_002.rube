@@ -42,45 +42,6 @@
   [
     
     {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "atlas_santa"
-        },
-        
-        {
-          "entry" : "atlas_environment"
-        }
-      ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
       "class" : "joint",
       "comboboxEntries" : 
       [
@@ -115,82 +76,10 @@
     },
     
     {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
-    },
-    
-    {
       "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "0"
-        },
-        
-        {
-          "entry" : "1"
-        },
-        
-        {
-          "entry" : "2"
-        },
-        
-        {
-          "entry" : "3"
-        },
-        
-        {
-          "entry" : "4"
-        },
-        
-        {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
-        }
-      ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
     },
     
     {
@@ -249,6 +138,117 @@
       "displayName" : "phaserPlayerBodyPart",
       "name" : "phaserPlayerCharacterPart",
       "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -21277,7 +21277,7 @@
       
       {
         "angle" : 0,
-        "file" : "character_santa_v1.rube",
+        "file" : "export/character_santa_v1.json",
         "flip" : false,
         "id" : 2,
         "name" : "object0",

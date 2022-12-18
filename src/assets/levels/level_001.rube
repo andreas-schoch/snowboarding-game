@@ -42,13 +42,6 @@
   [
     
     {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
       "class" : "image",
       "comboboxEntries" : 
       [
@@ -67,9 +60,23 @@
     },
     
     {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
       "class" : "fixture",
       "displayName" : "phaserBoardEdge",
       "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
       "type" : "bool"
     },
     
@@ -82,43 +89,52 @@
     
     {
       "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "joint",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "distanceLegLeft"
+          "entry" : "0"
         },
         
         {
-          "entry" : "distanceLegRight"
+          "entry" : "1"
         },
         
         {
-          "entry" : "weldCenter"
+          "entry" : "2"
         },
         
         {
-          "entry" : "bindingLeft"
+          "entry" : "3"
         },
         
         {
-          "entry" : "bindingRight"
+          "entry" : "4"
         },
         
         {
-          "entry" : "prismatic"
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
         }
       ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
-      "type" : "string"
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
     },
     
     {
@@ -202,53 +218,37 @@
     },
     
     {
-      "class" : "body",
+      "class" : "joint",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "0"
+          "entry" : "distanceLegLeft"
         },
         
         {
-          "entry" : "1"
+          "entry" : "distanceLegRight"
         },
         
         {
-          "entry" : "2"
+          "entry" : "weldCenter"
         },
         
         {
-          "entry" : "3"
+          "entry" : "bindingLeft"
         },
         
         {
-          "entry" : "4"
+          "entry" : "bindingRight"
         },
         
         {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
+          "entry" : "prismatic"
         }
       ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
     }
   ],
   "metaworld" : 
@@ -16734,7 +16734,7 @@
       
       {
         "angle" : 0,
-        "file" : "character_santa_v1.rube",
+        "file" : "export/character_santa_v1.json",
         "flip" : false,
         "id" : 2,
         "name" : "object0",

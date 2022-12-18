@@ -35,7 +35,7 @@ export default class GameScene extends Ph.Scene {
     //  This wasn't an issue when terrain was procedural and chunked, so will likely fix itself once that is optimized again.
     this.b2Physics = new Physics(this, 40, new Pl.b2Vec2(0, -10));
     const currentLevel = localStorage.getItem(KEY_LEVEL_CURRENT) || LevelKeys.level_001;
-    this.b2Physics.loadRubeScene([LevelKeys.level_001, LevelKeys.level_002].includes(currentLevel as LevelKeys) ? currentLevel : LevelKeys.level_001);
+    this.b2Physics.loadRubeScene([LevelKeys.level_001, LevelKeys.level_002, LevelKeys.level_003].includes(currentLevel as LevelKeys) ? currentLevel : LevelKeys.level_001);
     this.playerController = new PlayerController(this, this.b2Physics);
     this.terrain = new Terrain(this, this.b2Physics);
 

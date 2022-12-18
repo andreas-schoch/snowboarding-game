@@ -42,13 +42,6 @@
   [
     
     {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
       "class" : "fixture",
       "comboboxEntries" : 
       [
@@ -67,6 +60,13 @@
       ],
       "displayName" : "phaserSensorType",
       "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
       "type" : "string"
     },
     
@@ -129,62 +129,10 @@
     },
     
     {
-      "class" : "joint",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "distanceLegLeft"
-        },
-        
-        {
-          "entry" : "distanceLegRight"
-        },
-        
-        {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
-        }
-      ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
-      "type" : "string"
-    },
-    
-    {
       "class" : "fixture",
       "displayName" : "phaserBoardEdge",
       "name" : "phaserBoardEdge",
       "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "atlas_santa"
-        },
-        
-        {
-          "entry" : "atlas_environment"
-        }
-      ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
-      "type" : "string"
     },
     
     {
@@ -249,6 +197,58 @@
       "displayName" : "phaserTerrain",
       "name" : "phaserTerrain",
       "type" : "bool"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
     }
   ],
   "metaworld" : 
@@ -281,6 +281,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -371,6 +372,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -461,6 +463,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -578,6 +581,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -668,6 +672,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -765,13 +770,13 @@
         "id" : 5,
         "linearDamping" : 0.05,
         "linearVelocity" : 0,
-        "massData-I" : 0.02515068836510181,
+        "massData-I" : 0.02515069022774696,
         "massData-center" : 
         {
-          "x" : 0.002433402463793755,
-          "y" : 7.035521321085980e-08
+          "x" : 0.002433401066809893,
+          "y" : 7.048485883842659e-08
         },
-        "massData-mass" : 1.535542488098145,
+        "massData-mass" : 1.535542607307434,
         "name" : "body0",
         "position" : 
         {
@@ -786,6 +791,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           
@@ -876,6 +882,7 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "bullet" : true,
         "customProperties" : 
         [
           

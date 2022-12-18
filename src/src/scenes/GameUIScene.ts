@@ -282,8 +282,8 @@ export default class GameUIScene extends Ph.Scene {
             break;
           }
           case 'level_001':
-          case 'level_002': {
-          // case 'level_003':
+          case 'level_002':
+          case 'level_003': {
           // case 'level_004':
           // case 'level_005': {
             localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);

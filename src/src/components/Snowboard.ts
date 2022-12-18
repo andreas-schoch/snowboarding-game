@@ -21,10 +21,6 @@ export interface ISegment {
   groundRayDirection: Pl.b2Vec2;
   groundRayResult: IRayCastResult;
   groundRayCallback: Pl.b2RayCastCallback;
-
-  crashRayDirection?: Pl.b2Vec2;
-  crashRayResult?: IRayCastResult;
-  crashRayCallback?: Pl.b2RayCastCallback;
 }
 
 
@@ -65,13 +61,6 @@ export class WickedSnowboard {
       segment.body.GetWorldPoint(segment.groundRayDirection, this.pointEnd);
       this.b2Physics.world.RayCast(this.pointStart, this.pointEnd, segment.groundRayCallback);
       DEBUG && this.drawDebug(segment.groundRayResult.hit ? 0x0000ff : 0x00ff00);
-
-      if (segment.crashRayResult && segment.crashRayCallback && segment.crashRayDirection) {
-        segment.body.GetWorldPoint(Pl.b2Vec2.ZERO, this.pointStart);
-        segment.body.GetWorldPoint(segment.crashRayDirection, this.pointEnd);
-        this.b2Physics.world.RayCast(this.pointStart, this.pointEnd, segment.crashRayCallback);
-        DEBUG && this.drawDebug(segment.crashRayResult.hit ? 0x0000ff : 0x00ff00);
-      }
     }
 
     this.isTailGrounded = segments[0].groundRayResult.hit;
@@ -107,13 +96,6 @@ export class WickedSnowboard {
     segment.groundRayResult.point = null;
     segment.groundRayResult.normal = null;
     segment.groundRayResult.fraction = -1;
-
-    if (segment.crashRayResult) {
-      segment.crashRayResult.hit = false;
-      segment.crashRayResult.point = null;
-      segment.crashRayResult.normal = null;
-      segment.crashRayResult.fraction = -1;
-    }
   }
 
   private drawDebug(color: number) {
@@ -139,9 +121,6 @@ export class WickedSnowboard {
         groundRayDirection: new Pl.b2Vec2(0, -rayLength / this.b2Physics.worldScale),
         groundRayResult: groundHitResult,
         groundRayCallback: this.rayCallbackFactory(groundHitResult),
-        crashRayDirection: isNose ? new Pl.b2Vec2((isNose ? rayLength * 2 : rayLength) / this.b2Physics.worldScale, 0) : undefined,
-        crashRayResult: isNose ? crashHitResult : undefined,
-        crashRayCallback: isNose ? this.rayCallbackFactory(crashHitResult) : undefined,
       });
 
       if (isNose) this.nose = this.segments[this.segments.length - 1];
