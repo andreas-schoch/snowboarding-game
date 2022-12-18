@@ -307,11 +307,9 @@ export default class GameUIScene extends Ph.Scene {
           case 'level_001':
           case 'level_002':
           case 'level_003': {
-            // case 'level_004':
-            // case 'level_005': {
             localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
-            this.crashed = false;
-            this.restartGame();
+            leaderboardService.setLevel(evt.target.id);
+            this.playAgain()
             break;
           }
           default: {
@@ -445,7 +443,7 @@ export default class GameUIScene extends Ph.Scene {
         if (cloneElRank) cloneElRank.innerHTML = String(i + 1);
         if (cloneElUsername) cloneElUsername.innerHTML = String(displayName);
         if (cloneElScore) cloneElScore.innerHTML = String(calculateTotalScore(score as IScore));
-        if (cloneElUsername && localPlayerUsername && localPlayerUsername === score.userName) cloneElUsername.classList.add('your-own-score');
+        if (cloneElUsername && localPlayerUsername && (leaderboardService.auth?.currentUser?.uid === score.userID || !leaderboardService.auth)) cloneElUsername.classList.add('your-own-score');
         leaderboardItemContainer.appendChild(clone);
       }
     }

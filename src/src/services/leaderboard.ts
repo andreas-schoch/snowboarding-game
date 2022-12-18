@@ -55,7 +55,7 @@ export class LeaderboardService {
     if (this.auth?.currentUser) {
       this.rexLeaderboard = new RexLeaderboard({
         root: `leaderboard_${level}`,
-        pageItemCount: 100,
+        pageItemCount: 200,
       });
     }
   }
