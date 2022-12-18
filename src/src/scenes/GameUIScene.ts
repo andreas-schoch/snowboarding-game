@@ -1,7 +1,21 @@
 import * as Ph from 'phaser';
-import {BASE_FLIP_POINTS, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_ID, KEY_USER_NAME, KEY_USER_SCORES, POINTS_PER_COIN, SceneKeys, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX} from '../index';
-import {IComboTrickScore, IFlipTrickScore, IScore} from '../components/State';
+import {
+  DEBUG,
+  DEFAULT_WIDTH,
+  KEY_LEVEL_CURRENT,
+  KEY_USER_NAME,
+  KEY_USER_SCORES,
+  leaderboardService, LEVEL_SUCCESS_BONUS_POINTS,
+  POINTS_PER_COIN,
+  SceneKeys,
+  SETTINGS_KEY_RESOLUTION,
+  SETTINGS_KEY_VOLUME_MUSIC,
+  SETTINGS_KEY_VOLUME_SFX,
+} from '../index';
+import {IComboTrickScore, IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
+import {pseudoRandomId} from '../util/pseudoRandomId';
+import {getCurrentLevel} from '../util/getCurrentLevel';
 
 
 export enum PanelIds {
@@ -52,6 +66,7 @@ export default class GameUIScene extends Ph.Scene {
 
   private pendingScore: IScore | null = null;
   private localScores: IScore[] = [];
+  private crashed: boolean = false;
 
   constructor() {
     super({key: SceneKeys.GAME_UI_SCENE});
@@ -77,6 +92,7 @@ export default class GameUIScene extends Ph.Scene {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
+    leaderboardService.setLevel(getCurrentLevel());
     this.initDomUi();
 
     this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
@@ -103,6 +119,7 @@ export default class GameUIScene extends Ph.Scene {
 
     this.observer.on('enter_crashed', (score: IScore) => {
       this.pendingScore = score;
+      this.crashed = true;
       this.sfx_death.play();
       this.sfx_grunt.play();
       this.comboLeewayChart.clear();
@@ -113,9 +130,9 @@ export default class GameUIScene extends Ph.Scene {
         detune: -500,
         rate: 0.5,
         duration: 2000,
-        onComplete: () => {
+        onComplete: async () => {
           this.music.stop();
-          this.updateYourScorePanelData(score);
+          await this.updateYourScorePanelData(score);
           this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
         },
       });
@@ -129,9 +146,9 @@ export default class GameUIScene extends Ph.Scene {
         targets: this.music,
         volume: 0,
         duration: 2000,
-        onComplete: () => {
+        onComplete: async () => {
           this.music.stop();
-          this.updateYourScorePanelData(score);
+          await this.updateYourScorePanelData(score);
           this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
         },
       });
@@ -210,7 +227,7 @@ export default class GameUIScene extends Ph.Scene {
       this.panelYourScore,
     ];
 
-    element.on('click', (evt) => {
+    element.on('click', async (evt) => {
         switch (evt.target.id) {
           case 'btn-goto-pause-menu': {
             this.setPanelVisibility(PanelIds.PANEL_PAUSE_MENU);
@@ -222,6 +239,8 @@ export default class GameUIScene extends Ph.Scene {
             break;
           }
           case 'btn-goto-select-level': {
+            const backBtn = document.querySelector('#panel-select-level #btn-goto-pause-menu');
+            backBtn && (this.crashed ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden'));
             this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
             break;
           }
@@ -230,8 +249,7 @@ export default class GameUIScene extends Ph.Scene {
             break;
           }
           case 'btn-goto-leaderboards': {
-            this.localScores = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '[]');
-            this.updateLeaderboardPanelData(this.localScores);
+            await this.updateLeaderboardPanelData();
             this.setPanelVisibility(PanelIds.PANEL_LEADERBOARDS);
             break;
           }
@@ -260,9 +278,14 @@ export default class GameUIScene extends Ph.Scene {
             const nameInput: HTMLInputElement | null = document.getElementById('username') as HTMLInputElement;
             const name = nameInput?.value;
             if (name && this.pendingScore && submitScoreForm) {
-              this.submitScore(this.pendingScore, name);
+              if (leaderboardService.auth?.currentUser) {
+                leaderboardService.rexLeaderboard.setUser({userID: leaderboardService.auth.currentUser.uid, userName: nameInput.value});
+                await leaderboardService.auth.currentUser.updateProfile({displayName: nameInput.value});
+              }
+              localStorage.setItem(KEY_USER_NAME, nameInput.value);
+              await leaderboardService.submit(this.pendingScore); // TODO add loading indicator
+              await this.updateYourScorePanelData(this.pendingScore);
               submitScoreForm.classList.add('hidden');
-
             }
             break;
           }
@@ -284,14 +307,15 @@ export default class GameUIScene extends Ph.Scene {
           case 'level_001':
           case 'level_002':
           case 'level_003': {
-          // case 'level_004':
-          // case 'level_005': {
+            // case 'level_004':
+            // case 'level_005': {
             localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
+            this.crashed = false;
             this.restartGame();
             break;
           }
           default: {
-            console.log('non-interactable target id', evt.target.id);
+            DEBUG && console.log('non-interactable target id', evt.target.id);
           }
 
         }
@@ -304,6 +328,7 @@ export default class GameUIScene extends Ph.Scene {
 
   private playAgain() {
     this.music.stop();
+    this.crashed = false;
     this.restartGame();
   }
 
@@ -331,22 +356,12 @@ export default class GameUIScene extends Ph.Scene {
 
   }
 
-  private updateYourScorePanelData(score: IScore) {
-    const trickScore = score.trickScoreLog.reduce((acc, cur) => {
-      if (cur.type === 'combo') {
-        return acc + ((cur as IComboTrickScore).multiplier * (cur as IComboTrickScore).accumulator);
-      } else if (cur.type === 'flip') {
-        return acc + ((cur as IFlipTrickScore).flips * (cur as IFlipTrickScore).flips * BASE_FLIP_POINTS);
-      } else {
-        return acc;
-      }
-    }, 0);
-
-    console.log('trickScore computed', trickScore, score.trickScore);
+  private async updateYourScorePanelData(score: IScore) {
     if (this.panelYourScore) {
       const elDistance = document.getElementById('your-score-distance');
       const elCoins = document.getElementById('your-score-coins');
       const elTricks = document.getElementById('your-score-trick-score');
+      const elBonus = document.getElementById('your-score-bonus');
       const elTricksBestCombo = document.getElementById('your-score-best-combo');
       const elTotal = document.getElementById('your-score-total');
       const elUsername = document.getElementById('username') as HTMLInputElement;
@@ -361,65 +376,76 @@ export default class GameUIScene extends Ph.Scene {
       if (elDistance) elDistance.innerText = String(score.distance) + 'm';
       if (elCoins) elCoins.innerText = `${score.coins}x${POINTS_PER_COIN}`;
       if (elTricks) elTricks.innerText = String(score.trickScore);
+      if (elBonus) elBonus.innerText = String(score.finishedLevel ? LEVEL_SUCCESS_BONUS_POINTS : 0);
       if (elTricksBestCombo) elTricksBestCombo.innerText = String(bestCombo);
       if (elTotal) elTotal.innerText = String(calculateTotalScore(score));
 
-      const username = localStorage.getItem(KEY_USER_NAME);
-      const userId = localStorage.getItem(KEY_USER_ID);
-      if (elUsername && !username) {
+      const currentUser = leaderboardService.auth?.currentUser;
+      if (!currentUser) {
+        // When leaderboard is disabled; TODO refactor and clean the mess
+        if (!localStorage.getItem(KEY_USER_NAME)) {
+          elUsername.value = `Player_${pseudoRandomId()}`;
+          elUsername.setAttribute('value', elUsername.value); // to make floating label move up
+          localStorage.setItem(KEY_USER_NAME, elUsername.value);
+        } else {
+          elSubmitScoreForm?.classList.add('hidden');
+          await leaderboardService.submit(score);
+        }
+        return;
+      }
+
+      // Everything below is expected to work only when leaderboards are enabled
+      if (!elUsername) throw new Error('username input field not found');
+      const note: HTMLElement | null = document.querySelector('.submit-score-offline-info');
+      note && note.classList.add('hidden');
+
+      if (!currentUser.displayName) {
         // First time player without a username. Score is submitted manually somewhere else after clicking a button.
-        elUsername.value = `Player_${this.pseudoRandomId()}`;
-        elUsername.setAttribute('value', elUsername.value);
-        // This game has no auth. Users are identified by pseudo secret userId which is stored locally and shall not be made public via API
-        // This allows anonymous users to submit scores while making it impossible for others to submit a score in the name of someone else (as long as userId doesn't leak).
-        // Maybe the game will have proper auth at some point in the future. If that happens, an anonymous user can be turned into a "real" user profile.
+        elUsername.value = `Player_${pseudoRandomId()}`;
+        elUsername.setAttribute('value', elUsername.value); // to make floating label move up
         localStorage.setItem(KEY_USER_NAME, elUsername.value);
-        localStorage.setItem(KEY_USER_ID, crypto?.randomUUID ? crypto.randomUUID() : this.pseudoRandomId());
-      } else if (username && userId) {
-        elSubmitScoreForm?.classList.add('hidden');
+      } else {
         // Score is submitted automatically for users that submitted a score once before from this device and browser.
-        this.submitScore(score, userId);
+        elSubmitScoreForm?.classList.add('hidden');
+        leaderboardService.rexLeaderboard.setUser({userID: currentUser.uid, userName: currentUser.displayName});
+        await leaderboardService.submit(score);
+        const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
+        // Cannot trust plain value total on firebase nor the rank nor the order atm
+        // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
+        const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
+        const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
+        const elYourRank = document.getElementById('your-score-rank-value');
+        if (elYourRank && yourRank !== -1 && scores?.length) elYourRank.innerText = `${yourRank + 1}/${scores.length}`;
       }
     }
   }
 
-  private submitScore(score: IScore, userId: string) {
-    // FIXME there are some annoying issues with the firebase based database. The changes will only be committed and pushed when I had time to deal with them...
-    //  For now the game has only a local leaderboard where players can only see their own past scores.
-    //  Scores are preserved locally in such a way that it may be possible to submit them later on when user plays the game again once leaderboards are enabled.
-    const localScores: IScore[] = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '[]');
-    score.id = this.pseudoRandomId();
-    score.timestamp = Date.now();
-    localScores.push(score);
-    this.localScores = localScores;
-    console.log('localScores', localScores);
-    localStorage.setItem(KEY_USER_SCORES, JSON.stringify(localScores));
-  }
+  private async updateLeaderboardPanelData() {
+    if (leaderboardService.auth?.currentUser) {
+      const note: HTMLElement | null = document.querySelector('.leaderboard-note');
+      note && note.classList.add('hidden');
+    }
 
-  private pseudoRandomId(): string {
-    // fallback is unique enough for purposes of this game atm.
-    return Math.random().toString(36).slice(2);
-  }
-
-  private updateLeaderboardPanelData(localScores: IScore[]) {
+    // TODO cleanup this mess
+    let fbScores = leaderboardService.auth
+      ? await leaderboardService.rexLeaderboard.loadFirstPage()
+      : (JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}')[getCurrentLevel()] || []).map(s => ({...s, userName: localStorage.getItem(KEY_USER_NAME)}));
     const leaderboardItemTemplate: HTMLTemplateElement | null = document.getElementById('leaderboard-item-template') as HTMLTemplateElement;
     const leaderboardItemContainer = document.getElementById('leaderboard-item-container');
     if (this.panelLeaderboards && leaderboardItemTemplate && leaderboardItemContainer) {
-      const localPlayerUsername = localStorage.getItem(KEY_USER_NAME) as string;
-      localScores = localScores
-      // TODO don't forget that local scores don't contain username and id when uploaded need to be added when online leaderboard is ready
-      .map(s => ({...s, total: calculateTotalScore(s, false), username: s.username || localStorage.getItem(KEY_USER_NAME) as string}))
-      .sort((a, b) => b.total - a.total);
+      const localPlayerUsername = leaderboardService.auth?.currentUser?.displayName || localStorage.getItem(KEY_USER_NAME) as string;
+      const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
       leaderboardItemContainer.innerText = '';
-      for (const [i, score] of localScores.entries()) {
-        const displayName = localPlayerUsername && localPlayerUsername === score.username ? 'You' : score.username;
+      for (const [i, score] of scores.entries()) {
+        const displayName = score.userName;
         const clone: HTMLElement = leaderboardItemTemplate.content.cloneNode(true) as HTMLElement;
         const cloneElRank = clone.querySelector('#leaderboard-item-rank');
         const cloneElUsername = clone.querySelector('#leaderboard-item-username');
         const cloneElScore = clone.querySelector('#leaderboard-item-score');
         if (cloneElRank) cloneElRank.innerHTML = String(i + 1);
         if (cloneElUsername) cloneElUsername.innerHTML = String(displayName);
-        if (cloneElScore) cloneElScore.innerHTML = String(score.total);
+        if (cloneElScore) cloneElScore.innerHTML = String(calculateTotalScore(score as IScore));
+        if (cloneElUsername && localPlayerUsername && localPlayerUsername === score.userName) cloneElUsername.classList.add('your-own-score');
         leaderboardItemContainer.appendChild(clone);
       }
     }

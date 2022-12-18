@@ -1,59 +1,87 @@
-// TODO v0.6.0
-//  Responsible to communicate with server and submit scores
-//  Since the game is simulated on the client, the server will do some basic sanity checking to make it a little bit harder to
-//  submit cheated runs. Will probably track the start/end time of each run and submit score changes periodically every ~5-10seconds.
-//  (Also number of flips, landed combos, collected coins, distance etc) This data will be stored together with the total score.
-//  By comparing this meta with other similarly ranked scores, we can find anomalies
-//  (e.g num flips went from 5 to 50 in 5 seconds, num coins collected is much higher, score doesn't match the meta data)
-//  When a fake score is detected, instead of removing it, keep showing it to the cheating user and filter it out for everybody else.
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
+import {env} from '../environment';
+import {DEBUG, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LevelKeys} from '../index';
+import {calculateTotalScore} from '../util/calculateTotalScore';
+import {pseudoRandomId} from '../util/pseudoRandomId';
+import {IScore} from '../components/State';
+import {getCurrentLevel} from '../util/getCurrentLevel';
 
-// Login procedure should be somewhat similar to playfabs LoginWithCustomId()
+
 export class LeaderboardService {
-  private readonly SERVER_URL: string = '';
-  // uuid created by server and saved locally.
-  // When user visits site again with the same device their username and scores will be remembered.
-  private readonly USER_ID: string;
-  // Not sure if truly needed for first MVP but was thinking of sending a JWT token after login with USER_ID
-  // Most likely won't be part of v0.6.0.
-  private sessionToken: string;
+  rexLeaderboard: RexLeaderboard; // TODO get rid. It works well but not 100% suited for this games needs (score stored as list of actions instead of plain value)
+  auth: firebase.auth.Auth;
+  currentLevel: LevelKeys;
+  private numAuthAttempts = 0;
 
   constructor() {
-    this.USER_ID = localStorage.getItem('userId') || '';
+    if (env.FIREBASE_LEADERBOARD_ENABLED) {
+      // @ts-ignore workaround to support rex firebase plugin which seems to expect firebase to be loaded via script tag and be globally available
+      window.firebase = firebase;
+      const firebaseConfig = {
+        apiKey: env.FIREBASE_API_KEY,
+        authDomain: env.FIREBASE_AUTH_DOMAIN,
+        projectId: env.FIREBASE_PROJECT_ID,
+        storageBucket: env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
+        appId: env.FIREBASE_APP_ID,
+        measurementId: env.FIREBASE_MESSAGING_SENDER_ID,
+      };
+      const app = firebase.initializeApp(firebaseConfig);
+      this.auth = firebase.auth();
+      this.auth.onAuthStateChanged(async user => {
+        DEBUG && console.log('onAuthStateChanged user', user);
+        if (user) {
+          // Signed in
+          if (user.displayName && user.displayName !== localStorage.getItem(KEY_USER_NAME)) localStorage.setItem(KEY_USER_NAME, user.displayName);
+          this.setLevel(getCurrentLevel());
+        } else {
+          // Try to sign in
+          DEBUG && console.log('try signInAnonymously');
+          if (++this.numAuthAttempts >= 3) throw new Error('failed to authenticate multiple times.');
+          this.auth.signInAnonymously().catch((error) => console.error('Failed to login anonymous user', error));
+        }
+      });
+    }
   }
 
-  openWebsocket() {
-    // Open websocket and register listeners
-
+  setLevel(level: LevelKeys) {
+    this.numAuthAttempts = 0;
+    this.currentLevel = level;
+    localStorage.setItem(KEY_LEVEL_CURRENT, level);
+    // TODO timeFilters don't work well with how I want scores to be stored (list of actions from which total is derived instead of plain numeric total)
+    if (this.auth?.currentUser) {
+      this.rexLeaderboard = new RexLeaderboard({
+        root: `leaderboard_${level}`,
+        pageItemCount: 100,
+      });
+    }
   }
 
-  loginAnonymous() {
-    // s
+  async submit(score: IScore): Promise<boolean> {
+    score.id = pseudoRandomId();
+    score.timestamp = Date.now();
+    this.saveScoreLocally(score);
 
+    if (env.FIREBASE_LEADERBOARD_ENABLED && this.auth?.currentUser) {
+      const highest = await this.rexLeaderboard.getScore(this.auth.currentUser.uid);
+
+      if (!highest || calculateTotalScore(highest as IScore) < calculateTotalScore(score)) {
+        await this.rexLeaderboard.post(calculateTotalScore(score), score, score.timestamp);
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  setDisplayName(displayName: string) {
-
-  }
-
-  startRun() {
-    // Here server is informed that this player has started a run
-
-  }
-
-  endRun() {
-    // Here the score gets submitted to the server. Probably via websocket message
-    this.submitFinalScore();
-  }
-
-  submitIntermediateScore() {
-
-  }
-
-  private submitFinalScore() {
-
-  }
-
-  private registerSocketListeners() {
-
+  private saveScoreLocally(score: IScore) {
+    const localScoresMap: Record<keyof LevelKeys, IScore[]> = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}');
+    const localScoresLevel = localScoresMap[score.level] || [];
+    localScoresLevel.push(score);
+    localScoresMap[score.level] = localScoresLevel;
+    localStorage.setItem(KEY_USER_SCORES, JSON.stringify(localScoresMap));
   }
 }

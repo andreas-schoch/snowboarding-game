@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -35,6 +36,7 @@ module.exports = {
     },
   },
   plugins: [
+    new Dotenv(),
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
     new CopyWebpackPlugin({

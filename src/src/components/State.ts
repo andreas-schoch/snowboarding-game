@@ -3,7 +3,8 @@ import * as Pl from '@box2d/core';
 import {Physics} from './Physics';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
 import {IBodyParts, PlayerController} from './PlayerController';
-import {BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION} from '../index';
+import {BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION} from '../index';
+import {getCurrentLevel} from '../util/getCurrentLevel';
 
 
 export interface IBaseTrickScore {
@@ -31,8 +32,8 @@ export type TrickScore = IComboTrickScore | IFlipTrickScore;
 export interface IScore {
   id?: string;
   timestamp?: number;
-  username?: string;
-  userId?: string;
+  userName?: string;
+  userID?: string;
   total?: number; // derived from others
   distance: number;
   coins: number;
@@ -40,6 +41,7 @@ export interface IScore {
   trickScoreLog: TrickScore[];
   finishedLevel: boolean;
   crashed: boolean;
+  level: LevelKeys;
 }
 
 
@@ -152,6 +154,7 @@ export class State {
       finishedLevel: this.levelFinished,
       crashed: this.isCrashed,
       trickScoreLog: this.trickScoreLog,
+      level: getCurrentLevel()
     };
   }
 

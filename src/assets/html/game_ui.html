@@ -736,7 +736,8 @@
   /* = Panel Select Level = */
   /* ====================== */
   #panel-select-level {
-    width: 600px;
+    /* TODO temporary change back to 600px wide once it shows current rank and personal best */
+    width: 770px;
     height: 600px;
   }
 
@@ -879,6 +880,16 @@
     padding-right: 0.5rem;
   }
 
+  .your-own-score::after {
+    content: 'You';
+    color: white;
+    background-color: var(--blue-800);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    margin-left: 0.4rem;
+    font-size: 12px;
+  }
+
   /* ==================== */
   /* = Panel Your Score = */
   /* ==================== */
@@ -913,6 +924,27 @@
     color: black;
     font-size: 24px;
     font-weight: bolder;
+  }
+
+  .summary-rank {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    line-height: 20px;
+  }
+
+  .summary-rank > span {
+    text-align: center !important;
+    color: var(--grey-600);
+  }
+
+  #your-score-rank-value {
+    color: black;
+    font-weight: bolder;
+  }
+
+  .summary-personal-best > span {
+    color: var(--grey-700);
+    font-size: 18px;
   }
 
   .submit-score button {
@@ -1046,14 +1078,14 @@
         <div class="level-number">Level 001</div>
         <div class="level-name">Santas Backyard</div>
         <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
-        <div class="level-your-high-score">
-          <div class="">Personal Best:</div>
-          <div class="level-your-high-score-value">24030</div>
-        </div>
-        <div class="level-your-rank">
-          <div class="">Rank:</div>
-          <div class="level-your-rank-value">3/32</div>
-        </div>
+        <!--        <div class="level-your-high-score">-->
+        <!--          <div class="">Personal Best:</div>-->
+        <!--          <div class="level-your-high-score-value">24030</div>-->
+        <!--        </div>-->
+        <!--        <div class="level-your-rank">-->
+        <!--          <div class="">Rank:</div>-->
+        <!--          <div class="level-your-rank-value">3/32</div>-->
+        <!--        </div>-->
       </div>
 
       <div class="level-item">
@@ -1061,14 +1093,14 @@
         <div class="level-number">Level 002</div>
         <div class="level-name">The Rollercoaster</div>
         <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_002_the_rollercoaster.png')"></div>
-        <div class="level-your-high-score">
-          <div class="">Personal Best:</div>
-          <div class="level-your-high-score-value">24030</div>
-        </div>
-        <div class="level-your-rank">
-          <div class="">Rank:</div>
-          <div class="level-your-rank-value">3/32</div>
-        </div>
+        <!--        <div class="level-your-high-score">-->
+        <!--          <div class="">Personal Best:</div>-->
+        <!--          <div class="level-your-high-score-value">24030</div>-->
+        <!--        </div>-->
+        <!--        <div class="level-your-rank">-->
+        <!--          <div class="">Rank:</div>-->
+        <!--          <div class="level-your-rank-value">3/32</div>-->
+        <!--        </div>-->
       </div>
 
       <div class="level-item">
@@ -1076,14 +1108,14 @@
         <div class="level-number">Level 003</div>
         <div class="level-name">Building Bridges</div>
         <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_003_building_bridges.png')"></div>
-        <div class="level-your-high-score">
-          <div class="">Personal Best:</div>
-          <div class="level-your-high-score-value">24030</div>
-        </div>
-        <div class="level-your-rank">
-          <div class="">Rank:</div>
-          <div class="level-your-rank-value">3/32</div>
-        </div>
+        <!--        <div class="level-your-high-score">-->
+        <!--          <div class="">Personal Best:</div>-->
+        <!--          <div class="level-your-high-score-value">24030</div>-->
+        <!--        </div>-->
+        <!--        <div class="level-your-rank">-->
+        <!--          <div class="">Rank:</div>-->
+        <!--          <div class="level-your-rank-value">3/32</div>-->
+        <!--        </div>-->
       </div>
 
       <div class="level-item">
@@ -1091,14 +1123,14 @@
         <div class="level-number">Level 004</div>
         <div class="level-name">Rocky Roads</div>
         <div class="level-thumbnail"></div>
-        <div class="level-your-high-score">
-          <div class="">Personal Best:</div>
-          <div class="level-your-high-score-value">24030</div>
-        </div>
-        <div class="level-your-rank">
-          <div class="">Rank:</div>
-          <div class="level-your-rank-value">3/32</div>
-        </div>
+        <!--        <div class="level-your-high-score">-->
+        <!--          <div class="">Personal Best:</div>-->
+        <!--          <div class="level-your-high-score-value">24030</div>-->
+        <!--        </div>-->
+        <!--        <div class="level-your-rank">-->
+        <!--          <div class="">Rank:</div>-->
+        <!--          <div class="level-your-rank-value">3/32</div>-->
+        <!--        </div>-->
       </div>
 
       <div class="level-item">
@@ -1106,14 +1138,14 @@
         <div class="level-number">Level 005</div>
         <div class="level-name">Mission Impossible</div>
         <div class="level-thumbnail"></div>
-        <div class="level-your-high-score">
-          <div class="">Personal Best:</div>
-          <div class="level-your-high-score-value">24030</div>
-        </div>
-        <div class="level-your-rank">
-          <div class="">Rank:</div>
-          <div class="level-your-rank-value">3/32</div>
-        </div>
+        <!--        <div class="level-your-high-score">-->
+        <!--          <div class="">Personal Best:</div>-->
+        <!--          <div class="level-your-high-score-value">24030</div>-->
+        <!--        </div>-->
+        <!--        <div class="level-your-rank">-->
+        <!--          <div class="">Rank:</div>-->
+        <!--          <div class="level-your-rank-value">3/32</div>-->
+        <!--        </div>-->
       </div>
 
       <!-- TODO in the future populate level selection programmatically using a template -->
@@ -1200,8 +1232,7 @@
     <div class="panel-title">Leaderboards</div>
     <div class="row">
       <div class="col col-12 leaderboard-note">
-        Current version of the game doesn't have the online leaderboards enabled.
-        It may be added within the next few days. You will currently only see your own past high-scores below.
+        Current version of the game doesn't have the online leaderboards enabled. You will only see your own past high-scores below.
       </div>
     </div>
     <div class="row leaderboard-header">
@@ -1423,10 +1454,19 @@
       </span>
       <span class="col col-4" id="your-score-trick-score">3400</span>
     </div>
+    <div class="row summary summary-bonus">
+      <span class="col col-8">Bonus points</span>
+      <span class="col col-4" id="your-score-bonus">0</span>
+    </div>
     <div class="row summary summary-total">
       <span class="col col-8">Total</span>
       <span class="col col-4" id="your-score-total">6570</span>
     </div>
+
+    <div class="row summary summary-rank">
+      <span class="col col-12">You are ranked <span id="your-score-rank-value">-/-</span> in the leaderboards on this level!</span>
+    </div>
+
     <!--  SUBMIT SCORE -->
     <div class="submit-score">
       <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet. Please choose your name.
@@ -1445,7 +1485,7 @@
     <!-- BACK / REPLAY -->
     <div class="row play-again">
       <div class="col col-12">
-        <button class="col col-6 btn btn-secondary" id="btn-select-level">
+        <button class="col col-6 btn btn-secondary" id="btn-goto-select-level">
           <i class="material-icons">chevron_left</i>
           <span>Select Level</span>
         </button>

@@ -1,8 +1,11 @@
 import * as Ph from 'phaser';
+import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
+
 import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
 import GameStats from 'gamestats.js';
 import GameUIScene from './scenes/GameUIScene';
+import {LeaderboardService} from './services/leaderboard';
 
 
 export const enum SceneKeys {
@@ -12,15 +15,17 @@ export const enum SceneKeys {
 }
 
 
+// Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
+export const leaderboardService = new LeaderboardService();
+
 export const SETTINGS_KEY_DEBUG = 'snowboarding_game_debug';
 export const SETTINGS_KEY_DEBUG_ZOOM = 'snowboarding_game_debug_zoom';
 export const SETTINGS_KEY_RESOLUTION = 'snowboarding_game_resolution';
 export const SETTINGS_KEY_VOLUME_MUSIC = 'snowboarding_game_volume_music';
 export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
 
-export const KEY_USER_ID = 'snowboarding_game_user_id';
 export const KEY_USER_NAME = 'snowboarding_game_user_name';
-export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v2';
+export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
 
 export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
 
@@ -34,6 +39,12 @@ export enum LevelKeys {
   level_005 = 'level_005',
 }
 
+
+export const LEVELS = [
+  LevelKeys.level_001,
+  LevelKeys.level_002,
+  LevelKeys.level_003,
+];
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
@@ -52,7 +63,7 @@ export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '1.0.6',
+  version: '1.1.0',
   type: Ph.AUTO,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
@@ -74,6 +85,13 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
     height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
   },
   scene: [PreloadScene, GameScene, GameUIScene],
+  plugins: {
+    global: [{
+      key: 'rexFirebase',
+      plugin: FirebasePlugin,
+      start: true,
+    }],
+  },
 };
 
 const config = {

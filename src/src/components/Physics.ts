@@ -1,6 +1,6 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {stats} from '../index';
+import {LevelKeys, stats} from '../index';
 import GameScene from '../scenes/GameScene';
 import {RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
 import {RubeLoader} from '../util/RUBE/RubeLoader';
@@ -33,7 +33,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.rubeLoader = new RubeLoader(this.world, this.scene.add.graphics(), this.scene, this.worldScale);
   }
 
-  loadRubeScene(rubeScene: string) {
+  loadRubeScene(rubeScene: LevelKeys) {
     const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     if (this.rubeLoader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
     else throw new Error('Failed to load RUBE scene');
@@ -46,7 +46,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     stats.begin('physics');
     // const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 9));
     this.world.Step(this.stepDeltaTime, this.stepConfig);
-    // this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
+    this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
 
     // iterate through all bodies
     const worldScale = this.worldScale;
