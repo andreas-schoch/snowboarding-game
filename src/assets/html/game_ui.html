@@ -778,6 +778,25 @@
     cursor: pointer;
   }
 
+  #level_004,
+  #level_005 {
+    background-color: rgba(0, 0, 0, 0.7);
+    cursor: not-allowed !important;
+  }
+
+  #level_004::after,
+  #level_005::after {
+    content: "Upcoming";
+    color: white;
+    font-size: 18px;
+    font-weight: bolder;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: not-allowed !important;
+  }
+
   #panel-select-level .level-number {
     color: var(--grey-700);
   }
@@ -1175,14 +1194,14 @@
         <span class="col col-4 flex-center control-img">
           <img class="img-center" src="assets/img/controls/Arrow_Up_Key_Light.png" alt="keyboard arrow up key">
         </span>
-        <span class="col col-8 control-text">Jump</span>
+        <span class="col col-8 control-text">Jump (press longer for higher jump)</span>
       </span>
       <span class="row">
         <span class="col col-4 flex-center control-img">
           <img src="assets/img/controls/Arrow_Left_Key_Light.png" alt="keyboard arrow left key">
           <img src="assets/img/controls/Arrow_Right_Key_Light.png" alt="keyboard arrow right key">
         </span>
-        <span class="col col-8 control-text">Balance and flip</span>
+        <span class="col col-8 control-text">Balance and perform tricks (frontflip, backflip)</span>
       </span>
       <span class="row">
         <span class="col col-4 flex-center control-img">
@@ -1212,6 +1231,11 @@
         <span class="col col-8 control-text">Balance and flip by pressing left or right side of screen</span>
       </span>
       <span class="row"><span class="col col-12" style="font-size: 12px; margin-top: 2rem;">(Keyboard controls work much better atm)</span></span>
+      <span class="row how-to-play-title"><span class="col col-12">Combo System</span></span>
+      <span class="row game-premise"><span class="col col-12">After each trick (backflip, frontflip) you have a few seconds to perform the next one to gain extra points.
+        The combo counter will eventually run out if you stay on the ground for too long. If you crash, the combo points are lost.
+        The points are only applied once the counter runs out or you reach the finish line.
+      </span></span>
     </div>
 
     <!-- BACK-->
