@@ -13,7 +13,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start('GameScene');
+    this.scene.start(SceneKeys.GAME_SCENE);
   }
 
   private loadAudio() {
@@ -59,5 +59,6 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.json(LevelKeys.level_001, `assets/levels/export/${LevelKeys.level_001}.json`);
     this.load.json(LevelKeys.level_002, `assets/levels/export/${LevelKeys.level_002}.json`);
     this.load.json(LevelKeys.level_003, `assets/levels/export/${LevelKeys.level_003}.json`);
+    this.load.json(LevelKeys.level_004, `assets/levels/export/${LevelKeys.level_004}.json`);
   }
 }

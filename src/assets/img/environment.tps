@@ -219,6 +219,22 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">obstacles/ice_block.png</key>
+            <key type="filename">obstacles/wooden_crate.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>69,69,137,137</rect>
+                <key>scale9Paddings</key>
+                <rect>69,69,137,137</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">obstacles/ice_spikes.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -318,6 +334,8 @@
             <filename>svgsilh/cottage.png</filename>
             <filename>svgsilh/tree_01.png</filename>
             <filename>present_temp.png</filename>
+            <filename>obstacles/ice_block.png</filename>
+            <filename>obstacles/wooden_crate.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

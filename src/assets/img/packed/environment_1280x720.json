@@ -5,7 +5,7 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 511,
-				"h": 342
+				"h": 390
 			},
 			"scale": 0.25,
 			"frames": [
@@ -31,6 +31,27 @@
 					}
 				},
 				{
+					"filename": "santa-board.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 313,
+						"h": 33
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 313,
+						"h": 33
+					},
+					"frame": {
+						"x": 1,
+						"y": 291,
+						"w": 313,
+						"h": 33
+					}
+				},
+				{
 					"filename": "tree_01.png",
 					"rotated": false,
 					"trimmed": false,
@@ -52,6 +73,69 @@
 					}
 				},
 				{
+					"filename": "ice_block.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 69
+					},
+					"frame": {
+						"x": 316,
+						"y": 278,
+						"w": 69,
+						"h": 69
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 69
+					},
+					"frame": {
+						"x": 387,
+						"y": 278,
+						"w": 69,
+						"h": 69
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 46,
+						"h": 50
+					},
+					"frame": {
+						"x": 458,
+						"y": 278,
+						"w": 46,
+						"h": 50
+					}
+				},
+				{
 					"filename": "ice_spikes.png",
 					"rotated": false,
 					"trimmed": false,
@@ -66,8 +150,8 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 278,
-						"y": 278,
+						"x": 1,
+						"y": 326,
 						"w": 78,
 						"h": 63
 					}
@@ -87,52 +171,10 @@
 						"h": 56
 					},
 					"frame": {
-						"x": 358,
-						"y": 278,
+						"x": 81,
+						"y": 326,
 						"w": 78,
 						"h": 56
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 50,
-						"h": 50
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 46,
-						"h": 50
-					},
-					"frame": {
-						"x": 438,
-						"y": 278,
-						"w": 46,
-						"h": 50
-					}
-				},
-				{
-					"filename": "santa-board.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 157,
-						"h": 17
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 157,
-						"h": 17
-					},
-					"frame": {
-						"x": 1,
-						"y": 291,
-						"w": 157,
-						"h": 17
 					}
 				}
 			]
@@ -141,6 +183,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d05b175b45e829d03a5d1afaca85e901:e83b6b39992b3435021a42dda654fdbf:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

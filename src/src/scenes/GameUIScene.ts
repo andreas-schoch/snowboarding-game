@@ -67,6 +67,7 @@ export default class GameUIScene extends Ph.Scene {
   private pendingScore: IScore | null = null;
   private localScores: IScore[] = [];
   private crashed: boolean = false;
+  private finished: boolean = false;
 
   constructor() {
     super({key: SceneKeys.GAME_UI_SCENE});
@@ -80,7 +81,7 @@ export default class GameUIScene extends Ph.Scene {
 
   create() {
     const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
-    this.music = this.sound.add('riverside_ride', {loop: true, volume: musicVolume * 0.5, rate: 0.95, delay: 1, detune: 0});
+    this.music = this.sound.add('riverside_ride', {loop: true, volume: musicVolume * 0.3, rate: 0.95, delay: 1, detune: 0});
     this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
     this.sfx_jump_start = this.sound.add('boink', {detune: -200, volume: sfxVolume});
@@ -122,6 +123,7 @@ export default class GameUIScene extends Ph.Scene {
       this.crashed = true;
       this.sfx_death.play();
       this.sfx_grunt.play();
+      if (this.finished) return;
       this.comboLeewayChart.clear();
       if (this.hudCombo) this.hudCombo.innerText = '-';
       this.tweens.add({
@@ -139,7 +141,9 @@ export default class GameUIScene extends Ph.Scene {
     });
 
     this.observer.on('level_finish', (score: IScore) => {
+      if (this.crashed) return;
       this.pendingScore = score;
+      this.finished = true;
       this.sfx_applause.play();
       this.comboLeewayChart.clear();
       this.tweens.add({
@@ -306,10 +310,11 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'level_001':
           case 'level_002':
-          case 'level_003': {
+          case 'level_003':
+          case 'level_004': {
             localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
             leaderboardService.setLevel(evt.target.id);
-            this.playAgain()
+            this.playAgain();
             break;
           }
           default: {
@@ -327,6 +332,7 @@ export default class GameUIScene extends Ph.Scene {
   private playAgain() {
     this.music.stop();
     this.crashed = false;
+    this.finished = false;
     this.restartGame();
   }
 
