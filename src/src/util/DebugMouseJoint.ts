@@ -1,17 +1,16 @@
-import {Physics} from '../components/Physics';
-import Ph from 'phaser';
+import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
+import {Physics} from '../components/Physics';
 import {b2BodyType} from '@box2d/core';
-import GameScene from '../scenes/GameScene';
 
 
 export class DebugMouseJoint {
   private mouseJoint: Pl.b2MouseJoint | null;
 
-  private scene: GameScene;
+  private scene: Ph.Scene;
   private b2Physics: Physics;
 
-  constructor(scene: GameScene, b2Physics: Physics) {
+  constructor(scene: Ph.Scene, b2Physics: Physics) {
     this.scene = scene;
     this.b2Physics = b2Physics;
 

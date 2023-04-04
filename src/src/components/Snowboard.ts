@@ -1,7 +1,6 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {Physics} from './Physics';
-import GameScene from '../scenes/GameScene';
 import {PlayerController} from './PlayerController';
 import {DEBUG} from '../index';
 
@@ -38,7 +37,7 @@ export class WickedSnowboard {
   private debugGraphics: Ph.GameObjects.Graphics;
 
   private readonly player: PlayerController;
-  private readonly scene: GameScene;
+  private readonly scene: Ph.Scene;
   private readonly b2Physics: Physics;
 
   constructor(player: PlayerController) {

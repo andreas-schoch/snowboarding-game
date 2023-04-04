@@ -6,14 +6,17 @@ import GameScene from './scenes/GameScene';
 import GameStats from 'gamestats.js';
 import GameUIScene from './scenes/GameUIScene';
 import {LeaderboardService} from './services/leaderboard';
+import LevelEditorScene from "./scenes/LevelEditorScene";
+import {LevelEditorUIScene} from "./scenes/LevelEditorUIScene";
 
 
 export const enum SceneKeys {
   PRELOAD_SCENE = 'PreloadScene',
   GAME_SCENE = 'GameScene',
   GAME_UI_SCENE = 'GameUIScene',
+  LEVEL_EDITOR_SCENE = 'LevelEditorScene',
+  LEVEL_EDITOR_UI_SCENE = 'LevelEditorUIScene',
 }
-
 
 // Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();
@@ -30,8 +33,9 @@ export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
 export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
 
 // This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
-// The majority of the levels is expected to be custom made by players and fetched from a server.
+// The majority of the levels is expected to be custom-made by players and fetched from a server.
 export enum LevelKeys {
+  level_empty = 'level_empty',
   level_001 = 'level_001',
   level_002 = 'level_002',
   level_003 = 'level_003',
@@ -39,8 +43,8 @@ export enum LevelKeys {
   level_005 = 'level_005',
 }
 
-
 export const LEVELS = [
+  LevelKeys.level_empty,
   LevelKeys.level_001,
   LevelKeys.level_002,
   LevelKeys.level_003,
@@ -85,34 +89,12 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
     width: DEFAULT_WIDTH * RESOLUTION_SCALE,
     height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
   },
-  scene: [PreloadScene, GameScene, GameUIScene],
+  scene: [PreloadScene, GameScene, GameUIScene, LevelEditorScene, LevelEditorUIScene],
   plugins: {
-    global: [{
-      key: 'rexFirebase',
-      plugin: FirebasePlugin,
-      start: true,
-    }],
+    global: [
+      {key: 'rexFirebase', plugin: FirebasePlugin, start: true}
+    ],
   },
-};
-
-const config = {
-  autoPlace: true, /* auto place in the dom */
-  targetFPS: 60, /* the target max FPS */
-  redrawInterval: 200, /* the interval in MS for redrawing the FPS graph */
-  maximumHistory: 200, /* the length of the visual graph history in frames */
-  scale: 1, /* the scale of the canvas */
-  memoryUpdateInterval: 100, /* the interval for measuring the memory */
-  memoryMaxHistory: 60 * 10, /* the max amount of memory measures */
-
-  // Styling props
-  FONT_FAMILY: 'Arial',
-  COLOR_FPS_BAR: '#34cfa2',
-  COLOR_FPS_AVG: '#FFF',
-  COLOR_TEXT_LABEL: '#FFF',
-  COLOR_TEXT_TO_LOW: '#eee207',
-  COLOR_TEXT_BAD: '#d34646',
-  COLOR_TEXT_TARGET: '#d249dd',
-  COLOR_BG: '#333333',
 };
 
 export let stats: GameStats = {begin: () => null, end: () => null} as unknown as GameStats;

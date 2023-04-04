@@ -1,7 +1,6 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {Physics} from './Physics';
-import GameScene from '../scenes/GameScene';
 import {DEFAULT_ZOOM} from '../index';
 
 export default class Terrain {
@@ -9,7 +8,7 @@ export default class Terrain {
   private readonly chunks: ITerrainChunk[] = [];
 
   private readonly b2Physics: Physics;
-  private readonly scene: GameScene;
+  private readonly scene: Ph.Scene;
   private readonly zoomModifier = 1 / DEFAULT_ZOOM;
   private readonly layers = [
     {color: 0xC8E1EB, width: 5 * this.zoomModifier}, // top layer of snow
@@ -19,7 +18,7 @@ export default class Terrain {
     {color: 0x3a3232, width: 250 * this.zoomModifier},
   ];
 
-  constructor(scene: GameScene, physics: Physics) {
+  constructor(scene: Ph.Scene, physics: Physics) {
     this.scene = scene;
     this.b2Physics = physics;
 

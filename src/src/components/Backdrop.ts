@@ -1,16 +1,15 @@
 import * as Ph from 'phaser';
 import {stats} from '../index';
-import GameScene from '../scenes/GameScene';
 
 
 export class Backdrop {
-  private scene: GameScene;
+  private scene: Ph.Scene;
 
   private bgSpaceBack: Phaser.GameObjects.TileSprite;
   private bgSpaceMid: Phaser.GameObjects.TileSprite;
   private bgSpaceFront: Phaser.GameObjects.TileSprite;
 
-  constructor(scene: GameScene) {
+  constructor(scene: Ph.Scene) {
     this.scene = scene;
     this.bgSpaceBack = this.registerLayer('bg_space_back.png');
     this.bgSpaceMid = this.registerLayer('bg_space_mid.png');

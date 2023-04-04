@@ -1,7 +1,6 @@
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {LevelKeys, stats} from '../index';
-import GameScene from '../scenes/GameScene';
 import {RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
 import {RubeLoader} from '../util/RUBE/RubeLoader';
 
@@ -10,13 +9,13 @@ export class Physics extends Phaser.Events.EventEmitter {
   isPaused: boolean = false;
   worldScale: number;
   world: Pl.b2World;
-  private readonly scene: GameScene;
+  private readonly scene: Ph.Scene;
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
   debugDraw: Ph.GameObjects.Graphics;
   rubeLoader: RubeLoader;
 
-  constructor(scene: GameScene, worldScale: number, gravity: Pl.b2Vec2) {
+  constructor(scene: Ph.Scene, worldScale: number, gravity: Pl.b2Vec2) {
     super();
     this.debugDraw = scene.add.graphics();
     this.scene = scene;

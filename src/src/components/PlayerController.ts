@@ -2,16 +2,16 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {Physics} from './Physics';
 import {DEBUG, stats} from '../index';
-import GameScene from '../scenes/GameScene';
 import {WickedSnowboard} from './Snowboard';
 import {State} from './State';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
 import {DebugMouseJoint} from '../util/DebugMouseJoint';
 import {PanelIds} from '../scenes/GameUIScene';
+import {Observer} from "../util/observer";
 
 
 export class PlayerController {
-  readonly scene: GameScene;
+  readonly scene: Ph.Scene;
   readonly b2Physics: Physics;
   private readonly cursors: Ph.Types.Input.Keyboard.CursorKeys | undefined;
 
@@ -28,20 +28,20 @@ export class PlayerController {
   private debugKeyUp: Phaser.Input.Keyboard.Key | undefined;
   private debugKeyDown: Phaser.Input.Keyboard.Key | undefined;
 
-  constructor(scene: GameScene, b2Physics: Physics) {
+  constructor(scene: Ph.Scene, b2Physics: Physics) {
     this.scene = scene;
     this.b2Physics = b2Physics;
     this.cursors = this.scene.input.keyboard?.createCursorKeys();
-    this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
-    this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
+    Observer.instance.on('pause_game_icon_pressed', () => this.pauseGame());
+    Observer.instance.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
     this.scene.input.keyboard?.on('keydown-ESC', () => this.pauseGame());
     this.cursors?.space.on('down', () => this.pauseGame());
-    this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
+    Observer.instance.on('resume_game', () => this.b2Physics.isPaused = false);
 
     this.cursors?.up.on('down', () => {
       // TODO simplify
       if (this.cursors && !this.state.isCrashed && !this.state.levelFinished && this.state.getState() === 'grounded' && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && !this.b2Physics.isPaused) {
-        this.scene.observer.emit('jump_start');
+        Observer.instance.emit('jump_start');
       }
     });
 
@@ -71,7 +71,7 @@ export class PlayerController {
     if (this.state.isCrashed || this.state.levelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.b2Physics.isPaused = !this.b2Physics.isPaused;
     this.state.updateComboLeeway(); // otherwise it continues during pause.
-    this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
+    Observer.instance.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
   }
 
   update(delta: number) {

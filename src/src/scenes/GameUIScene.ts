@@ -16,11 +16,13 @@ import {IComboTrickScore, IScore} from '../components/State';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 import {pseudoRandomId} from '../util/pseudoRandomId';
 import {getCurrentLevel} from '../util/getCurrentLevel';
+import {Observer} from "../util/observer";
 
 
 export enum PanelIds {
   PANEL_PAUSE_MENU = 'panel-pause-menu',
   PANEL_SELECT_LEVEL = 'panel-select-level',
+  PANEL_CREATE_LEVEL = 'panel-create-level',
   PANEL_LEADERBOARDS = 'panel-leaderboards',
   PANEL_HOW_TO_PLAY = 'panel-how-to-play',
   PANEL_SETTINGS = 'panel-settings',
@@ -38,7 +40,6 @@ enum HudIds {
 
 
 export default class GameUIScene extends Ph.Scene {
-  private observer: Phaser.Events.EventEmitter;
   private restartGame: () => void;
 
   private music: Phaser.Sound.BaseSound;
@@ -73,8 +74,7 @@ export default class GameUIScene extends Ph.Scene {
     super({key: SceneKeys.GAME_UI_SCENE});
   }
 
-  init([observer, restartGameCB]: [Ph.Events.EventEmitter, () => void]) {
-    this.observer = observer;
+  init([restartGameCB]: [() => void]) {
     this.restartGame = restartGameCB;
     this.resolutionMod = this.game.canvas.width / DEFAULT_WIDTH;
   }
@@ -96,21 +96,21 @@ export default class GameUIScene extends Ph.Scene {
     leaderboardService.setLevel(getCurrentLevel());
     this.initDomUi();
 
-    this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
-    this.observer.on('pickup_present', total => {
+    Observer.instance.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
+    Observer.instance.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
+    Observer.instance.on('pickup_present', total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();
     });
-    this.observer.on('combo_change', (accumulated, multiplier) => {
+    Observer.instance.on('combo_change', (accumulated, multiplier) => {
       if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-';
     });
-    this.observer.on('score_change', score => {
+    Observer.instance.on('score_change', score => {
       if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score));
     });
 
     this.comboLeewayChart = this.add.graphics();
-    this.observer.on('combo_leeway_update', (value) => {
+    Observer.instance.on('combo_leeway_update', (value) => {
       this.comboLeewayChart
       .clear()
       .fillStyle(0xffffff)
@@ -118,7 +118,7 @@ export default class GameUIScene extends Ph.Scene {
       .fillPath();
     });
 
-    this.observer.on('enter_crashed', (score: IScore) => {
+    Observer.instance.on('enter_crashed', (score: IScore) => {
       this.pendingScore = score;
       this.crashed = true;
       this.sfx_death.play();
@@ -140,7 +140,7 @@ export default class GameUIScene extends Ph.Scene {
       });
     });
 
-    this.observer.on('level_finish', (score: IScore) => {
+    Observer.instance.on('level_finish', (score: IScore) => {
       if (this.crashed) return;
       this.pendingScore = score;
       this.finished = true;
@@ -239,13 +239,17 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'btn-resume-game': {
             this.setPanelVisibility(PanelIds.NONE);
-            this.observer.emit('resume_game');
+            Observer.instance.emit('resume_game');
             break;
           }
           case 'btn-goto-select-level': {
             const backBtn = document.querySelector('#panel-select-level #btn-goto-pause-menu');
             backBtn && (this.crashed ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden'));
             this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
+            break;
+          }
+          case 'btn-create-level': {
+            this.setPanelVisibility(PanelIds.NONE);
             break;
           }
           case 'btn-goto-how-to-play': {
@@ -267,13 +271,13 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'pause-game-icon': {
             if (this.panelPauseMenu?.classList.contains('hidden')) {
-              this.observer.emit('pause_game_icon_pressed');
+              Observer.instance.emit('pause_game_icon_pressed');
             }
             break;
           }
           case 'how-to-play-icon': {
             if (this.panelPauseMenu?.classList.contains('hidden')) {
-              this.observer.emit('how_to_play_icon_pressed');
+              Observer.instance.emit('how_to_play_icon_pressed');
             }
             break;
           }
