@@ -7,17 +7,16 @@ import {b2BodyType} from '@box2d/core';
 export class DebugMouseJoint {
   private mouseJoint: Pl.b2MouseJoint | null;
 
-  private scene: Ph.Scene;
+  private context: Ph.Input.InputPlugin | Ph.GameObjects.DOMElement;
   private b2Physics: Physics;
 
-  constructor(scene: Ph.Scene, b2Physics: Physics) {
-    this.scene = scene;
+  constructor(context: Ph.Input.InputPlugin | Ph.GameObjects.DOMElement, b2Physics: Physics) {
+    this.context = context;
     this.b2Physics = b2Physics;
 
-    this.scene.input.on('pointerdown', (pointer: Ph.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-    this.scene.input.on('pointerup', (pointer: Ph.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-    this.scene.input.on('pointermove', (pointer: Ph.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
-
+    this.context.on('pointerdown', (pointer: Ph.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
+    this.context.on('pointerup', (pointer: Ph.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
+    this.context.on('pointermove', (pointer: Ph.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
   }
 
   MouseMove(p: Pl.XY, leftDrag: boolean): void {

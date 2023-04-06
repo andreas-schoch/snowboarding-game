@@ -10,10 +10,12 @@ export default class PreloadScene extends Phaser.Scene {
     this.loadImg();
     this.loadLevels();
     this.load.html('dom_game_ui', 'assets/html/game_ui.html');
+    this.load.html('dom_level_editor_ui', 'assets/html/level_editor_ui.html');
   }
 
   create() {
-    this.scene.start(SceneKeys.GAME_SCENE);
+    // this.scene.start(SceneKeys.GAME_SCENE);
+    this.scene.start(SceneKeys.LEVEL_EDITOR_SCENE);
   }
 
   private loadAudio() {

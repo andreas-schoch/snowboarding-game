@@ -5,7 +5,6 @@ import {DEBUG, stats} from '../index';
 import {WickedSnowboard} from './Snowboard';
 import {State} from './State';
 import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
-import {DebugMouseJoint} from '../util/DebugMouseJoint';
 import {PanelIds} from '../scenes/GameUIScene';
 import {Observer} from "../util/observer";
 
@@ -50,7 +49,6 @@ export class PlayerController {
     this.state = new State(this);
 
     if (DEBUG) {
-      new DebugMouseJoint(scene, b2Physics);
       this.debugKeyLeft = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
       this.debugKeyRight = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       this.debugKeyUp = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W);

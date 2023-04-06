@@ -5,7 +5,17 @@
 
 import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {RubeBody, RubeFixture, RubeEntity, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
+import {
+  RubeBody,
+  RubeFixture,
+  RubeEntity,
+  RubeScene,
+  RubeJoint,
+  RubeCustomPropertyTypes,
+  RubeImage,
+  RubeVector,
+  RubeCustomProperty
+} from './RubeLoaderInterfaces';
 import {DEBUG} from '../../index';
 
 
@@ -216,6 +226,8 @@ export class RubeLoader {
     img.setDepth(renderOrder);
     // @ts-ignore
     img.custom_origin_angle = -(angle || 0);
+    // @ts-ignore
+    img.b2Body = bodyObj;
     img.customProperties = customProperties || [];
     img.customPropertiesMap = this.customPropertiesArrayToMap(img.customProperties);
     bodyObj && bodyObj.SetUserData(img);
@@ -232,7 +244,7 @@ export class RubeLoader {
     return this.isXY(val) ? new Pl.b2Vec2(val.x, val.y) : new Pl.b2Vec2(0, 0);
   }
 
-  getBodiesByName(name) {
+  getBodiesByName(name: string): Pl.b2Body[] {
     const bodies: Pl.b2Body[] = [];
     for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
       if (!body) continue;

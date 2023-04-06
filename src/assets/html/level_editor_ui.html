@@ -1,0 +1,867 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  :root {
+    --level-editor-ui-padding: 0.5rem;
+
+    --blue-800: #123684;
+    --blue-900: #01256E;
+
+    --grey-400: #F7F7F7;
+    --grey-500: #E8E8E8;
+    --grey-600: #A8A8A8;
+    --grey-700: #6A6A6A;
+
+    --green: var(--blue-900);
+    --red: #D5365E;
+    --pane-border-width: 4px;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', sans-serif;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
+    /*pointer-events: none;*/
+  }
+
+  .bolder {
+    font-weight: bolder;
+  }
+
+  /* =============== */
+  /* = Grid System = */
+  /* =============== */
+  .col .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+  }
+
+  .row {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+
+  .row.last {
+    margin-bottom: 0;
+  }
+
+  .col.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .col.flex-right {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .row .col {
+    float: left;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 0.75rem;
+    min-height: 1px;
+    margin-left: auto;
+    left: auto;
+    right: auto;
+  }
+
+  .row .col-1 {
+    width: 8.3333333333%;
+  }
+
+  .row .col-2 {
+    width: 16.6666666667%;
+  }
+
+  .row .col-3 {
+    width: 25%;
+  }
+
+  .row .col-4 {
+    width: 33.3333333333%;
+  }
+
+  .row .col-5 {
+    width: 41.6666666667%;
+  }
+
+  .row .col-6 {
+    width: 50%;
+  }
+
+  .row .col-7 {
+    width: 58.3333333333%;
+  }
+
+  .row .col-8 {
+    width: 66.6666666667%;
+  }
+
+  .row .col-9 {
+    width: 75%;
+  }
+
+  .row .col-10 {
+    width: 83.3333333333%;
+  }
+
+  .row .col-11 {
+    width: 91.6666666667%;
+  }
+
+  .row .col-12 {
+    width: 100%;
+  }
+
+  /*****************************/
+  /** MATERIALIZE RADIO STYLES**/
+  /*****************************/
+  [type="radio"]:not(:checked),
+  [type="radio"]:checked {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [type="radio"]:not(:checked) + span,
+  [type="radio"]:checked + span {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.7rem;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  [type="radio"] + span:before,
+  [type="radio"] + span:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 4px;
+    width: 16px;
+    height: 16px;
+    z-index: 0;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+  }
+
+  /* Unchecked styles */
+  [type="radio"]:not(:checked) + span:before,
+  [type="radio"]:not(:checked) + span:after,
+  [type="radio"]:checked + span:before,
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:before,
+  [type="radio"].with-gap:checked + span:after {
+    border-radius: 50%;
+  }
+
+  [type="radio"]:not(:checked) + span:before,
+  [type="radio"]:not(:checked) + span:after {
+    border: 2px solid #5a5a5a;
+  }
+
+  [type="radio"]:not(:checked) + span:after {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  /* Checked styles */
+  [type="radio"]:checked + span:before {
+    border: 2px solid transparent;
+  }
+
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:before,
+  [type="radio"].with-gap:checked + span:after {
+    border: 2px solid var(--green);
+  }
+
+  [type="radio"]:checked + span:after,
+  [type="radio"].with-gap:checked + span:after {
+    background-color: var(--green);
+  }
+
+  [type="radio"]:checked + span:after {
+    -webkit-transform: scale(1.02);
+    transform: scale(1.02);
+  }
+
+  /* Radio With gap */
+  [type="radio"].with-gap:checked + span:after {
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+
+  /* Focused styles */
+  [type="radio"].tabbed:focus + span:before {
+    -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Disabled Radio With gap */
+  [type="radio"].with-gap:disabled:checked + span:before {
+    border: 2px solid rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"].with-gap:disabled:checked + span:after {
+    border: none;
+    background-color: rgba(0, 0, 0, 0.42);
+  }
+
+  /* Disabled style */
+  [type="radio"]:disabled:not(:checked) + span:before,
+  [type="radio"]:disabled:checked + span:before {
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled + span {
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled:not(:checked) + span:before {
+    border-color: rgba(0, 0, 0, 0.42);
+  }
+
+  [type="radio"]:disabled:checked + span:after {
+    background-color: rgba(0, 0, 0, 0.42);
+    border-color: #949494;
+  }
+
+  .range-field {
+    position: relative;
+  }
+
+  input[type=range],
+  input[type=range] + .thumb {
+    cursor: pointer;
+  }
+
+  input[type=range] {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    margin: 15px 0;
+    padding: 0;
+  }
+
+  input[type=range]:focus {
+    outline: none;
+  }
+
+  input[type=range] + .thumb {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    border: none;
+    height: 0;
+    width: 0;
+    border-radius: 50%;
+    background-color: var(--green);
+    margin-left: 7px;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+
+  input[type=range] + .thumb .value {
+    display: block;
+    width: 30px;
+    text-align: center;
+    color: var(--green);
+    font-size: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  input[type=range] + .thumb.active {
+    border-radius: 50% 50% 50% 0;
+  }
+
+  input[type=range] + .thumb.active .value {
+    color: #fff;
+    margin-left: -1px;
+    margin-top: 8px;
+    font-size: 10px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 3px;
+    background: #c2c0c2;
+    border: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+    -webkit-appearance: none;
+    background-color: var(--green);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    margin: -5px 0 0 0;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-webkit-slider-thumb {
+    -webkit-box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+  input[type=range] {
+    /* fix for FF unable to apply focus style bug  */
+    border: 1px solid white;
+    /*required for proper track sizing in FF*/
+  }
+
+  input[type=range]::-moz-range-track {
+    height: 3px;
+    background: #c2c0c2;
+    border: none;
+  }
+
+  input[type=range]::-moz-focus-inner {
+    border: 0;
+  }
+
+  input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+    margin-top: -5px;
+  }
+
+  input[type=range]:-moz-focusring {
+    outline: 1px solid #fff;
+    outline-offset: -1px;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-moz-range-thumb {
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+  input[type=range]::-ms-track {
+    height: 3px;
+    background: transparent;
+    border-color: transparent;
+    border-width: 6px 0;
+    /*remove default tick marks*/
+    color: transparent;
+  }
+
+  input[type=range]::-ms-fill-lower {
+    background: #777;
+  }
+
+  input[type=range]::-ms-fill-upper {
+    background: #ddd;
+  }
+
+  input[type=range]::-ms-thumb {
+    border: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    -webkit-transition: -webkit-box-shadow .3s;
+    transition: -webkit-box-shadow .3s;
+    transition: box-shadow .3s;
+    transition: box-shadow .3s, -webkit-box-shadow .3s;
+  }
+
+  .keyboard-focused input[type=range]:focus:not(.active)::-ms-thumb {
+    box-shadow: 0 0 0 10px rgba(38, 166, 154, 0.26);
+  }
+
+
+  /* ==================== */
+  /* = Button Overrides = */
+  /* ==================== */
+  .btn {
+    /* color should always be overwritten by primary or default btn class */
+    background-color: salmon;
+    border: 1px solid salmon;
+    border-radius: 4px;
+    display: block;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    font-weight: 400;
+    transition: all 0.2s;
+  }
+
+  .btn > i, .btn > span {
+    pointer-events: none;
+  }
+
+  .btn-primary {
+    background-color: var(--blue-800);
+    border-color: var(--blue-800);
+    color: white;
+  }
+
+  .btn-primary:focus,
+  .btn-primary:hover {
+    background-color: var(--blue-900);
+    border-color: var(--blue-900);
+  }
+
+  .btn-default {
+    background-color: transparent;
+    border-color: var(--grey-600);
+    color: var(--grey-700);
+  }
+
+  .btn-default:focus,
+  .btn-default:hover {
+    background-color: var(--grey-500);
+  }
+
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #424242;
+    cursor: pointer;
+    border-color: transparent;
+    background-color: transparent;
+    height: 40px;
+  }
+
+  .btn-secondary i {
+    margin-right: 0.5rem;
+  }
+
+  /* ======================== */
+  /* = Floating Label Input = */
+  /* ======================== */
+
+  .form-group {
+    position: relative;
+    margin: 0 0 20px 0;
+  }
+
+  .form-text-input {
+    /* Careful when changing any values, highly coupled to floating-label */
+    border: 1px solid var(--grey-600);
+    border-radius: 4px;
+    padding: 5px 6px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 26px;
+    height: 40px; /* Depends on the following: line-height 20px + padding 2x5px + border 2x2px (when focused) = 34px */
+    outline: none;
+    transition: all 0.1s;
+  }
+
+  .form-text-input:not(textarea) {
+    text-overflow: ellipsis;
+  }
+
+  .form-text-input:hover {
+    border: 1px solid var(--grey-700);
+  }
+
+  .form-text-input:focus {
+    padding-left: 5px; /* make it -1px than it was to prevent text wiggling left/right when border-width changes */
+    border: 2px solid var(--blue-900);
+  }
+
+  .form-group .floating-label {
+    /* Careful when changing any values, highly coupled to form-text-input */
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px; /* line-height 14px + padding 2x10px = 34px (needs to equal height of form-text-input)  */
+    padding: 13px 5px;
+    margin: 0;
+    pointer-events: none;
+    color: var(--grey-600);
+    transition: cubic-bezier(0.65, 0.05, 0.36, 1) 0.2s;
+  }
+
+  .form-text-input:focus + .floating-label,
+  .form-text-input:not([value=""]) + .floating-label {
+    background-color: white;
+    /* y-axis: height of form-text-input / 2 = 17px. That is the amount this label needs to move up. since padding-top gets removed, only 7px are left */
+    /* x-axis: depends on padding-left of form-text-input + padding overwrite below */
+    transform: translateY(-7px) translateX(5px);
+    padding: 0 2.5px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .form-text-input:not([value=""]):hover + .floating-label {
+    color: var(--grey-700);
+  }
+
+  /* Floating label not updating with autocomplete */
+  .form-text-input:-webkit-autofill + .floating-label {
+    background-color: white;
+    transform: translateY(-7px) translateX(5px);
+    padding: 0 2.5px;
+    font-size: 10px;
+    font-weight: 500;
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .form-text-input:focus + .floating-label {
+    color: var(--blue-900) !important;
+  }
+
+  .form-group .floating-label::after {
+    content: attr(data-necessity);
+  }
+
+  /* ========================= */
+  /* = Auto hiding scrollbar = */
+  /* ========================= */
+  .scrollbar {
+    overflow-y: auto;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--grey-400);
+  }
+
+  .scrollbar {
+    /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
+    /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
+    mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+    mask-size: 100% 20000px;
+    mask-position: left bottom;
+    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
+    -webkit-mask-size: 100% 20000px;
+    -webkit-mask-position: left bottom;
+    transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+    /*scrollbar-width: 8px;*/
+  }
+
+  .scrollbar:hover {
+    -webkit-mask-position: left top;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    cursor: grab;
+    border-radius: 4px;
+    background-color: var(--grey-600);
+  }
+
+  /* ============================================================================================================= */
+
+  /* =============== */
+  /* = Game UI HUD = */
+  /* =============== */
+  .level-editor-ui {
+    width: 1280px;
+    height: 720px;
+    color: white;
+    font-size: 20px;
+    position: relative;
+    /*pointer-events: none;*/
+  }
+
+  .level-editor-ui-item {
+    position: absolute;
+  }
+
+  .level-editor-ui-item .label {
+    margin-bottom: 0.4rem;
+    font-size: 12px;
+    color: var(--grey-600);
+  }
+
+  .level-editor-ui-item.distance {
+    left: var(--level-editor-ui-padding);
+    top: var(--level-editor-ui-padding);
+  }
+
+  .level-editor-ui-item.combo {
+    left: 50%;
+    top: var(--level-editor-ui-padding);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .level-editor-ui-item.score {
+    right: var(--level-editor-ui-padding);
+    top: var(--level-editor-ui-padding);
+    text-align: right;
+  }
+
+  #unsupported-browser-notice {
+    position: absolute;
+    bottom: var(--level-editor-ui-padding);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  /* ======== */
+  /* = Pane = */
+  /* ======== */
+
+  .pane {
+    background: white;
+    border: var(--pane-border-width) solid black;
+    border-radius: 6px;
+    width: 200px;
+    margin: 0;
+    padding: 3rem 0 1rem;
+    position: absolute;
+    font-size: 8px;
+    color: black;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .pane-title {
+    color: white;
+    font-size: 12px;
+    line-height: 15px;
+    padding: 3px 6px;
+    background-color: var(--blue-900);
+    border: var(--pane-border-width) solid black;
+    border-radius: 3px;
+    margin: 0 auto;
+    position: absolute;
+    top: calc(var(--pane-border-width) * -1);
+    left: calc(var(--pane-border-width) * -1);
+    width: calc(100% + 2 * var(--pane-border-width));
+  }
+
+  /* ==================== */
+  /* = Pane Scene Items = */
+  /* ==================== */
+  #pane-scene-items {
+    width: 200px;
+    height: 50%;
+  }
+
+  #pane-scene-items .select-level-note {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--grey-700);
+  }
+
+  #pane-scene-items .scene-items-scrollable {
+    max-height: 100%;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+  }
+
+  #pane-scene-items .scene-item {
+    position: relative;
+    padding: 2px;
+    display: flex;
+    flex-direction: row;
+    /*height: 20px; !* depends on checkbox width + padding *!*/
+    font-size: 10px;
+  }
+
+  #pane-scene-items .scene-item .scene-item-collapse {
+    width: 6px;
+    height: 6px;
+    position: relative;
+    top: 4px;
+    border-left: 2px solid red;
+    border-top: 2px solid red;
+    transform: rotate(-135deg);
+    margin-right: 8px;
+    margin-left: 4px;
+  }
+
+  .scene-item-children .scene-item .scene-item-collapse {
+    display: none;
+  }
+
+
+  #pane-scene-items .scene-item {
+    cursor: pointer;
+  }
+
+  #pane-scene-items .scene-item .scene-item-checkbox {
+    border: 1px solid black;
+    border-radius: 2px;
+    width: 16px; /* Must match .scene-item height - padding */
+    margin-right: 0.5rem;
+    cursor: pointer;
+  }
+
+  #pane-scene-items .scene-item .scene-item-type-icon {
+    font-size: 20px;
+    margin-right: 4px;
+    cursor: pointer;
+  }
+
+  #pane-scene-items .scene-item .scene-item-name {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  #pane-scene-items .scene-item-wrapper .scene-item-children:not(.scene-item-children:empty) {
+    padding-left: 42px;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .scene-item-children:not(.scene-item-children:empty):after {
+    content: '';
+    display: inline-block;
+    border-left: 1px dotted gray;
+    position: absolute;
+    left: 26px;
+    top: 0;
+    height: calc(100% - 10px)
+  }
+
+  #pane-scene-items .scene-item-children .scene-item:before {
+    content: '';
+    position: absolute;
+    border-top: 1px dotted gray;
+    width: 10px;
+    top: 10px;
+    left: -14px;
+  }
+
+  #pane-scene-item-properties {
+    width: 300px;
+    height: 50%;
+    /*top: 0;*/
+    right: 0;
+  }
+
+
+</style>
+
+<div class="level-editor-ui">
+
+  <!---------------------->
+  <!-- PANE SCENE ITEMS -->
+  <!---------------------->
+  <div class="pane" id="pane-scene-items">
+    <div class="pane-title">Scene Items</div>
+
+    <template id="scene-item-template">
+      <div class="scene-item-wrapper">
+        <div class="scene-item">
+          <div class="scene-item-collapse"></div>
+          <!--          <i class="material-icons">shape_line</i>-->
+          <!--          <i class="material-icons">format_shapes</i>-->
+          <!--          <i class="material-icons">spoke</i>-->
+          <!--          <i class="material-icons">stream</i>-->
+          <!--          <i class="material-icons">pattern</i>-->
+          <!--          <i class="material-icons">ssid_chart</i>-->
+          <!--          <i class="material-icons">crop_rotate</i>-->
+          <!--          <i class="material-icons">yard</i>-->
+
+
+          <i class="scene-item-type-icon material-icons">window</i>
+          <!--          <i class="material-icons">border_clear</i>-->
+          <!--          <i class="material-icons">polyline</i>-->
+          <!--          <i class="material-icons">wallpaper</i>-->
+
+          <!--          <div class="scene-item-checkbox"></div>-->
+          <div class="scene-item-name">Body 001</div>
+        </div>
+        <div class="scene-item-children"></div>
+      </div>
+    </template>
+
+    <div class="scene-items-scrollable scrollbar" id="scene-items-container">
+    </div>
+
+  </div>
+
+
+  <!--  ------------------------------------------------------------------------>
+
+
+  <!-------------------------------->
+  <!-- PANE SCENE ITEM PROPERTIES -->
+  <!-------------------------------->
+  <div class="pane" id="pane-scene-item-properties">
+    <div class="pane-title">Item Properties</div>
+
+    <template id="scene-item-body-properties-template">
+      <div>TEMP</div>
+    </template>
+
+    <template id="scene-item-fixture-properties-template">
+      <div>TEMP</div>
+    </template>
+
+    <template id="scene-item-joint-properties-template">
+      <div>TEMP</div>
+    </template>
+
+    <template id="scene-item-image-properties-template">
+      <div>TEMP</div>
+    </template>
+
+
+  </div>
+
+
+</div>

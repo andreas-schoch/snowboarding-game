@@ -43,32 +43,22 @@ export class Physics extends Phaser.Events.EventEmitter {
     if (this.isPaused) return;
 
     stats.begin('physics');
-    // const iterations = Math.floor(Math.max(this.scene.game.loop.actualFps / 3, 9));
     this.world.Step(this.stepDeltaTime, this.stepConfig);
-    this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
-
     // iterate through all bodies
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
-      if (!body) continue;
       let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
       if (!bodyRepresentation) continue;
 
-      if (bodyRepresentation) {
-        if (body.IsEnabled()) {
-          // if (true) {
-          let {x, y} = body.GetPosition();
-          !bodyRepresentation.visible && bodyRepresentation.setVisible(true);
-          bodyRepresentation.x = x * worldScale;
-          bodyRepresentation.y = y * -worldScale;
-          // @ts-ignore
-          bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.custom_origin_angle || 0); // in radians;
-        } else {
-          bodyRepresentation.setVisible(false);
-        }
-      } else {
+      if (body.IsEnabled()) {
+        let {x, y} = body.GetPosition();
+        !bodyRepresentation.visible && bodyRepresentation.setVisible(true);
+        bodyRepresentation.x = x * worldScale;
+        bodyRepresentation.y = y * -worldScale;
         // @ts-ignore
-        // console.log('no image', body.GetPosition(), body.name);
+        bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.custom_origin_angle || 0); // in radians;
+      } else {
+        bodyRepresentation.setVisible(false);
       }
     }
     stats.end('physics');
