@@ -22,11 +22,9 @@ export default class Terrain {
     this.scene = scene;
     this.b2Physics = physics;
 
-    this.terrainBody = this.b2Physics.world.CreateBody();
-    const pos = this.terrainBody.GetPosition();
-
     const p = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
     if (!p) return; // There may be levels where no terrain is present
+    const pos = p.GetPosition();
 
     const fix = p.GetFixtureList()?.GetShape() as Pl.b2ChainShape;
 

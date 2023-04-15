@@ -584,14 +584,13 @@
     /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
     /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
     mask-image: linear-gradient(to top, transparent, black),
-    linear-gradient(to left, transparent 17px, black 17px);
+    linear-gradient(to left, transparent 8px, black 8px);
     mask-size: 100% 20000px;
     mask-position: left bottom;
-    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
+    -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 8px, black 8px);
     -webkit-mask-size: 100% 20000px;
     -webkit-mask-position: left bottom;
     transition: mask-position 0.3s, -webkit-mask-position 0.3s;
-    /*scrollbar-width: 8px;*/
   }
 
   .scrollbar:hover {
@@ -658,21 +657,25 @@
   /* ======== */
   /* = Pane = */
   /* ======== */
-
   .pane {
     background: white;
     border: var(--pane-border-width) solid black;
     border-radius: 6px;
     width: 200px;
     margin: 0;
-    padding: 3rem 0 1rem;
+    padding: 2rem 0 1rem;
     position: absolute;
     font-size: 8px;
     color: black;
+    pointer-events: auto;
   }
 
   .hidden {
     display: none;
+  }
+
+  .invisible {
+    visibility: hidden;
   }
 
   .pane-title {
@@ -694,8 +697,8 @@
   /* = Pane Scene Items = */
   /* ==================== */
   #pane-scene-items {
-    width: 200px;
-    height: 50%;
+    width: 240px;
+    height: 55%;
   }
 
   #pane-scene-items .select-level-note {
@@ -710,25 +713,28 @@
     /*flex-direction: column;*/
   }
 
+  #pane-scene-items .scene-item.selected:after {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: -100px;
+    right: 0;
+    bottom: 0;
+    background-color: salmon;
+  }
+
   #pane-scene-items .scene-item {
     position: relative;
     padding: 2px;
     display: flex;
     flex-direction: row;
-    /*height: 20px; !* depends on checkbox width + padding *!*/
     font-size: 10px;
   }
 
   #pane-scene-items .scene-item .scene-item-collapse {
-    width: 6px;
-    height: 6px;
-    position: relative;
-    top: 4px;
-    border-left: 2px solid red;
-    border-top: 2px solid red;
-    transform: rotate(-135deg);
-    margin-right: 8px;
-    margin-left: 4px;
+    color: red;
+    font-size: 18px;
   }
 
   .scene-item-children .scene-item .scene-item-collapse {
@@ -771,9 +777,9 @@
     display: inline-block;
     border-left: 1px dotted gray;
     position: absolute;
-    left: 26px;
+    left: 29px;
     top: 0;
-    height: calc(100% - 10px)
+    height: calc(100% - 13px)
   }
 
   #pane-scene-items .scene-item-children .scene-item:before {
@@ -781,15 +787,53 @@
     position: absolute;
     border-top: 1px dotted gray;
     width: 10px;
-    top: 10px;
-    left: -14px;
+    top: 12px;
+    left: -13px;
   }
 
-  #pane-scene-item-properties {
-    width: 300px;
-    height: 50%;
-    /*top: 0;*/
-    right: 0;
+  #pane-item-properties {
+    width: 240px;
+    height: 45%;
+    left: 0;
+    bottom: 0;
+    font-size: 7px;
+  }
+
+  #pane-item-properties .scrollbar {
+    height: 100%;
+  }
+
+  #pane-item-properties .pane-item-properties-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #pane-item-properties i {
+    margin: 0 auto 8px;
+  }
+
+  #pane-item-properties .row {
+    margin-bottom: 0;
+    padding: 0 0.5rem;
+  }
+
+  #pane-item-properties input,
+  #pane-item-properties select {
+    width: 100%;
+    height: 24px;
+    font-size: 7px;
+    line-height: initial;
+    margin: 5px 0;
+  }
+
+  #pane-item-properties label {
+    line-height: 1.15;
+    display: flex;
+    align-items: center;
+  }
+
+  #pane-item-properties input[type="checkbox"] {
+    height: 14px;
   }
 
 
@@ -806,62 +850,377 @@
     <template id="scene-item-template">
       <div class="scene-item-wrapper">
         <div class="scene-item">
-          <div class="scene-item-collapse"></div>
-          <!--          <i class="material-icons">shape_line</i>-->
-          <!--          <i class="material-icons">format_shapes</i>-->
-          <!--          <i class="material-icons">spoke</i>-->
-          <!--          <i class="material-icons">stream</i>-->
-          <!--          <i class="material-icons">pattern</i>-->
-          <!--          <i class="material-icons">ssid_chart</i>-->
-          <!--          <i class="material-icons">crop_rotate</i>-->
-          <!--          <i class="material-icons">yard</i>-->
-
-
+          <i class="material-icons scene-item-collapse invisible">expand_more</i>
           <i class="scene-item-type-icon material-icons">window</i>
-          <!--          <i class="material-icons">border_clear</i>-->
-          <!--          <i class="material-icons">polyline</i>-->
-          <!--          <i class="material-icons">wallpaper</i>-->
-
-          <!--          <div class="scene-item-checkbox"></div>-->
           <div class="scene-item-name">Body 001</div>
         </div>
-        <div class="scene-item-children"></div>
+        <div class="scene-item-children hidden"></div>
       </div>
     </template>
-
-    <div class="scene-items-scrollable scrollbar" id="scene-items-container">
-    </div>
-
+    <div class="scene-items-scrollable scrollbar" id="scene-items-container"></div>
   </div>
-
-
-  <!--  ------------------------------------------------------------------------>
-
 
   <!-------------------------------->
   <!-- PANE SCENE ITEM PROPERTIES -->
   <!-------------------------------->
-  <div class="pane" id="pane-scene-item-properties">
+  <div class="pane" id="pane-item-properties">
     <div class="pane-title">Item Properties</div>
-
-    <template id="scene-item-body-properties-template">
-      <div>TEMP</div>
-    </template>
-
-    <template id="scene-item-fixture-properties-template">
-      <div>TEMP</div>
-    </template>
-
-    <template id="scene-item-joint-properties-template">
-      <div>TEMP</div>
-    </template>
-
-    <template id="scene-item-image-properties-template">
-      <div>TEMP</div>
-    </template>
-
-
+    <div class="scene-items-scrollable scrollbar">
+      <div class="pane-item-properties-container"></div>
+    </div>
   </div>
 
+  <template id="scene-item-body-properties-template">
+    <i class="scene-item-type-icon material-icons">window</i>
+    <form action="" id="form-properties">
+      <!-- TYPE -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-type">type</label>
+        <div class="col col-7">
+          <select id="property-type">
+            <option value="0">dynamic</option>
+            <option value="1">static</option>
+            <option value="2">kinematic</option>
+          </select>
+        </div>
+      </div>
+      <!-- NAME -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-name">Name</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+        </div>
+      </div>
+      <!-- BULLET -->
+      <div class="row property" id="bullet-form">
+        <label class="col col-5" for="property-bullet">Bullet</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-bullet" checked>
+        </div>
+      </div>
+      <!-- FIXED ROTATION -->
+      <div class="row property" id="fixed-rotation-form">
+        <label class="col col-5" for="property-fixed-rotation">Fixed Rotation</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-fixed-rotation" checked>
+        </div>
+      </div>
+      <!-- SLEEPING ALLOWED -->
+      <div class="row property" id="sleeping-allowed-form">
+        <label class="col col-5" for="property-sleeping-allowed">Sleeping Allowed</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-sleeping-allowed" checked>
+        </div>
+      </div>
+      <!-- LINEAR DAMPING -->
+      <div class="row property" id="linear-damping-form">
+        <label class="col col-5" for="property-linear-damping">Linear Damping</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-linear-damping" min="0" max="1"
+                 value="0.5" step="0.05">
+        </div>
+      </div>
+      <!-- ANGULAR DAMPING -->
+      <div class="row property" id="angular-damping-form">
+        <label class="col col-5" for="property-angular-damping">Angular Damping</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-angular-damping" min="0" max="1"
+                 value="0.5" step="0.05">
+        </div>
+      </div>
+      <!-- MASS -->
+      <div class="row property" id="mass-form">
+        <label class="col col-5" for="property-mass">Mass</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-mass" min="0" value="1" step="0.1">
+        </div>
+      </div>
+      <!-- GRAVITY SCALE -->
+      <div class="row property" id="gravity-scale-form">
+        <label class="col col-5" for="property-gravity-scale">Gravity Scale</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-gravity-scale" min="0" value="1"
+                 step="0.1">
+        </div>
+      </div>
+      <!-- ACTIVE -->
+      <div class="row property" id="active-form">
+        <label class="col col-5" for="property-active">Active</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-active" checked>
+        </div>
+      </div>
+      <!-- POSITION -->
+      <div class="row property" id="position-x-form">
+        <label class="col col-5" for="property-position-x">Pos X</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-position-x" min="0" value="1"
+                 step="0.1">
+        </div>
+      </div>
+      <div class="row property" id="position-y-form">
+        <label class="col col-5" for="property-position-y">Pos Y</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-position-y" min="0" value="1"
+                 step="0.1">
+        </div>
+      </div>
+      <!-- ANGLE -->
+      <div class="row property" id="angle-form">
+        <label class="col col-5" for="property-angle">Angle</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-angle" placeholder="3">
+        </div>
+      </div>
+      <!--LINEAR VELOCITY-->
+      <div class="row property" id="linear-velocity-form">
+        <label class="col col-5" for="property-linear-velocity">Linear Velocity</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-linear-velocity" placeholder="90">
+        </div>
+      </div>
+      <!-- ANGULAR VELOCITY -->
+      <div class="row property" id="angular-velocity-form">
+        <label class="col col-5" for="property-angular-velocity">Angular Velocity</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-angular-velocity" placeholder="90">
+        </div>
+      </div>
+      <!-- AWAKE -->
+      <div class="row property" id="awake-form">
+        <label class="col col-5" for="property-awake">Awake</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-awake" checked>
+        </div>
+      </div>
+    </form>
+  </template>
+
+  <template id="scene-item-fixture-properties-template">
+    <i class="scene-item-type-icon material-icons">border_clear</i>
+    <form action="" id="form-properties">
+      <!-- NAME -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-name">Name</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+        </div>
+      </div>
+      <!-- FRICTION -->
+      <div class="row property" id="friction-form">
+        <label class="col col-5" for="property-friction">Angular Velocity</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-friction" placeholder="90">
+        </div>
+      </div>
+      <!-- RESTITUTION -->
+      <div class="row property" id="restitution-form">
+        <label class="col col-5" for="property-restitution">Restitution</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-restitution" placeholder="90">
+        </div>
+      </div>
+      <!-- DENSITY -->
+      <div class="row property" id="density-form">
+        <label class="col col-5" for="property-density">Angular Velocity</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-density" placeholder="90">
+        </div>
+      </div>
+      <!-- SENSOR -->
+      <div class="row property" id="sensor-form">
+        <label class="col col-5" for="property-sensor">Sensor</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-sensor" checked>
+        </div>
+      </div>
+      <!-- FILTER CATEGORY BITS -->
+      <div class="row property" id="filter-category-bits-form">
+        <label class="col col-5" for="property-filter-category-bits">Filter Category Bits</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-filter-category-bits" placeholder="90">
+        </div>
+      </div>
+      <!-- FILTER MASK BITS -->
+      <div class="row property" id="filter-mask-bits-form">
+        <label class="col col-5" for="property-filter-mask-bits">Filter Mask Bits</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-filter-mask-bits" placeholder="90">
+        </div>
+      </div>
+      <!-- FILTER GROUP INDEX -->
+      <div class="row property" id="filter-group-index-form">
+        <label class="col col-5" for="property-filter-group-index">Filter Group Index</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-filter-group-index" placeholder="90">
+        </div>
+      </div>
+      <!-- SHAPE TYPE -->
+      <div class="row property" id="shape-type-form">
+        <label class="col col-5" for="property-shape-type">Shape Type</label>
+        <div class="col col-7">
+          <select id="property-shape-type">
+            <option value="circle">Circle</option>
+            <option value="polygon">Polygon</option>
+            <option value="line">Line</option>
+            <option value="Loop">Loop</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </template>
+
+  <template id="scene-item-joint-properties-template">
+    <i class="scene-item-type-icon material-icons">polyline</i>
+    <form action="" id="form-properties">
+      <!-- TYPE -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-type">type</label>
+        <div class="col col-7">
+          <select id="property-type">
+            <option value="revolute">Revolute</option>
+            <option value="prismatic">Prismatic</option>
+            <option value="distance">Distance</option>
+            <option value="wheel">Wheel</option>
+            <option value="rope">Rope</option>
+            <option value="weld">Weld</option>
+            <option value="friction">Friction</option>
+            <option value="motor">Motor</option>
+          </select>
+        </div>
+      </div>
+      <!-- NAME -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-name">Name</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+        </div>
+      </div>
+      <!-- BODY A -->
+      <div class="row property" id="body-a-form">
+        <label class="col col-5" for="property-body-a">Body A</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-body-a" placeholder="90">
+        </div>
+      </div>
+      <!-- BODY B -->
+      <div class="row property" id="body-b-form">
+        <label class="col col-5" for="property-body-b">Body B</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-body-b" placeholder="90">
+        </div>
+      </div>
+      <!-- ANCHOR A -->
+      <div class="row property" id="anchor-a-form">
+        <label class="col col-5" for="property-anchor-a">Anchor A</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-anchor-a">
+        </div>
+      </div>
+      <!-- ANCHOR B -->
+      <div class="row property" id="anchor-b-form">
+        <label class="col col-5" for="property-anchor-b">Anchor B</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-anchor-b">
+        </div>
+      </div>
+      <!-- COLLIDE CONNECTED -->
+      <div class="row property" id="collide-connected-form">
+        <label class="col col-5" for="property-collide-connected">Collide Connected</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-collide-connected" checked>
+        </div>
+      </div>
+    </form>
+  </template>
+
+  <template id="scene-item-image-properties-template">
+    <i class="scene-item-type-icon material-icons">wallpaper</i>
+    <form action="" id="form-properties">
+      <!-- NAME -->
+      <div class="row property" id="name-form">
+        <label class="col col-5" for="property-name">Name</label>
+        <div class="col col-7">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+        </div>
+      </div>
+      <!-- BODY -->
+      <div class="row property" id="body-form">
+        <label class="col col-5" for="property-body">Body</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-body" placeholder="90">
+        </div>
+      </div>
+      <!-- FILE -->
+      <div class="row property" id="file-form">
+        <label class="col col-5" for="property-file">Texture File</label>
+        <div class="col col-7">
+          <input type="file" class="form-control form-text-input" id="property-file" placeholder="90">
+        </div>
+      </div>
+      <!-- CENTER -->
+      <div class="row property" id="center-form">
+        <label class="col col-5" for="property-density">Center</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-density" placeholder="90">
+        </div>
+      </div>
+      <!-- ANGLE -->
+      <div class="row property" id="angle-form">
+        <label class="col col-5" for="property-angle">Angle</label>
+        <div class="col col-7">
+          <input type="number" class="form-control" id="property-angle" checked>
+        </div>
+      </div>
+      <!-- HEIGHT -->
+      <div class="row property" id="height-form">
+        <label class="col col-5" for="property-height">Height</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-height" placeholder="90">
+        </div>
+      </div>
+      <!-- ASPECT RATIO -->
+      <div class="row property" id="aspect-ratio-form">
+        <label class="col col-5" for="property-aspect-ratio">Aspect Ratio</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-aspect-ratio" placeholder="90">
+        </div>
+      </div>
+      <!-- OPACITY -->
+      <div class="row property" id="opacity-form">
+        <label class="col col-5" for="property-opacity">Opacity</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-opacity" placeholder="90">
+        </div>
+      </div>
+      <!-- FLIP -->
+      <div class="row property" id="flip-form">
+        <label class="col col-5" for="property-flip">Flip</label>
+        <div class="col col-7">
+          <input type="checkbox" class="form-control" id="property-flip" checked>
+        </div>
+      </div>
+      <!-- FILTER -->
+      <!--      <div class="row property" id="filter-form">-->
+      <!--        <label class="col col-5" for="property-filter">Filter</label>-->
+      <!--        <div class="col col-7">-->
+      <!--          <input type="checkbox" class="form-control" id="property-filter" checked>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!-- RENDER ORDER -->
+      <div class="row property" id="render-order-form">
+        <label class="col col-5" for="property-render-order">Render Order</label>
+        <div class="col col-7">
+          <input type="number" class="form-control form-text-input" id="property-render-order" placeholder="90">
+        </div>
+      </div>
+      <!-- Color Tint -->
+      <!--      <div class="row property" id="color-tint-form">-->
+      <!--        <label class="col col-5" for="property-color-tint">Color Tint</label>-->
+      <!--        <div class="col col-7">-->
+      <!--          <input type="color" class="form-control form-text-input" id="property-color-tint" placeholder="90">-->
+      <!--        </div>-->
+      <!--      </div>-->
+  </template>
 
 </div>

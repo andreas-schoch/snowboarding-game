@@ -1,7 +1,9 @@
 import * as Pl from '@box2d/core';  // TODO Consider removing this dependency. Maybe useful to make this "box2d port agnostic" and publish types on npm
 
 export interface RubeEntity {
+  id?: string;
   name?: string;
+  b2Body?: Pl.b2Body;
   customProperties?: RubeCustomProperty[];
   customPropertiesMap?: { [key: string]: unknown };
 }
@@ -36,8 +38,8 @@ export interface RubeBody {
   angle?: number; // radians
   angularDamping?: number;
   angularVelocity?: number; // radians per second
-  linearDamping?: number;
   linearVelocity?: RubeVector;
+  linearDamping?: number;
   'massData-mass'?: number;
   'massData-center'?: RubeVector;
   'massData-I'?: number; // Inertia?

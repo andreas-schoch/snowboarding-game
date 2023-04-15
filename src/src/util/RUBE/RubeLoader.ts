@@ -17,6 +17,7 @@ import {
   RubeCustomProperty
 } from './RubeLoaderInterfaces';
 import {DEBUG} from '../../index';
+import {pseudoRandomId} from "../pseudoRandomId";
 
 
 export class RubeLoader {
@@ -68,6 +69,7 @@ export class RubeLoader {
       I: bodyJson['massData-I'] || 1,
     });
 
+    body.id = pseudoRandomId();
     body.name = bodyJson.name || '';
     body.customProperties = bodyJson.customProperties || [];
     body.customPropertiesMap = this.customPropertiesArrayToMap(body.customProperties || []);
@@ -89,6 +91,7 @@ export class RubeLoader {
     };
 
     const fixture: Pl.b2Fixture & RubeEntity = body.CreateFixture(fd);
+    fixture.id = pseudoRandomId();
     fixture.name = fixtureJso.name || '';
     fixture.customProperties = fixtureJso.customProperties || [];
     fixture.customPropertiesMap = this.customPropertiesArrayToMap(fixture.customProperties);
@@ -198,6 +201,7 @@ export class RubeLoader {
         throw new Error('Unsupported joint type: ' + jointJson.type);
     }
 
+    joint.id = pseudoRandomId();
     joint.name = jointJson.name;
     joint.customProperties = jointJson.customProperties || [];
     joint.customPropertiesMap = this.customPropertiesArrayToMap(joint.customProperties);
@@ -219,6 +223,7 @@ export class RubeLoader {
     const textureFallback = (file || '').split('/').reverse()[0];
     const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', textureFallback);
     const img: Ph.GameObjects.Image & RubeEntity = this.scene.add.image(pos.x * this.worldSize, pos.y * -this.worldSize, texture || textureFallback, textureFrame);
+    img.id = pseudoRandomId();
     img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
     img.scaleY = (this.worldSize / img.height) * scale;
     img.scaleX = img.scaleY * aspectScale;
@@ -252,6 +257,29 @@ export class RubeLoader {
       if (body.name === name) bodies.push(body);
     }
     return bodies;
+  }
+
+  getBodyById(id: string): Pl.b2Body & RubeEntity | null {
+    for (let body: Pl.b2Body & RubeEntity | null = this.world.GetBodyList(); body; body = body.GetNext()) {
+      if (body.id === id) return body;
+    }
+    return null;
+  }
+
+  getFixtureById(id: string): Pl.b2Fixture & RubeEntity | null {
+    for (let body: Pl.b2Body & RubeEntity | null = this.world.GetBodyList(); body; body = body.GetNext()) {
+      for (let fixture: Pl.b2Fixture & RubeEntity | null = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+        if (fixture.id === id) return fixture;
+      }
+    }
+    return null;
+  }
+
+  getJointById(id: string): Pl.b2Joint & RubeEntity | null {
+    for (let joint: Pl.b2Joint & RubeEntity | null = this.world.GetJointList(); joint; joint = joint.GetNext()) {
+      if (joint.id === id) return joint;
+    }
+    return null;
   }
 
   getBodiesByCustomProperty(propertyType: RubeCustomPropertyTypes, propertyName: string, valueToMatch: unknown): Pl.b2Body[] {

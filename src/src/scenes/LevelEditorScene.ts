@@ -36,7 +36,7 @@ export default class LevelEditorScene extends Ph.Scene {
     this.b2Physics.loadRubeScene(getCurrentLevel());
     this.terrain = new Terrain(this, this.b2Physics);
 
-    this.scene.launch(SceneKeys.LEVEL_EDITOR_UI_SCENE, [this.b2Physics]);
+    this.scene.launch(SceneKeys.LEVEL_EDITOR_UI_SCENE, [this.b2Physics, this]);
 
     new DebugMouseJoint(this.input, this.b2Physics);
     this.debugKeyLeft = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -74,7 +74,7 @@ export default class LevelEditorScene extends Ph.Scene {
 }
 
 
-// TODO create side panel to list all current bodies, joints, fixtures or images in the scene kind of like in the RUBE editor
+// TODO ~~create side panel to list all current bodies, joints, fixtures or images in the scene kind of like in the RUBE editor~~
 // TODO implement feature to change position and other parameters of a body, joint, image, fixture (in a "properties" sidepanel)
 // TODO implement filter system to that side panel to only show bodies, joints, fixtures or images at once
 // TODO visualize fixture outlines
