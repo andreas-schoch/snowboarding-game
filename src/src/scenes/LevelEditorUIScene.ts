@@ -3,6 +3,7 @@ import * as Pl from '@box2d/core';
 import {DEFAULT_WIDTH, SceneKeys} from "../index";
 import {Physics} from "../components/Physics";
 import {RubeBody, RubeEntity, RubeImage} from "../util/RUBE/RubeLoaderInterfaces";
+import {DraggableInput} from "../components/web/DraggableInput";
 
 export class LevelEditorUIScene extends Ph.Scene {
   private b2Physics: Physics;
@@ -74,7 +75,6 @@ export class LevelEditorUIScene extends Ph.Scene {
   }
 
   private createSceneItem(entity: RubeEntity, type: 'body' | 'fixture' | 'joint' | 'image'): HTMLElement {
-    console.log('create scene item', entity, type)
     const typeToIconMap = {
       body: 'window',
       fixture: 'border_clear',
@@ -143,20 +143,38 @@ export class LevelEditorUIScene extends Ph.Scene {
         if (!body) return;
         const template: HTMLTemplateElement | null = document.getElementById('scene-item-body-properties-template') as HTMLTemplateElement;
         const clone: HTMLElement = template.content.cloneNode(true) as HTMLElement;
-        (clone.querySelector('#property-type') as HTMLSelectElement).value = String(body.GetType());
-        (clone.querySelector('#property-name') as HTMLSelectElement).value = String(body.name || '');
-        (clone.querySelector('#property-bullet') as HTMLInputElement).checked = body.IsBullet();
-        (clone.querySelector('#property-fixed-rotation') as HTMLInputElement).checked = body.IsFixedRotation();
-        (clone.querySelector('#property-sleeping-allowed') as HTMLInputElement).checked = body.IsSleepingAllowed();
-        (clone.querySelector('#property-linear-damping') as HTMLInputElement).value = String(body.GetLinearDamping());
-        (clone.querySelector('#property-angular-damping') as HTMLInputElement).value = String(body.GetAngularDamping());
-        (clone.querySelector('#property-awake') as HTMLInputElement).checked = body.IsAwake();
-        (clone.querySelector('#property-mass') as HTMLInputElement).value = String(body.GetMass());
-        (clone.querySelector('#property-active') as HTMLInputElement).checked = body.IsEnabled();
-        (clone.querySelector('#property-angle') as HTMLInputElement).value = String(body.GetAngle());
-        (clone.querySelector('#property-linear-velocity') as HTMLInputElement).value = String(body.GetLinearVelocity());
-        (clone.querySelector('#property-angular-velocity') as HTMLInputElement).value = String(body.GetAngularVelocity());
         propertiesContainer.appendChild(clone);
+        (propertiesContainer.querySelector('#property-type') as HTMLSelectElement).setAttribute('value', String(body.GetType()));
+        (propertiesContainer.querySelector('#property-name') as HTMLInputElement).setAttribute('value', String(body.name || ''));
+        (propertiesContainer.querySelector('#property-linear-damping') as DraggableInput).setAttribute('value', String(body.GetLinearDamping()));
+        (propertiesContainer.querySelector('#property-angular-damping') as HTMLInputElement).setAttribute('value', String(body.GetAngularDamping()));
+        (propertiesContainer.querySelector('#property-mass') as HTMLInputElement).setAttribute('value', String(body.GetMass()));
+        (propertiesContainer.querySelector('#property-gravity-scale') as HTMLInputElement).setAttribute('value', String(body.GetGravityScale()));
+        const pos = body.GetPosition();
+        const propPosX = (propertiesContainer.querySelector('#property-position-x') as HTMLInputElement)
+        propPosX.setAttribute('value', String(pos.x));
+        propPosX.addEventListener('change', e => body.SetTransformXY(Number((e.target as DraggableInput).valueInput.value), pos.y, body.GetAngle()));
+        const propPosY = (propertiesContainer.querySelector('#property-position-y') as HTMLInputElement)
+        propPosY.setAttribute('value', String(pos.y));
+        propPosY.addEventListener('change', e => body.SetTransformXY(pos.x, Number((e.target as DraggableInput).valueInput.value), body.GetAngle()));
+        (propertiesContainer.querySelector('#property-angle') as HTMLInputElement).setAttribute('value', String(body.GetAngle()));
+        const linVel = body.GetLinearVelocity();
+        (propertiesContainer.querySelector('#property-linear-velocity-x') as HTMLInputElement).setAttribute('value', String(linVel.x));
+        (propertiesContainer.querySelector('#property-linear-velocity-y') as HTMLInputElement).setAttribute('value', String(linVel.y));
+        (propertiesContainer.querySelector('#property-angular-velocity') as HTMLInputElement).setAttribute('value', String(body.GetAngularVelocity()));
+        (propertiesContainer.querySelector('#property-bullet') as HTMLInputElement).checked = body.IsBullet();
+        (propertiesContainer.querySelector('#property-fixed-rotation') as HTMLInputElement).checked = body.IsFixedRotation();
+        (propertiesContainer.querySelector('#property-sleeping-allowed') as HTMLInputElement).checked = body.IsSleepingAllowed();
+        (propertiesContainer.querySelector('#property-awake') as HTMLInputElement).checked = body.IsAwake();
+        (propertiesContainer.querySelector('#property-active') as HTMLInputElement).checked = body.IsEnabled();
+
+        const form = propertiesContainer.querySelector('#form-properties') as HTMLFormElement;
+        form.addEventListener('change', console.log);
+
+        const formData = new FormData(form);
+        formData.forEach((value, key) => console.log(key, value));
+        debugger;
+
         break;
       }
       case 'fixture': {

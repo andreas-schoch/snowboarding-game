@@ -826,7 +826,7 @@
     margin: 5px 0;
   }
 
-  #pane-item-properties label {
+  #pane-item-properties div:first-of-type {
     line-height: 1.15;
     display: flex;
     align-items: center;
@@ -846,7 +846,6 @@
   <!---------------------->
   <div class="pane" id="pane-scene-items">
     <div class="pane-title">Scene Items</div>
-
     <template id="scene-item-template">
       <div class="scene-item-wrapper">
         <div class="scene-item">
@@ -874,8 +873,8 @@
     <i class="scene-item-type-icon material-icons">window</i>
     <form action="" id="form-properties">
       <!-- TYPE -->
-      <div class="row property" id="name-form">
-        <label class="col col-5" for="property-type">type</label>
+      <div class="row">
+       <div class="col col-5">type</div>
         <div class="col col-7">
           <select id="property-type">
             <option value="0">dynamic</option>
@@ -885,112 +884,113 @@
         </div>
       </div>
       <!-- NAME -->
-      <div class="row property" id="name-form">
-        <label class="col col-5" for="property-name">Name</label>
+      <div class="row">
+        <div class="col col-5">Name</div>
         <div class="col col-7">
           <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
         </div>
       </div>
       <!-- BULLET -->
-      <div class="row property" id="bullet-form">
-        <label class="col col-5" for="property-bullet">Bullet</label>
+      <div class="row">
+       <div class="col col-5">Bullet</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-bullet" checked>
         </div>
       </div>
       <!-- FIXED ROTATION -->
-      <div class="row property" id="fixed-rotation-form">
-        <label class="col col-5" for="property-fixed-rotation">Fixed Rotation</label>
+      <div class="row">
+       <div class="col col-5">Fixed Rotation</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-fixed-rotation" checked>
         </div>
       </div>
       <!-- SLEEPING ALLOWED -->
-      <div class="row property" id="sleeping-allowed-form">
-        <label class="col col-5" for="property-sleeping-allowed">Sleeping Allowed</label>
+      <div class="row">
+       <div class="col col-5">Sleeping Allowed</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-sleeping-allowed" checked>
         </div>
       </div>
       <!-- LINEAR DAMPING -->
-      <div class="row property" id="linear-damping-form">
-        <label class="col col-5" for="property-linear-damping">Linear Damping</label>
+      <div class="row">
+       <div class="col col-5">Linear Damping</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-linear-damping" min="0" max="1"
-                 value="0.5" step="0.05">
+          <draggable-input my-data="69" id="property-linear-damping" min="0" max="1" step="0.025"></draggable-input>
         </div>
       </div>
       <!-- ANGULAR DAMPING -->
-      <div class="row property" id="angular-damping-form">
-        <label class="col col-5" for="property-angular-damping">Angular Damping</label>
+      <div class="row">
+       <div class="col col-5">Angular Damping</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-angular-damping" min="0" max="1"
-                 value="0.5" step="0.05">
+          <draggable-input id="property-angular-damping" min="0" max="1" step="0.025"></draggable-input>
         </div>
       </div>
       <!-- MASS -->
-      <div class="row property" id="mass-form">
-        <label class="col col-5" for="property-mass">Mass</label>
+      <div class="row">
+       <div class="col col-5">Mass</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-mass" min="0" value="1" step="0.1">
+          <draggable-input id="property-mass" min="0" step="0.1"></draggable-input>
         </div>
       </div>
       <!-- GRAVITY SCALE -->
-      <div class="row property" id="gravity-scale-form">
-        <label class="col col-5" for="property-gravity-scale">Gravity Scale</label>
+      <div class="row">
+       <div class="col col-5">Gravity Scale</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-gravity-scale" min="0" value="1"
-                 step="0.1">
+          <draggable-input id="property-gravity-scale" step="0.1"></draggable-input>
         </div>
       </div>
       <!-- ACTIVE -->
-      <div class="row property" id="active-form">
-        <label class="col col-5" for="property-active">Active</label>
+      <div class="row">
+       <div class="col col-5">Active</div>
         <div class="col col-7">
-          <input type="checkbox" class="form-control" id="property-active" checked>
+          <input aria-label="Active" type="checkbox" class="form-control" id="property-active" checked>
         </div>
       </div>
       <!-- POSITION -->
-      <div class="row property" id="position-x-form">
-        <label class="col col-5" for="property-position-x">Pos X</label>
+      <div class="row">
+       <div class="col col-5">Pos X</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-position-x" min="0" value="1"
-                 step="0.1">
+          <draggable-input id="property-position-x"></draggable-input>
         </div>
       </div>
-      <div class="row property" id="position-y-form">
-        <label class="col col-5" for="property-position-y">Pos Y</label>
+      <div class="row">
+       <div class="col col-5">Pos Y</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-position-y" min="0" value="1"
-                 step="0.1">
+          <draggable-input id="property-position-y"></draggable-input>
         </div>
       </div>
       <!-- ANGLE -->
-      <div class="row property" id="angle-form">
-        <label class="col col-5" for="property-angle">Angle</label>
+      <div class="row">
+       <div class="col col-5">Angle</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-angle" placeholder="3">
+          <draggable-input id="property-angle" min="0" max="360"></draggable-input>
         </div>
       </div>
       <!--LINEAR VELOCITY-->
-      <div class="row property" id="linear-velocity-form">
-        <label class="col col-5" for="property-linear-velocity">Linear Velocity</label>
+      <div class="row">
+       <div class="col col-5">Linear Velocity X</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-linear-velocity" placeholder="90">
+          <draggable-input id="property-linear-velocity-x"></draggable-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-5">Linear Velocity Y</div>
+        <div class="col col-7">
+          <draggable-input id="property-linear-velocity-y"></draggable-input>
         </div>
       </div>
       <!-- ANGULAR VELOCITY -->
-      <div class="row property" id="angular-velocity-form">
-        <label class="col col-5" for="property-angular-velocity">Angular Velocity</label>
+      <div class="row">
+       <div class="col col-5">Angular Velocity</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-angular-velocity" placeholder="90">
+          <draggable-input id="property-angular-velocity"></draggable-input>
         </div>
       </div>
       <!-- AWAKE -->
-      <div class="row property" id="awake-form">
-        <label class="col col-5" for="property-awake">Awake</label>
+      <div class="row">
+       <div class="col col-5">Awake</div>
         <div class="col col-7">
-          <input type="checkbox" class="form-control" id="property-awake" checked>
+          <input aria-label="Awake" type="checkbox" class="form-control" id="property-awake" checked>
         </div>
       </div>
     </form>

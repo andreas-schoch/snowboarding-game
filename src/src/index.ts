@@ -8,6 +8,7 @@ import GameUIScene from './scenes/GameUIScene';
 import {LeaderboardService} from './services/leaderboard';
 import LevelEditorScene from "./scenes/LevelEditorScene";
 import {LevelEditorUIScene} from "./scenes/LevelEditorUIScene";
+import {registerCustomElements} from "./components/web";
 
 
 export const enum SceneKeys {
@@ -125,3 +126,5 @@ window.addEventListener('load', () => {
     document.body.appendChild(stats.dom);
   }
 });
+
+registerCustomElements();

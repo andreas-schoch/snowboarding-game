@@ -44,7 +44,12 @@ export class Physics extends Phaser.Events.EventEmitter {
 
     stats.begin('physics');
     this.world.Step(this.stepDeltaTime, this.stepConfig);
-    // iterate through all bodies
+    this.updateBodyRepresentations();
+    this.updateDebugDraw();
+    stats.end('physics');
+  }
+
+  updateBodyRepresentations() {
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
       let bodyRepresentation = body.GetUserData() as Ph.GameObjects.Image;
@@ -61,6 +66,40 @@ export class Physics extends Phaser.Events.EventEmitter {
         bodyRepresentation.setVisible(false);
       }
     }
-    stats.end('physics');
+  }
+
+  updateDebugDraw() {
+    // iterate through all bodies and draw their shapes
+    this.debugDraw.clear();
+    this.debugDraw.lineStyle(1, 0x00ff00, 1);
+    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
+      for (let fixture = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+        const shape = fixture.GetShape();
+        const type = shape.GetType();
+        switch (type) {
+          case Pl.b2ShapeType.e_circle: {
+            const circle = shape as Pl.b2CircleShape;
+            const pos = body.GetPosition().Clone().Add(circle.m_p.Clone().Rotate(body.GetAngle())).Scale(this.worldScale);
+            this.debugDraw.strokeCircle(pos.x, -pos.y, circle.m_radius * this.worldScale);
+            break;
+          }
+          case Pl.b2ShapeType.e_chain:
+          case Pl.b2ShapeType.e_polygon: {
+            const polygon = shape as Pl.b2PolygonShape;
+            const bodyPos = body.GetPosition();
+            const bodyAngle = body.GetAngle();
+            const pxVerts = polygon.m_vertices
+            .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(bodyAngle)).Scale(this.worldScale))
+            .map(({x, y}) => ({x: x, y: -y}));
+            this.debugDraw.strokePoints(pxVerts, type === Pl.b2ShapeType.e_polygon).setDepth(100);
+            // debugger;
+            break;
+          }
+          default:
+            console.warn('Unknown shape type', shape.GetType());
+        }
+        // this.debugDraw.restore();
+      }
+    }
   }
 }

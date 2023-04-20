@@ -12,7 +12,7 @@ import {Observer} from "../util/observer";
 export default class LevelEditorScene extends Ph.Scene {
   private b2Physics: Physics;
   private backdrop: Backdrop;
-  private isSimulating: boolean = true;
+  private isSimulating: boolean = false;
   private terrain: Terrain;
   private zoomModifier = 1;
 
@@ -69,6 +69,9 @@ export default class LevelEditorScene extends Ph.Scene {
 
     if (this.isSimulating) this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
     this.backdrop.update();
+    this.b2Physics.updateDebugDraw();
+    this.b2Physics.updateBodyRepresentations();
+
     stats.end();
   }
 }
