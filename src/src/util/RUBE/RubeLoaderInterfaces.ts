@@ -4,6 +4,7 @@ export interface RubeEntity {
   id?: string;
   name?: string;
   b2Body?: Pl.b2Body;
+  selected?: boolean;
   customProperties?: RubeCustomProperty[];
   customPropertiesMap?: { [key: string]: unknown };
 }
@@ -55,6 +56,7 @@ export interface RubeFixture {
   'filter-categoryBits'?: number;
   // if not present; interpret as 65535
   'filter-maskBits'?: number;
+  // if not present; interpret as 0
   'filter-groupIndex'?: number;
   friction?: number;
   restitution?: number;

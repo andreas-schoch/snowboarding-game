@@ -2,14 +2,18 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import Terrain from '../components/Terrain';
 import {Physics} from '../components/Physics';
-import {DEBUG, DEFAULT_WIDTH, DEFAULT_ZOOM, KEY_LEVEL_CURRENT, LevelKeys, SceneKeys, stats} from '../index';
+import {DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, stats} from '../index';
 import {Backdrop} from '../components/Backdrop';
 import {getCurrentLevel} from '../util/getCurrentLevel';
 import {setupCamera} from "../util/setupCamera";
 import {DebugMouseJoint} from "../util/DebugMouseJoint";
 import {Observer} from "../util/observer";
+import {drawCoordZeroPoint} from "../util/drawCoordZeroPoint";
+import {RubeEntity} from "../util/RUBE/RubeLoaderInterfaces";
 
 export default class LevelEditorScene extends Ph.Scene {
+  context: 'body' | 'fixture' | 'joint' | 'image' = 'body';
+  selectedEntity: RubeEntity | null;
   private b2Physics: Physics;
   private backdrop: Backdrop;
   private isSimulating: boolean = false;
@@ -22,12 +26,17 @@ export default class LevelEditorScene extends Ph.Scene {
   private debugKeyDown: Phaser.Input.Keyboard.Key | undefined;
   private debugKeyZoomIn: Phaser.Input.Keyboard.Key | undefined;
   private debugKeyZoomOut: Phaser.Input.Keyboard.Key | undefined;
+  private keyPauseGame: Phaser.Input.Keyboard.Key | undefined;
+  private debugDraw: Phaser.GameObjects.Graphics;
 
   constructor() {
     super({key: SceneKeys.LEVEL_EDITOR_SCENE});
   }
 
   private create() {
+    this.debugDraw = this.add.graphics();
+
+    drawCoordZeroPoint(this);
     setupCamera(this.cameras.main);
     // Ensure that listeners from previous runs are cleared. Otherwise, for a single emit it may call the listener multiple times depending on amount of game-over/replays
     Observer.init()
@@ -45,6 +54,8 @@ export default class LevelEditorScene extends Ph.Scene {
     this.debugKeyDown = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.debugKeyZoomIn = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.debugKeyZoomOut = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.keyPauseGame = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.keyPauseGame?.on('down', () => this.isSimulating = !this.isSimulating);
   }
 
   update() {
@@ -69,18 +80,54 @@ export default class LevelEditorScene extends Ph.Scene {
 
     if (this.isSimulating) this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
     this.backdrop.update();
-    this.b2Physics.updateDebugDraw();
     this.b2Physics.updateBodyRepresentations();
-
+    this.updateDebugDraw();
+    this.strokeFixture(this.selectedEntity as Pl.b2Fixture, 2, 0x00ff00, 1000);
     stats.end();
+  }
+
+  private updateDebugDraw() {
+    // iterate through all bodies and draw their shapes
+    this.debugDraw.clear();
+    for (let body = this.b2Physics.world.GetBodyList(); body; body = body.GetNext()) {
+      for (let f: Pl.b2Fixture & RubeEntity | null = body.GetFixtureList(); f; f = f.GetNext()) {
+        this.strokeFixture(f, 1, 0xffffff, 100);
+      }
+    }
+  }
+
+  private strokeFixture(fixture: Pl.b2Fixture & RubeEntity, width = 1,  color = 0xffffff, depth = 100) {
+    if (!fixture || !fixture.GetShape) return;
+    this.debugDraw.lineStyle(width, color, 1);
+    this.debugDraw.setDepth(depth)
+    const shape = fixture.GetShape();
+    const type = shape.GetType();
+    const body = fixture.GetBody();
+    switch (type) {
+      case Pl.b2ShapeType.e_circle: {
+        const circle = shape as Pl.b2CircleShape;
+        const pos = body.GetPosition().Clone().Add(circle.m_p.Clone().Rotate(body.GetAngle())).Scale(this.b2Physics.worldScale);
+        this.debugDraw.strokeCircle(pos.x, -pos.y, circle.m_radius * this.b2Physics.worldScale);
+        break;
+      }
+      case Pl.b2ShapeType.e_chain:
+      case Pl.b2ShapeType.e_polygon: {
+        const polygon = shape as Pl.b2PolygonShape;
+        const bodyPos = body.GetPosition();
+        const bodyAngle = body.GetAngle();
+        const pxVerts = polygon.m_vertices
+        .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(bodyAngle)).Scale(this.b2Physics.worldScale))
+        .map(({x, y}) => ({x: x, y: -y}));
+        this.debugDraw.strokePoints(pxVerts, type === Pl.b2ShapeType.e_polygon);
+        break;
+      }
+      default:
+        console.warn('Unknown shape type', shape.GetType());
+    }
   }
 }
 
-
-// TODO ~~create side panel to list all current bodies, joints, fixtures or images in the scene kind of like in the RUBE editor~~
-// TODO implement feature to change position and other parameters of a body, joint, image, fixture (in a "properties" sidepanel)
 // TODO implement filter system to that side panel to only show bodies, joints, fixtures or images at once
-// TODO visualize fixture outlines
 // TODO visualize joint position and anchor-points
 // TODO Add another sidepanel from where user can drag objects into the scene (obstacles, background decoration etc.)
 //      For the beginning skip the draw-n-drop feature and create the same "cursor" system as in RUBE.

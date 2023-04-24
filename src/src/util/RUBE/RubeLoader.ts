@@ -85,9 +85,9 @@ export class RubeLoader {
     fd.restitution = fixtureJso.restitution || 0;
     fd.isSensor = Boolean(fixtureJso.sensor);
     fd.filter = {
-      categoryBits: fixtureJso['filter-categoryBits'],
-      maskBits: fixtureJso['filter-maskBits'] || 1,
-      groupIndex: fixtureJso['filter-groupIndex'] || 65535,
+      categoryBits: fixtureJso['filter-categoryBits'] || 1,
+      maskBits: fixtureJso['filter-maskBits'] || 65535,
+      groupIndex: fixtureJso['filter-groupIndex'] || 0,
     };
 
     const fixture: Pl.b2Fixture & RubeEntity = body.CreateFixture(fd);
@@ -95,7 +95,6 @@ export class RubeLoader {
     fixture.name = fixtureJso.name || '';
     fixture.customProperties = fixtureJso.customProperties || [];
     fixture.customPropertiesMap = this.customPropertiesArrayToMap(fixture.customProperties);
-
     return fixture;
   }
 
@@ -235,6 +234,7 @@ export class RubeLoader {
     img.b2Body = bodyObj;
     img.customProperties = customProperties || [];
     img.customPropertiesMap = this.customPropertiesArrayToMap(img.customProperties);
+    img.setInteractive();
     bodyObj && bodyObj.SetUserData(img);
     return img;
   }
@@ -247,16 +247,6 @@ export class RubeLoader {
 
   rubeToVec2(val?: RubeVector): Pl.b2Vec2 {
     return this.isXY(val) ? new Pl.b2Vec2(val.x, val.y) : new Pl.b2Vec2(0, 0);
-  }
-
-  getBodiesByName(name: string): Pl.b2Body[] {
-    const bodies: Pl.b2Body[] = [];
-    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
-      if (!body) continue;
-      // @ts-ignore
-      if (body.name === name) bodies.push(body);
-    }
-    return bodies;
   }
 
   getBodyById(id: string): Pl.b2Body & RubeEntity | null {
@@ -324,10 +314,8 @@ export class RubeLoader {
     for (let joint: j = this.world.GetJointList(); joint; joint = joint.GetNext()) {
       if (!joint || !joint.customProperties) continue;
       for (let i = 0; i < joint.customProperties.length; i++) {
-        if (!joint.customProperties[i].hasOwnProperty('name'))
-          continue;
-        if (!joint.customProperties[i].hasOwnProperty(propertyType))
-          continue;
+        if (!joint.customProperties[i].hasOwnProperty('name')) continue;
+        if (!joint.customProperties[i].hasOwnProperty(propertyType)) continue;
         if (joint.customProperties[i].name == propertyName &&
           joint.customProperties[i][propertyType] == valueToMatch) // TODO refactor to strict equals
           joints.push(joint);

@@ -18,8 +18,8 @@ export class PlayerController {
   board: WickedSnowboard;
   state: State;
 
-  private readonly jumpForce: number = 650 * 60;
-  private leanForce: number = 2.5 * 60;
+  private readonly jumpForce: number = 650;
+  private leanForce: number = 2.5;
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private debugControls: Phaser.Cameras.Controls.SmoothedKeyControl;
   private debugKeyLeft: Phaser.Input.Keyboard.Key | undefined;
@@ -72,42 +72,34 @@ export class PlayerController {
     Observer.instance.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
   }
 
-  update(delta: number) {
+  update() {
     if (this.b2Physics.isPaused) return;
     stats.begin('snowman');
 
-    if (DEBUG) {
-      this.debugControls && this.debugControls.update(delta);
-      if (this.debugKeyLeft?.isDown) this.scene.cameras.main.scrollX -= 300 * delta;
-      if (this.debugKeyRight?.isDown) this.scene.cameras.main.scrollX += 300 * delta;
-      if (this.debugKeyUp?.isDown) this.scene.cameras.main.scrollY -= 300 * delta;
-      if (this.debugKeyDown?.isDown) this.scene.cameras.main.scrollY += 300 * delta;
-    }
-
-    this.state.update(delta);
+    this.state.update();
     this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.board.getTimeInAir() > 100 && this.resetLegs();
 
     if (!this.state.isCrashed && !this.state.levelFinished) {
-      this.board.update(delta);
+      this.board.update();
 
       // Touch/Mouse input
       if (this.scene.input.activePointer?.isDown && this.scene.input.activePointer.wasTouch) {
         const pointer = this.scene.input.activePointer; // activePointer undefined until after first touch input
         pointer.motionFactor = 0.2;
-        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward(delta) : this.leanForward(delta);
-        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 250 && this.jump(delta);
+        this.scene.input.activePointer.x < this.scene.cameras.main.width / 2 ? this.leanBackward() : this.leanForward();
+        pointer.velocity.y < -30 && this.scene.game.getTime() - pointer.moveTime <= 250 && this.jump();
       } else {
         this.scene.input.activePointer.motionFactor = 0.8;
       }
 
       // Keyboard input
       if (this.cursors) {
-        this.cursors.up.isDown && this.leanUp(delta);
-        this.cursors.left.isDown && this.leanBackward(delta);
-        this.cursors.right.isDown && this.leanForward(delta);
-        this.cursors.down.isDown && this.leanCenter(delta);
-        this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
+        this.cursors.up.isDown && this.leanUp();
+        this.cursors.left.isDown && this.leanBackward();
+        this.cursors.right.isDown && this.leanForward();
+        this.cursors.down.isDown && this.leanCenter();
+        this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump();
       }
     }
     stats.end('snowman');
@@ -122,15 +114,15 @@ export class PlayerController {
     this.parts.prismatic && this.b2Physics.world.DestroyJoint(this.parts.prismatic);
   }
 
-  private jump(delta: number) {
+  private jump() {
     // prevents player from jumping too quickly after a landing
     if (this.scene.game.getTime() - this.state.timeGrounded < 100) return; // TODO change to numStepsGrounded
 
-    this.leanUp(delta);
+    this.leanUp();
 
     const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
-      const force = this.jumpForce * delta;
+      const force = this.jumpForce;
       const jumpVector = this.jumpVector.Set(0, 0);
       // TODO these kind of values should come from the RUBE export.
       //  That would make the game somewhat moddable once players can create and download custom levels and characters.
@@ -146,30 +138,30 @@ export class PlayerController {
     this.parts.distanceLegRight?.SetLength(0.65);
   }
 
-  private leanBackward(delta: number) {
+  private leanBackward() {
     this.parts.distanceLegLeft?.SetLength(0.55);
     this.parts.distanceLegRight?.SetLength(0.8);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * -10;
-    this.parts.body.ApplyAngularImpulse(this.leanForce * delta);
+    this.parts.body.ApplyAngularImpulse(this.leanForce);
   }
 
-  private leanForward(delta: number) {
+  private leanForward() {
     this.parts.distanceLegLeft?.SetLength(0.8);
     this.parts.distanceLegRight?.SetLength(0.55);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * 10;
-    this.parts.body.ApplyAngularImpulse(-this.leanForce * delta);
+    this.parts.body.ApplyAngularImpulse(-this.leanForce);
   }
 
-  private leanCenter(delta: number) {
+  private leanCenter() {
     this.parts.distanceLegLeft?.SetLength(0.55);
     this.parts.distanceLegRight?.SetLength(0.55);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = 0;
   }
 
-  private leanUp(delta: number) {
+  private leanUp() {
     this.parts.distanceLegLeft?.SetLength(0.8);
     this.parts.distanceLegRight?.SetLength(0.8);
     // @ts-ignore

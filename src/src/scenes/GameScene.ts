@@ -43,9 +43,8 @@ export default class GameScene extends Ph.Scene {
 
   update() {
     stats.begin();
-    const delta = this.game.loop.delta / 1000;
-    this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
-    this.playerController.update(delta);
+    this.b2Physics.update(); // needs to happen before update of player character otherwise b2Body.GetPosition() inaccurate
+    this.playerController.update();
     this.backdrop.update();
     stats.end();
   }

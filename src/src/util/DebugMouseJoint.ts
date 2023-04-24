@@ -2,6 +2,7 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {Physics} from '../components/Physics';
 import {b2BodyType} from '@box2d/core';
+import {getB2FixtureAtPoint} from "./getB2FixtureAtPoint";
 
 
 export class DebugMouseJoint {
@@ -14,57 +15,45 @@ export class DebugMouseJoint {
     this.context = context;
     this.b2Physics = b2Physics;
 
-    this.context.on('pointerdown', (pointer: Ph.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-    this.context.on('pointerup', (pointer: Ph.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-    this.context.on('pointermove', (pointer: Ph.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
+    const scale = this.b2Physics.worldScale;
+    this.context.on('pointerdown', (p: Ph.Input.Pointer) => this.mouseDown({x: p.worldX / scale, y: -p.worldY / scale}));
+    this.context.on('pointermove', (p: Ph.Input.Pointer) => this.mouseMove({x: p.worldX / scale, y: -p.worldY / scale}, true));
+    this.context.on('pointerup', (p: Ph.Input.Pointer) => this.mouseUp());
   }
 
-  MouseMove(p: Pl.XY, leftDrag: boolean): void {
+  mouseMove(p: Pl.XY, leftDrag: boolean): void {
     if (leftDrag && this.mouseJoint) {
       this.mouseJoint.SetTarget(p);
     }
   }
 
-  MouseUp(p: Pl.XY): void {
+  mouseUp(): void {
     if (this.mouseJoint) {
       this.b2Physics.world.DestroyJoint(this.mouseJoint);
       this.mouseJoint = null;
     }
   }
 
-  MouseDown(p: Pl.XY): void {
+  mouseDown(p: Pl.XY): void {
     if (this.mouseJoint) {
       this.b2Physics.world.DestroyJoint(this.mouseJoint);
       this.mouseJoint = null;
     }
 
     // Query the world for overlapping shapes.
-    let hit_fixture: Pl.b2Fixture | undefined;
-    this.b2Physics.world.QueryPointAABB(p, (fixture) => {
-      const body = fixture.GetBody();
-      if (body.GetType() === b2BodyType.b2_dynamicBody && fixture.TestPoint(p)) {
-        hit_fixture = fixture;
-        return false; // We are done, terminate the query.
-      }
-      return true; // Continue the query.
-    });
+    let body = getB2FixtureAtPoint(this.b2Physics.world, p, new Set([b2BodyType.b2_dynamicBody]))?.GetBody();
+    if (!body) return;
 
-    if (hit_fixture) {
-      const frequencyHz = 5;
-      const dampingRatio = 0.5;
+    const jd = new Pl.b2MouseJointDef();
+    jd.collideConnected = true;
+    jd.damping = 0.1;
+    jd.bodyA = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
+    jd.bodyB = body;
+    jd.target.Copy(p);
+    jd.maxForce = 1500 * body.GetMass();
+    Pl.b2LinearStiffness(jd, 5, 0.5, jd.bodyA, jd.bodyB);
 
-      const body = hit_fixture.GetBody();
-      const jd = new Pl.b2MouseJointDef();
-      jd.collideConnected = true;
-      jd.damping = 0.1;
-      jd.bodyA = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
-      jd.bodyB = body;
-      jd.target.Copy(p);
-      jd.maxForce = 700 * body.GetMass();
-      Pl.b2LinearStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
-
-      this.mouseJoint = this.b2Physics.world.CreateJoint(jd) as Pl.b2MouseJoint;
-      body.SetAwake(true);
-    }
+    this.mouseJoint = this.b2Physics.world.CreateJoint(jd) as Pl.b2MouseJoint;
+    body.SetAwake(true);
   }
 }

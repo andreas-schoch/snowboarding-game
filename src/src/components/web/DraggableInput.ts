@@ -38,13 +38,13 @@ export class DraggableInput extends HTMLElement {
   }
 
   private onMouseMove(e: MouseEvent): void {
-    const newValue = Number(this.valueInput.value) + (e.movementX * 0.05);
+    const newValue = Number(this.valueInput.value) + (e.movementX * 0.03);
     const min = this.valueInput.min === '' ? undefined : Number(this.valueInput.min);
     const max = this.valueInput.max === '' ? undefined : Number(this.valueInput.max);
 
     if (min !== undefined && !isNaN(min) && newValue < min) this.valueInput.value = String(min);
     else if (max !== undefined && !isNaN(max) && newValue > max) this.valueInput.value = String(max);
-    else this.valueInput.value = String(newValue);
+    else this.valueInput.value = String(newValue.toFixed(4));
 
     this.dispatchEvent(this.valueChangeEvent);
     if (min === undefined || max === undefined) return;

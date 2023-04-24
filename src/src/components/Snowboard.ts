@@ -50,7 +50,7 @@ export class WickedSnowboard {
 
   }
 
-  update(delta: number) {
+  update() {
     DEBUG && this.debugGraphics.clear();
     const segments = this.segments;
 

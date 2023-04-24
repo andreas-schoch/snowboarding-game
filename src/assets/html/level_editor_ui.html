@@ -693,18 +693,23 @@
     width: calc(100% + 2 * var(--pane-border-width));
   }
 
+  /* ======================== */
+  /* = Pane Content Browser = */
+  /* ======================== */
+  #pane-content-browser {
+    width: 220px;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
   /* ==================== */
   /* = Pane Scene Items = */
   /* ==================== */
   #pane-scene-items {
-    width: 240px;
-    height: 55%;
-  }
-
-  #pane-scene-items .select-level-note {
-    font-size: 12px;
-    line-height: 1.5;
-    color: var(--grey-700);
+    width: 220px;
+    height: 45%;
+    right: 0;
   }
 
   #pane-scene-items .scene-items-scrollable {
@@ -768,7 +773,6 @@
 
   #pane-scene-items .scene-item-wrapper .scene-item-children:not(.scene-item-children:empty) {
     padding-left: 42px;
-    margin-bottom: 1rem;
     position: relative;
   }
 
@@ -791,12 +795,24 @@
     left: -13px;
   }
 
+  /* ======================== */
+  /* = Pane Item Properties = */
+  /* ======================== */
   #pane-item-properties {
-    width: 240px;
-    height: 45%;
-    left: 0;
+    width: 220px;
+    height: 55%;
+    right: 0;
     bottom: 0;
     font-size: 7px;
+  }
+
+  #pane-item-properties .row {
+    margin-bottom: 0;
+    padding: 0 5px;
+  }
+
+  #pane-item-properties .col {
+    padding: 0 4px;
   }
 
   #pane-item-properties .scrollbar {
@@ -810,11 +826,6 @@
 
   #pane-item-properties i {
     margin: 0 auto 8px;
-  }
-
-  #pane-item-properties .row {
-    margin-bottom: 0;
-    padding: 0 0.5rem;
   }
 
   #pane-item-properties input,
@@ -836,10 +847,109 @@
     height: 14px;
   }
 
+  #context-switch {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    color: black;
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  #context-switch .context {
+    border: 2px solid black;
+    border-radius: 3px;
+    margin: 0 2px;
+    padding: 4px;
+    width: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #fff;
+    pointer-events: auto;
+  }
+
+  #context-switch .context-name {
+    pointer-events: none;
+    font-size: 9px;
+  }
+
+  #context-switch .context-icon {
+    pointer-events: none;
+    font-size: 16px;
+  }
+
+  #context-switch .context.active {
+    background-color: salmon;
+  }
+
+  #history-actions {
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    color: black;
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  #history-actions .action {
+    padding: 4px 6px;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 3px;
+
+  }
 
 </style>
 
 <div class="level-editor-ui">
+
+  <!-------------------->
+  <!-- CONTEXT SWITCH -->
+  <!-------------------->
+  <div id="context-switch">
+    <div class="context" data-context="body">
+      <div class="context-name">Body</div>
+      <i class="context-icon material-icons">window</i>
+    </div>
+    <div class="context active" data-context="fixture">
+      <div class="context-name">Fixture</div>
+      <i class="context-icon material-icons">border_clear</i>
+    </div>
+    <div class="context" data-context="joint">
+      <div class="context-name">Joint</div>
+      <i class="context-icon material-icons">polyline</i>
+    </div>
+    <div class="context" data-context="image">
+      <div class="context-name">Image</div>
+      <i class="context-icon material-icons">wallpaper</i>
+    </div>
+  </div>
+
+  <!----------------->
+  <!-- UNDO / REDO -->
+  <!----------------->
+  <div id="history-actions">
+    <i class="material-icons action" id="action-undo">undo</i>
+    <i class="material-icons action" id="action-redo">redo</i>
+  </div>
+
+  <!-------------------------->
+  <!-- PANE CONTENT BROWSER -->
+  <!-------------------------->
+  <div class="pane" id="pane-content-browser">
+    <div class="pane-title">Content Browser</div>
+    <div class="scene-items-scrollable scrollbar" id="content-browser-container"></div>
+  </div>
 
   <!---------------------->
   <!-- PANE SCENE ITEMS -->
@@ -874,12 +984,12 @@
     <form action="" id="form-properties">
       <!-- TYPE -->
       <div class="row">
-       <div class="col col-5">type</div>
+        <div class="col col-5">type</div>
         <div class="col col-7">
           <select id="property-type">
-            <option value="0">dynamic</option>
-            <option value="1">static</option>
-            <option value="2">kinematic</option>
+            <option value="0">static</option>
+            <option value="1">kinematic</option>
+            <option value="2">dynamic</option>
           </select>
         </div>
       </div>
@@ -892,83 +1002,83 @@
       </div>
       <!-- BULLET -->
       <div class="row">
-       <div class="col col-5">Bullet</div>
+        <div class="col col-5">Bullet</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-bullet" checked>
         </div>
       </div>
       <!-- FIXED ROTATION -->
       <div class="row">
-       <div class="col col-5">Fixed Rotation</div>
+        <div class="col col-5">Fixed Rotation</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-fixed-rotation" checked>
         </div>
       </div>
       <!-- SLEEPING ALLOWED -->
       <div class="row">
-       <div class="col col-5">Sleeping Allowed</div>
+        <div class="col col-5">Sleeping Allowed</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-sleeping-allowed" checked>
         </div>
       </div>
       <!-- LINEAR DAMPING -->
       <div class="row">
-       <div class="col col-5">Linear Damping</div>
+        <div class="col col-5">Linear Damping</div>
         <div class="col col-7">
           <draggable-input my-data="69" id="property-linear-damping" min="0" max="1" step="0.025"></draggable-input>
         </div>
       </div>
       <!-- ANGULAR DAMPING -->
       <div class="row">
-       <div class="col col-5">Angular Damping</div>
+        <div class="col col-5">Angular Damping</div>
         <div class="col col-7">
           <draggable-input id="property-angular-damping" min="0" max="1" step="0.025"></draggable-input>
         </div>
       </div>
       <!-- MASS -->
       <div class="row">
-       <div class="col col-5">Mass</div>
+        <div class="col col-5">Mass</div>
         <div class="col col-7">
           <draggable-input id="property-mass" min="0" step="0.1"></draggable-input>
         </div>
       </div>
       <!-- GRAVITY SCALE -->
       <div class="row">
-       <div class="col col-5">Gravity Scale</div>
+        <div class="col col-5">Gravity Scale</div>
         <div class="col col-7">
           <draggable-input id="property-gravity-scale" step="0.1"></draggable-input>
         </div>
       </div>
       <!-- ACTIVE -->
       <div class="row">
-       <div class="col col-5">Active</div>
+        <div class="col col-5">Active</div>
         <div class="col col-7">
           <input aria-label="Active" type="checkbox" class="form-control" id="property-active" checked>
         </div>
       </div>
       <!-- POSITION -->
       <div class="row">
-       <div class="col col-5">Pos X</div>
+        <div class="col col-5">Pos X</div>
         <div class="col col-7">
           <draggable-input id="property-position-x"></draggable-input>
         </div>
       </div>
       <div class="row">
-       <div class="col col-5">Pos Y</div>
+        <div class="col col-5">Pos Y</div>
         <div class="col col-7">
           <draggable-input id="property-position-y"></draggable-input>
         </div>
       </div>
       <!-- ANGLE -->
       <div class="row">
-       <div class="col col-5">Angle</div>
+        <div class="col col-5">Angle</div>
         <div class="col col-7">
-          <draggable-input id="property-angle" min="0" max="360"></draggable-input>
+          <draggable-input id="property-angle" min="0" max="6.28318531"></draggable-input>
         </div>
       </div>
       <!--LINEAR VELOCITY-->
       <div class="row">
-       <div class="col col-5">Linear Velocity X</div>
+        <div class="col col-5">Linear Velocity X</div>
         <div class="col col-7">
           <draggable-input id="property-linear-velocity-x"></draggable-input>
         </div>
@@ -981,14 +1091,14 @@
       </div>
       <!-- ANGULAR VELOCITY -->
       <div class="row">
-       <div class="col col-5">Angular Velocity</div>
+        <div class="col col-5">Angular Velocity</div>
         <div class="col col-7">
           <draggable-input id="property-angular-velocity"></draggable-input>
         </div>
       </div>
       <!-- AWAKE -->
       <div class="row">
-       <div class="col col-5">Awake</div>
+        <div class="col col-5">Awake</div>
         <div class="col col-7">
           <input aria-label="Awake" type="checkbox" class="form-control" id="property-awake" checked>
         </div>
@@ -1000,70 +1110,70 @@
     <i class="scene-item-type-icon material-icons">border_clear</i>
     <form action="" id="form-properties">
       <!-- NAME -->
-      <div class="row property" id="name-form">
-        <label class="col col-5" for="property-name">Name</label>
+      <div class="row">
+        <div class="col col-5">Name</div>
         <div class="col col-7">
-          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter fixture name">
         </div>
       </div>
       <!-- FRICTION -->
-      <div class="row property" id="friction-form">
-        <label class="col col-5" for="property-friction">Angular Velocity</label>
+      <div class="row">
+        <div class="col col-5">Friction</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-friction" placeholder="90">
+          <draggable-input id="property-friction"></draggable-input>
         </div>
       </div>
       <!-- RESTITUTION -->
-      <div class="row property" id="restitution-form">
-        <label class="col col-5" for="property-restitution">Restitution</label>
+      <div class="row">
+        <div class="col col-5">Restitution</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-restitution" placeholder="90">
+          <draggable-input id="property-restitution"></draggable-input>
         </div>
       </div>
       <!-- DENSITY -->
-      <div class="row property" id="density-form">
-        <label class="col col-5" for="property-density">Angular Velocity</label>
+      <div class="row">
+        <div class="col col-5">Density</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-density" placeholder="90">
+          <draggable-input id="property-density"></draggable-input>
         </div>
       </div>
       <!-- SENSOR -->
-      <div class="row property" id="sensor-form">
-        <label class="col col-5" for="property-sensor">Sensor</label>
+      <div class="row">
+        <div class="col col-5">Sensor</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-sensor" checked>
         </div>
       </div>
       <!-- FILTER CATEGORY BITS -->
-      <div class="row property" id="filter-category-bits-form">
-        <label class="col col-5" for="property-filter-category-bits">Filter Category Bits</label>
+      <div class="row">
+        <div class="col col-5">Filter Category Bits</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-filter-category-bits" placeholder="90">
+          <draggable-input id="property-filter-category-bits"></draggable-input>
         </div>
       </div>
       <!-- FILTER MASK BITS -->
-      <div class="row property" id="filter-mask-bits-form">
-        <label class="col col-5" for="property-filter-mask-bits">Filter Mask Bits</label>
+      <div class="row">
+        <div class="col col-5">Filter Mask Bits</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-filter-mask-bits" placeholder="90">
+          <draggable-input id="property-filter-mask-bits" step="1" max="65535"></draggable-input>
         </div>
       </div>
       <!-- FILTER GROUP INDEX -->
-      <div class="row property" id="filter-group-index-form">
-        <label class="col col-5" for="property-filter-group-index">Filter Group Index</label>
+      <div class="row">
+        <div class="col col-5">Filter Group Index</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-filter-group-index" placeholder="90">
+          <draggable-input id="property-filter-group-index" step="1" pattern="[0-9\-]+"></draggable-input>
         </div>
       </div>
       <!-- SHAPE TYPE -->
-      <div class="row property" id="shape-type-form">
-        <label class="col col-5" for="property-shape-type">Shape Type</label>
+      <div class="row">
+        <div class="col col-5">Shape Type</div>
         <div class="col col-7">
-          <select id="property-shape-type">
-            <option value="circle">Circle</option>
-            <option value="polygon">Polygon</option>
-            <option value="line">Line</option>
-            <option value="Loop">Loop</option>
+          <select id="property-shape-type" disabled>
+            <option value="0">Circle</option>
+            <option value="1">Edge</option>
+            <option value="2">Polygon</option>
+            <option value="3">Chain</option>
           </select>
         </div>
       </div>
@@ -1077,56 +1187,74 @@
       <div class="row property" id="name-form">
         <label class="col col-5" for="property-type">type</label>
         <div class="col col-7">
-          <select id="property-type">
-            <option value="revolute">Revolute</option>
-            <option value="prismatic">Prismatic</option>
-            <option value="distance">Distance</option>
-            <option value="wheel">Wheel</option>
-            <option value="rope">Rope</option>
-            <option value="weld">Weld</option>
-            <option value="friction">Friction</option>
-            <option value="motor">Motor</option>
+          <select id="property-type" disabled>
+            <option value="0">Unknown</option>
+            <option value="1">Revolute</option>
+            <option value="2">Prismatic</option>
+            <option value="3">Distance</option>
+            <option value="4">Pulley</option>
+            <option value="5">Mouse</option>
+            <option value="6">Gear</option>
+            <option value="7">Wheel</option>
+            <option value="8">Weld</option>
+            <option value="9">Friction</option>
+            <option value="10">Motor</option>
+            <option value="11">Area</option>
           </select>
         </div>
       </div>
       <!-- NAME -->
-      <div class="row property" id="name-form">
-        <label class="col col-5" for="property-name">Name</label>
+      <div class="row">
+        <div class="col col-5">Name</div>
         <div class="col col-7">
-          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter body name">
+          <input type="text" class="form-control form-text-input" id="property-name" placeholder="enter fixture name">
         </div>
       </div>
       <!-- BODY A -->
-      <div class="row property" id="body-a-form">
-        <label class="col col-5" for="property-body-a">Body A</label>
+      <div class="row">
+        <div class="col col-5">Body A</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-body-a" placeholder="90">
+          <draggable-input id="property-body-a"></draggable-input>
         </div>
       </div>
       <!-- BODY B -->
-      <div class="row property" id="body-b-form">
-        <label class="col col-5" for="property-body-b">Body B</label>
+      <div class="row">
+        <div class="col col-5">Body B</div>
         <div class="col col-7">
-          <input type="number" class="form-control form-text-input" id="property-body-b" placeholder="90">
+          <draggable-input id="property-body-b"></draggable-input>
         </div>
       </div>
-      <!-- ANCHOR A -->
-      <div class="row property" id="anchor-a-form">
-        <label class="col col-5" for="property-anchor-a">Anchor A</label>
+      <!-- ANCHOR A X -->
+      <div class="row">
+        <div class="col col-5">Anchor A X</div>
         <div class="col col-7">
-          <input type="text" class="form-control form-text-input" id="property-anchor-a">
+          <draggable-input id="property-anchor-a-x"></draggable-input>
         </div>
       </div>
-      <!-- ANCHOR B -->
-      <div class="row property" id="anchor-b-form">
-        <label class="col col-5" for="property-anchor-b">Anchor B</label>
+      <!-- ANCHOR A Y -->
+      <div class="row">
+        <div class="col col-5">Anchor A Y</div>
         <div class="col col-7">
-          <input type="text" class="form-control form-text-input" id="property-anchor-b">
+          <draggable-input id="property-anchor-a-y"></draggable-input>
+        </div>
+      </div>
+      <!-- ANCHOR B X -->
+      <div class="row">
+        <div class="col col-5">Anchor B X</div>
+        <div class="col col-7">
+          <draggable-input id="property-anchor-b-x"></draggable-input>
+        </div>
+      </div>
+      <!-- ANCHOR B Y -->
+      <div class="row">
+        <div class="col col-5">Anchor B Y</div>
+        <div class="col col-7">
+          <draggable-input id="property-anchor-b-y"></draggable-input>
         </div>
       </div>
       <!-- COLLIDE CONNECTED -->
-      <div class="row property" id="collide-connected-form">
-        <label class="col col-5" for="property-collide-connected">Collide Connected</label>
+      <div class="row">
+        <div class="col col-5">Collide Connected</div>
         <div class="col col-7">
           <input type="checkbox" class="form-control" id="property-collide-connected" checked>
         </div>

@@ -250,6 +250,7 @@ export default class GameUIScene extends Ph.Scene {
           }
           case 'btn-create-level': {
             this.setPanelVisibility(PanelIds.NONE);
+            this.scene.start(SceneKeys.LEVEL_EDITOR_SCENE);
             break;
           }
           case 'btn-goto-how-to-play': {

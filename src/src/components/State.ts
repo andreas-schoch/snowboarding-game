@@ -226,7 +226,7 @@ export class State {
     }
   }
 
-  update(delta: number): void {
+  update(): void {
     this.processPickups();
     const isInAir = this.playerController.board.isInAir();
     if (this.state === 'grounded' && isInAir && !this.isCrashed) Observer.instance.emit('enter_in_air');

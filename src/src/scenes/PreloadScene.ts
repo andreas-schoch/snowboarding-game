@@ -14,8 +14,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    // this.scene.start(SceneKeys.GAME_SCENE);
-    this.scene.start(SceneKeys.LEVEL_EDITOR_SCENE);
+    this.scene.start(SceneKeys.GAME_SCENE);
+    // this.scene.start(SceneKeys.LEVEL_EDITOR_SCENE);
   }
 
   private loadAudio() {
