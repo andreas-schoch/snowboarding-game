@@ -42,10 +42,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {from: 'src/assets/audio', to: 'assets/audio'},
-        {from: 'src/assets/img/packed', to: 'assets/img/packed'},
-        {from: 'src/assets/img/icons', to: 'assets/img/icons'},
-        {from: 'src/assets/img/controls', to: 'assets/img/controls'},
-        {from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails'},
+        {from: 'src/assets/img', to: 'assets/img'},
         {from: 'src/assets/html', to: 'assets/html'},
         {from: 'src/assets/levels/export', to: 'assets/levels/export'},
         {from: 'src/favicon.ico', to: ''},
