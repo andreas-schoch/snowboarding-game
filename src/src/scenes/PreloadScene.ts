@@ -41,6 +41,10 @@ export default class PreloadScene extends Phaser.Scene {
       'assets/audio/sfx/applause/applause.ogg',
       'assets/audio/sfx/applause/applause.mp3',
     ]);
+    this.load.audio('game_over_demon', [
+      'assets/audio/sfx/game_over_demon/game_over_demon.ogg',
+      'assets/audio/sfx/game_over_demon/game_over_demon.mp3',
+    ]);
   }
 
   private loadImg() {

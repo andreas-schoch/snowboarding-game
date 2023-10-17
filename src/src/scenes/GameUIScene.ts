@@ -47,6 +47,7 @@ export default class GameUIScene extends Ph.Scene {
   private sfx_death: Phaser.Sound.BaseSound;
   private sfx_grunt: Phaser.Sound.BaseSound;
   private sfx_applause: Phaser.Sound.BaseSound;
+  private sfx_game_over_demon: Phaser.Sound.BaseSound;
 
   private comboLeewayChart: Ph.GameObjects.Graphics;
   private resolutionMod: number;
@@ -89,6 +90,7 @@ export default class GameUIScene extends Ph.Scene {
     this.sfx_death = this.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume});
     this.sfx_grunt = this.sound.add('grunt', {detune: 700, rate: 1.25, volume: sfxVolume * 0.6});
     this.sfx_applause = this.sound.add('applause', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
+    this.sfx_game_over_demon = this.sound.add('game_over_demon', {detune: 0, rate: 0.95, volume: sfxVolume * 0.6});
 
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
@@ -126,12 +128,13 @@ export default class GameUIScene extends Ph.Scene {
       if (this.finished) return;
       this.comboLeewayChart.clear();
       if (this.hudCombo) this.hudCombo.innerText = '-';
+      this.sfx_game_over_demon.play();
       this.tweens.add({
         targets: this.music,
         volume: 0.0,
         detune: -500,
         rate: 0.5,
-        duration: 2000,
+        duration: 750,
         onComplete: async () => {
           this.music.stop();
           await this.updateYourScorePanelData(score);
@@ -331,6 +334,7 @@ export default class GameUIScene extends Ph.Scene {
 
   private playAgain() {
     this.music.stop();
+    this.sfx_game_over_demon.stop();
     this.crashed = false;
     this.finished = false;
     this.restartGame();

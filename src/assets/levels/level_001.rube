@@ -42,6 +42,13 @@
   [
     
     {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
+    },
+    
+    {
       "class" : "image",
       "comboboxEntries" : 
       [
@@ -57,84 +64,6 @@
       "displayName" : "phaserTexture",
       "name" : "phaserTexture",
       "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "0"
-        },
-        
-        {
-          "entry" : "1"
-        },
-        
-        {
-          "entry" : "2"
-        },
-        
-        {
-          "entry" : "3"
-        },
-        
-        {
-          "entry" : "4"
-        },
-        
-        {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
-        }
-      ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
     },
     
     {
@@ -197,24 +126,9 @@
     
     {
       "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     },
     
     {
@@ -248,6 +162,92 @@
       ],
       "displayName" : "phaserPlayerCharacterSpring",
       "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
       "type" : "string"
     }
   ],
@@ -11167,7 +11167,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 1,
@@ -11188,7 +11188,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 4,
@@ -11214,7 +11214,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 10,
@@ -11235,7 +11235,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 11,
@@ -11256,7 +11256,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 12,
@@ -11277,7 +11277,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 13,
@@ -11301,7 +11301,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 14,
@@ -11327,7 +11327,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 15,
@@ -11352,7 +11352,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 16,
@@ -11377,7 +11377,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 17,
@@ -11399,7 +11399,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 18,
@@ -11420,7 +11420,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 19,
@@ -11441,7 +11441,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 20,
@@ -11462,7 +11462,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 21,
@@ -11483,7 +11483,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 22,
@@ -11504,7 +11504,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 23,
@@ -11525,7 +11525,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 34,
@@ -11546,7 +11546,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 35,
@@ -11567,7 +11567,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 36,
@@ -11588,7 +11588,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 37,
@@ -11609,7 +11609,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 38,
@@ -11630,7 +11630,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 39,
@@ -11651,7 +11651,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 40,
@@ -11672,7 +11672,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 41,
@@ -11693,7 +11693,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 42,
@@ -11714,7 +11714,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 43,
@@ -11735,7 +11735,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 44,
@@ -11756,7 +11756,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 45,
@@ -11777,7 +11777,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 46,
@@ -11798,7 +11798,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 47,
@@ -11819,7 +11819,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 48,
@@ -11840,7 +11840,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 49,
@@ -11861,7 +11861,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 50,
@@ -11882,7 +11882,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 51,
@@ -11903,7 +11903,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 52,
@@ -11924,7 +11924,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 53,
@@ -11945,7 +11945,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 54,
@@ -11966,7 +11966,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 55,
@@ -11987,7 +11987,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 56,
@@ -12008,7 +12008,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 57,
@@ -12029,7 +12029,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 58,
@@ -12050,7 +12050,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 59,
@@ -12071,7 +12071,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 60,
@@ -12092,7 +12092,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 61,
@@ -12113,7 +12113,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 62,
@@ -12134,7 +12134,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 63,
@@ -12155,7 +12155,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 66,
@@ -12176,7 +12176,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 67,
@@ -12197,7 +12197,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 69,
@@ -12218,7 +12218,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 73,
@@ -12239,7 +12239,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 76,
@@ -12260,7 +12260,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 77,
@@ -12281,7 +12281,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 79,
@@ -12302,7 +12302,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 80,
@@ -12323,7 +12323,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 81,
@@ -12344,7 +12344,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 82,
@@ -12365,7 +12365,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 84,
@@ -12386,7 +12386,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 86,
@@ -12407,7 +12407,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 87,
@@ -12428,7 +12428,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 88,
@@ -12449,7 +12449,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 89,
@@ -12470,7 +12470,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 90,
@@ -12491,7 +12491,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 91,
@@ -12512,7 +12512,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 92,
@@ -12533,7 +12533,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 93,
@@ -12554,7 +12554,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 94,
@@ -12575,7 +12575,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 95,
@@ -12596,7 +12596,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 96,
@@ -12617,7 +12617,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 97,
@@ -12638,7 +12638,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 98,
@@ -12659,7 +12659,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 99,
@@ -12680,7 +12680,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 100,
@@ -12701,7 +12701,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 101,
@@ -12722,7 +12722,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 102,
@@ -12743,7 +12743,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 103,
@@ -12764,7 +12764,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 104,
@@ -12785,7 +12785,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 105,
@@ -12806,7 +12806,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 106,
@@ -12827,7 +12827,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 107,
@@ -12848,7 +12848,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 108,
@@ -12869,7 +12869,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 109,
@@ -12890,7 +12890,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 110,
@@ -12911,7 +12911,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 111,
@@ -12935,7 +12935,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 112,
@@ -12961,7 +12961,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 113,
@@ -12986,7 +12986,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 114,
@@ -13011,7 +13011,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 115,
@@ -13036,7 +13036,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 116,
@@ -13059,7 +13059,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 117,
@@ -13080,7 +13080,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/obstacles/snowy_rock.png",
+        "file" : "../img/obstacles/snowy_rock.png",
         "filter" : 1,
         "flip" : false,
         "id" : 118,
@@ -13102,7 +13102,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 119,
@@ -13124,7 +13124,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 120,
@@ -13145,7 +13145,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 121,
@@ -13166,7 +13166,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 122,
@@ -13187,7 +13187,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 123,
@@ -13208,7 +13208,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/obstacles/snowy_rock.png",
+        "file" : "../img/obstacles/snowy_rock.png",
         "filter" : 1,
         "flip" : false,
         "id" : 124,
@@ -13234,7 +13234,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/obstacles/snowy_rock.png",
+        "file" : "../img/obstacles/snowy_rock.png",
         "filter" : 1,
         "flip" : false,
         "id" : 125,
@@ -13260,7 +13260,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 126,
@@ -13285,7 +13285,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 127,
@@ -13311,7 +13311,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 128,
@@ -13337,7 +13337,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 129,
@@ -13362,7 +13362,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 130,
@@ -13388,7 +13388,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 131,
@@ -13414,7 +13414,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 132,
@@ -13439,7 +13439,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 133,
@@ -13464,7 +13464,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 134,
@@ -13490,7 +13490,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 135,
@@ -13515,7 +13515,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 136,
@@ -13541,7 +13541,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 137,
@@ -13567,7 +13567,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 138,
@@ -13589,7 +13589,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 139,
@@ -13610,7 +13610,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 140,
@@ -13631,7 +13631,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 141,
@@ -13652,7 +13652,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 142,
@@ -13673,7 +13673,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 143,
@@ -13694,7 +13694,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 144,
@@ -13715,7 +13715,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 145,
@@ -13736,7 +13736,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 146,
@@ -13757,7 +13757,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 147,
@@ -13778,7 +13778,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 148,
@@ -13799,7 +13799,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 149,
@@ -13820,7 +13820,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 150,
@@ -13841,7 +13841,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 151,
@@ -13862,7 +13862,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 152,
@@ -13883,7 +13883,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 153,
@@ -13904,7 +13904,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 154,
@@ -13925,7 +13925,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 155,
@@ -13946,7 +13946,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 156,
@@ -13967,7 +13967,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 157,
@@ -13988,7 +13988,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 158,
@@ -14009,7 +14009,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 159,
@@ -14030,7 +14030,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 160,
@@ -14051,7 +14051,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 161,
@@ -14072,7 +14072,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 162,
@@ -14093,7 +14093,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 163,
@@ -14118,7 +14118,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 164,
@@ -14144,7 +14144,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 165,
@@ -14169,7 +14169,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 166,
@@ -14195,7 +14195,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 167,
@@ -14221,7 +14221,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 168,
@@ -14243,7 +14243,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 169,
@@ -14264,7 +14264,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 170,
@@ -14288,7 +14288,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 171,
@@ -14313,7 +14313,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 172,
@@ -14338,7 +14338,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 173,
@@ -14363,7 +14363,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 174,
@@ -14389,7 +14389,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 175,
@@ -14414,7 +14414,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 176,
@@ -14439,7 +14439,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 177,
@@ -14464,7 +14464,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 178,
@@ -14486,7 +14486,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 179,
@@ -14508,7 +14508,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 180,
@@ -14529,7 +14529,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 181,
@@ -14550,7 +14550,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 182,
@@ -14596,7 +14596,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 184,
@@ -14617,7 +14617,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 185,
@@ -14638,7 +14638,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 186,
@@ -14659,7 +14659,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 187,
@@ -14680,7 +14680,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 188,
@@ -14701,7 +14701,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 189,
@@ -14722,7 +14722,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 190,
@@ -14743,7 +14743,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 191,
@@ -14764,7 +14764,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 192,
@@ -14785,7 +14785,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 193,
@@ -14806,7 +14806,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 194,
@@ -14827,7 +14827,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 195,
@@ -14848,7 +14848,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 196,
@@ -14869,7 +14869,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 197,
@@ -14890,7 +14890,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 198,
@@ -14911,7 +14911,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 199,
@@ -14932,7 +14932,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 200,
@@ -14953,7 +14953,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 201,
@@ -14974,7 +14974,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 202,
@@ -14995,7 +14995,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 203,
@@ -15044,7 +15044,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 205,
@@ -15069,7 +15069,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 206,
@@ -15094,7 +15094,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 207,
@@ -15119,7 +15119,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 208,
@@ -15142,7 +15142,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 209,
@@ -15164,7 +15164,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 210,
@@ -15185,7 +15185,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 211,
@@ -15207,7 +15207,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 212,
@@ -15232,7 +15232,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 213,
@@ -15258,7 +15258,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/tree_01.png",
+        "file" : "../img/svgsilh/tree_01.png",
         "filter" : 1,
         "flip" : false,
         "id" : 214,
@@ -15280,7 +15280,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 215,
@@ -15302,7 +15302,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 216,
@@ -15328,7 +15328,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 217,
@@ -15350,7 +15350,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 218,
@@ -15376,7 +15376,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/santa pieces v01/santa-board.png",
+        "file" : "../img/santa_parts_v01/santa-board.png",
         "filter" : 1,
         "flip" : true,
         "id" : 219,
@@ -15397,7 +15397,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 220,
@@ -15418,7 +15418,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 221,
@@ -15439,7 +15439,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 222,
@@ -15460,7 +15460,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 223,
@@ -15481,7 +15481,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 224,
@@ -15502,7 +15502,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 225,
@@ -15523,7 +15523,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 226,
@@ -15544,7 +15544,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 227,
@@ -15565,7 +15565,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 228,
@@ -15586,7 +15586,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 229,
@@ -15607,7 +15607,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 230,
@@ -15628,7 +15628,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 231,
@@ -15649,7 +15649,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 232,
@@ -15670,7 +15670,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 233,
@@ -15691,7 +15691,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 234,
@@ -15712,7 +15712,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 235,
@@ -15733,7 +15733,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 236,
@@ -15754,7 +15754,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 237,
@@ -15775,7 +15775,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 238,
@@ -15796,7 +15796,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 239,
@@ -15817,7 +15817,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 240,
@@ -15838,7 +15838,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 241,
@@ -15859,7 +15859,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 242,
@@ -15880,7 +15880,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 243,
@@ -15901,7 +15901,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 245,
@@ -15922,7 +15922,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 248,
@@ -15943,7 +15943,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 249,
@@ -15964,7 +15964,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 250,
@@ -15985,7 +15985,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 251,
@@ -16006,7 +16006,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 252,
@@ -16027,7 +16027,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 253,
@@ -16048,7 +16048,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 254,
@@ -16069,7 +16069,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 255,
@@ -16090,7 +16090,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 257,
@@ -16111,7 +16111,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 258,
@@ -16132,7 +16132,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 259,
@@ -16153,7 +16153,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 260,
@@ -16174,7 +16174,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 261,
@@ -16195,7 +16195,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 264,
@@ -16216,7 +16216,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 265,
@@ -16237,7 +16237,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 267,
@@ -16258,7 +16258,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 271,
@@ -16279,7 +16279,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 275,
@@ -16300,7 +16300,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 281,
@@ -16321,7 +16321,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 282,
@@ -16342,7 +16342,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 283,
@@ -16363,7 +16363,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 330,
@@ -16384,7 +16384,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 331,
@@ -16405,7 +16405,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 332,
@@ -16426,7 +16426,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 333,
@@ -16447,7 +16447,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 334,
@@ -16468,7 +16468,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 335,
@@ -16489,7 +16489,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 336,
@@ -16510,7 +16510,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 337,
@@ -16531,7 +16531,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 338,
@@ -16552,7 +16552,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 339,
@@ -16573,7 +16573,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 340,
@@ -16594,7 +16594,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 341,
@@ -16615,7 +16615,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 343,
@@ -16636,7 +16636,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 344,
@@ -16657,7 +16657,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 345,
@@ -16678,7 +16678,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 346,
@@ -16699,7 +16699,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 347,
@@ -16720,7 +16720,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../../../../../../Desktop/wicked-snowboard-game/src/assets/img/present_temp.png",
+        "file" : "../img/present_temp.png",
         "filter" : 1,
         "flip" : false,
         "id" : 348,
@@ -16734,7 +16734,7 @@
       
       {
         "angle" : 0,
-        "file" : "export/character_santa_v1.json",
+        "file" : "character_santa_v1.rube",
         "flip" : false,
         "id" : 2,
         "name" : "object0",
