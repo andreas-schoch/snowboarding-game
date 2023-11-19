@@ -12,11 +12,10 @@ export default class Terrain {
   private readonly scene: GameScene;
   private readonly zoomModifier = 1 / DEFAULT_ZOOM;
   private readonly layers = [
-    {color: 0xC8E1EB, width: 5 * this.zoomModifier}, // top layer of snow
-    {color: 0x5c8dc9, width: 22 * this.zoomModifier},
-    {color: 0x223B7B, width: 10 * this.zoomModifier},
-    {color: 0x2d2c2c, width: 5 * this.zoomModifier},
-    {color: 0x3a3232, width: 250 * this.zoomModifier},
+    {color: 0xC8E1EB, width: 4 * this.zoomModifier}, // top layer of snow
+    {color: 0x5c8dc9, width: 15 * this.zoomModifier},
+    {color: 0xC8E1EB, width: 4 * this.zoomModifier},
+    {color: 0xffffff, width: 250 * this.zoomModifier},
   ];
 
   constructor(scene: GameScene, physics: Physics) {
