@@ -44,6 +44,7 @@ export const LEVELS = [
   LevelKeys.level_001,
   LevelKeys.level_002,
   LevelKeys.level_003,
+  LevelKeys.level_004,
 ];
 
 export const POINTS_PER_COIN = 100;

@@ -13,7 +13,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start('GameScene');
+    this.scene.start(SceneKeys.GAME_SCENE);
   }
 
   private loadAudio() {
@@ -41,6 +41,10 @@ export default class PreloadScene extends Phaser.Scene {
       'assets/audio/sfx/applause/applause.ogg',
       'assets/audio/sfx/applause/applause.mp3',
     ]);
+    this.load.audio('game_over_demon', [
+      'assets/audio/sfx/game_over_demon/game_over_demon.ogg',
+      'assets/audio/sfx/game_over_demon/game_over_demon.mp3',
+    ]);
   }
 
   private loadImg() {
@@ -59,5 +63,6 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.json(LevelKeys.level_001, `assets/levels/export/${LevelKeys.level_001}.json`);
     this.load.json(LevelKeys.level_002, `assets/levels/export/${LevelKeys.level_002}.json`);
     this.load.json(LevelKeys.level_003, `assets/levels/export/${LevelKeys.level_003}.json`);
+    this.load.json(LevelKeys.level_004, `assets/levels/export/${LevelKeys.level_004}.json`);
   }
 }

@@ -776,20 +776,19 @@
 
   #panel-select-level .level-item-overlay {
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    left: -1px;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 8px;
     cursor: pointer;
   }
 
-  #level_004,
   #level_005 {
     background-color: rgba(0, 0, 0, 0.7);
     cursor: not-allowed !important;
   }
 
-  #level_004::after,
   #level_005::after {
     content: "Upcoming";
     color: white;
@@ -1146,7 +1145,7 @@
         <span class="level-item-overlay" id="level_004"></span>
         <div class="level-number">Level 004</div>
         <div class="level-name">Rocky Roads</div>
-        <div class="level-thumbnail"></div>
+        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_004_rocky_roads.png')"></div>
         <!--        <div class="level-your-high-score">-->
         <!--          <div class="">Personal Best:</div>-->
         <!--          <div class="level-your-high-score-value">24030</div>-->

@@ -4,8 +4,8 @@
 			"image": "environment_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 208,
-				"h": 484
+				"w": 246,
+				"h": 453
 			},
 			"scale": 0.1875,
 			"frames": [
@@ -56,20 +56,62 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 118,
-						"h": 12
+						"w": 234,
+						"h": 25
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 118,
-						"h": 12
+						"w": 234,
+						"h": 25
 					},
 					"frame": {
 						"x": 1,
 						"y": 427,
-						"w": 118,
-						"h": 12
+						"w": 234,
+						"h": 25
+					}
+				},
+				{
+					"filename": "ice_block.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 52
+					},
+					"frame": {
+						"x": 177,
+						"y": 219,
+						"w": 52,
+						"h": 52
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 52
+					},
+					"frame": {
+						"x": 177,
+						"y": 273,
+						"w": 52,
+						"h": 52
 					}
 				},
 				{
@@ -87,8 +129,8 @@
 						"h": 47
 					},
 					"frame": {
-						"x": 121,
-						"y": 427,
+						"x": 177,
+						"y": 327,
 						"w": 58,
 						"h": 47
 					}
@@ -108,8 +150,8 @@
 						"h": 42
 					},
 					"frame": {
-						"x": 1,
-						"y": 441,
+						"x": 177,
+						"y": 376,
 						"w": 58,
 						"h": 42
 					}
@@ -129,8 +171,8 @@
 						"h": 38
 					},
 					"frame": {
-						"x": 61,
-						"y": 441,
+						"x": 209,
+						"y": 1,
 						"w": 36,
 						"h": 38
 					}
@@ -141,6 +183,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d05b175b45e829d03a5d1afaca85e901:e83b6b39992b3435021a42dda654fdbf:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

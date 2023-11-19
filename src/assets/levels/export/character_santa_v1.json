@@ -1712,7 +1712,7 @@
 					"string" : "santa upper.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa upper.png",
+			"file" : "../img/santa_parts_v01/santa upper.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1771,7 +1771,7 @@
 					"string" : "santa upper.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa upper.png",
+			"file" : "../img/santa_parts_v01/santa upper.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1830,7 +1830,7 @@
 					"string" : "santa upper.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa upper.png",
+			"file" : "../img/santa_parts_v01/santa upper.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1873,7 +1873,7 @@
 					"string" : "santa-body.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-body.png",
+			"file" : "../img/santa_parts_v01/santa-body.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1921,7 +1921,7 @@
 					"string" : "santa-leg-lower.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-leg-lower.png",
+			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1980,7 +1980,7 @@
 					"string" : "santa-leg-lower.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-leg-lower.png",
+			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2039,7 +2039,7 @@
 					"string" : "santa-head-with-face.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-head-with-face.png",
+			"file" : "../img/santa_parts_v01/santa-head-with-face.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2098,7 +2098,7 @@
 					"string" : "santa upper.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa upper.png",
+			"file" : "../img/santa_parts_v01/santa upper.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2157,7 +2157,7 @@
 					"string" : "santa-arm-lower-left.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-arm-lower-left.png",
+			"file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2212,7 +2212,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2230,6 +2230,61 @@
 			"name" : "image5",
 			"opacity" : 1,
 			"renderOrder" : 4,
+			"scale" : 0.1163636371493340
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 11,
+			"center" : 0,
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
+				],
+				"y" : 
+				[
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "board.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/board.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
+			],
+			"name" : "image5",
+			"opacity" : 1,
+			"renderOrder" : 5,
 			"scale" : 0.1163636371493340
 		},
 		
@@ -2272,7 +2327,7 @@
 					"string" : "santa-arm-lower-left.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/santa-arm-lower-left.png",
+			"file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
 			"filter" : 1,
 			"flip" : true,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
@@ -2292,61 +2347,6 @@
 			"opacity" : 1,
 			"renderOrder" : 5,
 			"scale" : -0.4301609992980957
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 11,
-			"center" : 0,
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
-				],
-				"y" : 
-				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "board.png"
-				}
-			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
-			],
-			"name" : "image5",
-			"opacity" : 1,
-			"renderOrder" : 5,
-			"scale" : 0.1163636371493340
 		},
 		
 		{
@@ -2383,7 +2383,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2438,7 +2438,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2493,7 +2493,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2548,7 +2548,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2603,7 +2603,7 @@
 					"string" : "board.png"
 				}
 			],
-			"file" : "../../../../../../../../Desktop/santa pieces v01/board.png",
+			"file" : "../img/santa_parts_v01/board.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],

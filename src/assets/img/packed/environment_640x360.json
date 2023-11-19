@@ -4,8 +4,8 @@
 			"image": "environment_640x360.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 140,
-				"h": 326
+				"w": 258,
+				"h": 198
 			},
 			"scale": 0.125,
 			"frames": [
@@ -45,10 +45,52 @@
 						"h": 138
 					},
 					"frame": {
-						"x": 1,
-						"y": 147,
+						"x": 141,
+						"y": 1,
 						"w": 116,
 						"h": 138
+					}
+				},
+				{
+					"filename": "ice_block.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 34
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 34
+					},
+					"frame": {
+						"x": 1,
+						"y": 147,
+						"w": 34,
+						"h": 34
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 34
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 34
+					},
+					"frame": {
+						"x": 37,
+						"y": 147,
+						"w": 34,
+						"h": 34
 					}
 				},
 				{
@@ -66,31 +108,10 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 1,
-						"y": 287,
+						"x": 73,
+						"y": 147,
 						"w": 39,
 						"h": 31
-					}
-				},
-				{
-					"filename": "snowy_rock.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 39,
-						"h": 28
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 39,
-						"h": 28
-					},
-					"frame": {
-						"x": 42,
-						"y": 287,
-						"w": 39,
-						"h": 28
 					}
 				},
 				{
@@ -98,20 +119,20 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 78,
-						"h": 8
+						"w": 156,
+						"h": 17
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 78,
-						"h": 8
+						"w": 156,
+						"h": 17
 					},
 					"frame": {
-						"x": 42,
-						"y": 317,
-						"w": 78,
-						"h": 8
+						"x": 73,
+						"y": 180,
+						"w": 156,
+						"h": 17
 					}
 				},
 				{
@@ -129,10 +150,31 @@
 						"h": 25
 					},
 					"frame": {
-						"x": 83,
-						"y": 287,
+						"x": 231,
+						"y": 141,
 						"w": 24,
 						"h": 25
+					}
+				},
+				{
+					"filename": "snowy_rock.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 39,
+						"h": 28
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 39,
+						"h": 28
+					},
+					"frame": {
+						"x": 114,
+						"y": 147,
+						"w": 39,
+						"h": 28
 					}
 				}
 			]
@@ -141,6 +183,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d05b175b45e829d03a5d1afaca85e901:e83b6b39992b3435021a42dda654fdbf:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }
