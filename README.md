@@ -39,6 +39,7 @@ Eventually I want to add a level editor to the game so that players can create t
  npm i
  npm run start
 ```
+
 ## Enable your own Leaderboards
 <img src="./leaderboards.png" alt="Snowboarding Game Leaderboards" width="400" height="auto"> <img src="./highscore.png" alt="Snowboarding Game Highscore" width="400" height="auto">
 
@@ -55,8 +56,20 @@ FIREBASE_PROJECT_ID=<get-from-firebase>
 FIREBASE_STORAGE_BUCKET=<get-from-firebase>
 FIREBASE_MESSAGING_SENDER_ID=<get-from-firebase>
 FIREBASE_APP_ID=<get-from-firebase>
-FIREBASE_MEASUREMENT_ID=<get-from-firebase>
+FIREBASE_MEASUREMENT_ID=<get-from-firebase> # deprecated can be omitted
 ```
+
+## Deploy via Github Pages
+Create a fork of this repo, clone it, verify it works locally, setup leaderboards (if desired) and then run the following commands:
+```shell
+npm run pages-predeploy
+npm run pages-deploy
+```
+
+**Note**: If you want gh pages to use a custom domain, add a CNAME file within /dist folder before running `pages-deploy` command (Requires you to properly setup DNS records for your domain).
+
+If no custom domain is specified, it will be available via `https://<your-github-username>.github.io/<your-repo-name>/`
+
 
 ## License
 MIT
