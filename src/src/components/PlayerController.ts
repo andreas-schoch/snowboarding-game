@@ -19,8 +19,8 @@ export class PlayerController {
   board: WickedSnowboard;
   state: State;
 
-  private readonly jumpForce: number = 650 * 60;
-  private leanForce: number = 2.5 * 60;
+  private readonly jumpForce: number = 750 * 60;
+  private leanForce: number = 3 * 60;
   private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private debugControls: Phaser.Cameras.Controls.SmoothedKeyControl;
   private debugKeyLeft: Phaser.Input.Keyboard.Key | undefined;

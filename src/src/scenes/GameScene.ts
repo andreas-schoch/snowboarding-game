@@ -40,7 +40,7 @@ export default class GameScene extends Ph.Scene {
     this.terrain = new Terrain(this, this.b2Physics);
 
     this.cameras.main.startFollow(this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserCameraFollow', true)[0].GetUserData() as Phaser.GameObjects.Image, false, 0.8, 0.25);
-    this.cameras.main.followOffset.set(-375 / 2, 0);
+    this.cameras.main.followOffset.set(-250, 0);
     this.scene.launch(SceneKeys.GAME_UI_SCENE, [this.observer, () => {
       this.playerController.state.reset();
       this.scene.restart();

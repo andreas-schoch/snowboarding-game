@@ -59,7 +59,7 @@ export const RESOLUTION_SCALE: number = Number(localStorage.getItem(SETTINGS_KEY
 // FIXME there is some kind of floating point precision issue (I assume) where the terrain gets weird once player moves to far from origin
 //  It appears as the resolution and the scale have an influence on this. As temporary workaround I halved the world size and doubled the zoom.
 //  This likely won't be an issue once terrain is split up in chunks (as it was when it used to be procedural before RUBE loader added).
-export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 1);
+export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 0.9);
 export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 export const gameConfig: Ph.Types.Core.GameConfig = {
