@@ -3,26 +3,19 @@
 * Based on provided example by Chris Campbell: https://www.iforce2d.net/rube/loaders/rube-phaser-sample.zip
 */
 
-import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
-import {RubeBody, RubeFixture, RubeEntity, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
-import {DEBUG} from '../../index';
-
+import { RubeBody, RubeFixture, RubeEntity, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
 
 export class RubeLoader {
   private world: Pl.b2World;
-  private debugGraphics: Ph.GameObjects.Graphics;
-  private scene: Ph.Scene;
   private worldSize: number;
 
   loadedBodies: (Pl.b2Body | null)[];
   loadedJoints: (Pl.b2Joint | null)[];
-  loadedImages: ((Ph.GameObjects.Image & RubeEntity) | null)[];
+  loadedImages: ((RubeEntity) | null)[];
 
-  constructor(world: Pl.b2World, debugGraphics: Ph.GameObjects.Graphics, scene: Ph.Scene, worldSize: number) {
+  constructor(world: Pl.b2World, worldSize: number) {
     this.world = world;
-    this.debugGraphics = debugGraphics;
-    this.scene = scene;
     this.worldSize = worldSize;
   }
 
@@ -32,10 +25,13 @@ export class RubeLoader {
     this.loadedImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
 
     const success = this.loadedBodies.every(b => b) && this.loadedJoints.every(j => j) && this.loadedImages.every(i => i);
-    success
-      ? console.log(`R.U.B.E. scene loaded successfully`, this.loadedBodies, this.loadedJoints, this.loadedImages)
-      : console.error(`R.U.B.E. scene failed to load fully`, this.loadedBodies, this.loadedJoints, this.loadedImages);
+    if (success) console.log(`R.U.B.E. scene loaded successfully`, this.loadedBodies, this.loadedJoints, this.loadedImages);
+    else console.error(`R.U.B.E. scene failed to load fully`, this.loadedBodies, this.loadedJoints, this.loadedImages);
     return success;
+  }
+
+  handleLoadImage(imageJson: RubeImage, bodyObj: (Pl.b2Body & RubeEntity) | null): RubeEntity | null {
+    throw new Error('Method not implemented. This method gives you a chance to implement how you want to load images.');
   }
 
   private loadBody(bodyJson: RubeBody): Pl.b2Body | null {
@@ -195,37 +191,22 @@ export class RubeLoader {
     return joint;
   }
 
-  private loadImage(imageJson: RubeImage): (Ph.GameObjects.Image & RubeEntity) | null {
-    const {file, body, center, customProperties, angle, aspectScale, scale, flip, renderOrder} = imageJson;
+  private loadImage(imageJson: RubeImage): RubeEntity | null {
+    const { body, customProperties} = imageJson;
     const bodyObj = this.loadedBodies[body];
-    const pos = bodyObj ? bodyObj.GetPosition().Add(this.rubeToXY(center)) : this.rubeToXY(center);
-
-    if (!pos) return null;
-
-    const texture = this.getCustomProperty(imageJson, 'string', 'phaserTexture', '');
-    // textureFallback is used when the images in the exported RUBE scene don't define the phaserTexture or phaserTextureFrame custom properties.
-    // It is quite a hassle to set it within RUBE if not done from the start. In the future only the phaserTexture custom prop will be necessary to specify which atlas to use.
-    // The textureFrame will be taken from the image file name.
-    const textureFallback = (file || '').split('/').reverse()[0];
-    const textureFrame = this.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', textureFallback);
-    const img: Ph.GameObjects.Image & RubeEntity = this.scene.add.image(pos.x * this.worldSize, pos.y * -this.worldSize, texture || textureFallback, textureFrame);
-    img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
-    img.scaleY = (this.worldSize / img.height) * scale;
-    img.scaleX = img.scaleY * aspectScale;
-    img.flipX = flip;
-    img.setDepth(renderOrder);
-    // @ts-ignore
-    img.custom_origin_angle = -(angle || 0);
+    const img = this.handleLoadImage(imageJson, bodyObj);
+    if (!img) return null;
+    img.name = imageJson.name || '';
     img.customProperties = customProperties || [];
     img.customPropertiesMap = this.customPropertiesArrayToMap(img.customProperties);
     bodyObj && bodyObj.SetUserData(img);
     return img;
   }
 
-///////////////////
+  ///////////////////
 
-  rubeToXY(val?: RubeVector, offset: Pl.XY = {x: 0, y: 0}): Pl.XY {
-    return this.isXY(val) ? {x: val.x + offset.x, y: val.y + offset.y} : offset;
+  rubeToXY(val?: RubeVector, offset: Pl.XY = { x: 0, y: 0 }): Pl.XY {
+    return this.isXY(val) ? { x: val.x + offset.x, y: val.y + offset.y } : offset;
   }
 
   rubeToVec2(val?: RubeVector): Pl.b2Vec2 {
@@ -324,33 +305,18 @@ export class RubeLoader {
       const shape = new Pl.b2CircleShape();
       shape.Set(this.rubeToXY(fixtureJso.circle.center), fixtureJso.circle.radius);
       const bodyPos = body.GetPosition().Clone().Add(shape.m_p).Scale(this.worldSize);
-      DEBUG && this.debugGraphics.strokeCircle(bodyPos.x, -bodyPos.y, fixtureJso.circle.radius * this.worldSize);
-      return {shape};
+      return { shape };
     } else if (fixtureJso.hasOwnProperty('polygon') && fixtureJso.polygon) {
       const verts = this.pointsFromSeparatedVertices(fixtureJso.polygon.vertices).reverse();
-      const bodyPos = body.GetPosition();
-      if (DEBUG) {
-        const pxVerts = verts
-        .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
-        .map(({x, y}) => ({x: x, y: -y}));
-        this.debugGraphics.strokePoints(pxVerts, true).setDepth(100);
-      }
-      return {shape: new Pl.b2PolygonShape().Set(verts, verts.length)};
+      return { shape: new Pl.b2PolygonShape().Set(verts, verts.length) };
     } else if (fixtureJso.hasOwnProperty('chain') && fixtureJso.chain) {
       const verts = this.pointsFromSeparatedVertices(fixtureJso.chain.vertices).reverse();
-      const bodyPos = body.GetPosition();
-      if (DEBUG) {
-        const pxVerts = verts
-        .map(p => bodyPos.Clone().Add(new Pl.b2Vec2(p.x, p.y).Rotate(body.GetAngle())).Scale(this.worldSize))
-        .map(({x, y}) => ({x: x, y: -y}));
-        this.debugGraphics.strokePoints(pxVerts).setDepth(100);
-      }
       const isLoop = fixtureJso.chain.hasNextVertex && fixtureJso.chain.hasPrevVertex && fixtureJso.chain.nextVertex && fixtureJso.chain.prevVertex;
       // TODO should polygon create loop chain instead to avoid ghost collisions? https://box2d.org/posts/2020/06/ghost-collisions/
       const shape = isLoop
         ? new Pl.b2ChainShape().CreateLoop(verts, verts.length)
         : new Pl.b2ChainShape().CreateChain(verts, verts.length, this.rubeToXY(fixtureJso.chain.prevVertex), this.rubeToXY(fixtureJso.chain.nextVertex));
-      return {shape};
+      return { shape };
     } else {
       throw new Error('Could not find shape type for fixture');
     }

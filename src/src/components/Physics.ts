@@ -2,7 +2,7 @@ import * as Ph from 'phaser';
 import * as Pl from '@box2d/core';
 import {LevelKeys, stats} from '../index';
 import GameScene from '../scenes/GameScene';
-import {RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
+import {RubeEntity, RubeImage, RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
 import {RubeLoader} from '../util/RUBE/RubeLoader';
 
 
@@ -30,7 +30,27 @@ export class Physics extends Phaser.Events.EventEmitter {
       PostSolve: (contact, impulse) => this.emit('post_solve', contact, impulse),
     });
 
-    this.rubeLoader = new RubeLoader(this.world, this.scene.add.graphics(), this.scene, this.worldScale);
+    this.rubeLoader = new RubeLoader(this.world, this.worldScale);
+    this.rubeLoader.handleLoadImage = (imageJson: RubeImage, bodyObj: Pl.b2Body) => {
+      const {file, body, center, customProperties, angle, aspectScale, scale, flip, renderOrder} = imageJson;
+      const pos = bodyObj ? bodyObj.GetPosition().Add(this.rubeLoader.rubeToXY(center)) : this.rubeLoader.rubeToXY(center);
+      if (!pos) return null;
+      const texture = this.rubeLoader.getCustomProperty(imageJson, 'string', 'phaserTexture', '');
+      // textureFallback is used when the images in the exported RUBE scene don't define the phaserTexture or phaserTextureFrame custom properties.
+      // It is quite a hassle to set it within RUBE if not done from the start. In the future only the phaserTexture custom prop will be necessary to specify which atlas to use.
+      // The textureFrame will be taken from the image file name.
+      const textureFallback = (file || '').split('/').reverse()[0];
+      const textureFrame = this.rubeLoader.getCustomProperty(imageJson, 'string', 'phaserTextureFrame', textureFallback);
+      const img: Ph.GameObjects.Image & RubeEntity = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, texture || textureFallback, textureFrame);
+      img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
+      img.scaleY = (this.worldScale / img.height) * scale;
+      img.scaleX = img.scaleY * aspectScale;
+      img.flipX = flip;
+      img.setDepth(renderOrder);
+      // @ts-ignore
+      img.custom_origin_angle = -(angle || 0);
+      return img;
+    }
   }
 
   loadRubeScene(rubeScene: LevelKeys) {
