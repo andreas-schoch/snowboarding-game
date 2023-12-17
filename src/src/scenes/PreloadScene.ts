@@ -1,8 +1,8 @@
-import {DEFAULT_HEIGHT, LevelKeys, RESOLUTION_SCALE, SceneKeys} from '../index';
+import { DEFAULT_HEIGHT, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
-    super({key: SceneKeys.PRELOAD_SCENE});
+    super({ key: SceneKeys.PRELOAD_SCENE });
   }
 
   preload() {
@@ -50,7 +50,7 @@ export default class PreloadScene extends Phaser.Scene {
   private loadImg() {
     const height = DEFAULT_HEIGHT * RESOLUTION_SCALE;
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
-    const size = {360: '640x360', 540: '960x540', 720: '1280x720'}[closestSize];
+    const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
     this.load.atlas('atlas_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);

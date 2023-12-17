@@ -1,13 +1,11 @@
 import * as Ph from 'phaser';
-import * as Pl from '@box2d/core';
-import {Physics} from './Physics';
-import {DEBUG, stats} from '../index';
+import { Physics } from './Physics';
+import { DEBUG, b2 } from '../index';
 import GameScene from '../scenes/GameScene';
-import {WickedSnowboard} from './Snowboard';
-import {State} from './State';
-import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
-import {DebugMouseJoint} from '../util/DebugMouseJoint';
-import {PanelIds} from '../scenes/GameUIScene';
+import { WickedSnowboard } from './Snowboard';
+import { State } from './State';
+import { PanelIds } from '../scenes/GameUIScene';
+import { vec2Util } from '../util/RUBE/Vec2Math';
 
 
 export class PlayerController {
@@ -21,7 +19,6 @@ export class PlayerController {
 
   private readonly jumpForce: number = 750 * 60;
   private leanForce: number = 3 * 60;
-  private readonly jumpVector: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
   private debugControls: Phaser.Cameras.Controls.SmoothedKeyControl;
   private debugKeyLeft: Phaser.Input.Keyboard.Key | undefined;
   private debugKeyRight: Phaser.Input.Keyboard.Key | undefined;
@@ -48,23 +45,6 @@ export class PlayerController {
     this.initBodyParts();
     this.board = new WickedSnowboard(this);
     this.state = new State(this);
-
-    if (DEBUG) {
-      new DebugMouseJoint(scene, b2Physics);
-      this.debugKeyLeft = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-      this.debugKeyRight = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-      this.debugKeyUp = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-      this.debugKeyDown = this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-      this.debugControls = new Phaser.Cameras.Controls.SmoothedKeyControl({
-        camera: this.scene.cameras.main,
-        zoomIn: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-        zoomOut: this.scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-        acceleration: 0.05,
-        drag: 0.0015,
-        maxSpeed: 1.0,
-        zoomSpeed: 0.02,
-      });
-    }
   }
 
   private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
@@ -76,7 +56,6 @@ export class PlayerController {
 
   update(delta: number) {
     if (this.b2Physics.isPaused) return;
-    stats.begin('snowman');
 
     if (DEBUG) {
       this.debugControls && this.debugControls.update(delta);
@@ -87,7 +66,7 @@ export class PlayerController {
     }
 
     this.state.update(delta);
-    this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
+    // this.state.isCrashed && this.detachBoard(); // joints cannot be destroyed within post-solve callback
     this.board.getTimeInAir() > 100 && this.resetLegs();
 
     if (!this.state.isCrashed && !this.state.levelFinished) {
@@ -112,7 +91,6 @@ export class PlayerController {
         this.cursors.up.isDown && this.scene.game.getTime() - this.cursors.up.timeDown <= 250 && this.jump(delta);
       }
     }
-    stats.end('snowman');
   }
 
   private detachBoard() {
@@ -130,15 +108,14 @@ export class PlayerController {
 
     this.leanUp(delta);
 
-    const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
+    const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
       const force = this.jumpForce * delta;
-      const jumpVector = this.jumpVector.Set(0, 0);
       // TODO these kind of values should come from the RUBE export.
       //  That would make the game somewhat moddable once players can create and download custom levels and characters.
-      isCenterGrounded
-        ? this.parts.body.GetWorldVector({x: 0, y: force * 0.3}, jumpVector).Add({x: 0, y: force * 1.25})
-        : this.parts.body.GetWorldVector({x: 0, y: force * 0.5}, jumpVector).Add({x: 0, y: force * 0.85});
+      const jumpVector = isCenterGrounded
+        ? vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, force * 0.3)), new b2.b2Vec2(0, force * 1.25))
+        : vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, force * 0.5)), new b2.b2Vec2(0, force * 0.85));
       this.parts.body.ApplyForceToCenter(jumpVector, true);
     }
   }
@@ -153,7 +130,7 @@ export class PlayerController {
     this.parts.distanceLegRight?.SetLength(0.8);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * -10;
-    this.parts.body.ApplyAngularImpulse(this.leanForce * delta);
+    this.parts.body.ApplyAngularImpulse(this.leanForce * delta, true);
   }
 
   private leanForward(delta: number) {
@@ -161,7 +138,7 @@ export class PlayerController {
     this.parts.distanceLegRight?.SetLength(0.55);
     // @ts-ignore
     this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * 10;
-    this.parts.body.ApplyAngularImpulse(-this.leanForce * delta);
+    this.parts.body.ApplyAngularImpulse(-this.leanForce * delta, true);
   }
 
   private leanCenter(delta: number) {
@@ -184,26 +161,28 @@ export class PlayerController {
       body: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'body')[0],
       boardSegments: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'boardSegment'),
 
-      bindingLeft: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0] as Pl.b2RevoluteJoint,
-      bindingRight: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0] as Pl.b2RevoluteJoint,
-      distanceLegLeft: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0] as Pl.b2DistanceJoint,
-      distanceLegRight: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0] as Pl.b2DistanceJoint,
-      weldCenter: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0] as Pl.b2WeldJoint,
-      prismatic: this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0] as Pl.b2PrismaticJoint,
+      bindingLeft: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
+      bindingRight: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
+      distanceLegLeft: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0], b2.b2DistanceJoint),
+      distanceLegRight: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0], b2.b2DistanceJoint),
+      weldCenter: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0], b2.b2WeldJoint),
+      prismatic: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0], b2.b2PrismaticJoint),
     };
+
+    // debugger;
   }
 }
 
 
 export interface IBodyParts {
-  head: Pl.b2Body & RubeEntity;
-  body: Pl.b2Body & RubeEntity;
-  boardSegments: (Pl.b2Body & RubeEntity)[];
+  head: Box2D.b2Body;
+  body: Box2D.b2Body;
+  boardSegments: (Box2D.b2Body)[];
 
-  bindingLeft: Pl.b2RevoluteJoint & RubeEntity | null;
-  bindingRight: Pl.b2RevoluteJoint & RubeEntity | null;
-  distanceLegLeft: Pl.b2DistanceJoint & RubeEntity | null;
-  distanceLegRight: Pl.b2DistanceJoint & RubeEntity | null;
-  weldCenter: Pl.b2WeldJoint & RubeEntity | null;
-  prismatic: Pl.b2PrismaticJoint & RubeEntity | null;
+  bindingLeft: Box2D.b2RevoluteJoint | null;
+  bindingRight: Box2D.b2RevoluteJoint | null;
+  distanceLegLeft: Box2D.b2DistanceJoint | null;
+  distanceLegRight: Box2D.b2DistanceJoint | null;
+  weldCenter: Box2D.b2WeldJoint | null;
+  prismatic: Box2D.b2PrismaticJoint | null;
 }

@@ -1,26 +1,26 @@
 import * as Ph from 'phaser';
-import * as Pl from '@box2d/core';
-import {Physics} from './Physics';
+import { Physics } from './Physics';
 import GameScene from '../scenes/GameScene';
-import {PlayerController} from './PlayerController';
-import {DEBUG} from '../index';
+import { PlayerController } from './PlayerController';
+import { DEBUG, b2 } from '../index';
+import { vec2Util } from '../util/RUBE/Vec2Math';
 
 
 interface IRayCastResult {
   hit: boolean;
-  point: Pl.b2Vec2 | null | undefined;
-  normal: Pl.b2Vec2 | null | undefined;
+  point: Box2D.b2Vec2 | null | undefined;
+  normal: Box2D.b2Vec2 | null | undefined;
   fraction: number;
   lastHitTime: number;
 }
 
 
 export interface ISegment {
-  body: Pl.b2Body;
+  body: Box2D.b2Body;
 
-  groundRayDirection: Pl.b2Vec2;
+  groundRayDirection: Box2D.b2Vec2;
   groundRayResult: IRayCastResult;
-  groundRayCallback: Pl.b2RayCastCallback;
+  groundRayCallback: Box2D.b2RayCastCallback;
 }
 
 
@@ -33,8 +33,9 @@ export class WickedSnowboard {
 
   readonly segments: ISegment[] = [];
 
-  private pointStart: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
-  private pointEnd: Pl.b2Vec2 = new Pl.b2Vec2(0, 0);
+  private pointStart: Box2D.b2Vec2;
+  private pointEnd: Box2D.b2Vec2;
+  private ZERO: Box2D.b2Vec2;
   private debugGraphics: Ph.GameObjects.Graphics;
 
   private readonly player: PlayerController;
@@ -46,21 +47,23 @@ export class WickedSnowboard {
     this.scene = player.scene;
     this.b2Physics = player.b2Physics;
 
-    this.debugGraphics = this.scene.add.graphics();
+    this.pointStart = new b2.b2Vec2(0, 0);
+    this.pointEnd = new b2.b2Vec2(0, 0);
+    this.ZERO = new b2.b2Vec2(0, 0);
+
+    this.debugGraphics = this.scene.add.graphics().setDepth(10000000);
     this.initRays(this.b2Physics.worldScale / 4);
 
   }
 
   update(delta: number) {
-    DEBUG && this.debugGraphics.clear();
     const segments = this.segments;
-
     for (const segment of this.segments) {
       this.resetSegment(segment);
-      segment.body.GetWorldPoint(Pl.b2Vec2.ZERO, this.pointStart);
-      segment.body.GetWorldPoint(segment.groundRayDirection, this.pointEnd);
-      this.b2Physics.world.RayCast(this.pointStart, this.pointEnd, segment.groundRayCallback);
-      DEBUG && this.drawDebug(segment.groundRayResult.hit ? 0x0000ff : 0x00ff00);
+      // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
+      const pointStart = vec2Util.Clone(segment.body.GetWorldPoint(this.ZERO));
+      const pointEnd = vec2Util.Clone(segment.body.GetWorldPoint(segment.groundRayDirection));
+      this.b2Physics.world.RayCast(segment.groundRayCallback, pointStart, pointEnd);
     }
 
     this.isTailGrounded = segments[0].groundRayResult.hit;
@@ -76,19 +79,6 @@ export class WickedSnowboard {
 
   isInAir(): boolean {
     return this.getTimeInAir() !== -1;
-  }
-
-  private rayCallbackFactory(hitResult: IRayCastResult) {
-    return (fixture, point, normal, fraction) => {
-      // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
-      if (fixture.IsSensor()) return;
-      hitResult.hit = true;
-      hitResult.point = point;
-      hitResult.normal = normal;
-      hitResult.fraction = fraction;
-      hitResult.lastHitTime = this.scene.game.getTime();
-      return fraction;
-    };
   }
 
   private resetSegment(segment: ISegment) {
@@ -110,20 +100,34 @@ export class WickedSnowboard {
   }
 
   private initRays(rayLength: number) {
-    const temp: IRayCastResult = {hit: false, point: null, normal: null, fraction: -1, lastHitTime: -1};
     for (const segment of this.player.parts.boardSegments) {
-      const segmentIndex = this.b2Physics.rubeLoader.getCustomProperty(segment, 'int', 'phaserBoardSegmentIndex', -1);
-      const isNose = segmentIndex === this.player.parts.boardSegments.length - 1;
-      const groundHitResult = {...temp};
-      const crashHitResult = {...temp};
-      this.segments.push({
-        body: segment,
-        groundRayDirection: new Pl.b2Vec2(0, -rayLength / this.b2Physics.worldScale),
-        groundRayResult: groundHitResult,
-        groundRayCallback: this.rayCallbackFactory(groundHitResult),
+      const index = this.b2Physics.rubeLoader.getCustomProperty(segment, 'int', 'phaserBoardSegmentIndex', -1);
+      const result: IRayCastResult = { hit: false, point: null, normal: null, fraction: -1, lastHitTime: -1 };
+
+      const callback = Object.assign(new b2.JSRayCastCallback(), {
+        ReportFixture: (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number): number => {
+          const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
+          if (fixture.IsSensor()) return 1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
+          const point = b2.wrapPointer(pointPtr, b2.b2Vec2);
+          const normal = b2.wrapPointer(normalPtr, b2.b2Vec2);
+          result.hit = true;
+          result.point = point;
+          result.normal = normal;
+          result.fraction = fraction;
+          result.lastHitTime = this.scene.game.getTime();
+          return fraction;
+        }
       });
 
-      if (isNose) this.nose = this.segments[this.segments.length - 1];
+      this.segments.push({
+        body: segment,
+        groundRayDirection: new b2.b2Vec2(0, -rayLength / this.b2Physics.worldScale),
+        groundRayResult: result,
+        groundRayCallback: callback
+      });
+
+
+      if (index === this.player.parts.boardSegments.length - 1) this.nose = this.segments[this.segments.length - 1];
     }
 
   }

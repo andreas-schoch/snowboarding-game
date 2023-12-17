@@ -1,5 +1,4 @@
 import * as Ph from 'phaser';
-import {stats} from '../index';
 import GameScene from '../scenes/GameScene';
 
 
@@ -18,12 +17,10 @@ export class Backdrop {
   }
 
   update() {
-    stats.begin('backdrop');
     const {scrollX, scrollY} = this.scene.cameras.main;
     this.bgSpaceBack.setTilePosition(scrollX * 0.005, scrollY * 0.005);
     this.bgSpaceMid.setTilePosition(scrollX * 0.01, scrollY * 0.01);
     this.bgSpaceFront.setTilePosition(scrollX * 0.025, scrollY * 0.025);
-    stats.end('backdrop');
   }
 
   private registerLayer(key: string, scaleX: number = 1, scaleY: number = 1): Ph.GameObjects.TileSprite {

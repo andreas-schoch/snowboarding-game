@@ -1,19 +1,17 @@
 import * as Ph from 'phaser';
 import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
 
+import Box2DFactory from 'box2d-wasm';
 import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
-import GameStats from 'gamestats.js';
 import GameUIScene from './scenes/GameUIScene';
-import {LeaderboardService} from './services/leaderboard';
-
+import { LeaderboardService } from './services/leaderboard';
 
 export const enum SceneKeys {
   PRELOAD_SCENE = 'PreloadScene',
   GAME_SCENE = 'GameScene',
   GAME_UI_SCENE = 'GameUIScene',
 }
-
 
 // Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();
@@ -56,9 +54,6 @@ export const HEAD_MAX_IMPULSE = 8;
 export const DEFAULT_WIDTH = 1280;
 export const DEFAULT_HEIGHT = 720;
 export const RESOLUTION_SCALE: number = Number(localStorage.getItem(SETTINGS_KEY_RESOLUTION) || 1);
-// FIXME there is some kind of floating point precision issue (I assume) where the terrain gets weird once player moves to far from origin
-//  It appears as the resolution and the scale have an influence on this. As temporary workaround I halved the world size and doubled the zoom.
-//  This likely won't be an issue once terrain is split up in chunks (as it was when it used to be procedural before RUBE loader added).
 export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 0.9);
 export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
@@ -95,51 +90,10 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
   },
 };
 
-const config = {
-  autoPlace: true, /* auto place in the dom */
-  targetFPS: 60, /* the target max FPS */
-  redrawInterval: 200, /* the interval in MS for redrawing the FPS graph */
-  maximumHistory: 200, /* the length of the visual graph history in frames */
-  scale: 1, /* the scale of the canvas */
-  memoryUpdateInterval: 100, /* the interval for measuring the memory */
-  memoryMaxHistory: 60 * 10, /* the max amount of memory measures */
-
-  // Styling props
-  FONT_FAMILY: 'Arial',
-  COLOR_FPS_BAR: '#34cfa2',
-  COLOR_FPS_AVG: '#FFF',
-  COLOR_TEXT_LABEL: '#FFF',
-  COLOR_TEXT_TO_LOW: '#eee207',
-  COLOR_TEXT_BAD: '#d34646',
-  COLOR_TEXT_TARGET: '#d249dd',
-  COLOR_BG: '#333333',
-};
-
-export let stats: GameStats = {begin: () => null, end: () => null} as unknown as GameStats;
+export let b2: typeof Box2D & EmscriptenModule;
 window.addEventListener('load', () => {
-  const game = new Ph.Game(gameConfig);
-
-  if (DEBUG) {
-    const config = {
-      autoPlace: true, /* auto place in the dom */
-      targetFPS: 60, /* the target max FPS */
-      redrawInterval: 200, /* the interval in MS for redrawing the FPS graph */
-      maximumHistory: 200, /* the length of the visual graph history in frames */
-      scale: 1, /* the scale of the canvas */
-      memoryUpdateInterval: 100, /* the interval for measuring the memory */
-      memoryMaxHistory: 60 * 10, /* the max amount of memory measures */
-
-      // Styling props
-      FONT_FAMILY: 'Arial',
-      COLOR_FPS_BAR: '#34cfa2',
-      COLOR_FPS_AVG: '#FFF',
-      COLOR_TEXT_LABEL: '#FFF',
-      COLOR_TEXT_TO_LOW: '#eee207',
-      COLOR_TEXT_BAD: '#d34646',
-      COLOR_TEXT_TARGET: '#d249dd',
-      COLOR_BG: '#333333',
-    };
-    stats = new GameStats(config);
-    document.body.appendChild(stats.dom);
-  }
+  Box2DFactory({ locateFile: () => `assets/Box2D.wasm` }).then((_b2) => {
+    b2 = _b2;
+    new Ph.Game(gameConfig);
+  });
 });

@@ -13,6 +13,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      fs: false,
+      path: false,
+    },
   },
   module: {
     rules: [
@@ -38,18 +42,23 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({gameName: 'Snowboarding Game', template: 'src/index.html'}),
+    new HtmlWebpackPlugin({ gameName: 'Snowboarding Game', template: 'src/index.html' }),
     new CopyWebpackPlugin({
       patterns: [
-        {from: 'src/assets/audio', to: 'assets/audio'},
-        {from: 'src/assets/img/packed', to: 'assets/img/packed'},
-        {from: 'src/assets/img/icons', to: 'assets/img/icons'},
-        {from: 'src/assets/img/controls', to: 'assets/img/controls'},
-        {from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails'},
-        {from: 'src/assets/html', to: 'assets/html'},
-        {from: 'src/assets/levels/export', to: 'assets/levels/export'},
-        {from: 'src/favicon.ico', to: ''},
-        {from: 'src/manifest.json', to: ''},
+        { from: 'src/assets/audio', to: 'assets/audio' },
+        { from: 'src/assets/img/packed', to: 'assets/img/packed' },
+        { from: 'src/assets/img/icons', to: 'assets/img/icons' },
+        { from: 'src/assets/img/controls', to: 'assets/img/controls' },
+        { from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails' },
+        { from: 'src/assets/html', to: 'assets/html' },
+        { from: 'src/assets/levels/export', to: 'assets/levels/export' },
+        { from: 'src/favicon.ico', to: '' },
+        { from: 'src/manifest.json', to: '' },
+
+        { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: 'assets' },
+        { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: 'assets' },
+        { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },
+        { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: '' },
       ],
     }),
   ],

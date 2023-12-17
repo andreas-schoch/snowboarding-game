@@ -23,6 +23,7 @@
   "author": "Andreas Schoch",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.10.4",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv-webpack": "^8.0.1",
     "gh-pages": "^4.0.0",
@@ -38,9 +39,8 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@box2d/core": "^0.10.0",
+    "box2d-wasm": "^7.0.0",
     "firebase": "^9.15.0",
-    "gamestats.js": "^1.0.4",
     "phaser": "^3.60.0-beta.17",
     "phaser3-rex-plugins": "^1.1.77"
   }

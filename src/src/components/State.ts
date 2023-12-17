@@ -1,10 +1,9 @@
 import * as Ph from 'phaser';
-import * as Pl from '@box2d/core';
-import {Physics} from './Physics';
-import {RubeEntity} from '../util/RUBE/RubeLoaderInterfaces';
-import {IBodyParts, PlayerController} from './PlayerController';
-import {BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION} from '../index';
-import {getCurrentLevel} from '../util/getCurrentLevel';
+import { Physics } from './Physics';
+import { IBodyParts, PlayerController } from './PlayerController';
+import { BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION, b2 } from '../index';
+import { getCurrentLevel } from '../util/getCurrentLevel';
+import { wrap } from 'module';
 
 
 export interface IBaseTrickScore {
@@ -55,8 +54,8 @@ export class State {
   private readonly playerController: PlayerController;
   private state: 'in_air' | 'grounded'; // handle this more consistent
 
-  private readonly pickupsToProcess: Set<Pl.b2Body & RubeEntity> = new Set();
-  private readonly seenSensors: Set<Pl.b2Body & RubeEntity> = new Set();
+  private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
+  private readonly seenSensors: Set<Box2D.b2Body> = new Set();
   private comboLeeway: Phaser.Tweens.Tween | null = null;
   private comboAccumulatedScore = 0;
   private comboMultiplier = 0;
@@ -78,35 +77,35 @@ export class State {
     this.playerController = playerController;
     this.b2Physics = playerController.b2Physics;
     this.state = playerController.board.isInAir() ? 'in_air' : 'grounded';
-    this.registerCollisionListeners();
+    this.registerCollisionListeners(); // TODO fix
 
     this.playerController.scene.observer.on('enter_in_air', () => this.state = 'in_air');
 
     this.playerController.scene.observer.on('enter_grounded', () => {
-        this.state = 'grounded';
-        this.timeGrounded = this.playerController.scene.game.getTime();
-        this.landedFrontFlips += this.pendingFrontFlips;
-        this.landedBackFlips += this.pendingBackFlips;
+      this.state = 'grounded';
+      this.timeGrounded = this.playerController.scene.game.getTime();
+      this.landedFrontFlips += this.pendingFrontFlips;
+      this.landedBackFlips += this.pendingBackFlips;
 
-        const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
-        if (numFlips >= 1) {
-          this.trickScoreLog.push({type: 'flip', flips: numFlips, timestamp: Date.now()});
-          const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
-          this.totalTrickScore += trickScore;
-          this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
-          this.comboMultiplier++;
-          this.playerController.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
-          this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
+      const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
+      if (numFlips >= 1) {
+        this.trickScoreLog.push({ type: 'flip', flips: numFlips, timestamp: Date.now() });
+        const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
+        this.totalTrickScore += trickScore;
+        this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
+        this.comboMultiplier++;
+        this.playerController.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
+        this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
 
-          this.resetComboLeewayTween();
-          this.comboLeeway = this.createComboLeewayTween(false);
-        }
+        this.resetComboLeewayTween();
+        this.comboLeeway = this.createComboLeewayTween(false);
+      }
 
-        this.totalRotation = 0;
-        this.currentFlipRotation = 0;
-        this.pendingBackFlips = 0;
-        this.pendingFrontFlips = 0;
-      },
+      this.totalRotation = 0;
+      this.currentFlipRotation = 0;
+      this.pendingBackFlips = 0;
+      this.pendingFrontFlips = 0;
+    },
     );
   }
 
@@ -173,23 +172,33 @@ export class State {
   }
 
   private registerCollisionListeners() {
-    this.playerController.b2Physics.on('post_solve', (contact: Pl.b2Contact, impulse: Pl.b2ContactImpulse) => {
+    this.b2Physics.on('post_solve', (contactPtr: number, impulsePtr: number) => {
       if (this.isCrashed) return;
+
+      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
+      const impulse = b2.wrapPointer(impulsePtr, b2.b2ContactImpulse);
+
       const bodyA = contact.GetFixtureA().GetBody();
       const bodyB = contact.GetFixtureB().GetBody();
       if (bodyA === bodyB) return;
-      if ((bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...impulse.normalImpulses) > HEAD_MAX_IMPULSE) {
+
+      const normalImpulses: number[] = [];
+      for (let i = 0; i < impulse.count; i++) normalImpulses.push(impulse.get_normalImpulses(i));
+
+      if ((bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...normalImpulses) > HEAD_MAX_IMPULSE) {
         this.setCrashed();
       }
     });
 
-    this.playerController.b2Physics.on('begin_contact', (contact: Pl.b2Contact) => {
-      const fixtureA: Pl.b2Fixture & RubeEntity = contact.GetFixtureA();
-      const fixtureB: Pl.b2Fixture & RubeEntity = contact.GetFixtureB();
+    const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;
+    this.b2Physics.on('begin_contact', (contactPtr: number) => {
+      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
+      const fixtureA: Box2D.b2Fixture = contact.GetFixtureA();
+      const fixtureB: Box2D.b2Fixture = contact.GetFixtureB();
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
-      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && fixtureA.customPropertiesMap?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
-      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && fixtureB.customPropertiesMap?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
+      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
+      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
   }
 
@@ -199,17 +208,17 @@ export class State {
     this.resetComboLeewayTween();
   }
 
-  private handleSensor(body: Pl.b2Body & RubeEntity, fixture: Pl.b2Fixture & RubeEntity) {
+  // TODO only Physics class should use Pl or Box2D types directly to make rest of code box2d port agnostic
+  private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.levelFinished) return;
-    switch (fixture.customPropertiesMap?.phaserSensorType) {
+    switch (this.b2Physics.rubeLoader.customPropertiesMapMap.get(fixture)?.phaserSensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;
       }
       case 'level_finish': {
         this.playerController.scene.cameras.main.stopFollow();
-        console.log('congratulations you reached the end of the level');
         this.handleComboComplete();
         this.levelFinished = true;
         this.resetComboLeewayTween();
@@ -237,8 +246,9 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const img: Ph.GameObjects.Image = body.GetUserData();
-      this.b2Physics.world.DestroyBody(body);
+      const img: Ph.GameObjects.Image = this.b2Physics.rubeLoader.bodyUserDataMap.get(body) as Ph.GameObjects.Image;
+      this.b2Physics.rubeLoader.bodyUserDataMap.delete(body);
+      this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       img.destroy();
       this.totalCollectedPresents++;
       this.playerController.scene.observer.emit('pickup_present', this.totalCollectedPresents);
@@ -312,7 +322,7 @@ export class State {
     if (this.levelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now()});
+    this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
     this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
     this.playerController.scene.observer.emit('combo_change', 0, 0);
     this.comboAccumulatedScore = 0;
