@@ -1,7 +1,7 @@
 import * as Ph from 'phaser';
-import {LevelKeys, b2} from '../index';
+import { CharacterKeys, LevelKeys, b2 } from '../index';
 import GameScene from '../scenes/GameScene';
-import {RubeImage, RubeScene} from '../util/RUBE/RubeLoaderInterfaces';
+import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 
 
@@ -11,11 +11,11 @@ export class Physics extends Phaser.Events.EventEmitter {
   world: Box2D.b2World;
   private readonly scene: GameScene;
   private readonly stepDeltaTime = 1 / 60;
-  private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
+  private readonly stepConfig = { positionIterations: 12, velocityIterations: 12 };
   debugDraw: Ph.GameObjects.Graphics;
   rubeLoader: RubeLoader;
 
-  constructor(scene: GameScene, worldScale: number, gravity: {x: number, y: number}) {
+  constructor(scene: GameScene, worldScale: number, gravity: { x: number, y: number }) {
     super();
     this.debugDraw = scene.add.graphics();
     this.scene = scene;
@@ -36,7 +36,7 @@ export class Physics extends Phaser.Events.EventEmitter {
 
     this.rubeLoader = new RubeLoader(this.world);
     this.rubeLoader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body) => {
-      const {file, body, center, customProperties, angle, aspectScale, scale, flip, renderOrder} = imageJson;
+      const { file, center, customProperties, angle, aspectScale, scale, flip, renderOrder } = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.rubeLoader.rubeToVec2(center);
 
       if (!pos) return null;
@@ -51,46 +51,39 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.scaleX = img.scaleY * aspectScale;
       img.flipX = flip;
       img.setDepth(renderOrder);
-      // @ts-ignore
-      img.custom_origin_angle = -(angle || 0);
+      img.setDataEnabled();
+      img.data.set('angle_offset', -(angle || 0)); // need to preserve original angle it was expeorted with
       this.rubeLoader.customPropertiesArrayMap.set(img, customProperties || []);
       this.rubeLoader.customPropertiesMapMap.set(img, props);
       return img;
     }
   }
 
-  loadRubeScene(rubeScene: LevelKeys) {
+  loadRubeScene(rubeScene: LevelKeys | CharacterKeys) {
     const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     if (this.rubeLoader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
     else throw new Error('Failed to load RUBE scene');
-    // this.update();
   }
-  
+
   update() {
     if (this.isPaused) return;
-    // console.time('physics update');
-
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
     this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
 
-    // iterate through all bodies
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
       const bodyRepresentation = this.rubeLoader.bodyUserDataMap.get(body) as Ph.GameObjects.Image;
       if (!bodyRepresentation) continue;
       if (body.IsEnabled()) {
-        let {x, y} = body.GetPosition();
-        !bodyRepresentation.visible && bodyRepresentation.setVisible(true);
-        bodyRepresentation.x = x * worldScale;
-        bodyRepresentation.y = -y * worldScale;
-        // @ts-ignore
-        bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.custom_origin_angle || 0); // in radians;
+        let pos = body.GetPosition();
+        bodyRepresentation.visible = true
+        bodyRepresentation.x = pos.x * worldScale
+        bodyRepresentation.y = -pos.y * worldScale;
+        bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.data.get('angle_offset') || 0); // in radians;
       } else {
-        bodyRepresentation.setVisible(false);
+        bodyRepresentation.visible = false;
       }
     }
-
-    // console.timeEnd('physics update');
   }
 }

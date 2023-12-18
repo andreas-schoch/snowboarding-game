@@ -81,7 +81,7 @@ export class PlayerController {
   update() {
     if (this.b2Physics.isPaused) return;
     this.state.update();
-    this.board.getTimeInAir() > 100 && this.resetLegs();
+    this.board.getFramesInAir() > 6 && this.resetLegs();
     this.state.isCrashed && !this.alreadyDetached && this.detachBoard(); // joints cannot be destroyed within post-solve callback
 
     if (!this.state.isCrashed && !this.state.levelFinished) {
@@ -108,7 +108,7 @@ export class PlayerController {
 
   private jump() {
     // prevents player from jumping too quickly after a landing
-    if (this.scene.game.getTime() - this.state.timeGrounded < 100) return; // TODO change to numStepsGrounded
+    if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
 
     this.leanUp();
 

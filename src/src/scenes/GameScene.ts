@@ -1,10 +1,11 @@
 import * as Ph from 'phaser';
 import Terrain from '../components/Terrain';
 import { Physics } from '../components/Physics';
-import { DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys } from '../index';
+import { DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, b2 } from '../index';
 // import { Backdrop } from '../components/Backdrop';
 import { PlayerController } from '../components/PlayerController';
 import { getCurrentLevel } from '../util/getCurrentLevel';
+import { getSelectedCharacter } from '../util/getCurrentCharacter';
 
 export default class GameScene extends Ph.Scene {
   observer: Phaser.Events.EventEmitter;
@@ -37,6 +38,7 @@ export default class GameScene extends Ph.Scene {
     this.observer = new Ph.Events.EventEmitter();
     this.b2Physics = new Physics(this, 40, { x: 0, y: -10 });
     this.b2Physics.loadRubeScene(getCurrentLevel())
+    this.b2Physics.loadRubeScene(getSelectedCharacter())
     this.playerController = new PlayerController(this, this.b2Physics);
     this.terrain = new Terrain(this, this.b2Physics);
 
@@ -54,6 +56,7 @@ export default class GameScene extends Ph.Scene {
     this.scene.launch(SceneKeys.GAME_UI_SCENE, [this.observer, () => {
       this.playerController.state.reset();
       this.scene.restart();
+      b2.destroy(this.b2Physics.world);
     }]);
 
     // this.backdrop = new Backdrop(this);

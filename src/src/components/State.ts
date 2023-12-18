@@ -83,7 +83,7 @@ export class State {
 
     this.playerController.scene.observer.on('enter_grounded', () => {
       this.state = 'grounded';
-      this.timeGrounded = this.playerController.scene.game.getTime();
+      this.timeGrounded = this.playerController.scene.game.getFrame();
       this.landedFrontFlips += this.pendingFrontFlips;
       this.landedBackFlips += this.pendingBackFlips;
 

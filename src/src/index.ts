@@ -26,6 +26,7 @@ export const KEY_USER_NAME = 'snowboarding_game_user_name';
 export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
 
 export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
+export const KEY_SELECTED_CHARACTER = 'snowboarding_game_selected_character';
 
 // This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
 // The majority of the levels is expected to be custom made by players and fetched from a server.
@@ -37,12 +38,21 @@ export enum LevelKeys {
   level_005 = 'level_005',
 }
 
-
 export const LEVELS = [
   LevelKeys.level_001,
   LevelKeys.level_002,
   LevelKeys.level_003,
   LevelKeys.level_004,
+];
+
+export const enum CharacterKeys {
+  character_santa = 'character_santa',
+  character_santa_old = 'character_santa_old',
+}
+
+export const CHARACTERS = [
+  CharacterKeys.character_santa,
+  CharacterKeys.character_santa_old,
 ];
 
 export const POINTS_PER_COIN = 100;
@@ -68,12 +78,10 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
     createContainer: true,
   },
   fps: {
-    min: 55,
     target: 60,
+    min: 55,
     smoothStep: true,
   },
-  // roundPixels: true,
-  // pixelArt: true,
   scale: {
     mode: Ph.Scale.FIT,
     autoCenter: Ph.Scale.CENTER_BOTH,
@@ -82,11 +90,9 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
   },
   scene: [PreloadScene, GameScene, GameUIScene],
   plugins: {
-    global: [{
-      key: 'rexFirebase',
-      plugin: FirebasePlugin,
-      start: true,
-    }],
+    global: [
+      { key: 'rexFirebase', plugin: FirebasePlugin, start: true }
+    ],
   },
 };
 

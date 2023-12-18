@@ -11,7 +11,7 @@ interface IRayCastResult {
   point: Box2D.b2Vec2 | null | undefined;
   normal: Box2D.b2Vec2 | null | undefined;
   fraction: number;
-  lastHitTime: number;
+  lastHitFrame: number;
 }
 
 
@@ -71,14 +71,14 @@ export class WickedSnowboard {
     this.isCenterGrounded = segments[3].groundRayResult.hit;
   }
 
-  getTimeInAir(): number {
+  getFramesInAir(): number {
     if (this.segments.some(s => s.groundRayResult.hit)) return -1;
-    const mostRecentHit = Math.max(...this.segments.map(s => s.groundRayResult.lastHitTime));
-    return this.scene.game.getTime() - mostRecentHit;
+    const mostRecentHit = Math.max(...this.segments.map(s => s.groundRayResult.lastHitFrame));
+    return this.scene.game.getFrame() - mostRecentHit;
   }
 
   isInAir(): boolean {
-    return this.getTimeInAir() !== -1;
+    return this.getFramesInAir() !== -1;
   }
 
   private resetSegment(segment: ISegment) {
@@ -102,7 +102,7 @@ export class WickedSnowboard {
   private initRays(rayLength: number) {
     for (const segment of this.player.parts.boardSegments) {
       const index = this.b2Physics.rubeLoader.getCustomProperty(segment, 'int', 'phaserBoardSegmentIndex', -1);
-      const result: IRayCastResult = { hit: false, point: null, normal: null, fraction: -1, lastHitTime: -1 };
+      const result: IRayCastResult = { hit: false, point: null, normal: null, fraction: -1, lastHitFrame: -1 };
 
       const callback = Object.assign(new b2.JSRayCastCallback(), {
         ReportFixture: (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number): number => {
@@ -114,7 +114,7 @@ export class WickedSnowboard {
           result.point = point;
           result.normal = normal;
           result.fraction = fraction;
-          result.lastHitTime = this.scene.game.getTime();
+          result.lastHitFrame = this.scene.game.getFrame();
           return fraction;
         }
       });

@@ -42,89 +42,6 @@
   [
     
     {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "atlas_santa"
-        },
-        
-        {
-          "entry" : "atlas_environment"
-        }
-      ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "body"
-        },
-        
-        {
-          "entry" : "head"
-        },
-        
-        {
-          "entry" : "armUpperLeft"
-        },
-        
-        {
-          "entry" : "armUpperRight"
-        },
-        
-        {
-          "entry" : "armLowerLeft"
-        },
-        
-        {
-          "entry" : "armLowerRight"
-        },
-        
-        {
-          "entry" : "legUpperLeft"
-        },
-        
-        {
-          "entry" : "legUpperRight"
-        },
-        
-        {
-          "entry" : "legLowerLeft"
-        },
-        
-        {
-          "entry" : "legLowerRight"
-        },
-        
-        {
-          "entry" : "boardSegment"
-        },
-        
-        {
-          "entry" : "boardSegmentNose"
-        }
-      ],
-      "displayName" : "phaserPlayerBodyPart",
-      "name" : "phaserPlayerCharacterPart",
-      "type" : "string"
-    },
-    
-    {
       "class" : "fixture",
       "displayName" : "phaserBoardEdge",
       "name" : "phaserBoardEdge",
@@ -248,6 +165,89 @@
       ],
       "displayName" : "phaserSensorType",
       "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "body"
+        },
+        
+        {
+          "entry" : "head"
+        },
+        
+        {
+          "entry" : "armUpperLeft"
+        },
+        
+        {
+          "entry" : "armUpperRight"
+        },
+        
+        {
+          "entry" : "armLowerLeft"
+        },
+        
+        {
+          "entry" : "armLowerRight"
+        },
+        
+        {
+          "entry" : "legUpperLeft"
+        },
+        
+        {
+          "entry" : "legUpperRight"
+        },
+        
+        {
+          "entry" : "legLowerLeft"
+        },
+        
+        {
+          "entry" : "legLowerRight"
+        },
+        
+        {
+          "entry" : "boardSegment"
+        },
+        
+        {
+          "entry" : "boardSegmentNose"
+        }
+      ],
+      "displayName" : "phaserPlayerBodyPart",
+      "name" : "phaserPlayerCharacterPart",
       "type" : "string"
     }
   ],
@@ -16726,19 +16726,6 @@
         "id" : 348,
         "name" : "image6",
         "opacity" : 1,
-        "scale" : 1
-      }
-    ],
-    "metaobject" : 
-    [
-      
-      {
-        "angle" : 0,
-        "file" : "character_santa_v1.rube",
-        "flip" : false,
-        "id" : 2,
-        "name" : "object0",
-        "position" : 0,
         "scale" : 1
       }
     ],

@@ -77,13 +77,6 @@
     
     {
       "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
       "comboboxEntries" : 
       [
         
@@ -138,6 +131,13 @@
       "displayName" : "phaserPlayerBodyPart",
       "name" : "phaserPlayerCharacterPart",
       "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
     },
     
     {
@@ -21270,19 +21270,6 @@
         "name" : "image10",
         "opacity" : 1,
         "scale" : -0.7061569094657898
-      }
-    ],
-    "metaobject" : 
-    [
-      
-      {
-        "angle" : 0,
-        "file" : "character_santa_v1.rube",
-        "flip" : false,
-        "id" : 2,
-        "name" : "object0",
-        "position" : 0,
-        "scale" : 1
       }
     ],
     "positionIterations" : 12,

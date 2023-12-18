@@ -58,10 +58,7 @@ export class RubeLoader {
     
     const body: Box2D.b2Body = this.world.CreateBody(bd);
     body.SetMassData(massData);
-    // b2.destroy(massData.center);
     b2.destroy(massData);
-    // b2.destroy(bd.linearVelocity);
-    // b2.destroy(bd.position);
     b2.destroy(bd);
 
     this.customPropertiesArrayMap.set(body, bodyJson.customProperties || []);
