@@ -17,34 +17,13 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   private loadAudio() {
-    this.load.audio('riverside_ride', [
-      'assets/audio/music/riverside_ride/riverside_ride.ogg',
-      'assets/audio/music/riverside_ride/riverside_ride.mp3',
-    ]);
-    this.load.audio('boink', [
-      'assets/audio/sfx/jump/boink.ogg',
-      'assets/audio/sfx/jump/boink.mp3',
-    ]);
-    this.load.audio('pickup_present', [
-      'assets/audio/sfx/pickup/pickupgem.ogg',
-      'assets/audio/sfx/pickup/pickupgem.mp3',
-    ]);
-    this.load.audio('death', [
-      'assets/audio/sfx/crash/death.ogg',
-      'assets/audio/sfx/crash/death.mp3',
-    ]);
-    this.load.audio('grunt', [
-      'assets/audio/sfx/crash_grunt/grunt.ogg',
-      'assets/audio/sfx/crash_grunt/grunt.mp3',
-    ]);
-    this.load.audio('applause', [
-      'assets/audio/sfx/applause/applause.ogg',
-      'assets/audio/sfx/applause/applause.mp3',
-    ]);
-    this.load.audio('game_over_demon', [
-      'assets/audio/sfx/game_over_demon/game_over_demon.ogg',
-      'assets/audio/sfx/game_over_demon/game_over_demon.mp3',
-    ]);
+    this.load.audio('riverside_ride', 'assets/audio/music/riverside_ride/riverside_ride.mp3');
+    this.load.audio('boink', 'assets/audio/sfx/jump/boink.mp3');
+    this.load.audio('pickup_present', 'assets/audio/sfx/pickup/pickupgem.mp3');
+    this.load.audio('death', 'assets/audio/sfx/crash/death.mp3');
+    this.load.audio('grunt', 'assets/audio/sfx/crash_grunt/grunt.mp3');
+    this.load.audio('applause', 'assets/audio/sfx/applause/applause.mp3');
+    this.load.audio('game_over_demon', 'assets/audio/sfx/game_over_demon/game_over_demon.mp3');
   }
 
   private loadImg() {
@@ -59,8 +38,6 @@ export default class PreloadScene extends Phaser.Scene {
   private loadLevels() {
     // Character itself is currently imported by levels themselves (as RUBE Object) but will be loaded separately once game allows character selection
     // (e.g. Santa clause, Mrs. Clause, Snowman, Easter Bunny, The Hoff etc.)
-    // this.load.json('character_santa', 'assets/levels/export/character_santa_v1.json');
-    this.load.json(LevelKeys.level_001, `assets/levels/export/${LevelKeys.level_001}.json`);
     this.load.json(LevelKeys.level_002, `assets/levels/export/${LevelKeys.level_002}.json`);
     this.load.json(LevelKeys.level_003, `assets/levels/export/${LevelKeys.level_003}.json`);
     this.load.json(LevelKeys.level_004, `assets/levels/export/${LevelKeys.level_004}.json`);

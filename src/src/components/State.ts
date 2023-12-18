@@ -109,6 +109,10 @@ export class State {
     );
   }
 
+  getCurrentSpeed(): number {
+    return this.parts.body.GetLinearVelocity().Length();
+  }
+
   createComboLeewayTween(paused: boolean = true): Ph.Tweens.Tween {
     return this.playerController.scene.tweens.addCounter({
       paused,
@@ -234,7 +238,7 @@ export class State {
     }
   }
 
-  update(delta: number): void {
+  update(): void {
     this.processPickups();
     const isInAir = this.playerController.board.isInAir();
     if (this.state === 'grounded' && isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter_in_air');

@@ -12,13 +12,11 @@ export default class Terrain {
   private readonly scene: GameScene;
   private readonly zoomModifier = 1 / DEFAULT_ZOOM;
   private readonly layers = [
-    { color: 0xC8E1EB, width: 5 * this.zoomModifier }, // top layer of snow
-    { color: 0x7ca3d3, width: 20 * this.zoomModifier },
-    // {color: 0x7ca3d3 - 0x444444, width: 12 * this.zoomModifier},
-    { color: 0xb3cef2 - 0x666666, width: 10 * this.zoomModifier },
-    { color: 0xb3cef2 - 0x222222, width: 5 * this.zoomModifier },
-    { color: 0xb3cef2, width: 250 * this.zoomModifier },
-  ];
+    {color: 0x000000, width: 7 * this.zoomModifier},
+    {color: 0xb3cef2 - 0x222222, width: 10 * this.zoomModifier},
+    {color: 0xb3cef2, width: 20},
+    ];
+  // graphics: Ph.GameObjects.Graphics;
 
   constructor(scene: GameScene, physics: Physics) {
     this.scene = scene;
@@ -78,7 +76,7 @@ export default class Terrain {
       lastVert: points[lastIndex],
     };
     this.chunks.push(chunk);
-    const end = Math.max(...chunk.vertices.map(p => p.y)) + this.scene.cameras.main.height * 2;
+    const end = Math.max(...chunk.vertices.map(p => p.y)) + this.scene.cameras.main.height * 3;
     let offset = 0;
     points.push(new b2.b2Vec2(chunk.lastVert.x, end));
     points.push(new b2.b2Vec2(chunk.firstVert.x, end));

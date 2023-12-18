@@ -68,7 +68,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   
   update() {
     if (this.isPaused) return;
-    console.time('physics update');
+    // console.time('physics update');
 
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
     this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
@@ -91,6 +91,6 @@ export class Physics extends Phaser.Events.EventEmitter {
       }
     }
 
-    console.timeEnd('physics update');
+    // console.timeEnd('physics update');
   }
 }

@@ -56,7 +56,7 @@ export class WickedSnowboard {
 
   }
 
-  update(delta: number) {
+  update() {
     const segments = this.segments;
     for (const segment of this.segments) {
       this.resetSegment(segment);
@@ -107,7 +107,7 @@ export class WickedSnowboard {
       const callback = Object.assign(new b2.JSRayCastCallback(), {
         ReportFixture: (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number): number => {
           const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
-          if (fixture.IsSensor()) return 1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
+          if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
           const point = b2.wrapPointer(pointPtr, b2.b2Vec2);
           const normal = b2.wrapPointer(normalPtr, b2.b2Vec2);
           result.hit = true;
