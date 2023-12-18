@@ -961,29 +961,6 @@
 			[
 				
 				{
-					"circle" : 
-					{
-						"center" : 
-						{
-							"x" : 0.1646223068237305,
-							"y" : 4.768370217789197e-06
-						},
-						"radius" : 0.08
-					},
-					"customProperties" : 
-					[
-						
-						{
-							"bool" : false,
-							"name" : "phaserBoardEdge"
-						}
-					],
-					"density" : 1,
-					"friction" : 0.9,
-					"name" : "fixture9"
-				},
-				
-				{
 					"density" : 30.0,
 					"name" : "fixture5",
 					"polygon" : 
@@ -1047,6 +1024,29 @@
 							]
 						}
 					}
+				},
+				
+				{
+					"circle" : 
+					{
+						"center" : 
+						{
+							"x" : 0.1646223068237305,
+							"y" : 4.768370217789197e-06
+						},
+						"radius" : 0.08
+					},
+					"customProperties" : 
+					[
+						
+						{
+							"bool" : false,
+							"name" : "phaserBoardEdge"
+						}
+					],
+					"density" : 1,
+					"friction" : 0.9,
+					"name" : "fixture9"
 				}
 			],
 			"linearDamping" : 0.1,
@@ -1055,13 +1055,13 @@
 				"x" : 0,
 				"y" : 0
 			},
-			"massData-I" : 0.02506279200315475,
+			"massData-I" : 0.02506279386579990,
 			"massData-center" : 
 			{
-				"x" : 0.002159182680770755,
-				"y" : 6.318373380054254e-08
+				"x" : 0.002159182447940111,
+				"y" : 6.314951406238833e-08
 			},
-			"massData-mass" : 1.532950639724731,
+			"massData-mass" : 1.532950758934021,
 			"name" : "body0",
 			"position" : 
 			{
@@ -1204,29 +1204,6 @@
 			[
 				
 				{
-					"circle" : 
-					{
-						"center" : 
-						{
-							"x" : -0.1618160009384155,
-							"y" : 0
-						},
-						"radius" : 0.08
-					},
-					"customProperties" : 
-					[
-						
-						{
-							"bool" : false,
-							"name" : "phaserBoardEdge"
-						}
-					],
-					"density" : 1,
-					"friction" : 0.9,
-					"name" : "fixture7"
-				},
-				
-				{
 					"density" : 30.0,
 					"name" : "fixture5",
 					"polygon" : 
@@ -1290,6 +1267,29 @@
 							]
 						}
 					}
+				},
+				
+				{
+					"circle" : 
+					{
+						"center" : 
+						{
+							"x" : -0.1618160009384155,
+							"y" : 0
+						},
+						"radius" : 0.08
+					},
+					"customProperties" : 
+					[
+						
+						{
+							"bool" : false,
+							"name" : "phaserBoardEdge"
+						}
+					],
+					"density" : 1,
+					"friction" : 0.9,
+					"name" : "fixture7"
 				}
 			],
 			"linearDamping" : 0.1,
@@ -1301,10 +1301,10 @@
 			"massData-I" : 0.02504437416791916,
 			"massData-center" : 
 			{
-				"x" : -0.002122385427355766,
-				"y" : 6.075359104684708e-10
+				"x" : -0.002122384496033192,
+				"y" : 6.075358549573195e-10
 			},
-			"massData-mass" : 1.532950639724731,
+			"massData-mass" : 1.532950758934021,
 			"name" : "body0",
 			"position" : 
 			{
@@ -1647,11 +1647,11 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 5,
+			"body" : 0,
 			"center" : 
 			{
-				"x" : -8.983896293557336e-09,
-				"y" : -8.301412890432402e-10
+				"x" : -8.983899846271015e-09,
+				"y" : -8.301410114874841e-10
 			},
 			"corners" : 
 			{
@@ -1706,11 +1706,11 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 0,
+			"body" : 5,
 			"center" : 
 			{
-				"x" : -8.983899846271015e-09,
-				"y" : -8.301410114874841e-10
+				"x" : -8.983896293557336e-09,
+				"y" : -8.301412890432402e-10
 			},
 			"corners" : 
 			{
@@ -1801,7 +1801,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 2,
+			"body" : 7,
 			"center" : 
 			{
 				"x" : 3.378685775601298e-09,
@@ -1860,7 +1860,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 7,
+			"body" : 2,
 			"center" : 
 			{
 				"x" : 3.378685775601298e-09,
@@ -2037,65 +2037,6 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 13,
-			"center" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
-				],
-				"y" : 
-				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "board.png"
-				}
-			],
-			"file" : "../img/santa_parts_v01/board.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
-			],
-			"name" : "image5",
-			"opacity" : 1,
-			"renderOrder" : 4,
-			"scale" : 0.1163636371493340
-		},
-		
-		{
-			"aspectScale" : 1,
 			"body" : 3,
 			"center" : 
 			{
@@ -2151,6 +2092,65 @@
 			"opacity" : 1,
 			"renderOrder" : 4,
 			"scale" : 0.4301607608795166
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 13,
+			"center" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
+				],
+				"y" : 
+				[
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "board.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/board.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
+			],
+			"name" : "image5",
+			"opacity" : 1,
+			"renderOrder" : 4,
+			"scale" : 0.1163636371493340
 		},
 		
 		{
@@ -2574,276 +2574,6 @@
 		{
 			"anchorA" : 
 			{
-				"x" : -0.16,
-				"y" : 0.06
-			},
-			"anchorB" : 
-			{
-				"x" : 0,
-				"y" : -0.2
-			},
-			"bodyA" : 16,
-			"bodyB" : 7,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "bindingLeft"
-				}
-			],
-			"enableLimit" : false,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : 0,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "joint12",
-			"refAngle" : 0,
-			"type" : "revolute",
-			"upperLimit" : 0
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0.06
-			},
-			"anchorB" : 
-			{
-				"x" : 0,
-				"y" : -0.2
-			},
-			"bodyA" : 14,
-			"bodyB" : 2,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "bindingRight"
-				}
-			],
-			"enableLimit" : false,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : 0,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "joint13",
-			"refAngle" : 0,
-			"type" : "revolute",
-			"upperLimit" : 0
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"bodyA" : 15,
-			"bodyB" : 17,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint46",
-			"refAngle" : 0.4363323152065277,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"bodyA" : 11,
-			"bodyB" : 13,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint52",
-			"refAngle" : 0.4363323152065277,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"bodyA" : 17,
-			"bodyB" : 16,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint47",
-			"refAngle" : 0.08726646006107330,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"bodyA" : 11,
-			"bodyB" : 14,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint50",
-			"refAngle" : 0.08726646006107330,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"bodyA" : 16,
-			"bodyB" : 12,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint48",
-			"refAngle" : 0,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.16,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.16,
-				"y" : 0
-			},
-			"bodyA" : 12,
-			"bodyB" : 14,
-			"dampingRatio" : 0.5,
-			"frequency" : 30.0,
-			"name" : "joint51",
-			"refAngle" : 0,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : 0.4,
-				"y" : -0.4
-			},
-			"bodyA" : 11,
-			"bodyB" : 6,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "distanceLegRight"
-				}
-			],
-			"dampingRatio" : 0.5,
-			"frequency" : 7,
-			"length" : 0.7,
-			"name" : "joint19",
-			"type" : "distance"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : 0,
-				"y" : 0.06
-			},
-			"bodyA" : 10,
-			"bodyB" : 12,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "weldCenter"
-				}
-			],
-			"dampingRatio" : 0.5,
-			"frequency" : 20.0,
-			"name" : "joint16",
-			"refAngle" : 0,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
-				"x" : -0.4,
-				"y" : -0.4
-			},
-			"bodyA" : 17,
-			"bodyB" : 6,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "distanceLegLeft"
-				}
-			],
-			"dampingRatio" : 0.5,
-			"frequency" : 7,
-			"length" : 0.7,
-			"name" : "joint15",
-			"type" : "distance"
-		},
-		
-		{
-			"anchorA" : 
-			{
 				"x" : -0.37,
 				"y" : 0.2
 			},
@@ -2900,6 +2630,34 @@
 			"anchorB" : 
 			{
 				"x" : 0,
+				"y" : 0.06
+			},
+			"bodyA" : 10,
+			"bodyB" : 12,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "weldCenter"
+				}
+			],
+			"dampingRatio" : 0.5,
+			"frequency" : 20.0,
+			"name" : "joint16",
+			"refAngle" : 0,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
 				"y" : -1
 			},
 			"bodyA" : 10,
@@ -2926,6 +2684,62 @@
 			"refAngle" : 0,
 			"type" : "prismatic",
 			"upperLimit" : 0
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : 0.4,
+				"y" : -0.4
+			},
+			"bodyA" : 11,
+			"bodyB" : 6,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "distanceLegRight"
+				}
+			],
+			"dampingRatio" : 0.5,
+			"frequency" : 7,
+			"length" : 0.7,
+			"name" : "joint19",
+			"type" : "distance"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.4,
+				"y" : -0.4
+			},
+			"bodyA" : 17,
+			"bodyB" : 6,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "distanceLegLeft"
+				}
+			],
+			"dampingRatio" : 0.5,
+			"frequency" : 7,
+			"length" : 0.7,
+			"name" : "joint15",
+			"type" : "distance"
 		},
 		
 		{
@@ -3001,6 +2815,72 @@
 			"refAngle" : 0,
 			"type" : "revolute",
 			"upperLimit" : -0.2617993950843811
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0.06
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
+				"y" : -0.2
+			},
+			"bodyA" : 14,
+			"bodyB" : 2,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "bindingRight"
+				}
+			],
+			"enableLimit" : false,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : 0,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "joint13",
+			"refAngle" : 0,
+			"type" : "revolute",
+			"upperLimit" : 0
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -0.16,
+				"y" : 0.06
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
+				"y" : -0.2
+			},
+			"bodyA" : 16,
+			"bodyB" : 7,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "bindingLeft"
+				}
+			],
+			"enableLimit" : false,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : 0,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "joint12",
+			"refAngle" : 0,
+			"type" : "revolute",
+			"upperLimit" : 0
 		},
 		
 		{
@@ -3101,6 +2981,126 @@
 			"refAngle" : 0,
 			"type" : "revolute",
 			"upperLimit" : -0.3490658402442932
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"bodyA" : 16,
+			"bodyB" : 12,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint48",
+			"refAngle" : 0,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"bodyA" : 12,
+			"bodyB" : 14,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint51",
+			"refAngle" : 0,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"bodyA" : 15,
+			"bodyB" : 17,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint46",
+			"refAngle" : 0.4363323152065277,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"bodyA" : 11,
+			"bodyB" : 13,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint52",
+			"refAngle" : 0.4363323152065277,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"bodyA" : 11,
+			"bodyB" : 14,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint50",
+			"refAngle" : 0.08726646006107330,
+			"type" : "weld"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.16,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : -0.16,
+				"y" : 0
+			},
+			"bodyA" : 17,
+			"bodyB" : 16,
+			"dampingRatio" : 0.5,
+			"frequency" : 30.0,
+			"name" : "joint47",
+			"refAngle" : 0.08726646006107330,
+			"type" : "weld"
 		}
 	],
 	"positionIterations" : 12,
