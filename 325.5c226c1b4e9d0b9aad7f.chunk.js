@@ -1,0 +1,1 @@
+(self.webpackChunksnowboarding_game=self.webpackChunksnowboarding_game||[]).push([[325,486],{498:()=>{},723:()=>{}}]);
