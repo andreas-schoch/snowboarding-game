@@ -49,6 +49,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
       img.scaleY = (this.worldScale / img.height) * scale;
       img.scaleX = img.scaleY * aspectScale;
+      img.alpha = imageJson.opacity || 1;
       img.flipX = flip;
       img.setDepth(renderOrder);
       img.setDataEnabled();
@@ -77,7 +78,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       if (!bodyRepresentation) continue;
       if (body.IsEnabled()) {
         let pos = body.GetPosition();
-        bodyRepresentation.visible = true
+        bodyRepresentation.setVisible(true);
         bodyRepresentation.x = pos.x * worldScale
         bodyRepresentation.y = -pos.y * worldScale;
         bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.data.get('angle_offset') || 0); // in radians;

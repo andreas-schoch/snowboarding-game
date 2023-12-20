@@ -104,8 +104,8 @@ export class WickedSnowboard {
       const index = this.b2Physics.rubeLoader.getCustomProperty(segment, 'int', 'phaserBoardSegmentIndex', -1);
       const result: IRayCastResult = { hit: false, point: null, normal: null, fraction: -1, lastHitFrame: -1 };
 
-      const callback = Object.assign(new b2.JSRayCastCallback(), {
-        ReportFixture: (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number): number => {
+      const callback = new b2.JSRayCastCallback();
+      callback.ReportFixture = (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number) => {
           const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
           if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
           const point = b2.wrapPointer(pointPtr, b2.b2Vec2);
@@ -116,8 +116,7 @@ export class WickedSnowboard {
           result.fraction = fraction;
           result.lastHitFrame = this.scene.game.getFrame();
           return fraction;
-        }
-      });
+        };
 
       this.segments.push({
         body: segment,

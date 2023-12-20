@@ -28,8 +28,9 @@ export class PlayerController {
   private keyArrowRight: Phaser.Input.Keyboard.Key;
   private keySpace: Phaser.Input.Keyboard.Key;
   private jumpKeyDownStartFrame: number = 0;
-  jumpKeyDown: boolean;
-  alreadyDetached = false;
+  private jumpKeyDown: boolean;
+  private alreadyDetached = false;
+  private currentBodyFlipDot = 1;
 
   constructor(scene: GameScene, b2Physics: Physics) {
     this.scene = scene;
@@ -79,20 +80,58 @@ export class PlayerController {
   }
 
   update() {
+    // TODO create a command data structure from which runs can be repeated instead of using the raw keyboard input states to determine when to do anything input related
+    //  This has the advantage that:
+    //  - we can test how deterministic the physics are
+    //  - we can replay runs IF they are deterministic (I think box2d isn't 100% deterministic across Operating systems due to floating point implementation differences)
+    //  - we can serialize and save the commands for each frame 
     if (this.b2Physics.isPaused) return;
     this.state.update();
-    this.board.getFramesInAir() > 6 && this.resetLegs();
-    this.state.isCrashed && !this.alreadyDetached && this.detachBoard(); // joints cannot be destroyed within post-solve callback
+    if (this.board.getFramesInAir() > 6) this.resetLegs();
+    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
+    if (this.state.isCrashed || this.state.levelFinished) return;
+    this.board.update();
+    this.applyInputs();
+    this.updateLookAtDirection();
+  }
 
-    if (!this.state.isCrashed && !this.state.levelFinished) {
-      this.board.update();
-      if (this.scene.input.keyboard) {
-        (this.keyArrowUp.isDown || this.keyW.isDown) && this.leanUp();
-        (this.keyArrowLeft.isDown || this.keyA.isDown) && this.leanBackward();
-        (this.keyArrowDown.isDown || this.keyS.isDown) && this.leanCenter();
-        (this.keyArrowRight.isDown || this.keyD.isDown) && this.leanForward();
-        this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown && this.jump();
-      }
+  private applyInputs() {
+    if (this.keyArrowUp.isDown || this.keyW.isDown) this.leanUp();
+    if (this.keyArrowLeft.isDown || this.keyA.isDown) this.leanBackward();
+    if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter();
+    if (this.keyArrowRight.isDown || this.keyD.isDown) this.leanForward();
+    if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown) this.jump();
+  }
+
+  private updateLookAtDirection() {
+    const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.parts.body.GetLinearVelocity()));
+    const bodyXDirection = vec2Util.Normalize(this.parts.body.GetWorldVector(new b2.b2Vec2(1, 0)));
+    // slow down change while in air to jitter while doing flips
+    const lerpFactor = this.state.getState() === 'grounded' ? 0.03 : 0.01;
+    const targetFlip = vec2Util.Dot(bodyXDirection, velocityDirection) < 0 ? -1 : 1;
+    this.currentBodyFlipDot = this.currentBodyFlipDot + lerpFactor * (targetFlip - this.currentBodyFlipDot);
+
+    const headImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.head) as Phaser.GameObjects.Image;
+    const bodyImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.body) as Phaser.GameObjects.Image;
+    const bodyArmUpperLeftImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armUpperLeft) as Phaser.GameObjects.Image;
+    const bodyArmUpperRightImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armUpperRight) as Phaser.GameObjects.Image;
+    const bodyArmLowerLeftImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armLowerLeft) as Phaser.GameObjects.Image;
+    const bodyArmLowerRightImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armLowerRight) as Phaser.GameObjects.Image;
+
+    if (this.currentBodyFlipDot < 0) {
+      headImage.flipX = true;
+      bodyImage.flipX = true;
+      bodyArmUpperLeftImage.setDepth(this.parts.armUpperRightRenderDepth);
+      bodyArmUpperRightImage.setDepth(this.parts.armUpperLeftRenderDepth);
+      bodyArmLowerLeftImage.setDepth(this.parts.armLowerRightRenderDepth);
+      bodyArmLowerRightImage.setDepth(this.parts.armLowerLeftRenderDepth);
+    } else {
+      headImage.flipX = false;
+      bodyImage.flipX = false;
+      bodyArmUpperLeftImage.setDepth(this.parts.armUpperLeftRenderDepth);
+      bodyArmUpperRightImage.setDepth(this.parts.armUpperRightRenderDepth);
+      bodyArmLowerLeftImage.setDepth(this.parts.armLowerLeftRenderDepth);
+      bodyArmLowerRightImage.setDepth(this.parts.armLowerRightRenderDepth);
     }
   }
 
@@ -159,9 +198,23 @@ export class PlayerController {
   }
 
   private initBodyParts() {
+
+    const armUpperLeft = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armUpperLeft')[0];
+    const armLowerLeft = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armLowerLeft')[0];
+    const armUpperRight = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armUpperRight')[0];
+    const armLowerRight = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armLowerRight')[0];
+
     this.parts = {
       head: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'head')[0],
       body: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'body')[0],
+      armUpperLeft,
+      armLowerLeft,
+      armUpperRight,
+      armLowerRight,
+      armUpperLeftRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armUpperLeft) as Phaser.GameObjects.Image).depth,
+      armLowerLeftRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armLowerLeft) as Phaser.GameObjects.Image).depth,
+      armUpperRightRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armUpperRight) as Phaser.GameObjects.Image).depth,
+      armLowerRightRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armLowerRight) as Phaser.GameObjects.Image).depth,
       boardSegments: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'boardSegment'),
       bindingLeft: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
       bindingRight: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
@@ -177,6 +230,10 @@ export class PlayerController {
 export interface IBodyParts {
   head: Box2D.b2Body;
   body: Box2D.b2Body;
+  armUpperLeft: Box2D.b2Body;
+  armLowerLeft: Box2D.b2Body;
+  armUpperRight: Box2D.b2Body;
+  armLowerRight: Box2D.b2Body;
   boardSegments: (Box2D.b2Body)[];
 
   bindingLeft: Box2D.b2RevoluteJoint | null;
@@ -185,4 +242,9 @@ export interface IBodyParts {
   distanceLegRight: Box2D.b2DistanceJoint | null;
   weldCenter: Box2D.b2WeldJoint | null;
   prismatic: Box2D.b2PrismaticJoint | null;
+
+  armUpperLeftRenderDepth: number;
+  armLowerLeftRenderDepth: number;
+  armUpperRightRenderDepth: number;
+  armLowerRightRenderDepth: number;
 }

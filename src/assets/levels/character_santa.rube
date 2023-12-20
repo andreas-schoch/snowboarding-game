@@ -569,10 +569,10 @@
         "massData-I" : 0.02504437416791916,
         "massData-center" : 
         {
-          "x" : -0.002122384496033192,
-          "y" : 6.075358549573195e-10
+          "x" : -0.002122385427355766,
+          "y" : 6.075359104684708e-10
         },
-        "massData-mass" : 1.532950758934021,
+        "massData-mass" : 1.532950639724731,
         "name" : "body0",
         "position" : 
         {
@@ -776,13 +776,13 @@
         "id" : 5,
         "linearDamping" : 0.1,
         "linearVelocity" : 0,
-        "massData-I" : 0.02506279386579990,
+        "massData-I" : 0.02506279200315475,
         "massData-center" : 
         {
-          "x" : 0.002159182447940111,
-          "y" : 6.314951406238833e-08
+          "x" : 0.002159182680770755,
+          "y" : 6.318373380054254e-08
         },
-        "massData-mass" : 1.532950758934021,
+        "massData-mass" : 1.532950639724731,
         "name" : "body0",
         "position" : 
         {
@@ -1031,6 +1031,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "armLowerRight"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1095,6 +1103,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "armUpperRight"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1348,6 +1364,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "armUpperLeft"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1410,6 +1434,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "armLowerLeft"
+          }
+        ],
         "fixture" : 
         [
           
@@ -2473,13 +2505,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 45,
-        "lowerLimit" : -1.570796370506287,
+        "lowerLimit" : -1.134464025497437,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint6",
         "referenceAngle" : 0,
         "type" : "revolute",
-        "upperLimit" : -0.2617993950843811
+        "upperLimit" : -0.1745329201221466
       },
       
       {
@@ -2525,13 +2557,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 48,
-        "lowerLimit" : -0.7853981852531433,
+        "lowerLimit" : -0.9599310755729675,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint8",
         "referenceAngle" : -1.570796370506287,
         "type" : "revolute",
-        "upperLimit" : 0.7853981852531433
+        "upperLimit" : 0
       },
       
       {
@@ -2664,13 +2696,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 53,
-        "lowerLimit" : -0.7853981852531433,
+        "lowerLimit" : -1.134464025497437,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint9",
         "referenceAngle" : 3.141592741012573,
         "type" : "revolute",
-        "upperLimit" : 0
+        "upperLimit" : -0.1745329201221466
       },
       
       {
@@ -2696,7 +2728,7 @@
         "name" : "joint7",
         "referenceAngle" : -1.570796370506287,
         "type" : "revolute",
-        "upperLimit" : 2.356189966201782
+        "upperLimit" : 0.9599310755729675
       }
     ],
     "positionIterations" : 12,

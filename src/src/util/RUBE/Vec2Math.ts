@@ -26,4 +26,15 @@ export class vec2Util {
     v.y *= scalar;
     return v;
   }
+
+  static Dot(a: Box2D.b2Vec2, b: Box2D.b2Vec2) {
+    return a.x * b.x + a.y * b.y;
+  }
+
+  static Normalize(vector: Box2D.b2Vec2) {
+    const magnitude = Math.sqrt(vector.x ** 2 + vector.y ** 2);
+    if (magnitude === 0) return vector; // prevent divide by zero
+    vector.Set(vector.x / magnitude, vector.y / magnitude);
+    return vector;
+  }
 }
