@@ -17,7 +17,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   private loadAudio() {
-    this.load.audio('riverside_ride', 'assets/audio/music/riverside_ride/riverside_ride.mp3');
+    this.load.audio('welcome_to_the_show', 'assets/audio/music/KevinMacLeod/Welcome to the Show.mp3');
     this.load.audio('boink', 'assets/audio/sfx/jump/boink.mp3');
     this.load.audio('pickup_present', 'assets/audio/sfx/pickup/pickupgem.mp3');
     this.load.audio('death', 'assets/audio/sfx/crash/death.mp3');

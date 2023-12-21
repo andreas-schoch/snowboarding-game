@@ -374,7 +374,6 @@ export class RubeLoader {
     }
     const ptr_wrapped = wrapPointer(buffer, b2Vec2);
     if (closedLoop) shape.CreateLoop(ptr_wrapped, vertices.length);
-    // TODO potentially problematic to use prev and nextVertex like this if it expects a pointer to specific vec2
     else shape.CreateChain(ptr_wrapped, vertices.length, this.rubeToVec2(chain.prevVertex), this.rubeToVec2(chain.nextVertex));
     return shape;
   }

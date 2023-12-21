@@ -87,7 +87,7 @@ export class PlayerController {
     //  - we can serialize and save the commands for each frame 
     if (this.b2Physics.isPaused) return;
     this.state.update();
-    if (this.board.getFramesInAir() > 6) this.resetLegs();
+    if (this.board.getFramesInAir() > 6 && !this.jumpKeyDown) this.resetLegs();
     if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
     if (this.state.isCrashed || this.state.levelFinished) return;
     this.board.update();
@@ -100,6 +100,8 @@ export class PlayerController {
     if (this.keyArrowLeft.isDown || this.keyA.isDown) this.leanBackward();
     if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter();
     if (this.keyArrowRight.isDown || this.keyD.isDown) this.leanForward();
+    if (this.jumpKeyDown) this.leanUp();
+
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown) this.jump();
   }
 
@@ -146,10 +148,10 @@ export class PlayerController {
   }
 
   private jump() {
+    // this.leanUp();
     // prevents player from jumping too quickly after a landing
     if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
 
-    this.leanUp();
 
     const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {

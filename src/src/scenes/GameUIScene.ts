@@ -82,7 +82,7 @@ export default class GameUIScene extends Ph.Scene {
 
   create() {
     const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
-    this.music = this.sound.add('riverside_ride', {loop: true, volume: musicVolume * 0.3, rate: 0.95, delay: 1, detune: 0});
+    this.music = this.sound.add('welcome_to_the_show', {loop: true, volume: musicVolume * 0.3, rate: 1, delay: 1, detune: 0});
     this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
     this.sfx_jump_start = this.sound.add('boink', {detune: -200, volume: sfxVolume});
