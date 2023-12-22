@@ -1,18 +1,4 @@
 /**
- * name         "Big Rock"
- * source       https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100305
- * author       Kevin MacLeod (incompetech.com)
- * license      http://creativecommons.org/licenses/by/4.0/
- */
-
-/**
- * name         "Fantasia Fantasia"
- * source       https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1800006
- * author       Kevin MacLeod (incompetech.com)
- * license      http://creativecommons.org/licenses/by/4.0/
- */
-
-/**
  * name         "Welcome to the Show"
  * source       https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100013
  * author       Kevin MacLeod (incompetech.com)
