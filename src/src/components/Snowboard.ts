@@ -40,17 +40,21 @@ export class Snowboard {
     this.ZERO = new b2.b2Vec2(0, 0);
 
     this.debugGraphics = this.scene.add.graphics().setDepth(10000000);
-    this.debugGraphics.fillStyle(0x00ff00, 1);
+    this.debugGraphics.fillStyle(0xffffff, 1);
+    this.debugGraphics.fillCircle(8, 8, 8);
+    this.debugGraphics.generateTexture('circle_01', 16, 16);
+    this.debugGraphics.clear();
+
     this.initRays(this.b2Physics.worldScale / 4);
 
 
-    this.particles = this.scene.add.particles(0, 0, 'shapes', {
+    this.particles = this.scene.add.particles(0, 0, 'circle_01', {
       active: true,
       visible: true,
       emitting: false,
       particleBringToTop: true,
       radial: true,
-      frame: { frames: ["circle_05"], cycle: false, quantity: 0 },
+      // frame: { frames: ["circle_05"], cycle: false, quantity: 0 },
       blendMode: 1,
       gravityY: 100,
       frequency: 0,

@@ -1,0 +1,26 @@
+{
+    "name": "Snowboarding Game",
+    "short_name": "Snowboarding",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "description": "Physics based 2D snowboarding game.",
+    "icons": [
+        {
+            "src": "./favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "./android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#c8c8c8",
+    "background_color": "#c8c8c8"
+}

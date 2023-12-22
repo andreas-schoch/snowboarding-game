@@ -1,3 +1,4 @@
+import { simd } from "wasm-feature-detect";
 import * as Ph from 'phaser';
 import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
 
@@ -98,8 +99,11 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
 
 export let b2: typeof Box2D & EmscriptenModule;
 window.addEventListener('load', () => {
-  Box2DFactory({ locateFile: () => `assets/Box2D.wasm` }).then((_b2) => {
-    b2 = _b2;
-    new Ph.Game(gameConfig);
+  simd().then(simdSupported => {
+    // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
+    Box2DFactory({ locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm' }).then((_b2) => {
+      b2 = _b2;
+      new Ph.Game(gameConfig);
+    });
   });
 });

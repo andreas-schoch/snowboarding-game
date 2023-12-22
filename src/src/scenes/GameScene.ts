@@ -70,6 +70,5 @@ export default class GameScene extends Ph.Scene {
     // this.backdrop.update();
     this.setZoomLevel();
     // console.timeEnd('update');
-
   }
 }

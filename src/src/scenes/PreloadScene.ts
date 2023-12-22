@@ -33,7 +33,6 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
     this.load.atlas('atlas_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
-    this.load.atlas('shapes', 'assets/particles/shapes.png', 'assets/particles/shapes.json');
   }
 
   private loadLevels() {

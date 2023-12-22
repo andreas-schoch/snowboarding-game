@@ -52,12 +52,7 @@ module.exports = {
         { from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails' },
         { from: 'src/assets/html', to: 'assets/html' },
         { from: 'src/assets/levels/export', to: 'assets/levels/export' },
-        { from: 'src/assets/particles', to: 'assets/particles' },
-        { from: 'src/favicon.ico', to: '' },
-        { from: 'src/manifest.json', to: '' },
-
-        { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: 'assets' },
-        { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: 'assets' },
+        { from: 'src/assets/manifest', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: '' },
       ],
