@@ -6,6 +6,7 @@ import { DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, b2 } from '../index';
 import { PlayerController } from '../components/PlayerController';
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { getSelectedCharacter } from '../util/getCurrentCharacter';
+import { vec2Util } from '../util/RUBE/Vec2Math';
 
 export default class GameScene extends Ph.Scene {
   observer: Phaser.Events.EventEmitter;
@@ -13,6 +14,7 @@ export default class GameScene extends Ph.Scene {
   b2Physics: Physics; // TODO should ideally be made private again
   private terrain: Terrain;
   private playerController: PlayerController;
+  body: Box2D.b2Body;
   // private backdrop: Backdrop;
 
   constructor() {
@@ -43,11 +45,10 @@ export default class GameScene extends Ph.Scene {
     this.terrain = new Terrain(this, this.b2Physics);
 
     this.resolutionMod = this.cameras.main.width / DEFAULT_WIDTH;
-    const body = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserCameraFollow', true)[0]
-    const img = this.b2Physics.rubeLoader.bodyUserDataMap.get(body) as Phaser.GameObjects.Image;
-    this.cameras.main.startFollow(img, false, 0.8, 0.25);
-    this.cameras.main.followOffset.set(-250, 0);
-    this.cameras.main.setDeadzone(50, 125);
+    this.body = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserCameraFollow', true)[0]
+    const img = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.body) as Phaser.GameObjects.Image;
+    this.cameras.main.startFollow(img, false, 0.5, 0.5);
+    this.cameras.main.setDeadzone(0, 125);
     this.cameras.main.setBackgroundColor(0x3470c6);
     this.cameras.main.setZoom(DEFAULT_ZOOM * this.resolutionMod * 1.5);
     this.cameras.main.scrollX -= this.cameras.main.width;
@@ -59,13 +60,16 @@ export default class GameScene extends Ph.Scene {
       b2.destroy(this.b2Physics.world);
     }]);
 
-    // this.backdrop = new Backdrop(this);
     this.observer.on('enter_crashed', () => this.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
   }
 
   update() {
-    this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
+    this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
     this.playerController.update();
     this.setZoomLevel();
+
+    const velocityX = this.body.GetLinearVelocity().x * 10;
+    const lerpFactor = 0.01;
+    this.cameras.main.setFollowOffset(this.cameras.main.followOffset.x + lerpFactor * (-velocityX - this.cameras.main.followOffset.x), 0);
   }
 }
