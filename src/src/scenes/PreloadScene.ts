@@ -11,11 +11,11 @@ export default class PreloadScene extends Phaser.Scene {
     this.loadLevels();
     this.load.html('dom_game_ui', 'assets/html/game_ui.html');
   }
-
+  
   create() {
     this.scene.start(SceneKeys.GAME_SCENE);
   }
-
+  
   private loadAudio() {
     this.load.audio('welcome_to_the_show', 'assets/audio/music/KevinMacLeod/Welcome to the Show.mp3');
     this.load.audio('boink', 'assets/audio/sfx/jump/boink.mp3');
@@ -25,7 +25,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.audio('applause', 'assets/audio/sfx/applause/applause.mp3');
     this.load.audio('game_over_demon', 'assets/audio/sfx/game_over_demon/game_over_demon.mp3');
   }
-
+  
   private loadImg() {
     const height = DEFAULT_HEIGHT * RESOLUTION_SCALE;
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
@@ -33,6 +33,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
     this.load.atlas('atlas_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
+    this.load.atlas('shapes', 'assets/particles/shapes.png', 'assets/particles/shapes.json');
   }
 
   private loadLevels() {

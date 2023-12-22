@@ -52,6 +52,7 @@ module.exports = {
         { from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails' },
         { from: 'src/assets/html', to: 'assets/html' },
         { from: 'src/assets/levels/export', to: 'assets/levels/export' },
+        { from: 'src/assets/particles', to: 'assets/particles' },
         { from: 'src/favicon.ico', to: '' },
         { from: 'src/manifest.json', to: '' },
 

@@ -1,7 +1,7 @@
 import { Physics } from './Physics';
 import { b2 } from '../index';
 import GameScene from '../scenes/GameScene';
-import { WickedSnowboard } from './Snowboard';
+import { Snowboard } from './Snowboard';
 import { State } from './State';
 import { PanelIds } from '../scenes/GameUIScene';
 import { vec2Util } from '../util/RUBE/Vec2Math';
@@ -12,7 +12,7 @@ export class PlayerController {
   readonly b2Physics: Physics;
 
   parts: IBodyParts;
-  board: WickedSnowboard;
+  board: Snowboard;
   state: State;
 
   private readonly jumpForce: number = 13;
@@ -40,7 +40,7 @@ export class PlayerController {
     this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
 
     this.initBodyParts();
-    this.board = new WickedSnowboard(this);
+    this.board = new Snowboard(this);
     this.state = new State(this);
     this.initKeyboardInputs();
   }
@@ -59,10 +59,10 @@ export class PlayerController {
 
     this.keySpace.onDown = () => this.pauseGame();
     const onJump = () => {
+      this.jumpKeyDown = true;
       if (!this.state.isCrashed && !this.state.levelFinished && !this.b2Physics.isPaused && this.state.getState() === 'grounded') {
-        this.jumpKeyDown = true;
-        this.scene.observer.emit('jump_start');
         this.jumpKeyDownStartFrame = this.scene.game.getFrame();
+        this.scene.observer.emit('jump_start');
       }
     };
     this.keyW.onDown = onJump;
@@ -96,12 +96,10 @@ export class PlayerController {
   }
 
   private applyInputs() {
-    if (this.keyArrowUp.isDown || this.keyW.isDown) this.leanUp();
+    if (this.jumpKeyDown) this.leanUp();
     if (this.keyArrowLeft.isDown || this.keyA.isDown) this.leanBackward();
     if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter();
     if (this.keyArrowRight.isDown || this.keyD.isDown) this.leanForward();
-    if (this.jumpKeyDown) this.leanUp();
-
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown) this.jump();
   }
 

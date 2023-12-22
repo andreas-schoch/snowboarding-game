@@ -118,9 +118,28 @@
     
     {
       "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
     },
     
     {
@@ -2398,8 +2417,8 @@
         [
           
           {
-            "bool" : true,
-            "name" : "phaserTerrain"
+            "name" : "surfaceType",
+            "string" : "snow"
           }
         ],
         "fixture" : 

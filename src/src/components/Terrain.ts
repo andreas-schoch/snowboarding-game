@@ -25,7 +25,7 @@ export default class Terrain {
     this.terrainBody = this.b2Physics.world.CreateBody(def);
     const pos = this.terrainBody.GetPosition();
 
-    const p = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
+    const p = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'surfaceType', 'snow')[0];
     if (!p) return; // There may be levels where no terrain is present
 
     const fix = p.GetFixtureList();

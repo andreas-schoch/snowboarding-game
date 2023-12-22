@@ -21,9 +21,9 @@ export class vec2Util {
     return v;
   }
 
-  static Scale(v: Box2D.b2Vec2, scalar: number) {
+  static Scale(v: Box2D.b2Vec2, scalar: number, scalarY?: number) {
     v.x *= scalar;
-    v.y *= scalar;
+    v.y *= scalarY || scalar;
     return v;
   }
 

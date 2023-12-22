@@ -4,6 +4,23 @@ import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 
+export interface IBeginContactEvent {
+  contact: Box2D.b2Contact;
+  fixtureA: Box2D.b2Fixture;
+  fixtureB: Box2D.b2Fixture;
+  bodyA: Box2D.b2Body;
+  bodyB: Box2D.b2Body;
+}
+
+export interface IPostSolveEvent {
+  contact: Box2D.b2Contact;
+  impulse: Box2D.b2ContactImpulse;
+  fixtureA: Box2D.b2Fixture;
+  fixtureB: Box2D.b2Fixture;
+  bodyA: Box2D.b2Body;
+  bodyB: Box2D.b2Body;
+}
+
 
 export class Physics extends Phaser.Events.EventEmitter {
   isPaused: boolean = false;
@@ -26,10 +43,27 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.world.SetAutoClearForces(true);
 
     const listeners = new b2.JSContactListener();
-    listeners.BeginContact = contact => this.emit('begin_contact', contact);
+    listeners.BeginContact = (contactPtr: number) => {
+      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
+      const fixtureA: Box2D.b2Fixture = contact.GetFixtureA();
+      const fixtureB: Box2D.b2Fixture = contact.GetFixtureB();
+      const bodyA = fixtureA.GetBody();
+      const bodyB = fixtureB.GetBody();
+      const data: IBeginContactEvent = { contact, fixtureA, fixtureB, bodyA, bodyB };
+      this.emit('begin_contact', data);
+    };
     listeners.EndContact = () => null;
     listeners.PreSolve = () => null;
-    listeners.PostSolve = (contact, impulse) => this.emit('post_solve', contact, impulse);
+    listeners.PostSolve = (contactPtr: number, impulsePtr: number) => {
+      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
+      const impulse = b2.wrapPointer(impulsePtr, b2.b2ContactImpulse);
+      const fixtureA = contact.GetFixtureA()
+      const fixtureB = contact.GetFixtureB()
+      const bodyA = fixtureA.GetBody();
+      const bodyB = fixtureB.GetBody();
+      const data: IPostSolveEvent = { contact, impulse, fixtureA, fixtureB, bodyA, bodyB };
+      this.emit('post_solve', data);
+    }
     this.world.SetContactListener(listeners);
     b2.destroy(gravityVec);
     // b2.destroy(listeners); // error when we destroy this

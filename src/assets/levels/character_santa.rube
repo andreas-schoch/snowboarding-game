@@ -93,30 +93,15 @@
     
     {
       "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     },
     
     {
       "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
       "type" : "bool"
     },
     
@@ -238,17 +223,32 @@
     },
     
     {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
       "type" : "bool"
     },
     
     {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
     }
   ],
   "metaworld" : 
@@ -540,7 +540,7 @@
             [
               
               {
-                "bool" : false,
+                "bool" : true,
                 "name" : "phaserBoardEdge"
               }
             ],
@@ -569,10 +569,10 @@
         "massData-I" : 0.02504437416791916,
         "massData-center" : 
         {
-          "x" : -0.002122385427355766,
-          "y" : 6.075359104684708e-10
+          "x" : -0.002122384496033192,
+          "y" : 6.075358549573195e-10
         },
-        "massData-mass" : 1.532950639724731,
+        "massData-mass" : 1.532950758934021,
         "name" : "body0",
         "position" : 
         {
@@ -750,7 +750,7 @@
             [
               
               {
-                "bool" : false,
+                "bool" : true,
                 "name" : "phaserBoardEdge"
               }
             ],
@@ -776,13 +776,13 @@
         "id" : 5,
         "linearDamping" : 0.1,
         "linearVelocity" : 0,
-        "massData-I" : 0.02506279200315475,
+        "massData-I" : 0.02506279386579990,
         "massData-center" : 
         {
-          "x" : 0.002159182680770755,
-          "y" : 6.318373380054254e-08
+          "x" : 0.002159182447940111,
+          "y" : 6.314951406238833e-08
         },
-        "massData-mass" : 1.532950639724731,
+        "massData-mass" : 1.532950758934021,
         "name" : "body0",
         "position" : 
         {

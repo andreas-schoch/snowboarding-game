@@ -169,13 +169,6 @@
     },
     
     {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
       "class" : "image",
       "comboboxEntries" : 
       [
@@ -248,6 +241,32 @@
       ],
       "displayName" : "phaserPlayerBodyPart",
       "name" : "phaserPlayerCharacterPart",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
       "type" : "string"
     }
   ],
@@ -1630,8 +1649,8 @@
         [
           
           {
-            "bool" : true,
-            "name" : "phaserTerrain"
+            "name" : "surfaceType",
+            "string" : "snow"
           }
         ],
         "fixture" : 

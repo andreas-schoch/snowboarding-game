@@ -1,5 +1,5 @@
 import * as Ph from 'phaser';
-import { Physics } from './Physics';
+import { IBeginContactEvent, IPostSolveEvent, Physics } from './Physics';
 import { IBodyParts, PlayerController } from './PlayerController';
 import { BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION, b2 } from '../index';
 import { getCurrentLevel } from '../util/getCurrentLevel';
@@ -176,31 +176,18 @@ export class State {
   }
 
   private registerCollisionListeners() {
-    this.b2Physics.on('post_solve', (contactPtr: number, impulsePtr: number) => {
+    this.b2Physics.on('post_solve', ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
       if (this.isCrashed) return;
-
-      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
-      const impulse = b2.wrapPointer(impulsePtr, b2.b2ContactImpulse);
-
-      const bodyA = contact.GetFixtureA().GetBody();
-      const bodyB = contact.GetFixtureB().GetBody();
+      const bodyA = fixtureA.GetBody();
+      const bodyB =fixtureB.GetBody();
       if (bodyA === bodyB) return;
-
-      const normalImpulses: number[] = [];
-      for (let i = 0; i < impulse.count; i++) normalImpulses.push(impulse.get_normalImpulses(i));
-
-      if ((bodyA === this.parts.head || bodyB === this.parts.head) && Math.max(...normalImpulses) > HEAD_MAX_IMPULSE) {
-        this.setCrashed();
-      }
+      let largestImpulse: number = -1;
+      for (let i = 0; i < impulse.count; i++) largestImpulse = Math.max(largestImpulse, impulse.get_normalImpulses(i));
+      if ((bodyA === this.parts.head || bodyB === this.parts.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
     const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;
-    this.b2Physics.on('begin_contact', (contactPtr: number) => {
-      const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
-      const fixtureA: Box2D.b2Fixture = contact.GetFixtureA();
-      const fixtureB: Box2D.b2Fixture = contact.GetFixtureB();
-      const bodyA = fixtureA.GetBody();
-      const bodyB = fixtureB.GetBody();
+    this.b2Physics.on('begin_contact', ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
@@ -290,9 +277,9 @@ export class State {
     //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
       if (this.state === 'in_air' || !this.playerController.board.isCenterGrounded || this.b2Physics.isPaused) {
-        this.comboLeeway.isPlaying() && this.comboLeeway.pause() && DEBUG && console.log('pause comboLeeway');
+        this.comboLeeway.isPlaying() && this.comboLeeway.pause();
       } else {
-        this.comboLeeway.isPaused() && this.comboLeeway.resume() && DEBUG && console.log('resume comboLeeway');
+        this.comboLeeway.isPaused() && this.comboLeeway.resume();
       }
     }
   }

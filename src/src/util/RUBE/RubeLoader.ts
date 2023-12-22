@@ -50,12 +50,12 @@ export class RubeLoader {
     bd.set_angularDamping(bodyJson.angularDamping || 0);
     bd.set_position(this.rubeToVec2(bodyJson.position));
     bd.set_bullet(Boolean(bodyJson.bullet || false));
-    
+
     const massData = new b2.b2MassData();
     massData.mass = bodyJson['massData-mass'] || 1;
     massData.center = this.rubeToVec2(bodyJson['massData-center']);
     massData.I = bodyJson['massData-I'] || 1;
-    
+
     const body: Box2D.b2Body = this.world.CreateBody(bd);
     body.SetMassData(massData);
     b2.destroy(massData);
@@ -249,13 +249,11 @@ export class RubeLoader {
     const bodies: Box2D.b2Body[] = [];
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       const props = this.customPropertiesArrayMap.get(body);
-      if (!body || !props) continue;
-      for (let i = 0; i < props.length; i++) {
-        if (!props[i].hasOwnProperty('name')) continue;
-        if (!props[i].hasOwnProperty(propertyType)) continue;
-        if (props[i].name == propertyName &&
-          props[i][propertyType] == valueToMatch) // TODO refactor to strict equals
-          bodies.push(body);
+      if (!body  || !props) continue;
+      for (const prop of Object.values(props)) {
+        if (!prop.hasOwnProperty('name')) continue;
+        if (!prop.hasOwnProperty(propertyType)) continue;
+        if (prop.name == propertyName && prop[propertyType] == valueToMatch) bodies.push(body); // TODO refactor to strict equals
       }
     }
     return bodies;
@@ -343,14 +341,14 @@ export class RubeLoader {
     const vertices = this.pointsFromSeparatedVertices(polygon.vertices).reverse();
 
     const { _malloc, b2Vec2, b2PolygonShape, HEAPF32, wrapPointer } = b2;
-    const shape = new b2PolygonShape();            
+    const shape = new b2PolygonShape();
     const buffer = _malloc(vertices.length * 8);
     let offset = 0;
-    for (let i=0; i<vertices.length; i++) {
+    for (let i = 0; i < vertices.length; i++) {
       HEAPF32[buffer + offset >> 2] = vertices[i].get_x();
       HEAPF32[buffer + (offset + 4) >> 2] = vertices[i].get_y();
       offset += 8;
-    }            
+    }
     const ptr_wrapped = wrapPointer(buffer, b2Vec2);
     shape.Set(ptr_wrapped, vertices.length);
     return shape;
