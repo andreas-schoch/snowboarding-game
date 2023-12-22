@@ -64,11 +64,8 @@ export default class GameScene extends Ph.Scene {
   }
 
   update() {
-    // console.time('update');
     this.b2Physics.update(); // needs to happen before update of snowman otherwise b2Body.GetPosition() inaccurate
     this.playerController.update();
-    // this.backdrop.update();
     this.setZoomLevel();
-    // console.timeEnd('update');
   }
 }

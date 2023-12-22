@@ -54,9 +54,9 @@ export class Snowboard {
       emitting: false,
       particleBringToTop: true,
       radial: true,
-      // frame: { frames: ["circle_05"], cycle: false, quantity: 0 },
-      blendMode: 1,
+      blendMode: 0,
       gravityY: 100,
+      delay: 100,
       frequency: 0,
       maxParticles: 0,
       timeScale: 1,
@@ -66,7 +66,7 @@ export class Snowboard {
       quantity: { min: 2, max: 10 },
       scale: { ease: "Linear", min: 0.1, max: 0.25 },
       speed: { min: 25, max: 100 },
-      tint: [0x8d8da6]
+      // tint: [0x8d8da6]
     }).setDepth(-10);
 
     const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;

@@ -6,7 +6,6 @@ import { vec2Util } from '../util/RUBE/Vec2Math';
 
 export default class Terrain {
   private readonly terrainBody: Box2D.b2Body;
-  private readonly chunks: ITerrainChunk[] = [];
 
   private readonly b2Physics: Physics;
   private readonly scene: GameScene;
@@ -55,18 +54,14 @@ export default class Terrain {
         startX = vertPixelScale.x;
       }
     }
-    chunks.forEach((chunkPoints, i) => this.drawTerrain(chunkPoints));
+    chunks.forEach((chunkPoints, i) => this.drawTerrain(chunkPoints, i));
   }
 
-  private drawTerrain(pointsWorld: Box2D.b2Vec2[]): void {
+  private drawTerrain(pointsWorld: Box2D.b2Vec2[], index: number): void {
     const minX = Math.min(...pointsWorld.map(point => point.x));
-    const maxX = Math.max(...pointsWorld.map(point => point.x));
     const minY = Math.min(...pointsWorld.map(point => point.y));
-    const maxY = Math.max(...pointsWorld.map(point => point.y));
-    const width = maxX - minX;
-    const height = maxY - minY;
     const graphics = this.scene.add.graphics().setDepth(10);
-    graphics.setPosition(minX, minY);
+    graphics.setPosition(minX, minY)
 
     const pointsLocal = pointsWorld.map(point => new b2.b2Vec2(point.x - minX, point.y - minY));
 
@@ -82,6 +77,14 @@ export default class Terrain {
       graphics.translateCanvas(0, -offset);
       offset += width / 2;
     }
+
+    // const maxX = Math.max(...pointsWorld.map(point => point.x));
+    // const maxY = Math.max(...pointsWorld.map(point => point.y));
+    // const width = maxX - minX;
+    // const height = (maxY - minY) + lowestHeight + this.scene.cameras.main.height * 2;
+    // graphics.generateTexture(`terrainChunk${index}`, width, height);
+    // graphics.destroy();
+    // this.scene.add.image(minX, minY, `terrainChunk${index}`).setOrigin(0, 0);
     // graphics.lineStyle(10, 0x0000ff, 1);
     // graphics.strokeRect(0, 0, width, height);
     // this.downloadTerrainImage(graphics, pointsWorld);
@@ -110,13 +113,4 @@ export default class Terrain {
     link.download = `${textureKey}.png`;
     link.click();
   }
-}
-
-
-interface ITerrainChunk {
-  index: number;
-  graphics: Ph.GameObjects.Graphics;
-  vertices: Box2D.b2Vec2[];
-  firstVert: Box2D.b2Vec2;
-  lastVert: Box2D.b2Vec2;
 }

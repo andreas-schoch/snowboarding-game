@@ -102,10 +102,8 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   update() {
     if (this.isPaused) return;
-    console.time('update physics');
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
     this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
-    console.timeEnd('update physics');
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
