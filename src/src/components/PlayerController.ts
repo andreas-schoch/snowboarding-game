@@ -99,8 +99,8 @@ export class PlayerController {
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown) this.jump();
     if (this.jumpKeyDown) this.leanUp();
     if (this.keyArrowLeft.isDown || this.keyA.isDown) this.leanBackward();
-    if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter();
     if (this.keyArrowRight.isDown || this.keyD.isDown) this.leanForward();
+    if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter(); // needs to be last to override leanForward and leanBackward and speed up rotation
   }
 
   private updateLookAtDirection() {
