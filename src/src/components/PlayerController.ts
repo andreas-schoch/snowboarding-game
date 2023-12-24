@@ -166,35 +166,27 @@ export class PlayerController {
     this.parts.distanceLegLeft?.SetLength(0.65);
     this.parts.distanceLegRight?.SetLength(0.65);
   }
-
+  
   private leanBackward() {
     this.parts.distanceLegLeft?.SetLength(0.5);
     this.parts.distanceLegRight?.SetLength(0.8);
-    // @ts-ignore
-    this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * -10;
     this.parts.body.ApplyAngularImpulse(this.leanForce, true);
   }
 
   private leanForward() {
     this.parts.distanceLegLeft?.SetLength(0.8);
     this.parts.distanceLegRight?.SetLength(0.5);
-    // @ts-ignore
-    this.parts.weldCenter.m_referenceAngle = Math.PI / 180 * 10;
     this.parts.body.ApplyAngularImpulse(-this.leanForce, true);
   }
 
   private leanCenter() {
     this.parts.distanceLegLeft?.SetLength(0.5);
     this.parts.distanceLegRight?.SetLength(0.5);
-    // @ts-ignore
-    this.parts.weldCenter.m_referenceAngle = 0;
   }
 
   private leanUp() {
     this.parts.distanceLegLeft?.SetLength(0.8);
     this.parts.distanceLegRight?.SetLength(0.8);
-    // @ts-ignore
-    this.parts.weldCenter.m_referenceAngle = 0;
   }
 
   private initBodyParts() {

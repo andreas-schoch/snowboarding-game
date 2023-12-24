@@ -87,6 +87,11 @@ export class Snowboard {
         if (!this.scene.cameras.main.worldView.contains(point.x, point.y)) continue;
         if (normalImpulse < 4 || velocityLength < 0.5) continue;
         this.particles.emitParticleAt(point.x, point.y, Math.min(normalImpulse * 1.5, 25));
+
+        if (propsBA && propsBA['phaserPlayerCharacterPart'] === 'boardSegment' || propsBB && propsBB['phaserPlayerCharacterPart'] === 'boardSegment') {
+          const centerGrounded = this.segments[3].groundRayResult.hit;
+          this.scene.observer.emit('surface_impact', normalImpulse, 'snow', false, centerGrounded, false);
+        }
       }
     });
   }

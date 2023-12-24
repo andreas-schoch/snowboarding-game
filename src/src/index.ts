@@ -46,6 +46,14 @@ export const LEVELS = [
   LevelKeys.level_004,
 ];
 
+export const BackgroundMusicKeys = {
+  ContinueLife: 'KevinMacLeod/Continue Life',
+  Heartbreaking: 'KevinMacLeod/Heartbreaking',
+  RainsWillFall: 'KevinMacLeod/Rains Will Fall',
+  SadTrio: 'KevinMacLeod/Sad Trio',
+  StagesOfGrief: 'KevinMacLeod/Stages of Grief',
+};
+
 export const enum CharacterKeys {
   character_santa = 'character_santa',
   character_santa_old = 'character_santa_old',

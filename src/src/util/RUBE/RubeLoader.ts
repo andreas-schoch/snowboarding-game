@@ -34,7 +34,9 @@ export class RubeLoader {
   }
 
   handleLoadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null): unknown | null {
-    throw new Error('Method not implemented. This method gives you a chance to implement how you want to load images.');
+    console.log('handleLoadImage', imageJson, bodyObj);
+    return null;
+    // throw new Error('Method not implemented. This method gives you a chance to implement how you want to load images.');
   }
 
   private loadBody(bodyJson: RubeBody): Box2D.b2Body | null {

@@ -1,6 +1,34 @@
 /**
- * name         "Welcome to the Show"
- * source       https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100013
+ * name         "Continue Life"
+ * source       https://incompetech.com
+ * author       Kevin MacLeod (incompetech.com)
+ * license      http://creativecommons.org/licenses/by/4.0/
+ */
+
+/**
+ * name         "Heartbreaking"
+ * source       https://incompetech.com
+ * author       Kevin MacLeod (incompetech.com)
+ * license      http://creativecommons.org/licenses/by/4.0/
+ */
+
+/**
+ * name         "Rains Will Fall"
+ * source       https://incompetech.com
+ * author       Kevin MacLeod (incompetech.com)
+ * license      http://creativecommons.org/licenses/by/4.0/
+ */
+
+/**
+ * name         "Sad Trio"
+ * source       https://incompetech.com
+ * author       Kevin MacLeod (incompetech.com)
+ * license      http://creativecommons.org/licenses/by/4.0/
+ */
+
+/**
+ * name         "Stages of Grief"
+ * source       https://incompetech.com
  * author       Kevin MacLeod (incompetech.com)
  * license      http://creativecommons.org/licenses/by/4.0/
  */

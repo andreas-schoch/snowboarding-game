@@ -15,6 +15,8 @@ export default class GameScene extends Ph.Scene {
   private terrain: Terrain;
   private playerController: PlayerController;
   body: Box2D.b2Body;
+  windNoise: Ph.Sound.NoAudioSound | Ph.Sound.HTML5AudioSound | Ph.Sound.WebAudioSound;
+  snowboardSlide: Ph.Sound.NoAudioSound | Ph.Sound.HTML5AudioSound | Ph.Sound.WebAudioSound;
   // private backdrop: Backdrop;
 
   constructor() {
@@ -27,12 +29,19 @@ export default class GameScene extends Ph.Scene {
     const maxSpeed = 40; // replace with your game's max speed
     const minZoom = 0.5; // zoomed out
     const maxZoom = DEFAULT_ZOOM; // zoomed in
-
     const normalizedSpeed = Math.min(Math.max(speed / maxSpeed, 0), 1);
     const targetZoom = (maxZoom - normalizedSpeed * (maxZoom - minZoom)) * this.resolutionMod;
     const lerpFactor = 0.02;
     const newZoom = currentZoom + lerpFactor * (targetZoom - currentZoom);
     this.cameras.main.setZoom(newZoom);
+  }
+
+  setWindNoise() {
+    // TODO improve. Maybe pan left/right depending on which ear faces movement direction
+    const maxSpeed = 60;
+    const headSpeed = this.playerController.parts.head.GetLinearVelocity().Length();
+    this.windNoise.setVolume(Math.min(Math.max((headSpeed / maxSpeed) * 0.3, 0.02), 0.5));
+    this.windNoise.setRate(Math.min(Math.max((headSpeed / maxSpeed) * 1.5, 0.5), 1.5));
   }
 
   private create() {
@@ -54,8 +63,40 @@ export default class GameScene extends Ph.Scene {
     this.cameras.main.scrollX -= this.cameras.main.width;
     this.cameras.main.scrollY -= this.cameras.main.height;
 
+    this.snowboardSlide = this.sound.add('snowboard_slide_04', { loop: true, volume: 1, rate: 1, delay: 0, detune: 1000 });
+    this.snowboardSlide.play();
+    this.windNoise = this.sound.add('wind', { loop: true, volume: 1, rate: 1, delay: 0, detune: 0 });
+    this.windNoise.play();
+
+    this.observer.on('surface_impact', (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
+      // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
+      const maxImpulse = 12;
+      const target = center ? 0 : 1200;
+      const lerpFactor = 0.7;
+      const currentDetune = this.snowboardSlide.detune;
+      const newDetune = currentDetune + lerpFactor * (target - currentDetune);
+      this.snowboardSlide.setDetune(newDetune);
+      const percentage = Math.min(impulse / maxImpulse, 1);
+      const volume = Math.max(Math.min(percentage, 1), 0.2);
+      this.snowboardSlide.setVolume(volume);
+    });
+
+    this.observer.on('enter_in_air', () => {
+      this.add.tween({
+        targets: this.snowboardSlide,
+        volume: 0.03,
+        ease: 'Linear',
+        duration: 250,
+        onComplete: () => this.snowboardSlide.setDetune(0)
+      });
+    });
+
     this.scene.launch(SceneKeys.GAME_UI_SCENE, [this.observer, () => {
       this.playerController.state.reset();
+      this.snowboardSlide.stop();
+      this.snowboardSlide.destroy();
+      this.windNoise.stop();
+      this.windNoise.destroy();
       this.scene.restart();
       b2.destroy(this.b2Physics.world);
     }]);
@@ -67,6 +108,7 @@ export default class GameScene extends Ph.Scene {
     this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
     this.playerController.update();
     this.setZoomLevel();
+    this.setWindNoise();
 
     const velocityX = this.body.GetLinearVelocity().x * 10;
     const lerpFactor = 0.01;

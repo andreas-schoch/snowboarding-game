@@ -3,6 +3,7 @@ import { CharacterKeys, LevelKeys, b2 } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
+import DebugDrawer from './DebugDraw';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -31,6 +32,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly stepConfig = { positionIterations: 12, velocityIterations: 12 };
   debugDraw: Ph.GameObjects.Graphics;
   rubeLoader: RubeLoader;
+  debugDrawer: DebugDrawer;
 
   constructor(scene: GameScene, worldScale: number, gravity: { x: number, y: number }) {
     super();
@@ -41,6 +43,9 @@ export class Physics extends Phaser.Events.EventEmitter {
     const gravityVec = new b2.b2Vec2(gravity.x, gravity.y);
     this.world = new b2.b2World(gravityVec);
     this.world.SetAutoClearForces(true);
+
+    this.debugDrawer = new DebugDrawer(this.scene.add.graphics().setDepth(5000), this.worldScale);
+    this.world.SetDebugDraw(this.debugDrawer.instance);
 
     const listeners = new b2.JSContactListener();
     listeners.BeginContact = (contactPtr: number) => {
@@ -103,7 +108,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   update() {
     if (this.isPaused) return;
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
-    this.world.ClearForces(); // recommended after each time step if flag not set which does it automatically
+    // this.world.DebugDraw();
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
@@ -119,5 +124,6 @@ export class Physics extends Phaser.Events.EventEmitter {
         bodyRepresentation.visible = false;
       }
     }
+    // this.debugDrawer.clear();
   }
 }

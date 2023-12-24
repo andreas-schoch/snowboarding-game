@@ -278,698 +278,160 @@
       
       {
         "angle" : 0,
-        "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 1,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          },
-          
-          {
-            "bool" : false,
-            "name" : "phaserTerrain"
-          }
-        ],
         "fixture" : 
         [
           
           {
-            "density" : 30.0,
+            "density" : 1,
+            "filter-categoryBits" : 4,
+            "filter-maskBits" : 8,
+            "friction" : 0.2,
             "id" : 1,
             "name" : "fixture5",
             "shapes" : 
             [
               
               {
-                "type" : "polygon"
+                "type" : "line"
               }
             ],
             "vertices" : 
             {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
+              "x" : [ -10, 10 ],
+              "y" : [ 0.0, 0.0 ]
             }
           }
         ],
         "id" : 1,
-        "linearDamping" : 0.1,
         "linearVelocity" : 0,
-        "massData-I" : 0.02445356547832489,
-        "massData-center" : 
-        {
-          "x" : -4.924881835677297e-09,
-          "y" : 6.156102294596622e-10
-        },
-        "massData-mass" : 1.512844562530518,
         "name" : "body0",
-        "position" : 
-        {
-          "x" : -0.64,
-          "y" : 1.14
-        },
-        "type" : "dynamic"
+        "position" : 0,
+        "type" : "static"
       },
       
       {
         "angle" : 0,
-        "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 2,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
+        "fixedRotation" : true,
         "fixture" : 
         [
           
           {
-            "density" : 30.0,
-            "id" : 2,
-            "name" : "fixture5",
+            "density" : 3183.09863281250,
+            "filter-categoryBits" : 8,
+            "filter-maskBits" : 4,
+            "friction" : 1,
+            "id" : 8,
+            "name" : "fixture2",
             "shapes" : 
             [
               
               {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
-            }
-          }
-        ],
-        "id" : 2,
-        "linearDamping" : 0.1,
-        "linearVelocity" : 0,
-        "massData-I" : 0.02445356547832489,
-        "massData-center" : 
-        {
-          "x" : -4.924881835677297e-09,
-          "y" : 6.156102294596622e-10
-        },
-        "massData-mass" : 1.512844562530518,
-        "name" : "body0",
-        "position" : 
-        {
-          "x" : -0.32,
-          "y" : 1.14
-        },
-        "type" : "dynamic"
-      },
-      
-      {
-        "angle" : 0,
-        "angularDamping" : 0.1,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 0,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
-        "fixture" : 
-        [
-          
-          {
-            "density" : 30.0,
-            "id" : 3,
-            "name" : "fixture5",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
-            }
-          },
-          
-          {
-            "customProperties" : 
-            [
-              
-              {
-                "bool" : true,
-                "name" : "phaserBoardEdge"
-              }
-            ],
-            "density" : 1,
-            "friction" : 0.9,
-            "id" : 11,
-            "name" : "fixture7",
-            "shapes" : 
-            [
-              
-              {
-                "radius" : 0.08,
+                "radius" : 0.05,
                 "type" : "circle"
               }
             ],
             "vertices" : 
             {
-              "x" : [ -0.1618160009384155 ],
+              "x" : [ 0.0 ],
               "y" : [ 0.0 ]
             }
           }
         ],
-        "id" : 3,
-        "linearDamping" : 0.1,
+        "id" : 8,
         "linearVelocity" : 0,
-        "massData-I" : 0.02504437416791916,
-        "massData-center" : 
-        {
-          "x" : -0.002122384496033192,
-          "y" : 6.075358549573195e-10
-        },
-        "massData-mass" : 1.532950758934021,
-        "name" : "body0",
+        "massData-mass" : 25.0,
+        "name" : "rightAnkle",
         "position" : 
         {
-          "x" : -0.96,
-          "y" : 1.14
+          "x" : 0.15,
+          "y" : 1.308370351791382
         },
         "type" : "dynamic"
       },
       
       {
         "angle" : 0,
-        "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 4,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
         "fixture" : 
         [
           
           {
-            "density" : 30.0,
-            "id" : 4,
-            "name" : "fixture5",
+            "density" : 509.2958068847656,
+            "filter-categoryBits" : 4,
+            "filter-maskBits" : 0,
+            "id" : 9,
+            "name" : "fixture3",
             "shapes" : 
             [
               
               {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
-            }
-          }
-        ],
-        "id" : 4,
-        "linearDamping" : 0.1,
-        "linearVelocity" : 0,
-        "massData-I" : 0.02445356547832489,
-        "massData-center" : 
-        {
-          "x" : -4.924881835677297e-09,
-          "y" : 6.156102294596622e-10
-        },
-        "massData-mass" : 1.512844562530518,
-        "name" : "body0",
-        "position" : 
-        {
-          "x" : 0.32,
-          "y" : 1.14
-        },
-        "type" : "dynamic"
-      },
-      
-      {
-        "angle" : 0,
-        "angularDamping" : 0.1,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 6,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
-        "fixture" : 
-        [
-          
-          {
-            "density" : 30.0,
-            "id" : 5,
-            "name" : "fixture5",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
-            }
-          },
-          
-          {
-            "customProperties" : 
-            [
-              
-              {
-                "bool" : true,
-                "name" : "phaserBoardEdge"
-              }
-            ],
-            "density" : 1,
-            "friction" : 0.9,
-            "id" : 16,
-            "name" : "fixture9",
-            "shapes" : 
-            [
-              
-              {
-                "radius" : 0.08,
+                "radius" : 0.25,
                 "type" : "circle"
               }
             ],
             "vertices" : 
             {
-              "x" : [ 0.1646223068237305 ],
-              "y" : [ 4.768370217789197e-06 ]
+              "x" : [ 0.0 ],
+              "y" : [ 0.0 ]
             }
           }
         ],
-        "id" : 5,
-        "linearDamping" : 0.1,
+        "id" : 9,
         "linearVelocity" : 0,
-        "massData-I" : 0.02506279386579990,
-        "massData-center" : 
-        {
-          "x" : 0.002159182447940111,
-          "y" : 6.314951406238833e-08
-        },
-        "massData-mass" : 1.532950758934021,
-        "name" : "body0",
-        "position" : 
-        {
-          "x" : 0.96,
-          "y" : 1.14
-        },
-        "type" : "dynamic"
-      },
-      
-      {
-        "angle" : 0,
-        "angularDamping" : 0.1,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 3,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
-        "fixture" : 
-        [
-          
-          {
-            "density" : 30.0,
-            "id" : 6,
-            "name" : "fixture5",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
-            }
-          }
-        ],
-        "id" : 6,
-        "linearDamping" : 0.1,
-        "linearVelocity" : 0,
-        "massData-I" : 0.02445356547832489,
-        "massData-center" : 
-        {
-          "x" : -4.924881835677297e-09,
-          "y" : 6.156102294596622e-10
-        },
-        "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "massData-I" : 3.1250,
+        "massData-mass" : 100.0,
+        "name" : "wheel",
         "position" : 
         {
           "x" : 0,
-          "y" : 1.14
+          "y" : 1.308370351791382
         },
         "type" : "dynamic"
       },
       
       {
         "angle" : 0,
-        "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
-        "bullet" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "int" : 5,
-            "name" : "phaserBoardSegmentIndex"
-          },
-          
-          {
-            "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
-          }
-        ],
+        "fixedRotation" : true,
         "fixture" : 
         [
           
           {
-            "density" : 30.0,
-            "id" : 7,
-            "name" : "fixture5",
+            "density" : 3183.09863281250,
+            "filter-categoryBits" : 8,
+            "filter-maskBits" : 4,
+            "friction" : 1,
+            "id" : 10,
+            "name" : "fixture2",
             "shapes" : 
             [
               
               {
-                "type" : "polygon"
+                "radius" : 0.05,
+                "type" : "circle"
               }
             ],
             "vertices" : 
             {
-              "x" : 
-              [
-                -0.1719309985637665,
-                -0.1989769935607910,
-                -0.2105669975280762,
-                -0.2216749936342239,
-                -0.2221579998731613,
-                -0.1989769935607910,
-                -0.1777269989252090,
-                0.1719309985637665,
-                0.1989769935607910,
-                0.2105669975280762,
-                0.2216749936342239,
-                0.2221579998731613,
-                0.1989769935607910,
-                0.1777269989252090
-              ],
-              "y" : 
-              [
-                0.05988619849085808,
-                0.05119299888610840,
-                0.04056809842586517,
-                0.01931810006499290,
-                -0.01931810006499290,
-                -0.05119299888610840,
-                -0.05940319970250130,
-                -0.05988619849085808,
-                -0.05119299888610840,
-                -0.04056809842586517,
-                -0.01931810006499290,
-                0.01931810006499290,
-                0.05119299888610840,
-                0.05940319970250130
-              ]
+              "x" : [ 0.0 ],
+              "y" : [ 0.0 ]
             }
           }
         ],
-        "id" : 7,
-        "linearDamping" : 0.1,
+        "id" : 10,
         "linearVelocity" : 0,
-        "massData-I" : 0.02445356547832489,
-        "massData-center" : 
-        {
-          "x" : -4.924881835677297e-09,
-          "y" : 6.156102294596622e-10
-        },
-        "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "massData-mass" : 25.0,
+        "name" : "leftAnkle",
         "position" : 
         {
-          "x" : 0.64,
-          "y" : 1.14
+          "x" : -0.15,
+          "y" : 1.308370351791382
         },
         "type" : "dynamic"
       },
@@ -978,50 +440,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 9,
-            "name" : "fixture11",
-            "sensor" : true,
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.07333278656005859,
-                0.07333278656005859,
-                0.07333278656005859,
-                -0.07333278656005859
-              ],
-              "y" : 
-              [
-                -0.07333266735076904,
-                -0.07333266735076904,
-                0.07333266735076904,
-                0.07333266735076904
-              ]
-            }
-          }
-        ],
-        "id" : 11,
+        "id" : 14,
         "linearVelocity" : 0,
-        "massData-I" : 7.711876969551668e-05,
-        "massData-mass" : 0.02151075564324856,
+        "massData-mass" : 1,
         "name" : "body1",
         "position" : 
         {
           "x" : 0,
-          "y" : 1.2
+          "y" : 1.8
         },
         "type" : "dynamic"
       },
@@ -1169,7 +595,7 @@
       },
       
       {
-        "angle" : 0,
+        "angle" : -0.6691374778747559,
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
@@ -1178,6 +604,7 @@
           
           {
             "density" : 15.0,
+            "filter-maskBits" : 4,
             "friction" : 1,
             "id" : 41,
             "name" : "fixture3",
@@ -1232,8 +659,8 @@
         "name" : "LEG",
         "position" : 
         {
-          "x" : -0.48,
-          "y" : 1.4
+          "x" : -0.4413027763366699,
+          "y" : 1.382934093475342
         },
         "type" : "dynamic"
       },
@@ -1256,11 +683,13 @@
             "name" : "phaserCameraFollow"
           }
         ],
+        "fixedRotation" : true,
         "fixture" : 
         [
           
           {
             "density" : 35.0,
+            "filter-maskBits" : 4,
             "friction" : 1,
             "id" : 42,
             "name" : "fixture1",
@@ -1281,7 +710,7 @@
         "id" : 41,
         "linearDamping" : 0.05,
         "linearVelocity" : 0,
-        "massData-I" : 3.009370088577271,
+        "massData-I" : 0.007292989175766706,
         "massData-center" : 
         {
           "x" : -1.166431395915879e-08,
@@ -1307,6 +736,7 @@
           
           {
             "density" : 15.0,
+            "filter-maskBits" : 4,
             "friction" : 1,
             "id" : 43,
             "name" : "fixture0",
@@ -1511,6 +941,7 @@
           
           {
             "density" : 15.0,
+            "filter-maskBits" : 4,
             "friction" : 1,
             "id" : 46,
             "name" : "fixture3",
@@ -1622,7 +1053,7 @@
       },
       
       {
-        "angle" : -0.6108652353286743,
+        "angle" : -0.1199361085891724,
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
@@ -1631,6 +1062,7 @@
           
           {
             "density" : 15.0,
+            "filter-maskBits" : 4,
             "friction" : 1,
             "id" : 53,
             "name" : "fixture0",
@@ -1677,203 +1109,14 @@
         "name" : "UPPER",
         "position" : 
         {
-          "x" : -0.4,
-          "y" : 1.674999952316284
+          "x" : -0.3310303688049316,
+          "y" : 1.649690032005310
         },
         "type" : "dynamic"
       }
     ],
     "metaimage" : 
     [
-      
-      {
-        "aspectScale" : 1,
-        "body" : 4,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 2,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 6,
-        "scale" : 0.1163636371493340
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 5,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 3,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 4,
-        "scale" : 0.1163636371493340
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 2,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 5,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 8,
-        "scale" : 0.1163636371493340
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 6,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 6,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 7,
-        "scale" : 0.1163636371493340
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 1,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 7,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 9,
-        "scale" : 0.1163636371493340
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 3,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 8,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 10,
-        "scale" : 0.1163640022277832
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 7,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/board.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 9,
-        "name" : "image5",
-        "opacity" : 1,
-        "renderOrder" : 5,
-        "scale" : 0.1163636371493340
-      },
       
       {
         "aspectScale" : 1,
@@ -2187,133 +1430,74 @@
       {
         "anchorA" : 
         {
-          "x" : 0.16,
-          "y" : 0
+          "x" : -0.15,
+          "y" : 4.768371582031250e-06
         },
-        "anchorB" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "bodyA" : 1,
-        "bodyB" : 2,
+        "anchorB" : 0,
+        "bodyA" : 9,
+        "bodyB" : 10,
         "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
-        "id" : 1,
-        "name" : "joint47",
-        "referenceAngle" : 0.08726646006107330,
-        "type" : "weld"
-      },
-      
-      {
-        "anchorA" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "anchorB" : 
-        {
-          "x" : 0.16,
-          "y" : 0
-        },
-        "bodyA" : 7,
-        "bodyB" : 4,
-        "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
-        "id" : 2,
-        "name" : "joint50",
-        "referenceAngle" : 0.08726646006107330,
-        "type" : "weld"
-      },
-      
-      {
-        "anchorA" : 
-        {
-          "x" : 0.16,
-          "y" : 0
-        },
-        "anchorB" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "bodyA" : 7,
-        "bodyB" : 5,
-        "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
-        "id" : 3,
-        "name" : "joint52",
-        "referenceAngle" : 0.4363323152065277,
-        "type" : "weld"
-      },
-      
-      {
-        "anchorA" : 
-        {
-          "x" : 0.16,
-          "y" : 0
-        },
-        "anchorB" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "bodyA" : 3,
-        "bodyB" : 1,
-        "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
-        "id" : 4,
-        "name" : "joint46",
-        "referenceAngle" : 0.4363323152065277,
-        "type" : "weld"
-      },
-      
-      {
-        "anchorA" : 
-        {
-          "x" : 0.16,
-          "y" : 0
-        },
-        "anchorB" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "bodyA" : 6,
-        "bodyB" : 4,
-        "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
-        "id" : 5,
-        "name" : "joint51",
-        "referenceAngle" : 0,
-        "type" : "weld"
-      },
-      
-      {
-        "anchorA" : 
-        {
-          "x" : 0.16,
-          "y" : 0
-        },
-        "anchorB" : 
-        {
-          "x" : -0.16,
-          "y" : 0
-        },
-        "bodyA" : 2,
-        "bodyB" : 6,
-        "collideConnected" : false,
-        "dampingRatio" : 0.5,
-        "frequency" : 30.0,
+        "enableLimit" : false,
+        "enableMotor" : false,
         "id" : 6,
-        "name" : "joint48",
+        "lowerLimit" : 0,
+        "maxMotorTorque" : 0,
+        "motorSpeed" : 0,
+        "name" : "joint3",
         "referenceAngle" : 0,
-        "type" : "weld"
+        "type" : "revolute",
+        "upperLimit" : 0
+      },
+      
+      {
+        "anchorA" : 
+        {
+          "x" : 0.15,
+          "y" : 4.768370217789197e-06
+        },
+        "anchorB" : 0,
+        "bodyA" : 9,
+        "bodyB" : 8,
+        "collideConnected" : false,
+        "enableLimit" : false,
+        "enableMotor" : false,
+        "id" : 7,
+        "lowerLimit" : 0,
+        "maxMotorTorque" : 0,
+        "motorSpeed" : 0,
+        "name" : "joint2",
+        "referenceAngle" : 0,
+        "type" : "revolute",
+        "upperLimit" : 0
+      },
+      
+      {
+        "anchorA" : 
+        {
+          "x" : 0,
+          "y" : -0.8916200399398804
+        },
+        "anchorB" : 
+        {
+          "x" : 0,
+          "y" : 9.655952453613281e-06
+        },
+        "bodyA" : 41,
+        "bodyB" : 9,
+        "collideConnected" : false,
+        "enableMotor" : true,
+        "id" : 8,
+        "localAxisA" : 
+        {
+          "x" : 0,
+          "y" : 1
+        },
+        "maxMotorTorque" : 5000.0,
+        "motorSpeed" : -4.363323211669922,
+        "name" : "joint0",
+        "springDampingRatio" : 0.7,
+        "springFrequency" : 4,
+        "type" : "wheel"
       },
       
       {
@@ -2385,13 +1569,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 11,
-        "lowerLimit" : -2.181661605834961,
+        "lowerLimit" : -0.4363323152065277,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint10",
         "referenceAngle" : 0,
         "type" : "revolute",
-        "upperLimit" : 0.4363323152065277
+        "upperLimit" : 2.181661605834961
       },
       
       {
@@ -2411,40 +1595,32 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 12,
-        "lowerLimit" : 0.3490658402442932,
+        "lowerLimit" : -2.530727386474609,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint11",
         "referenceAngle" : 0,
         "type" : "revolute",
-        "upperLimit" : 2.530727386474609
+        "upperLimit" : -0.3490658402442932
       },
       
       {
         "anchorA" : 
         {
-          "x" : -0.16,
-          "y" : 0.06
+          "x" : 0,
+          "y" : -0.1949999928474426
         },
         "anchorB" : 
         {
-          "x" : 0,
-          "y" : -0.2
+          "x" : 0.33,
+          "y" : -0.04269989952445030
         },
-        "bodyA" : 2,
-        "bodyB" : 40,
+        "bodyA" : 45,
+        "bodyB" : 8,
         "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "bindingLeft"
-          }
-        ],
         "enableLimit" : false,
         "enableMotor" : false,
-        "id" : 13,
+        "id" : 20,
         "lowerLimit" : 0,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
@@ -2455,37 +1631,20 @@
       },
       
       {
-        "anchorA" : 
-        {
-          "x" : 0.16,
-          "y" : 0.06
-        },
+        "anchorA" : 0,
         "anchorB" : 
         {
           "x" : 0,
-          "y" : -0.2
+          "y" : -0.4
         },
-        "bodyA" : 4,
-        "bodyB" : 45,
+        "bodyA" : 14,
+        "bodyB" : 41,
         "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "bindingRight"
-          }
-        ],
-        "enableLimit" : false,
-        "enableMotor" : false,
-        "id" : 14,
-        "lowerLimit" : 0,
-        "maxMotorTorque" : 0,
-        "motorSpeed" : 0,
+        "id" : 22,
+        "maxForce" : 50.0,
+        "maxTorque" : 50.0,
         "name" : "joint13",
-        "referenceAngle" : 0,
-        "type" : "revolute",
-        "upperLimit" : 0
+        "type" : "friction"
       },
       
       {
@@ -2531,13 +1690,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 46,
-        "lowerLimit" : -0.08726646006107330,
+        "lowerLimit" : 0,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
         "name" : "joint18",
         "referenceAngle" : 0,
         "type" : "revolute",
-        "upperLimit" : 0.08726646006107330
+        "upperLimit" : 0
       },
       
       {
@@ -2564,119 +1723,6 @@
         "referenceAngle" : -1.570796370506287,
         "type" : "revolute",
         "upperLimit" : 0
-      },
-      
-      {
-        "anchorA" : 0,
-        "anchorB" : 
-        {
-          "x" : -0.4,
-          "y" : -0.4
-        },
-        "bodyA" : 1,
-        "bodyB" : 41,
-        "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "distanceLegLeft"
-          }
-        ],
-        "dampingRatio" : 0.5,
-        "frequency" : 7,
-        "id" : 49,
-        "length" : 0.7,
-        "name" : "joint15",
-        "type" : "distance"
-      },
-      
-      {
-        "anchorA" : 0,
-        "anchorB" : 
-        {
-          "x" : 0.4,
-          "y" : -0.4
-        },
-        "bodyA" : 7,
-        "bodyB" : 41,
-        "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "distanceLegRight"
-          }
-        ],
-        "dampingRatio" : 0.5,
-        "frequency" : 7,
-        "id" : 50,
-        "length" : 0.7,
-        "name" : "joint19",
-        "type" : "distance"
-      },
-      
-      {
-        "anchorA" : 0,
-        "anchorB" : 
-        {
-          "x" : 0,
-          "y" : -1
-        },
-        "bodyA" : 11,
-        "bodyB" : 41,
-        "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "prismatic"
-          }
-        ],
-        "enableLimit" : false,
-        "enableMotor" : false,
-        "id" : 51,
-        "localAxisA" : 
-        {
-          "x" : 0,
-          "y" : 1
-        },
-        "lowerLimit" : 0,
-        "maxMotorForce" : 0,
-        "motorSpeed" : 0,
-        "name" : "joint14",
-        "referenceAngle" : 0,
-        "type" : "prismatic",
-        "upperLimit" : 0
-      },
-      
-      {
-        "anchorA" : 0,
-        "anchorB" : 
-        {
-          "x" : 0,
-          "y" : 0.06
-        },
-        "bodyA" : 11,
-        "bodyB" : 6,
-        "collideConnected" : false,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserPlayerCharacterSpring",
-            "string" : "weldCenter"
-          }
-        ],
-        "dampingRatio" : 0.5,
-        "frequency" : 20.0,
-        "id" : 52,
-        "name" : "joint16",
-        "referenceAngle" : 0,
-        "type" : "weld"
       },
       
       {

@@ -1,4 +1,4 @@
-import { CharacterKeys, DEFAULT_HEIGHT, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
+import { BackgroundMusicKeys, CharacterKeys, DEFAULT_HEIGHT, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -17,13 +17,15 @@ export default class PreloadScene extends Phaser.Scene {
   }
   
   private loadAudio() {
-    this.load.audio('welcome_to_the_show', 'assets/audio/music/KevinMacLeod/Welcome to the Show.mp3');
+    Object.values(BackgroundMusicKeys).forEach(key => this.load.audio(key, `assets/audio/music/${key}.mp3`)); 
     this.load.audio('boink', 'assets/audio/sfx/jump/boink.mp3');
-    this.load.audio('pickup_present', 'assets/audio/sfx/pickup/pickupgem.mp3');
+    this.load.audio('pickup_present', 'assets/audio/sfx/pickup/pickup_coins.wav');
     this.load.audio('death', 'assets/audio/sfx/crash/death.mp3');
     this.load.audio('grunt', 'assets/audio/sfx/crash_grunt/grunt.mp3');
     this.load.audio('applause', 'assets/audio/sfx/applause/applause.mp3');
     this.load.audio('game_over_demon', 'assets/audio/sfx/game_over_demon/game_over_demon.mp3');
+    this.load.audio('snowboard_slide_04', 'assets/audio/sfx/nox_sound/snowboard_slide_loop_04.mp3');
+    this.load.audio('wind', 'assets/audio/sfx/wind/wind-seamless-02.mp3');
   }
   
   private loadImg() {

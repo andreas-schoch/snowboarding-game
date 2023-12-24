@@ -1,6 +1,5 @@
 /**
- * source       https://www.iforce2d.net/rube/loaders/rube-phaser-sample.zip
- * author       unknown
- * license      unknown
- * notes        Part of an example project showing how to load RUBE files into phaser.
+ * source       https://freesound.org/people/Anthousai/sounds/336579/
+ * author       Anthousai
+ * license      https://creativecommons.org/publicdomain/zero/1.0/
  */

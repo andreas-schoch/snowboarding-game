@@ -1,5 +1,6 @@
 import * as Ph from 'phaser';
 import {
+  BackgroundMusicKeys,
   DEBUG,
   DEFAULT_WIDTH,
   KEY_LEVEL_CURRENT,
@@ -82,13 +83,14 @@ export default class GameUIScene extends Ph.Scene {
 
   create() {
     const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
-    this.music = this.sound.add('welcome_to_the_show', {loop: true, volume: musicVolume * 0.3, rate: 1, delay: 1, detune: 0});
+    const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
+    this.music = this.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0});
     this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
     this.sfx_jump_start = this.sound.add('boink', {detune: -200, volume: sfxVolume});
-    this.sfx_pickup_present = this.sound.add('pickup_present', {detune: 100, rate: 1.1, volume: sfxVolume});
-    this.sfx_death = this.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume});
-    this.sfx_grunt = this.sound.add('grunt', {detune: 700, rate: 1.25, volume: sfxVolume * 0.6});
+    this.sfx_pickup_present = this.sound.add('pickup_present', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
+    this.sfx_death = this.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
+    this.sfx_grunt = this.sound.add('grunt', {detune: 400, rate: 1.25, volume: sfxVolume * 0.5});
     this.sfx_applause = this.sound.add('applause', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
     this.sfx_game_over_demon = this.sound.add('game_over_demon', {detune: 0, rate: 0.95, volume: sfxVolume * 0.6});
 
@@ -99,7 +101,7 @@ export default class GameUIScene extends Ph.Scene {
     this.initDomUi();
 
     this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
+    // this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
     this.observer.on('pickup_present', total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();
@@ -329,7 +331,6 @@ export default class GameUIScene extends Ph.Scene {
     );
 
     return element;
-
   }
 
   private playAgain() {
@@ -359,7 +360,6 @@ export default class GameUIScene extends Ph.Scene {
       } else {
         p.classList.add('hidden');
       }
-
     });
 
   }
