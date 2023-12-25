@@ -99,7 +99,7 @@ export default class Terrain {
     const height = maxY - minY;
 
     // Generate a texture from the Graphics object
-    const textureKey = `terrainChunk`;
+    const textureKey = `terrainChunk-${Math.floor(Math.random() * 1000000)}}`;
     graphics.generateTexture(textureKey, width, height);
 
     // Get the texture as a base64 encoded URL

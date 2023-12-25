@@ -44,6 +44,7 @@ export const LEVELS = [
   LevelKeys.level_002,
   LevelKeys.level_003,
   LevelKeys.level_004,
+  LevelKeys.level_005,
 ];
 
 export const BackgroundMusicKeys = {

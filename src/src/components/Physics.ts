@@ -108,7 +108,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   update() {
     if (this.isPaused) return;
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
-    // this.world.DebugDraw();
+    this.world.DebugDraw();
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
@@ -124,6 +124,6 @@ export class Physics extends Phaser.Events.EventEmitter {
         bodyRepresentation.visible = false;
       }
     }
-    // this.debugDrawer.clear();
+    this.debugDrawer.clear();
   }
 }

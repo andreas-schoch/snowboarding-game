@@ -1,4 +1,4 @@
-import { BackgroundMusicKeys, CharacterKeys, DEFAULT_HEIGHT, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
+import { BackgroundMusicKeys, CharacterKeys, DEFAULT_HEIGHT, LEVELS, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -42,9 +42,7 @@ export default class PreloadScene extends Phaser.Scene {
     // (e.g. Santa clause, Mrs. Clause, Snowman, Easter Bunny, The Hoff etc.)
     this.load.json(CharacterKeys.character_santa_old, `assets/levels/export/${CharacterKeys.character_santa_old}.json`);
     this.load.json(CharacterKeys.character_santa, `assets/levels/export/${CharacterKeys.character_santa}.json`);
-    this.load.json(LevelKeys.level_001, `assets/levels/export/${LevelKeys.level_001}.json`);
-    this.load.json(LevelKeys.level_002, `assets/levels/export/${LevelKeys.level_002}.json`);
-    this.load.json(LevelKeys.level_003, `assets/levels/export/${LevelKeys.level_003}.json`);
-    this.load.json(LevelKeys.level_004, `assets/levels/export/${LevelKeys.level_004}.json`);
+
+    LEVELS.forEach(level => this.load.json(level, `assets/levels/export/${level}.json`));
   }
 }
