@@ -1,4 +1,3 @@
-import * as Ph from 'phaser';
 import { IPostSolveEvent, Physics } from './Physics';
 import GameScene from '../scenes/GameScene';
 import { PlayerController } from './PlayerController';
@@ -24,50 +23,22 @@ export class Snowboard {
   isTailGrounded: boolean;
   isNoseGrounded: boolean;
   isCenterGrounded: boolean;
-  readonly segments: ISegment[] = [];
-  private ZERO: Box2D.b2Vec2;
-  private debugGraphics: Ph.GameObjects.Graphics;
 
   private readonly player: PlayerController;
   private readonly scene: GameScene;
   private readonly b2Physics: Physics;
-  particles: Ph.GameObjects.Particles.ParticleEmitter;
+  private readonly segments: ISegment[] = [];
+  private readonly ZERO: Box2D.b2Vec2;
+  private readonly particles: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor(player: PlayerController) {
-    this.player = player;
     this.scene = player.scene;
     this.b2Physics = player.b2Physics;
+    this.player = player;
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.debugGraphics = this.scene.add.graphics().setDepth(10000000);
-    this.debugGraphics.fillStyle(0xffffff, 1);
-    this.debugGraphics.fillCircle(8, 8, 8);
-    this.debugGraphics.generateTexture('circle_01', 16, 16);
-    this.debugGraphics.clear();
-
     this.initRays(this.b2Physics.worldScale / 4);
-
-
-    this.particles = this.scene.add.particles(0, 0, 'circle_01', {
-      active: true,
-      visible: true,
-      emitting: false,
-      particleBringToTop: true,
-      radial: true,
-      blendMode: 0,
-      gravityY: 100,
-      delay: 100,
-      frequency: 0,
-      maxParticles: 0,
-      timeScale: 1,
-      alpha: 1,
-      angle: { min: 0, max: 360 },
-      lifespan: { min: 600, max: 1250 },
-      quantity: { min: 2, max: 10 },
-      scale: { ease: "Linear", min: 0.1, max: 0.25 },
-      speed: { min: 25, max: 100 },
-      // tint: [0x8d8da6]
-    }).setDepth(-10);
+    this.particles = this.initParticles();
 
     const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;
     const scale = this.b2Physics.worldScale;
@@ -94,6 +65,34 @@ export class Snowboard {
         }
       }
     });
+  }
+
+  private initParticles() {
+    const graphics = this.scene.add.graphics().setDepth(10000000);
+    graphics.fillStyle(0xffffff, 1);
+    graphics.fillCircle(8, 8, 8);
+    graphics.generateTexture('circle_01', 16, 16);
+    graphics.clear();
+    return this.scene.add.particles(0, 0, 'circle_01', {
+      active: true,
+      visible: true,
+      emitting: false,
+      particleBringToTop: true,
+      radial: true,
+      blendMode: 0,
+      gravityY: 100,
+      delay: 100,
+      frequency: 0,
+      maxParticles: 0,
+      timeScale: 1,
+      alpha: 1,
+      angle: { min: 0, max: 360 },
+      lifespan: { min: 600, max: 1250 },
+      quantity: { min: 2, max: 10 },
+      scale: { ease: "Linear", min: 0.1, max: 0.25 },
+      speed: { min: 25, max: 100 },
+      // tint: [0x8d8da6]
+    }).setDepth(-10);
   }
 
   update() {
@@ -150,6 +149,5 @@ export class Snowboard {
 
       this.segments.push({ body, groundRayDirection, groundRayResult, groundRayCallback });
     }
-
   }
 }

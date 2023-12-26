@@ -1,8 +1,8 @@
-import { simd } from "wasm-feature-detect";
-import * as Ph from 'phaser';
-import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
-
+import 'phaser'; // needs to be imported at least once
 import Box2DFactory from 'box2d-wasm';
+import { simd } from "wasm-feature-detect";
+import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js'; // TODO get rid of this. Consider using firebase without plugin or switch to Couchbase as a backend
+
 import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
 import GameUIScene from './scenes/GameUIScene';
@@ -75,10 +75,10 @@ export const CHARACTERS = [
   CharacterKeys.character_santa_old,
 ];
 
-export const gameConfig: Ph.Types.Core.GameConfig = {
+export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',
-  type: Ph.AUTO,
+  type: Phaser.AUTO,
   backgroundColor: '#ffffff',
   disableContextMenu: true,
   parent: 'phaser-wrapper',
@@ -91,8 +91,8 @@ export const gameConfig: Ph.Types.Core.GameConfig = {
     smoothStep: true,
   },
   scale: {
-    mode: Ph.Scale.RESIZE,
-    autoCenter: Ph.Scale.CENTER_BOTH,
+    mode: Phaser.Scale.RESIZE,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH * RESOLUTION_SCALE,
     height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
   },
@@ -110,7 +110,7 @@ window.addEventListener('load', () => {
     // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
     Box2DFactory({ locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm' }).then((_b2) => {
       b2 = _b2;
-      new Ph.Game(gameConfig);
+      new Phaser.Game(gameConfig);
 
       if (navigator.onLine) {
         // Display fps and memory usage

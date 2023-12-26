@@ -1,4 +1,3 @@
-import * as Ph from 'phaser';
 import Terrain from '../components/Terrain';
 import { Physics } from '../components/Physics';
 import { b2 } from '../index';
@@ -11,15 +10,15 @@ import { getCurrentLevel } from '../util/getCurrentLevel';
 import { getSelectedCharacter } from '../util/getCurrentCharacter';
 import { vec2Util } from '../util/RUBE/Vec2Math';
 
-export default class GameScene extends Ph.Scene {
+export default class GameScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter;
   resolutionMod: number;
   b2Physics: Physics; // TODO should ideally be made private again
   private terrain: Terrain;
   private playerController: PlayerController;
   body: Box2D.b2Body;
-  windNoise: Ph.Sound.NoAudioSound | Ph.Sound.HTML5AudioSound | Ph.Sound.WebAudioSound;
-  snowboardSlide: Ph.Sound.NoAudioSound | Ph.Sound.HTML5AudioSound | Ph.Sound.WebAudioSound;
+  windNoise: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+  snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   // private backdrop: Backdrop;
 
   constructor() {
@@ -49,7 +48,7 @@ export default class GameScene extends Ph.Scene {
 
   private create() {
     if (this.observer) this.observer.destroy(); // clear previous runs
-    this.observer = new Ph.Events.EventEmitter();
+    this.observer = new Phaser.Events.EventEmitter();
     this.b2Physics = new Physics(this, 40, { x: 0, y: -10 });
     this.b2Physics.loadRubeScene(getCurrentLevel())
     this.b2Physics.loadRubeScene(getSelectedCharacter())

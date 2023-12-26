@@ -1,4 +1,3 @@
-import * as Ph from 'phaser';
 import { CharacterKeys, LevelKeys, b2 } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
@@ -24,19 +23,17 @@ export interface IPostSolveEvent {
 
 
 export class Physics extends Phaser.Events.EventEmitter {
-  isPaused: boolean = false;
-  worldScale: number;
   world: Box2D.b2World;
+  rubeLoader: RubeLoader;
+  worldScale: number;
+  isPaused: boolean = false;
   private readonly scene: GameScene;
+  private readonly debugDrawer: DebugDrawer;
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = { positionIterations: 12, velocityIterations: 12 };
-  debugDraw: Ph.GameObjects.Graphics;
-  rubeLoader: RubeLoader;
-  debugDrawer: DebugDrawer;
 
   constructor(scene: GameScene, worldScale: number, gravity: { x: number, y: number }) {
     super();
-    this.debugDraw = scene.add.graphics();
     this.scene = scene;
     this.worldScale = worldScale;
 
@@ -84,7 +81,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const textureFallback = (file || '').split('/').reverse()[0];
       const texture = props['phaserTexture'] as string || textureFallback;
       const textureFrame = props['phaserTextureFrame'] as string || textureFallback; // TODO obsolete if filename matches texture name in altas
-      const img: Ph.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, texture, textureFrame);
+      const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, texture, textureFrame);
       img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
       img.scaleY = (this.worldScale / img.height) * scale;
       img.scaleX = img.scaleY * aspectScale;
@@ -112,7 +109,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
-      const bodyRepresentation = this.rubeLoader.bodyUserDataMap.get(body) as Ph.GameObjects.Image;
+      const bodyRepresentation = this.rubeLoader.bodyUserDataMap.get(body) as Phaser.GameObjects.Image;
       if (!bodyRepresentation) continue;
       if (body.IsEnabled()) {
         let pos = body.GetPosition();

@@ -1,4 +1,3 @@
-// import * as Ph from 'phaser';
 // import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '../index';
 // import GameScene from '../scenes/GameScene';
 
@@ -10,7 +9,7 @@
 //   // private bgSpaceFront: Phaser.GameObjects.TileSprite;
 //   // private bgLandscapeMountains: Phaser.GameObjects.TileSprite;
 //   // private bgLandscapeHills: Phaser.GameObjects.TileSprite;
-//   bgAir: Ph.GameObjects.TileSprite;
+//   bgAir: Phaser.GameObjects.TileSprite;
 
 //   constructor(scene: GameScene) {
 //     this.scene = scene;
@@ -37,7 +36,7 @@
 //     this.bgAir.setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
 //   }
 
-//   private registerLayer(atlas: string, key: string, scaleX: number = 1, scaleY: number = 1): Ph.GameObjects.TileSprite {
+//   private registerLayer(atlas: string, key: string, scaleX: number = 1, scaleY: number = 1): Phaser.GameObjects.TileSprite {
 //     const {width, height, zoomX, zoomY, worldView} = this.scene.cameras.main;
 //     return this.scene.add.tileSprite(worldView.x + width / 2, worldView.y + height / 2, width, height, atlas, key)
 //     .setOrigin(0.5, 0.5)

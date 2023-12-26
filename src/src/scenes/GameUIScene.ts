@@ -1,4 +1,3 @@
-import * as Ph from 'phaser';
 import { IComboTrickScore, IScore } from '../components/State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
@@ -25,19 +24,18 @@ enum HudIds {
 }
 
 
-export default class GameUIScene extends Ph.Scene {
+export default class GameUIScene extends Phaser.Scene {
   private observer: Phaser.Events.EventEmitter;
   private restartGame: () => void;
 
   private music: Phaser.Sound.BaseSound;
-  private sfx_jump_start: Phaser.Sound.BaseSound;
   private sfx_pickup_present: Phaser.Sound.BaseSound;
   private sfx_death: Phaser.Sound.BaseSound;
   private sfx_grunt: Phaser.Sound.BaseSound;
   private sfx_applause: Phaser.Sound.BaseSound;
   private sfx_game_over_demon: Phaser.Sound.BaseSound;
 
-  private comboLeewayChart: Ph.GameObjects.Graphics;
+  private comboLeewayChart: Phaser.GameObjects.Graphics;
   private resolutionMod: number;
 
   private panels: HTMLElement[] = [];
@@ -62,7 +60,7 @@ export default class GameUIScene extends Ph.Scene {
     super({ key: SCENE_GAME_UI });
   }
 
-  init([observer, restartGameCB]: [Ph.Events.EventEmitter, () => void]) {
+  init([observer, restartGameCB]: [Phaser.Events.EventEmitter, () => void]) {
     this.observer = observer;
     this.restartGame = restartGameCB;
     this.resolutionMod = this.game.canvas.width / DEFAULT_WIDTH;
@@ -74,7 +72,6 @@ export default class GameUIScene extends Ph.Scene {
     this.music = this.sound.add(randomMusicKey, { loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0 });
     this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
-    this.sfx_jump_start = this.sound.add('boink', { detune: -200, volume: sfxVolume });
     this.sfx_pickup_present = this.sound.add('pickup_present', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
     this.sfx_death = this.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
     this.sfx_grunt = this.sound.add('grunt', { detune: 400, rate: 1.25, volume: sfxVolume * 0.5 });
@@ -154,7 +151,7 @@ export default class GameUIScene extends Ph.Scene {
   update() {
   }
 
-  private initDomUi(): Ph.GameObjects.DOMElement {
+  private initDomUi(): Phaser.GameObjects.DOMElement {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
@@ -175,7 +172,7 @@ export default class GameUIScene extends Ph.Scene {
     // For now a text message is shown encouraging user to switch to a different browser if there are issues.
     // Older v0.5.0 prototype was running fairly well on lowest resolution on a raspberry pi. v1.0.0 can definitely be optimized better.
     const browser = this.sys.game.device.browser;
-    if (!(browser.chrome || browser.edge || browser.opera)) {
+    if (!(browser.chrome || browser.edge || browser.opera || browser.firefox)) {
       const elUnsupportedBrowserNotice = document.getElementById('unsupported-browser-notice');
       if (!elUnsupportedBrowserNotice) throw new Error('element with id "unsupported-browser-notice" not found');
       console.warn('Unsupported browser detected. Game may run well but it was not optimized for this particular browser:', browser);

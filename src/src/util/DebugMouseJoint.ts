@@ -1,5 +1,4 @@
 // import {Physics} from '../components/Physics';
-// import Ph from 'phaser';
 // import * as Pl from '@box2d/core';
 // import {b2BodyType} from '@box2d/core';
 // import GameScene from '../scenes/GameScene';
@@ -15,9 +14,9 @@
 //     this.scene = scene;
 //     this.b2Physics = b2Physics;
 
-//     this.scene.input.on('pointerdown', (pointer: Ph.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-//     this.scene.input.on('pointerup', (pointer: Ph.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-//     this.scene.input.on('pointermove', (pointer: Ph.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
+//     this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
+//     this.scene.input.on('pointerup', (pointer: Phaser.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
+//     this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
 
 //   }
 

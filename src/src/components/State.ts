@@ -1,8 +1,6 @@
-import * as Ph from 'phaser';
 import { IBeginContactEvent, IPostSolveEvent, Physics } from './Physics';
 import { IBodyParts, PlayerController } from './PlayerController';
-import { LevelKeys } from '../index';
-import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION } from "..";
+import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION } from "..";
 import { getCurrentLevel } from '../util/getCurrentLevel';
 
 export interface IBaseTrickScore {
@@ -112,7 +110,7 @@ export class State {
     return this.parts.body.GetLinearVelocity().Length();
   }
 
-  createComboLeewayTween(paused: boolean = true): Ph.Tweens.Tween {
+  createComboLeewayTween(paused: boolean = true): Phaser.Tweens.Tween {
     return this.playerController.scene.tweens.addCounter({
       paused,
       from: Math.PI * -0.5,
@@ -236,7 +234,7 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const img: Ph.GameObjects.Image = this.b2Physics.rubeLoader.bodyUserDataMap.get(body) as Ph.GameObjects.Image;
+      const img: Phaser.GameObjects.Image = this.b2Physics.rubeLoader.bodyUserDataMap.get(body) as Phaser.GameObjects.Image;
       this.b2Physics.rubeLoader.bodyUserDataMap.delete(body);
       this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       img.destroy();
@@ -250,7 +248,7 @@ export class State {
 
   private updateTrickCounter() {
     if (this.state === 'in_air') {
-      const currentAngle = Ph.Math.Angle.Normalize(this.parts.body.GetAngle());
+      const currentAngle = Phaser.Math.Angle.Normalize(this.parts.body.GetAngle());
 
       const diff = this.calculateDifferenceBetweenAngles(this.anglePreviousUpdate, currentAngle);
       this.totalRotation += diff;
