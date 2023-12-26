@@ -1,8 +1,11 @@
-import { BackgroundMusicKeys, CharacterKeys, DEFAULT_HEIGHT, LEVELS, LevelKeys, RESOLUTION_SCALE, SceneKeys } from '../index';
+import { BackgroundMusicKeys, CharacterKeys, LEVELS, LevelKeys } from '../index';
+import { RESOLUTION_SCALE } from "..";
+import { DEFAULT_HEIGHT } from "..";
+import { SCENE_GAME, SCENE_PRELOAD } from "..";
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
-    super({ key: SceneKeys.PRELOAD_SCENE });
+    super({ key: SCENE_PRELOAD });
   }
 
   preload() {
@@ -13,7 +16,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
   
   create() {
-    this.scene.start(SceneKeys.GAME_SCENE);
+    this.scene.start(SCENE_GAME);
   }
   
   private loadAudio() {
@@ -40,7 +43,6 @@ export default class PreloadScene extends Phaser.Scene {
   private loadLevels() {
     // Character itself is currently imported by levels themselves (as RUBE Object) but will be loaded separately once game allows character selection
     // (e.g. Santa clause, Mrs. Clause, Snowman, Easter Bunny, The Hoff etc.)
-    this.load.json(CharacterKeys.character_santa_old, `assets/levels/export/${CharacterKeys.character_santa_old}.json`);
     this.load.json(CharacterKeys.character_santa, `assets/levels/export/${CharacterKeys.character_santa}.json`);
 
     LEVELS.forEach(level => this.load.json(level, `assets/levels/export/${level}.json`));

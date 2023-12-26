@@ -1,10 +1,9 @@
 import * as Ph from 'phaser';
 import { IBeginContactEvent, IPostSolveEvent, Physics } from './Physics';
 import { IBodyParts, PlayerController } from './PlayerController';
-import { BASE_FLIP_POINTS, DEBUG, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION, b2 } from '../index';
+import { LevelKeys } from '../index';
+import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION } from "..";
 import { getCurrentLevel } from '../util/getCurrentLevel';
-import { wrap } from 'module';
-
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';

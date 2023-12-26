@@ -1,5 +1,5 @@
 import {IScore} from '../components/State';
-import {BASE_FLIP_POINTS, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN} from '../index';
+import { BASE_FLIP_POINTS, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN } from "..";
 
 export const calculateTotalScore = (score: IScore, useCachedTotal: boolean = true): number => {
   return score.distance + calculateTrickScore(score, useCachedTotal) + (score.coins * POINTS_PER_COIN) + (score.finishedLevel ? LEVEL_SUCCESS_BONUS_POINTS : 0);

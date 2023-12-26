@@ -3,7 +3,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
 import {env} from '../environment';
-import {DEBUG, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LevelKeys} from '../index';
+import { DEBUG, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LevelKeys } from '..';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 import {pseudoRandomId} from '../util/pseudoRandomId';
 import {IScore} from '../components/State';

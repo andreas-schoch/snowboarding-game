@@ -31,6 +31,9 @@ export class PlayerController {
   private jumpKeyDown: boolean;
   private alreadyDetached = false;
   private currentBodyFlipDot = 1;
+  private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
+  private readonly UP: Box2D.b2Vec2 = new b2.b2Vec2(0, 1);
+  private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
 
   constructor(scene: GameScene, b2Physics: Physics) {
     this.scene = scene;
@@ -104,19 +107,20 @@ export class PlayerController {
   }
 
   private updateLookAtDirection() {
+    const userDataMap = this.b2Physics.rubeLoader.bodyUserDataMap;
     const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.parts.body.GetLinearVelocity()));
-    const bodyXDirection = vec2Util.Normalize(this.parts.body.GetWorldVector(new b2.b2Vec2(1, 0)));
+    const bodyXDirection = vec2Util.Normalize(this.parts.body.GetWorldVector(this.FORWARD));
     // slow down change while in air to jitter while doing flips
     const lerpFactor = this.state.getState() === 'grounded' ? 0.03 : 0.01;
     const targetFlip = vec2Util.Dot(bodyXDirection, velocityDirection) < 0 ? -1 : 1;
     this.currentBodyFlipDot = this.currentBodyFlipDot + lerpFactor * (targetFlip - this.currentBodyFlipDot);
 
-    const headImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.head) as Phaser.GameObjects.Image;
-    const bodyImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.body) as Phaser.GameObjects.Image;
-    const bodyArmUpperLeftImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armUpperLeft) as Phaser.GameObjects.Image;
-    const bodyArmUpperRightImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armUpperRight) as Phaser.GameObjects.Image;
-    const bodyArmLowerLeftImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armLowerLeft) as Phaser.GameObjects.Image;
-    const bodyArmLowerRightImage = this.b2Physics.rubeLoader.bodyUserDataMap.get(this.parts.armLowerRight) as Phaser.GameObjects.Image;
+    const headImage = userDataMap.get(this.parts.head) as Phaser.GameObjects.Image;
+    const bodyImage = userDataMap.get(this.parts.body) as Phaser.GameObjects.Image;
+    const bodyArmUpperLeftImage = userDataMap.get(this.parts.armUpperLeft) as Phaser.GameObjects.Image;
+    const bodyArmUpperRightImage = userDataMap.get(this.parts.armUpperRight) as Phaser.GameObjects.Image;
+    const bodyArmLowerLeftImage = userDataMap.get(this.parts.armLowerLeft) as Phaser.GameObjects.Image;
+    const bodyArmLowerRightImage = userDataMap.get(this.parts.armLowerRight) as Phaser.GameObjects.Image;
 
     if (this.currentBodyFlipDot < 0) {
       headImage.flipX = true;
@@ -146,10 +150,8 @@ export class PlayerController {
   }
 
   private jump() {
-    // this.leanUp();
     // prevents player from jumping too quickly after a landing
     if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
-
 
     const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
@@ -158,6 +160,21 @@ export class PlayerController {
       const jumpVector = isCenterGrounded
         ? vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.3)), new b2.b2Vec2(0, this.jumpForce * 1.25))
         : vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.5)), new b2.b2Vec2(0, this.jumpForce * 0.85));
+
+      // const velocity = this.parts.body.GetLinearVelocity();
+      // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);
+      // const bodyUp = vec2Util.Clone(this.parts.body.GetWorldVector(this.UP));
+      // bodyUp.Normalize();
+      // perpendicular.Normalize();
+      // if (isCenterGrounded) {
+      //   vec2Util.Scale(perpendicular, this.jumpForce * 1.25);
+      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.3);
+      // } else {
+      //   vec2Util.Scale(perpendicular, this.jumpForce * 0.5);
+      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.85);
+      // }
+      // let jumpVector = vec2Util.Add(perpendicular, bodyUp);
+
       this.parts.body.ApplyLinearImpulseToCenter(jumpVector, true);
     }
   }
@@ -166,7 +183,7 @@ export class PlayerController {
     this.parts.distanceLegLeft?.SetLength(0.65);
     this.parts.distanceLegRight?.SetLength(0.65);
   }
-  
+
   private leanBackward() {
     this.parts.distanceLegLeft?.SetLength(0.5);
     this.parts.distanceLegRight?.SetLength(0.8);

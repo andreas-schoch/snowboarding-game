@@ -1,7 +1,10 @@
 import * as Ph from 'phaser';
 import Terrain from '../components/Terrain';
 import { Physics } from '../components/Physics';
-import { DEFAULT_WIDTH, DEFAULT_ZOOM, SceneKeys, b2 } from '../index';
+import { b2 } from '../index';
+import { DEFAULT_ZOOM } from "..";
+import { DEFAULT_WIDTH } from "..";
+import { SCENE_GAME, SCENE_GAME_UI } from "..";
 // import { Backdrop } from '../components/Backdrop';
 import { PlayerController } from '../components/PlayerController';
 import { getCurrentLevel } from '../util/getCurrentLevel';
@@ -20,7 +23,7 @@ export default class GameScene extends Ph.Scene {
   // private backdrop: Backdrop;
 
   constructor() {
-    super({ key: SceneKeys.GAME_SCENE });
+    super({ key: SCENE_GAME });
   }
 
   setZoomLevel() {
@@ -91,7 +94,7 @@ export default class GameScene extends Ph.Scene {
       });
     });
 
-    this.scene.launch(SceneKeys.GAME_UI_SCENE, [this.observer, () => {
+    this.scene.launch(SCENE_GAME_UI, [this.observer, () => {
       this.playerController.state.reset();
       this.snowboardSlide.stop();
       this.snowboardSlide.destroy();

@@ -1,22 +1,9 @@
 import * as Ph from 'phaser';
-import {
-  BackgroundMusicKeys,
-  DEBUG,
-  DEFAULT_WIDTH,
-  KEY_LEVEL_CURRENT,
-  KEY_USER_NAME,
-  KEY_USER_SCORES,
-  leaderboardService, LEVEL_SUCCESS_BONUS_POINTS,
-  POINTS_PER_COIN,
-  SceneKeys,
-  SETTINGS_KEY_RESOLUTION,
-  SETTINGS_KEY_VOLUME_MUSIC,
-  SETTINGS_KEY_VOLUME_SFX,
-} from '../index';
-import {IComboTrickScore, IScore} from '../components/State';
-import {calculateTotalScore} from '../util/calculateTotalScore';
-import {pseudoRandomId} from '../util/pseudoRandomId';
-import {getCurrentLevel} from '../util/getCurrentLevel';
+import { IComboTrickScore, IScore } from '../components/State';
+import { calculateTotalScore } from '../util/calculateTotalScore';
+import { pseudoRandomId } from '../util/pseudoRandomId';
+import { getCurrentLevel } from '../util/getCurrentLevel';
+import { BackgroundMusicKeys, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
 
 
 export enum PanelIds {
@@ -72,7 +59,7 @@ export default class GameUIScene extends Ph.Scene {
   private finished: boolean = false;
 
   constructor() {
-    super({key: SceneKeys.GAME_UI_SCENE});
+    super({ key: SCENE_GAME_UI });
   }
 
   init([observer, restartGameCB]: [Ph.Events.EventEmitter, () => void]) {
@@ -84,15 +71,15 @@ export default class GameUIScene extends Ph.Scene {
   create() {
     const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
-    this.music = this.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0});
+    this.music = this.sound.add(randomMusicKey, { loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0 });
     this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
-    this.sfx_jump_start = this.sound.add('boink', {detune: -200, volume: sfxVolume});
-    this.sfx_pickup_present = this.sound.add('pickup_present', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
+    this.sfx_jump_start = this.sound.add('boink', { detune: -200, volume: sfxVolume });
+    this.sfx_pickup_present = this.sound.add('pickup_present', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
     this.sfx_death = this.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
-    this.sfx_grunt = this.sound.add('grunt', {detune: 400, rate: 1.25, volume: sfxVolume * 0.5});
-    this.sfx_applause = this.sound.add('applause', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
-    this.sfx_game_over_demon = this.sound.add('game_over_demon', {detune: 0, rate: 0.95, volume: sfxVolume * 0.6});
+    this.sfx_grunt = this.sound.add('grunt', { detune: 400, rate: 1.25, volume: sfxVolume * 0.5 });
+    this.sfx_applause = this.sound.add('applause', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
+    this.sfx_game_over_demon = this.sound.add('game_over_demon', { detune: 0, rate: 0.95, volume: sfxVolume * 0.6 });
 
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
@@ -116,10 +103,10 @@ export default class GameUIScene extends Ph.Scene {
     this.comboLeewayChart = this.add.graphics();
     this.observer.on('combo_leeway_update', (value) => {
       this.comboLeewayChart
-      .clear()
-      .fillStyle(0xffffff)
-      .slice(screenCenterX, 72 * this.resolutionMod, 12 * this.resolutionMod, value, Math.PI * 1.5)
-      .fillPath();
+        .clear()
+        .fillStyle(0xffffff)
+        .slice(screenCenterX, 72 * this.resolutionMod, 12 * this.resolutionMod, value, Math.PI * 1.5)
+        .fillPath();
     });
 
     this.observer.on('enter_crashed', (score: IScore) => {
@@ -237,98 +224,98 @@ export default class GameUIScene extends Ph.Scene {
     ];
 
     element.on('click', async (evt) => {
-        switch (evt.target.id) {
-          case 'btn-goto-pause-menu': {
-            this.setPanelVisibility(PanelIds.PANEL_PAUSE_MENU);
-            break;
-          }
-          case 'btn-resume-game': {
-            this.setPanelVisibility(PanelIds.NONE);
-            this.observer.emit('resume_game');
-            break;
-          }
-          case 'btn-goto-select-level': {
-            const backBtn = document.querySelector('#panel-select-level #btn-goto-pause-menu');
-            backBtn && (this.crashed ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden'));
-            this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
-            break;
-          }
-          case 'btn-goto-how-to-play': {
-            this.setPanelVisibility(PanelIds.PANEL_HOW_TO_PLAY);
-            break;
-          }
-          case 'btn-goto-leaderboards': {
-            await this.updateLeaderboardPanelData();
-            this.setPanelVisibility(PanelIds.PANEL_LEADERBOARDS);
-            break;
-          }
-          case 'btn-goto-settings': {
-            this.setPanelVisibility(PanelIds.PANEL_SETTINGS);
-            break;
-          }
-          case 'btn-goto-credits': {
-            this.setPanelVisibility(PanelIds.PANEL_CREDITS);
-            break;
-          }
-          case 'pause-game-icon': {
-            if (this.panelPauseMenu?.classList.contains('hidden')) {
-              this.observer.emit('pause_game_icon_pressed');
-            }
-            break;
-          }
-          case 'how-to-play-icon': {
-            if (this.panelPauseMenu?.classList.contains('hidden')) {
-              this.observer.emit('how_to_play_icon_pressed');
-            }
-            break;
-          }
-          case 'btn-score-submit': {
-            const submitScoreForm = document.querySelector('.submit-score');
-            const nameInput: HTMLInputElement | null = document.getElementById('username') as HTMLInputElement;
-            const name = nameInput?.value;
-            if (name && this.pendingScore && submitScoreForm) {
-              if (leaderboardService.auth?.currentUser) {
-                leaderboardService.rexLeaderboard.setUser({userID: leaderboardService.auth.currentUser.uid, userName: nameInput.value});
-                await leaderboardService.auth.currentUser.updateProfile({displayName: nameInput.value});
-              }
-              localStorage.setItem(KEY_USER_NAME, nameInput.value);
-              await leaderboardService.submit(this.pendingScore); // TODO add loading indicator
-              await this.updateYourScorePanelData(this.pendingScore);
-              submitScoreForm.classList.add('hidden');
-            }
-            break;
-          }
-          case 'btn-save-settings': {
-            evt.preventDefault();
-            const settingsForm = this.panelSettings?.querySelector('form');
-            if (settingsForm) {
-              localStorage.setItem(SETTINGS_KEY_RESOLUTION, settingsForm.resolution.value || '1');
-              localStorage.setItem(SETTINGS_KEY_VOLUME_MUSIC, settingsForm.volumeMusic.value);
-              localStorage.setItem(SETTINGS_KEY_VOLUME_SFX, settingsForm.volumeSfx.value);
-              location.reload();
-            }
-            break;
-          }
-          case 'btn-play-again': {
-            this.playAgain();
-            break;
-          }
-          case 'level_001':
-          case 'level_002':
-          case 'level_003':
-          case 'level_004':
-          case 'level_005': {
-            localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
-            leaderboardService.setLevel(evt.target.id);
-            this.playAgain();
-            break;
-          }
-          default: {
-            DEBUG && console.log('non-interactable target id', evt.target.id);
-          }
-
+      switch (evt.target.id) {
+        case 'btn-goto-pause-menu': {
+          this.setPanelVisibility(PanelIds.PANEL_PAUSE_MENU);
+          break;
         }
-      },
+        case 'btn-resume-game': {
+          this.setPanelVisibility(PanelIds.NONE);
+          this.observer.emit('resume_game');
+          break;
+        }
+        case 'btn-goto-select-level': {
+          const backBtn = document.querySelector('#panel-select-level #btn-goto-pause-menu');
+          backBtn && (this.crashed ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden'));
+          this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
+          break;
+        }
+        case 'btn-goto-how-to-play': {
+          this.setPanelVisibility(PanelIds.PANEL_HOW_TO_PLAY);
+          break;
+        }
+        case 'btn-goto-leaderboards': {
+          await this.updateLeaderboardPanelData();
+          this.setPanelVisibility(PanelIds.PANEL_LEADERBOARDS);
+          break;
+        }
+        case 'btn-goto-settings': {
+          this.setPanelVisibility(PanelIds.PANEL_SETTINGS);
+          break;
+        }
+        case 'btn-goto-credits': {
+          this.setPanelVisibility(PanelIds.PANEL_CREDITS);
+          break;
+        }
+        case 'pause-game-icon': {
+          if (this.panelPauseMenu?.classList.contains('hidden')) {
+            this.observer.emit('pause_game_icon_pressed');
+          }
+          break;
+        }
+        case 'how-to-play-icon': {
+          if (this.panelPauseMenu?.classList.contains('hidden')) {
+            this.observer.emit('how_to_play_icon_pressed');
+          }
+          break;
+        }
+        case 'btn-score-submit': {
+          const submitScoreForm = document.querySelector('.submit-score');
+          const nameInput: HTMLInputElement | null = document.getElementById('username') as HTMLInputElement;
+          const name = nameInput?.value;
+          if (name && this.pendingScore && submitScoreForm) {
+            if (leaderboardService.auth?.currentUser) {
+              leaderboardService.rexLeaderboard.setUser({ userID: leaderboardService.auth.currentUser.uid, userName: nameInput.value });
+              await leaderboardService.auth.currentUser.updateProfile({ displayName: nameInput.value });
+            }
+            localStorage.setItem(KEY_USER_NAME, nameInput.value);
+            await leaderboardService.submit(this.pendingScore); // TODO add loading indicator
+            await this.updateYourScorePanelData(this.pendingScore);
+            submitScoreForm.classList.add('hidden');
+          }
+          break;
+        }
+        case 'btn-save-settings': {
+          evt.preventDefault();
+          const settingsForm = this.panelSettings?.querySelector('form');
+          if (settingsForm) {
+            localStorage.setItem(SETTINGS_KEY_RESOLUTION, settingsForm.resolution.value || '1');
+            localStorage.setItem(SETTINGS_KEY_VOLUME_MUSIC, settingsForm.volumeMusic.value);
+            localStorage.setItem(SETTINGS_KEY_VOLUME_SFX, settingsForm.volumeSfx.value);
+            location.reload();
+          }
+          break;
+        }
+        case 'btn-play-again': {
+          this.playAgain();
+          break;
+        }
+        case 'level_001':
+        case 'level_002':
+        case 'level_003':
+        case 'level_004':
+        case 'level_005': {
+          localStorage.setItem(KEY_LEVEL_CURRENT, evt.target.id);
+          leaderboardService.setLevel(evt.target.id);
+          this.playAgain();
+          break;
+        }
+        default: {
+          DEBUG && console.log('non-interactable target id', evt.target.id);
+        }
+
+      }
+    },
     );
 
     return element;
@@ -416,12 +403,12 @@ export default class GameUIScene extends Ph.Scene {
       } else {
         // Score is submitted automatically for users that submitted a score once before from this device and browser.
         elSubmitScoreForm?.classList.add('hidden');
-        leaderboardService.rexLeaderboard.setUser({userID: currentUser.uid, userName: currentUser.displayName});
+        leaderboardService.rexLeaderboard.setUser({ userID: currentUser.uid, userName: currentUser.displayName });
         await leaderboardService.submit(score);
         const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
         // Cannot trust plain value total on firebase nor the rank nor the order atm
         // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
-        const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
+        const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
         const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
         const elYourRank = document.getElementById('your-score-rank-value');
         if (elYourRank && yourRank !== -1 && scores?.length) elYourRank.innerText = `${yourRank + 1}/${scores.length}`;
@@ -438,12 +425,12 @@ export default class GameUIScene extends Ph.Scene {
     // TODO cleanup this mess
     let fbScores = leaderboardService.auth
       ? await leaderboardService.rexLeaderboard.loadFirstPage()
-      : (JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}')[getCurrentLevel()] || []).map(s => ({...s, userName: localStorage.getItem(KEY_USER_NAME)}));
+      : (JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}')[getCurrentLevel()] || []).map(s => ({ ...s, userName: localStorage.getItem(KEY_USER_NAME) }));
     const leaderboardItemTemplate: HTMLTemplateElement | null = document.getElementById('leaderboard-item-template') as HTMLTemplateElement;
     const leaderboardItemContainer = document.getElementById('leaderboard-item-container');
     if (this.panelLeaderboards && leaderboardItemTemplate && leaderboardItemContainer) {
       const localPlayerUsername = leaderboardService.auth?.currentUser?.displayName || localStorage.getItem(KEY_USER_NAME) as string;
-      const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
+      const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
       leaderboardItemContainer.innerText = '';
       for (const [i, score] of scores.entries()) {
         const displayName = score.userName;
