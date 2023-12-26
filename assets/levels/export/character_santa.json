@@ -6,56 +6,6 @@
 	[
 		
 		{
-			"angle" : 0,
-			"angularVelocity" : 0,
-			"awake" : true,
-			"fixture" : 
-			[
-				
-				{
-					"density" : 1,
-					"friction" : 0.2,
-					"name" : "fixture11",
-					"polygon" : 
-					{
-						"vertices" : 
-						{
-							"x" : 
-							[
-								0.07333278656005859,
-								0.07333278656005859,
-								-0.07333278656005859,
-								-0.07333278656005859
-							],
-							"y" : 
-							[
-								-0.07333266735076904,
-								0.07333266735076904,
-								0.07333266735076904,
-								-0.07333266735076904
-							]
-						}
-					},
-					"sensor" : true
-				}
-			],
-			"linearVelocity" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"massData-I" : 7.711876969551668e-05,
-			"massData-mass" : 0.02151075564324856,
-			"name" : "body1",
-			"position" : 
-			{
-				"x" : 0,
-				"y" : 1.2
-			},
-			"type" : 2
-		},
-		
-		{
 			"angle" : -0.6108652353286743,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -752,6 +702,57 @@
 		
 		{
 			"angle" : 0,
+			"angularVelocity" : 0,
+			"awake" : true,
+			"fixture" : 
+			[
+				
+				{
+					"density" : 1,
+					"friction" : 0.2,
+					"name" : "fixture11",
+					"polygon" : 
+					{
+						"vertices" : 
+						{
+							"x" : 
+							[
+								0.07333278656005859,
+								0.07333278656005859,
+								-0.07333278656005859,
+								-0.07333278656005859
+							],
+							"y" : 
+							[
+								-0.07333266735076904,
+								0.07333266735076904,
+								0.07333266735076904,
+								-0.07333266735076904
+							]
+						}
+					},
+					"sensor" : true
+				}
+			],
+			"linearVelocity" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"massData-I" : 7.711876969551668e-05,
+			"massData-mass" : 0.02151075564324856,
+			"name" : "body1",
+			"position" : 
+			{
+				"x" : 0,
+				"y" : 1.2
+			},
+			"type" : 2
+		},
+		
+		{
+			"allowSleep" : false,
+			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
@@ -861,6 +862,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -971,6 +973,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -991,29 +994,6 @@
 			],
 			"fixture" : 
 			[
-				
-				{
-					"circle" : 
-					{
-						"center" : 
-						{
-							"x" : 0.1646223068237305,
-							"y" : 4.768370217789197e-06
-						},
-						"radius" : 0.08
-					},
-					"customProperties" : 
-					[
-						
-						{
-							"bool" : true,
-							"name" : "phaserBoardEdge"
-						}
-					],
-					"density" : 1,
-					"friction" : 0.9,
-					"name" : "fixture9"
-				},
 				
 				{
 					"density" : 30.0,
@@ -1079,6 +1059,29 @@
 							]
 						}
 					}
+				},
+				
+				{
+					"circle" : 
+					{
+						"center" : 
+						{
+							"x" : 0.1646219938993454,
+							"y" : 4.768370217789197e-06
+						},
+						"radius" : 0.07500000298023224
+					},
+					"customProperties" : 
+					[
+						
+						{
+							"bool" : true,
+							"name" : "phaserBoardEdge"
+						}
+					],
+					"density" : 1,
+					"friction" : 0.9,
+					"name" : "fixture9"
 				}
 			],
 			"linearDamping" : 0.1,
@@ -1087,13 +1090,13 @@
 				"x" : 0,
 				"y" : 0
 			},
-			"massData-I" : 0.02506279200315475,
+			"massData-I" : 0.02498216927051544,
 			"massData-center" : 
 			{
-				"x" : 0.002159182680770755,
-				"y" : 6.318373380054254e-08
+				"x" : 0.001900733914226294,
+				"y" : 5.566448990634854e-08
 			},
-			"massData-mass" : 1.532950639724731,
+			"massData-mass" : 1.530516028404236,
 			"name" : "body0",
 			"position" : 
 			{
@@ -1104,6 +1107,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -1214,6 +1218,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -1243,7 +1248,7 @@
 							"x" : -0.1618160009384155,
 							"y" : 0
 						},
-						"radius" : 0.08
+						"radius" : 0.07500000298023224
 					},
 					"customProperties" : 
 					[
@@ -1330,13 +1335,13 @@
 				"x" : 0,
 				"y" : 0
 			},
-			"massData-I" : 0.02504437416791916,
+			"massData-I" : 0.02496598288416862,
 			"massData-center" : 
 			{
-				"x" : -0.002122385427355766,
-				"y" : 6.075359104684708e-10
+				"x" : -0.001868345658294857,
+				"y" : 6.085023596114070e-10
 			},
-			"massData-mass" : 1.532950639724731,
+			"massData-mass" : 1.530515909194946,
 			"name" : "body0",
 			"position" : 
 			{
@@ -1347,6 +1352,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -1457,6 +1463,7 @@
 		},
 		
 		{
+			"allowSleep" : false,
 			"angle" : 0,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
@@ -1620,7 +1627,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 9,
+			"body" : 8,
 			"center" : 
 			{
 				"x" : -8.983896293557336e-09,
@@ -1679,66 +1686,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 6,
-			"center" : 
-			{
-				"x" : -8.983896293557336e-09,
-				"y" : -8.301412890432402e-10
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.09726297855377197,
-					0.09726296365261078,
-					0.09726296365261078,
-					-0.09726297855377197
-				],
-				"y" : 
-				[
-					-0.2251457571983337,
-					-0.2251457571983337,
-					0.2251457571983337,
-					0.2251457571983337
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "santa upper.png"
-				}
-			],
-			"file" : "../img/santa_parts_v01/santa upper.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.09726297855377197,
-				-0.2251457571983337,
-				0.09726296365261078,
-				-0.2251457571983337,
-				0.09726296365261078,
-				0.2251457571983337,
-				-0.09726297855377197,
-				0.2251457571983337
-			],
-			"name" : "image0",
-			"opacity" : 1,
-			"renderOrder" : -1,
-			"scale" : 0.4502915143966675
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 1,
+			"body" : 0,
 			"center" : 
 			{
 				"x" : -8.983899846271015e-09,
@@ -1797,7 +1745,66 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 7,
+			"body" : 5,
+			"center" : 
+			{
+				"x" : -8.983896293557336e-09,
+				"y" : -8.301412890432402e-10
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.09726297855377197,
+					0.09726296365261078,
+					0.09726296365261078,
+					-0.09726297855377197
+				],
+				"y" : 
+				[
+					-0.2251457571983337,
+					-0.2251457571983337,
+					0.2251457571983337,
+					0.2251457571983337
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "santa upper.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/santa upper.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.09726297855377197,
+				-0.2251457571983337,
+				0.09726296365261078,
+				-0.2251457571983337,
+				0.09726296365261078,
+				0.2251457571983337,
+				-0.09726297855377197,
+				0.2251457571983337
+			],
+			"name" : "image0",
+			"opacity" : 1,
+			"renderOrder" : -1,
+			"scale" : 0.4502915143966675
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 6,
 			"center" : 
 			{
 				"x" : 0,
@@ -1833,125 +1840,125 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 3,
-			"center" : 
-			{
-				"x" : 3.378685775601298e-09,
-				"y" : -3.152774041836892e-09
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1356996893882751,
-					0.1356996893882751,
-					0.1356996893882751,
-					-0.1356996893882751
-				],
-				"y" : 
-				[
-					-0.2186272889375687,
-					-0.2186272889375687,
-					0.2186272889375687,
-					0.2186272889375687
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "santa-leg-lower.png"
-				}
-			],
-			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				0.2186272889375687,
-				-0.1356996893882751,
-				0.2186272889375687
-			],
-			"name" : "image3",
-			"opacity" : 1,
-			"renderOrder" : 1,
-			"scale" : 0.4372545778751373
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 8,
-			"center" : 
-			{
-				"x" : 3.378685775601298e-09,
-				"y" : -3.152774041836892e-09
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1356996893882751,
-					0.1356996893882751,
-					0.1356996893882751,
-					-0.1356996893882751
-				],
-				"y" : 
-				[
-					-0.2186272889375687,
-					-0.2186272889375687,
-					0.2186272889375687,
-					0.2186272889375687
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "santa-leg-lower.png"
-				}
-			],
-			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				0.2186272889375687,
-				-0.1356996893882751,
-				0.2186272889375687
-			],
-			"name" : "image3",
-			"opacity" : 1,
-			"renderOrder" : 1,
-			"scale" : 0.4372545778751373
-		},
-		
-		{
-			"aspectScale" : 1,
 			"body" : 2,
+			"center" : 
+			{
+				"x" : 3.378685775601298e-09,
+				"y" : -3.152774041836892e-09
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1356996893882751,
+					0.1356996893882751,
+					0.1356996893882751,
+					-0.1356996893882751
+				],
+				"y" : 
+				[
+					-0.2186272889375687,
+					-0.2186272889375687,
+					0.2186272889375687,
+					0.2186272889375687
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "santa-leg-lower.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				0.2186272889375687,
+				-0.1356996893882751,
+				0.2186272889375687
+			],
+			"name" : "image3",
+			"opacity" : 1,
+			"renderOrder" : 1,
+			"scale" : 0.4372545778751373
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 7,
+			"center" : 
+			{
+				"x" : 3.378685775601298e-09,
+				"y" : -3.152774041836892e-09
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1356996893882751,
+					0.1356996893882751,
+					0.1356996893882751,
+					-0.1356996893882751
+				],
+				"y" : 
+				[
+					-0.2186272889375687,
+					-0.2186272889375687,
+					0.2186272889375687,
+					0.2186272889375687
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "santa-leg-lower.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/santa-leg-lower.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				0.2186272889375687,
+				-0.1356996893882751,
+				0.2186272889375687
+			],
+			"name" : "image3",
+			"opacity" : 1,
+			"renderOrder" : 1,
+			"scale" : 0.4372545778751373
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 1,
 			"center" : 
 			{
 				"x" : -0.05464810132980347,
@@ -2010,7 +2017,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 5,
+			"body" : 4,
 			"center" : 
 			{
 				"x" : -8.983896293557336e-09,
@@ -2128,7 +2135,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 4,
+			"body" : 3,
 			"center" : 
 			{
 				"x" : 0.001304094679653645,
@@ -2183,67 +2190,6 @@
 			"opacity" : 1,
 			"renderOrder" : 4,
 			"scale" : 0.4301607608795166
-		},
-		
-		{
-			"angle" : 3.141592741012573,
-			"aspectScale" : 1,
-			"body" : 10,
-			"center" : 
-			{
-				"x" : -0.001304090023040771,
-				"y" : 0.0002272281999466941
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1282368302345276,
-					0.1256286799907684,
-					0.1256286501884460,
-					-0.128236860036850
-				],
-				"y" : 
-				[
-					-0.2148532867431641,
-					-0.2148532569408417,
-					0.2153077423572540,
-					0.2153077125549316
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "santa-arm-lower-left.png"
-				}
-			],
-			"file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
-			"filter" : 1,
-			"flip" : true,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1282368302345276,
-				-0.2148532867431641,
-				0.1256286799907684,
-				-0.2148532569408417,
-				0.1256286501884460,
-				0.2153077423572540,
-				-0.128236860036850,
-				0.2153077125549316
-			],
-			"name" : "image4",
-			"opacity" : 1,
-			"renderOrder" : 5,
-			"scale" : -0.4301609992980957
 		},
 		
 		{
@@ -2303,6 +2249,67 @@
 			"opacity" : 1,
 			"renderOrder" : 5,
 			"scale" : 0.1163636371493340
+		},
+		
+		{
+			"angle" : 3.141592741012573,
+			"aspectScale" : 1,
+			"body" : 9,
+			"center" : 
+			{
+				"x" : -0.001304090023040771,
+				"y" : 0.0002272281999466941
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1282368302345276,
+					0.1256286799907684,
+					0.1256286501884460,
+					-0.128236860036850
+				],
+				"y" : 
+				[
+					-0.2148532867431641,
+					-0.2148532569408417,
+					0.2153077423572540,
+					0.2153077125549316
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_santa"
+				},
+				
+				{
+					"name" : "phaserTextureFrame",
+					"string" : "santa-arm-lower-left.png"
+				}
+			],
+			"file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
+			"filter" : 1,
+			"flip" : true,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1282368302345276,
+				-0.2148532867431641,
+				0.1256286799907684,
+				-0.2148532569408417,
+				0.1256286501884460,
+				0.2153077423572540,
+				-0.128236860036850,
+				0.2153077125549316
+			],
+			"name" : "image4",
+			"opacity" : 1,
+			"renderOrder" : 5,
+			"scale" : -0.4301609992980957
 		},
 		
 		{
@@ -2606,26 +2613,79 @@
 		{
 			"anchorA" : 
 			{
-				"x" : 0,
-				"y" : 0.4
+				"x" : -0.37,
+				"y" : 0.2
 			},
 			"anchorB" : 
 			{
-				"x" : 0,
-				"y" : -0.25
+				"x" : -5.682480264113110e-09,
+				"y" : 0.13
 			},
-			"bodyA" : 7,
-			"bodyB" : 2,
+			"bodyA" : 6,
+			"bodyB" : 4,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
 			"lowerLimit" : 0,
 			"maxMotorTorque" : 0,
 			"motorSpeed" : 0,
-			"name" : "joint18",
-			"refAngle" : 0,
+			"name" : "joint7",
+			"refAngle" : -1.570796370506287,
 			"type" : "revolute",
-			"upperLimit" : 0
+			"upperLimit" : 0.9599310755729675
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -6.993820633738324e-09,
+				"y" : 0.16
+			},
+			"anchorB" : 
+			{
+				"x" : 6.877980922581628e-07,
+				"y" : 0.19
+			},
+			"bodyA" : 8,
+			"bodyB" : 9,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : -1.134464025497437,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "joint9",
+			"refAngle" : 3.141592741012573,
+			"type" : "revolute",
+			"upperLimit" : -0.1745329201221466
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
+				"y" : 0.06
+			},
+			"bodyA" : 10,
+			"bodyB" : 12,
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserPlayerCharacterSpring",
+					"string" : "weldCenter"
+				}
+			],
+			"dampingRatio" : 0.5,
+			"frequency" : 20.0,
+			"name" : "joint16",
+			"refAngle" : 0,
+			"type" : "weld"
 		},
 		
 		{
@@ -2639,8 +2699,8 @@
 				"x" : 0,
 				"y" : -1
 			},
-			"bodyA" : 0,
-			"bodyB" : 7,
+			"bodyA" : 10,
+			"bodyB" : 6,
 			"customProperties" : 
 			[
 				
@@ -2673,89 +2733,11 @@
 			},
 			"anchorB" : 
 			{
-				"x" : 0,
-				"y" : 0.06
-			},
-			"bodyA" : 0,
-			"bodyB" : 12,
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserPlayerCharacterSpring",
-					"string" : "weldCenter"
-				}
-			],
-			"dampingRatio" : 0.5,
-			"frequency" : 20.0,
-			"name" : "joint16",
-			"refAngle" : 0,
-			"type" : "weld"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : -0.37,
-				"y" : 0.2
-			},
-			"anchorB" : 
-			{
-				"x" : -5.682480264113110e-09,
-				"y" : 0.13
-			},
-			"bodyA" : 7,
-			"bodyB" : 5,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : 0,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "joint7",
-			"refAngle" : -1.570796370506287,
-			"type" : "revolute",
-			"upperLimit" : 0.9599310755729675
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : -6.993820633738324e-09,
-				"y" : 0.16
-			},
-			"anchorB" : 
-			{
-				"x" : 6.877980922581628e-07,
-				"y" : 0.19
-			},
-			"bodyA" : 9,
-			"bodyB" : 10,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : -1.134464025497437,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "joint9",
-			"refAngle" : 3.141592741012573,
-			"type" : "revolute",
-			"upperLimit" : -0.1745329201221466
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"anchorB" : 
-			{
 				"x" : 0.4,
 				"y" : -0.4
 			},
 			"bodyA" : 11,
-			"bodyB" : 7,
+			"bodyB" : 6,
 			"customProperties" : 
 			[
 				
@@ -2783,7 +2765,7 @@
 				"y" : -0.4
 			},
 			"bodyA" : 17,
-			"bodyB" : 7,
+			"bodyB" : 6,
 			"customProperties" : 
 			[
 				
@@ -2810,8 +2792,8 @@
 				"x" : 5.682480264113110e-09,
 				"y" : -0.13
 			},
-			"bodyA" : 7,
-			"bodyB" : 9,
+			"bodyA" : 6,
+			"bodyB" : 8,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
@@ -2827,6 +2809,31 @@
 		{
 			"anchorA" : 
 			{
+				"x" : 0,
+				"y" : 0.4
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
+				"y" : -0.25
+			},
+			"bodyA" : 6,
+			"bodyB" : 1,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : 0,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "joint18",
+			"refAngle" : 0,
+			"type" : "revolute",
+			"upperLimit" : 0
+		},
+		
+		{
+			"anchorA" : 
+			{
 				"x" : -8.305163667898796e-09,
 				"y" : 0.19
 			},
@@ -2835,8 +2842,8 @@
 				"x" : 6.993820633738324e-09,
 				"y" : -0.16
 			},
-			"bodyA" : 4,
-			"bodyB" : 5,
+			"bodyA" : 3,
+			"bodyB" : 4,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
@@ -2861,7 +2868,7 @@
 				"y" : -0.2
 			},
 			"bodyA" : 14,
-			"bodyB" : 3,
+			"bodyB" : 2,
 			"customProperties" : 
 			[
 				
@@ -2894,7 +2901,7 @@
 				"y" : -0.2
 			},
 			"bodyA" : 16,
-			"bodyB" : 8,
+			"bodyB" : 7,
 			"customProperties" : 
 			[
 				
@@ -2926,8 +2933,8 @@
 				"x" : -0.001500010490417480,
 				"y" : 0.1549999713897705
 			},
-			"bodyA" : 1,
-			"bodyB" : 8,
+			"bodyA" : 0,
+			"bodyB" : 7,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
@@ -2951,8 +2958,8 @@
 				"x" : -0.002069123089313507,
 				"y" : 0.1511480063199997
 			},
-			"bodyA" : 7,
-			"bodyB" : 1,
+			"bodyA" : 6,
+			"bodyB" : 0,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
@@ -2976,8 +2983,8 @@
 				"x" : 0.002069123089313507,
 				"y" : 0.1511480063199997
 			},
-			"bodyA" : 7,
-			"bodyB" : 6,
+			"bodyA" : 6,
+			"bodyB" : 5,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
@@ -3001,8 +3008,8 @@
 				"x" : 0.001500010490417480,
 				"y" : 0.1549999713897705
 			},
-			"bodyA" : 6,
-			"bodyB" : 3,
+			"bodyA" : 5,
+			"bodyB" : 2,
 			"enableLimit" : true,
 			"enableMotor" : false,
 			"jointSpeed" : 0,
