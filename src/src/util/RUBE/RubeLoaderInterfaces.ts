@@ -101,6 +101,36 @@ export interface RubeFixtureShapeChain {
 
 export type RubeJoint = RubeJointRevolute | RubeJointDistance | RubeJointPrismatic | RubeJointWheel | RubeJointRope | RubeJointMotor | RubeJointWeld | RubeJointFriction;
 
+export const enum RubeJointType {
+  e_unknownJoint,
+  e_revoluteJoint,
+  e_prismaticJoint,
+  e_distanceJoint,
+  e_pulleyJoint,
+  e_mouseJoint,
+  e_gearJoint,
+  e_wheelJoint,
+  e_weldJoint,
+  e_frictionJoint,
+  e_ropeJoint,
+  e_motorJoint
+};
+
+export const enumTypeToRubeJointType = {
+  // [RubeJointType.e_unknownJoint]: 'unknown' as const,
+  [RubeJointType.e_revoluteJoint]: 'revolute' as const,
+  [RubeJointType.e_prismaticJoint]: 'prismatic' as const,
+  [RubeJointType.e_distanceJoint]: 'distance' as const,
+  // [RubeJointType.e_pulleyJoint]: 'pulley' as const,
+  // [RubeJointType.e_mouseJoint]: 'mouse' as const,
+  // [RubeJointType.e_gearJoint]: 'gear' as const,
+  [RubeJointType.e_wheelJoint]: 'wheel' as const,
+  [RubeJointType.e_weldJoint]: 'weld' as const,
+  [RubeJointType.e_frictionJoint]: 'friction' as const,
+  [RubeJointType.e_ropeJoint]: 'rope' as const,
+  [RubeJointType.e_motorJoint]: 'motor' as const
+};
+
 export interface RubeJointBase {
   type: 'revolute' | 'distance' | 'prismatic' | 'wheel' | 'rope' | 'motor' | 'weld' | 'friction';
   name: string;
