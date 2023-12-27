@@ -67,7 +67,7 @@ export interface RubeCustomProperty {
 }
 
 // zero needs to be turned into { x: 0, y: 0 }
-export type RubeVector = {x: number, y: number}| 0;
+export type RubeVector = { x: number, y: number } | 0;
 
 // Not sure why RUBE json export represents lists of vectors like this. Maybe an openGL thing?
 export interface RubeVectorArray {
@@ -91,8 +91,8 @@ export interface RubeFixtureShapeChain {
   vertices: RubeVectorArray;
   // If the following properties are not present, the shape is an open-ended
   // chain shape. If they are present, the shape is a closed loop shape.
-  hasNextVertex: true;
-  hasPrevVertex: true;
+  hasNextVertex: boolean;
+  hasPrevVertex: boolean;
   nextVertex: RubeVector
   prevVertex: RubeVector
 }
@@ -135,8 +135,8 @@ export interface RubeJointDistance extends RubeJointBase {
 
 export interface RubeJointPrismatic extends RubeJointBase {
   type: 'prismatic';
-  enableLimit?: true;
-  enableMotor?: true;
+  enableLimit?: boolean;
+  enableMotor?: boolean;
   localAxisA?: RubeVector;
   lowerLimit?: number;
   maxMotorForce?: number;
@@ -146,13 +146,14 @@ export interface RubeJointPrismatic extends RubeJointBase {
 }
 
 export interface RubeJointWheel extends RubeJointBase {
-  type:  'wheel';
-  enableMotor?: true;
+  type: 'wheel';
+  enableMotor?: boolean;
   localAxisA?: RubeVector;
   maxMotorTorque?: number;
   motorSpeed?: number;
   springDampingRatio?: number;
   springFrequency?: number;
+  // dampingRatio?: number; // TODO verify if available or if it is the springDampingRatio and springFrequency
 }
 
 export interface RubeJointRope extends RubeJointBase {

@@ -107,35 +107,28 @@ export class PlayerController {
   }
 
   private updateLookAtDirection() {
-    const userDataMap = this.b2Physics.rubeLoader.bodyUserDataMap;
+    const userDataMap = this.b2Physics.loader.bodyUserDataMap;
     const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.parts.body.GetLinearVelocity()));
     const bodyXDirection = vec2Util.Normalize(this.parts.body.GetWorldVector(this.FORWARD));
     // slow down change while in air to jitter while doing flips
-    const lerpFactor = this.state.getState() === 'grounded' ? 0.03 : 0.01;
+    const lerpFactor = this.state.getState() === 'grounded' ? 0.03 : 0.005;
     const targetFlip = vec2Util.Dot(bodyXDirection, velocityDirection) < 0 ? -1 : 1;
     this.currentBodyFlipDot = this.currentBodyFlipDot + lerpFactor * (targetFlip - this.currentBodyFlipDot);
 
-    const headImage = userDataMap.get(this.parts.head) as Phaser.GameObjects.Image;
-    const bodyImage = userDataMap.get(this.parts.body) as Phaser.GameObjects.Image;
-    const bodyArmUpperLeftImage = userDataMap.get(this.parts.armUpperLeft) as Phaser.GameObjects.Image;
-    const bodyArmUpperRightImage = userDataMap.get(this.parts.armUpperRight) as Phaser.GameObjects.Image;
-    const bodyArmLowerLeftImage = userDataMap.get(this.parts.armLowerLeft) as Phaser.GameObjects.Image;
-    const bodyArmLowerRightImage = userDataMap.get(this.parts.armLowerRight) as Phaser.GameObjects.Image;
-
     if (this.currentBodyFlipDot < 0) {
-      headImage.flipX = true;
-      bodyImage.flipX = true;
-      bodyArmUpperLeftImage.setDepth(this.parts.armUpperRightRenderDepth);
-      bodyArmUpperRightImage.setDepth(this.parts.armUpperLeftRenderDepth);
-      bodyArmLowerLeftImage.setDepth(this.parts.armLowerRightRenderDepth);
-      bodyArmLowerRightImage.setDepth(this.parts.armLowerLeftRenderDepth);
+      this.parts.headImage.flipX = true;
+      this.parts.bodyImage.flipX = true;
+      this.parts.armUpperLeftImage.setDepth(this.parts.armUpperRightDepth);
+      this.parts.armUpperRightImage.setDepth(this.parts.armUpperLeftDepth);
+      this.parts.armLowerLeftImage.setDepth(this.parts.armLowerRightDepth);
+      this.parts.armLowerRightImage.setDepth(this.parts.armLowerLeftDepth);
     } else {
-      headImage.flipX = false;
-      bodyImage.flipX = false;
-      bodyArmUpperLeftImage.setDepth(this.parts.armUpperLeftRenderDepth);
-      bodyArmUpperRightImage.setDepth(this.parts.armUpperRightRenderDepth);
-      bodyArmLowerLeftImage.setDepth(this.parts.armLowerLeftRenderDepth);
-      bodyArmLowerRightImage.setDepth(this.parts.armLowerRightRenderDepth);
+      this.parts.headImage.flipX = false;
+      this.parts.bodyImage.flipX = false;
+      this.parts.armUpperLeftImage.setDepth(this.parts.armUpperLeftDepth);
+      this.parts.armUpperRightImage.setDepth(this.parts.armUpperRightDepth);
+      this.parts.armLowerLeftImage.setDepth(this.parts.armLowerLeftDepth);
+      this.parts.armLowerRightImage.setDepth(this.parts.armLowerRightDepth);
     }
   }
 
@@ -207,34 +200,59 @@ export class PlayerController {
   }
 
   private initBodyParts() {
+    const propType = 'string';
+    const propName = 'phaserPlayerCharacterPart';
+    const head = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'head')[0];
+    const body = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'body')[0];
+    const armUpperLeft = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armUpperLeft')[0];
+    const armLowerLeft = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armLowerLeft')[0];
+    const armUpperRight = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armUpperRight')[0];
+    const armLowerRight = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armLowerRight')[0];
+    
+    const headImage = this.b2Physics.loader.bodyUserDataMap.get(head)!.image;
+    const bodyImage = this.b2Physics.loader.bodyUserDataMap.get(body)!.image;
+    const armUpperLeftImage = this.b2Physics.loader.bodyUserDataMap.get(armUpperLeft)!.image;
+    const armLowerLeftImage = this.b2Physics.loader.bodyUserDataMap.get(armLowerLeft)!.image;
+    const armUpperRightImage = this.b2Physics.loader.bodyUserDataMap.get(armUpperRight)!.image;
+    const armLowerRightImage = this.b2Physics.loader.bodyUserDataMap.get(armLowerRight)!.image;
 
-    const armUpperLeft = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armUpperLeft')[0];
-    const armLowerLeft = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armLowerLeft')[0];
-    const armUpperRight = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armUpperRight')[0];
-    const armLowerRight = this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'armLowerRight')[0];
+    if (!head || !body || !armUpperLeft || !armLowerLeft || !armUpperRight || !armLowerRight) throw new Error('Player character b2Bodies not found');
+    if (!headImage || !bodyImage || !armUpperLeftImage || !armLowerLeftImage || !armUpperRightImage || !armLowerRightImage) throw new Error('Player character images not found');
+    
+    const segments = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'boardSegment');
+    segments.sort((a, b) => {
+      const aIndex = Number(this.b2Physics.loader.customPropertiesMapMap.get(a)!['phaserBoardSegmentIndex']);
+      const bIndex = Number(this.b2Physics.loader.customPropertiesMapMap.get(b)!['phaserBoardSegmentIndex']);
+      return aIndex - bIndex;
+    });
 
     this.parts = {
-      head: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'head')[0],
-      body: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'body')[0],
+      head,
+      body,
       armUpperLeft,
       armLowerLeft,
       armUpperRight,
       armLowerRight,
-      armUpperLeftRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armUpperLeft) as Phaser.GameObjects.Image).depth,
-      armLowerLeftRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armLowerLeft) as Phaser.GameObjects.Image).depth,
-      armUpperRightRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armUpperRight) as Phaser.GameObjects.Image).depth,
-      armLowerRightRenderDepth: (this.b2Physics.rubeLoader.bodyUserDataMap.get(armLowerRight) as Phaser.GameObjects.Image).depth,
-      boardSegments: this.b2Physics.rubeLoader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'boardSegment'),
-      bindingLeft: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
-      bindingRight: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
-      distanceLegLeft: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0], b2.b2DistanceJoint),
-      distanceLegRight: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0], b2.b2DistanceJoint),
-      weldCenter: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0], b2.b2WeldJoint),
-      prismatic: b2.castObject(this.b2Physics.rubeLoader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0], b2.b2PrismaticJoint),
+      headImage,
+      bodyImage,
+      armUpperLeftImage,
+      armLowerLeftImage,
+      armUpperRightImage,
+      armLowerRightImage,
+      armUpperLeftDepth: armUpperLeftImage.depth,
+      armLowerLeftDepth: armLowerLeftImage.depth,
+      armUpperRightDepth: armUpperRightImage.depth,
+      armLowerRightDepth: armLowerRightImage.depth,
+      boardSegments: segments,
+      bindingLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
+      bindingRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
+      distanceLegLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0], b2.b2DistanceJoint),
+      distanceLegRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0], b2.b2DistanceJoint),
+      weldCenter: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0], b2.b2WeldJoint),
+      prismatic: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0], b2.b2PrismaticJoint),
     };
   }
 }
-
 
 export interface IBodyParts {
   head: Box2D.b2Body;
@@ -245,15 +263,22 @@ export interface IBodyParts {
   armLowerRight: Box2D.b2Body;
   boardSegments: (Box2D.b2Body)[];
 
+  headImage: Phaser.GameObjects.Image;
+  bodyImage: Phaser.GameObjects.Image;
+  armUpperLeftImage: Phaser.GameObjects.Image;
+  armLowerLeftImage: Phaser.GameObjects.Image;
+  armUpperRightImage: Phaser.GameObjects.Image;
+  armLowerRightImage: Phaser.GameObjects.Image;
+  
+  armUpperLeftDepth: number;
+  armLowerLeftDepth: number;
+  armUpperRightDepth: number;
+  armLowerRightDepth: number;
+
   bindingLeft: Box2D.b2RevoluteJoint | null;
   bindingRight: Box2D.b2RevoluteJoint | null;
   distanceLegLeft: Box2D.b2DistanceJoint | null;
   distanceLegRight: Box2D.b2DistanceJoint | null;
   weldCenter: Box2D.b2WeldJoint | null;
   prismatic: Box2D.b2PrismaticJoint | null;
-
-  armUpperLeftRenderDepth: number;
-  armLowerLeftRenderDepth: number;
-  armUpperRightRenderDepth: number;
-  armLowerRightRenderDepth: number;
 }

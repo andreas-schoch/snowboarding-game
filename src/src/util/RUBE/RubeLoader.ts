@@ -7,16 +7,19 @@ import { b2 } from '../..';
 import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
 
-export class RubeLoader {
+type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
+
+export class RubeLoader<IMG = unknown> {
   private world: Box2D.b2World;
 
   loadedBodies: (Box2D.b2Body | null)[] = [];
   loadedJoints: (Box2D.b2Joint | null)[] = [];
   loadedImages: (unknown | null)[] = []; // depends on with what engine this loader is used. Maybe make generic
 
-  bodyUserDataMap: Map<Box2D.b2Body, unknown> = new Map();
-  customPropertiesArrayMap: Map<Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint | unknown, RubeCustomProperty[]> = new Map();
-  customPropertiesMapMap: Map<Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint | unknown, { [key: string]: unknown }> = new Map();
+  bodyUserDataMap: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
+  bodyByName: Map<string, Box2D.b2Body[]> = new Map();
+  customPropertiesArrayMap: Map<CustomPropOwner | IMG, RubeCustomProperty[]> = new Map();
+  customPropertiesMapMap: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
 
   constructor(world: Box2D.b2World) {
     this.world = world;
@@ -33,8 +36,7 @@ export class RubeLoader {
     return success;
   }
 
-  handleLoadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null): unknown | null {
-    console.log('handleLoadImage', imageJson, bodyObj);
+  handleLoadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null): IMG | null {
     return null;
     // throw new Error('Method not implemented. This method gives you a chance to implement how you want to load images.');
   }
@@ -63,6 +65,7 @@ export class RubeLoader {
     b2.destroy(massData);
     b2.destroy(bd);
 
+    this.bodyUserDataMap.set(body, { name: bodyJson.name || '', image: null });
     this.customPropertiesArrayMap.set(body, bodyJson.customProperties || []);
     this.customPropertiesMapMap.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
     (bodyJson.fixture || []).forEach(fixtureJson => this.loadFixture(body, fixtureJson));
@@ -223,12 +226,16 @@ export class RubeLoader {
     jd.damping = damping;
   }
 
-  private loadImage(imageJson: RubeImage): unknown | null {
-    const { body, customProperties } = imageJson;
+  private loadImage(imageJson: RubeImage): IMG | null {
+    const { body } = imageJson;
     const bodyObj = this.loadedBodies[body];
     const img = this.handleLoadImage(imageJson, bodyObj);
     if (!img) return null;
-    if (bodyObj) this.bodyUserDataMap.set(bodyObj, img);
+    if (bodyObj) {
+      const userData = this.bodyUserDataMap.get(bodyObj);
+      if (!userData) throw new Error('bodyUserDataMap is missing bodyObj. this should never happen');
+      userData.image = img;
+    }
     return img;
   }
 
@@ -251,7 +258,7 @@ export class RubeLoader {
     const bodies: Box2D.b2Body[] = [];
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       const props = this.customPropertiesArrayMap.get(body);
-      if (!body  || !props) continue;
+      if (!body || !props) continue;
       for (const prop of Object.values(props)) {
         if (!prop.hasOwnProperty('name')) continue;
         if (!prop.hasOwnProperty(propertyType)) continue;
@@ -298,12 +305,12 @@ export class RubeLoader {
   }
 
   // TODO turn into map instead of having to iterate over custom props
-  getCustomProperty<T = unknown>(entity: unknown, propertyType: RubeCustomPropertyTypes, propertyName: string, defaultValue: T): T {
+  getCustomProperty<A = unknown>(entity: CustomPropOwner| IMG, propertyType: RubeCustomPropertyTypes, propertyName: string, defaultValue: A): A {
     const props = this.customPropertiesArrayMap.get(entity);
     if (!props) return defaultValue;
     for (const prop of Object.values(props)) {
       if (!prop.name || !prop.hasOwnProperty(propertyType)) continue;
-      if (prop.name === propertyName) return prop[propertyType] as unknown as T;
+      if (prop.name === propertyName) return prop[propertyType] as A;
     }
     return defaultValue;
   }

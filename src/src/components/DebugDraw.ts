@@ -13,9 +13,9 @@ export default class DebugDrawer {
     this.pixelsPerMeter = pixelsPerMeter;
     this.lineWidth = lineWidth;
     this.instance.AppendFlags(b2.b2Draw.e_shapeBit);
-    // this.instance.AppendFlags(b2.b2Draw.e_jointBit);
+    this.instance.AppendFlags(b2.b2Draw.e_jointBit);
     // this.instance.AppendFlags(b2.b2Draw.e_aabbBit);
-    this.instance.AppendFlags(b2.b2Draw.e_centerOfMassBit);
+    // this.instance.AppendFlags(b2.b2Draw.e_centerOfMassBit);
     // this.instance.AppendFlags(b2.b2Draw.e_pairBit);
 
     this.instance.DrawSegment = (vert1_p: number, vert2_p: number, color_p: number) => {

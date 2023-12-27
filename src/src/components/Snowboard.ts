@@ -40,11 +40,10 @@ export class Snowboard {
     this.initRays(this.b2Physics.worldScale / 4);
     this.particles = this.initParticles();
 
-    const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;
-    const scale = this.b2Physics.worldScale;
+    const { worldScale, loader: { customPropertiesMapMap } } = this.b2Physics;
     this.b2Physics.on('post_solve', ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
-      const propsBA = customProps.get(bodyA);
-      const propsBB = customProps.get(bodyB);
+      const propsBA = customPropertiesMapMap.get(bodyA);
+      const propsBB = customPropertiesMapMap.get(bodyB);
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
 
       const nonSurfaceBody = propsBA && propsBA['surfaceType'] !== 'snow' ? bodyA : bodyB;
@@ -53,7 +52,7 @@ export class Snowboard {
       const manifold = new b2.b2WorldManifold();
       contact.GetWorldManifold(manifold);
       for (let i = 0; i < impulse.get_count(); i++) {
-        const point = vec2Util.Scale(manifold.get_points(i), scale, -scale);
+        const point = vec2Util.Scale(manifold.get_points(i), worldScale, -worldScale);
         const normalImpulse = impulse.get_normalImpulses(i);
         if (!this.scene.cameras.main.worldView.contains(point.x, point.y)) continue;
         if (normalImpulse < 4 || velocityLength < 0.5) continue;

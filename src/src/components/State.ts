@@ -173,18 +173,18 @@ export class State {
   }
 
   private registerCollisionListeners() {
-    this.b2Physics.on('post_solve', ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
+    this.b2Physics.on('post_solve', ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
-      const bodyB =fixtureB.GetBody();
+      const bodyB = fixtureB.GetBody();
       if (bodyA === bodyB) return;
       let largestImpulse: number = -1;
       for (let i = 0; i < impulse.count; i++) largestImpulse = Math.max(largestImpulse, impulse.get_normalImpulses(i));
       if ((bodyA === this.parts.head || bodyB === this.parts.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    const customProps = this.b2Physics.rubeLoader.customPropertiesMapMap;
-    this.b2Physics.on('begin_contact', ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
+    const customProps = this.b2Physics.loader.customPropertiesMapMap;
+    this.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
@@ -200,7 +200,7 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.levelFinished) return;
-    switch (this.b2Physics.rubeLoader.customPropertiesMapMap.get(fixture)?.phaserSensorType) {
+    switch (this.b2Physics.loader.customPropertiesMapMap.get(fixture)?.phaserSensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;
@@ -234,10 +234,14 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const img: Phaser.GameObjects.Image = this.b2Physics.rubeLoader.bodyUserDataMap.get(body) as Phaser.GameObjects.Image;
-      this.b2Physics.rubeLoader.bodyUserDataMap.delete(body);
+      const userdata = this.b2Physics.loader.bodyUserDataMap.get(body);
+      const image = userdata?.image;
+      if (image) {
+        userdata.image = null;
+        image.destroy();
+      }
+      this.b2Physics.loader.bodyUserDataMap.delete(body);
       this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
-      img.destroy();
       this.totalCollectedPresents++;
       this.playerController.scene.observer.emit('pickup_present', this.totalCollectedPresents);
       this.playerController.scene.observer.emit('score_change', this.getCurrentScore());

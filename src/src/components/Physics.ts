@@ -24,7 +24,7 @@ export interface IPostSolveEvent {
 
 export class Physics extends Phaser.Events.EventEmitter {
   world: Box2D.b2World;
-  rubeLoader: RubeLoader;
+  loader: RubeLoader<Phaser.GameObjects.Image>;
   worldScale: number;
   isPaused: boolean = false;
   private readonly scene: GameScene;
@@ -70,13 +70,13 @@ export class Physics extends Phaser.Events.EventEmitter {
     b2.destroy(gravityVec);
     // b2.destroy(listeners); // error when we destroy this
 
-    this.rubeLoader = new RubeLoader(this.world);
-    this.rubeLoader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body) => {
+    this.loader = new RubeLoader(this.world);
+    this.loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body) => {
       const { file, center, customProperties, angle, aspectScale, scale, flip, renderOrder } = imageJson;
-      const pos = bodyObj ? bodyObj.GetPosition() : this.rubeLoader.rubeToVec2(center);
+      const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
       if (!pos) return null;
-      const props = this.rubeLoader.customPropertiesArrayToMap(customProperties || []);
+      const props = this.loader.customPropertiesArrayToMap(customProperties || []);
 
       const textureFallback = (file || '').split('/').reverse()[0];
       const texture = props['phaserTexture'] as string || textureFallback;
@@ -90,16 +90,17 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.setDepth(renderOrder);
       img.setDataEnabled();
       img.data.set('angle_offset', -(angle || 0)); // need to preserve original angle it was expeorted with
-      this.rubeLoader.customPropertiesArrayMap.set(img, customProperties || []);
-      this.rubeLoader.customPropertiesMapMap.set(img, props);
+      this.loader.customPropertiesArrayMap.set(img, customProperties || []);
+      this.loader.customPropertiesMapMap.set(img, props);
       return img;
     }
   }
 
   loadRubeScene(rubeScene: LevelKeys | CharacterKeys) {
     const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
-    if (this.rubeLoader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
+    if (this.loader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
     else throw new Error('Failed to load RUBE scene');
+    // this.world.DebugDraw();
   }
 
   update() {
@@ -109,16 +110,17 @@ export class Physics extends Phaser.Events.EventEmitter {
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
-      const bodyRepresentation = this.rubeLoader.bodyUserDataMap.get(body) as Phaser.GameObjects.Image;
-      if (!bodyRepresentation) continue;
+      const userdata = this.loader.bodyUserDataMap.get(body);
+      const image = userdata?.image;
+      if (!image) continue;
       if (body.IsEnabled()) {
         let pos = body.GetPosition();
-        bodyRepresentation.setVisible(true);
-        bodyRepresentation.x = pos.x * worldScale
-        bodyRepresentation.y = -pos.y * worldScale;
-        bodyRepresentation.rotation = -body.GetAngle() + (bodyRepresentation.data.get('angle_offset') || 0); // in radians;
+        image.setVisible(true);
+        image.x = pos.x * worldScale
+        image.y = -pos.y * worldScale;
+        image.rotation = -body.GetAngle() + (image.data.get('angle_offset') || 0); // in radians;
       } else {
-        bodyRepresentation.visible = false;
+        image.visible = false;
       }
     }
     // this.debugDrawer.clear();

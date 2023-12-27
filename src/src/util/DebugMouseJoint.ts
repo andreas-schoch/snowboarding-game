@@ -58,7 +58,7 @@
 //       const jd = new Pl.b2MouseJointDef();
 //       jd.collideConnected = true;
 //       jd.damping = 0.1;
-//       jd.bodyA = this.b2Physics.rubeLoader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
+//       jd.bodyA = this.b2Physics.loader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
 //       jd.bodyB = body;
 //       jd.target.Copy(p);
 //       jd.maxForce = 700 * body.GetMass();
