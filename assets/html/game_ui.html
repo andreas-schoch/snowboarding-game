@@ -180,7 +180,7 @@
 
   /* #level_005 {
     /* background-color: rgba(0, 0, 0, 0.7); */
-    /* cursor: not-allowed !important; */
+  /* cursor: not-allowed !important; */
   }
 
   #level_005::after {
@@ -193,9 +193,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: not-allowed !important;
-  } */
+  }
 
-  #panel-select-level .level-number {
+  */ #panel-select-level .level-number {
     color: var(--grey-700);
   }
 
@@ -269,6 +269,13 @@
     height: 3.5rem;
   }
 
+  #panel-how-to-play img.combo-counter {
+    width: 100px;
+    height: auto;
+    margin-bottom: 2rem;
+    border-radius: 5px;
+  }
+
   /* ====================== */
   /* = Panel Leaderboards = */
   /* ====================== */
@@ -309,14 +316,14 @@
   /* ==================== */
   /* = Panel Your Score = */
   /* ==================== */
-  .summary > span:first-of-type {
+  .summary>span:first-of-type {
     color: var(--grey-700);
     font-weight: normal;
     font-size: 14px;
     text-align: left;
   }
 
-  .summary > span:last-of-type {
+  .summary>span:last-of-type {
     color: var(--grey-700);
     font-weight: normal;
     font-size: 14px;
@@ -336,7 +343,7 @@
     margin-top: 2rem;
   }
 
-  .summary.summary-total > span {
+  .summary.summary-total>span {
     color: black;
     font-size: 24px;
     font-weight: bolder;
@@ -348,7 +355,7 @@
     line-height: 20px;
   }
 
-  .summary-rank > span {
+  .summary-rank>span {
     text-align: center !important;
     color: var(--grey-600);
   }
@@ -358,7 +365,7 @@
     font-weight: bolder;
   }
 
-  .summary-personal-best > span {
+  .summary-personal-best>span {
     color: var(--grey-700);
     font-size: 18px;
   }
@@ -422,14 +429,11 @@
 
   }
 
-  #panel-credits .credits-name {
-
-  }
+  #panel-credits .credits-name {}
 
   #panel-credits .credits-link {
     font-size: 10px;
   }
-
 </style>
 
 <div class="game-ui">
@@ -450,7 +454,8 @@
     <div class="value" id="hud-score">0</div>
   </div>
 
-  <div id="unsupported-browser-notice" class="hidden">This game hasn't been optimized for this browser (yet). In case it doesn't run well, consider using Chrome or Edge to play it.</div>
+  <div id="unsupported-browser-notice" class="hidden">This game hasn't been optimized for this browser (yet). In case it
+    doesn't run well, consider using Chrome or Edge to play it.</div>
 
   <!---------------------->
   <!-- PANEL PAUSE MENU -->
@@ -493,28 +498,32 @@
         <span class="level-item-overlay" id="level_001"></span>
         <div class="level-number">Level 001</div>
         <div class="level-name">Santas Backyard</div>
-        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
+        <div class="level-thumbnail"
+          style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
       </div>
 
       <div class="level-item">
         <span class="level-item-overlay" id="level_002"></span>
         <div class="level-number">Level 002</div>
         <div class="level-name">The Rollercoaster</div>
-        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_002_the_rollercoaster.png')"></div>
+        <div class="level-thumbnail"
+          style="background-image: url('assets/img/thumbnails/level_002_the_rollercoaster.png')"></div>
       </div>
 
       <div class="level-item">
         <span class="level-item-overlay" id="level_003"></span>
         <div class="level-number">Level 003</div>
         <div class="level-name">Building Bridges</div>
-        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_003_building_bridges.png')"></div>
+        <div class="level-thumbnail"
+          style="background-image: url('assets/img/thumbnails/level_003_building_bridges.png')"></div>
       </div>
 
       <div class="level-item">
         <span class="level-item-overlay" id="level_004"></span>
         <div class="level-number">Level 004</div>
         <div class="level-name">Rocky Roads</div>
-        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_004_rocky_roads.png')"></div>
+        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_004_rocky_roads.png')">
+        </div>
       </div>
 
       <div class="level-item">
@@ -544,8 +553,6 @@
   <div class="panel hidden" id="panel-how-to-play">
     <div class="panel-title">How to play</div>
     <div class="scrollbar">
-      <span class="row how-to-play-title"><span class="col col-12">Premise</span></span>
-      <span class="row game-premise"><span class="col col-12">Santas helpers lost all presents for the kids! Luckily Santa happens to be a pro-snowboarder and is able to collect them quickly while performing cool tricks.</span></span>
       <span class="row how-to-play-title"><span class="col col-12">Keyboard controls</span></span>
       <span class="row">
         <span class="col col-4 flex-center control-img">
@@ -574,7 +581,7 @@
         <span class="col col-8 control-text">toggle pause</span>
       </span>
       <span class="row how-to-play-title"><span class="col col-12">Touchscreen controls</span></span>
-      <span class="row">
+      <!-- <span class="row">
         <span class="col col-4 flex-center control-img">
           <img class="img-center" src="assets/img/controls/Gesture_Swipe_Up.png" alt="gesture swipe up">
         </span>
@@ -586,13 +593,21 @@
           <img src="assets/img/controls/Gesture_Swipe_Right.png" alt="gesture swipe right">
         </span>
         <span class="col col-8 control-text">Balance and flip by pressing left or right side of screen</span>
-      </span>
-      <span class="row"><span class="col col-12" style="font-size: 12px; margin-top: 2rem;">(Keyboard controls work much better atm)</span></span>
+      </span> -->
+      <span class="row"><span class="col col-12">(work-in-progress)</span></span>
       <span class="row how-to-play-title"><span class="col col-12">Combo System</span></span>
-      <span class="row game-premise"><span class="col col-12">After each trick (backflip, frontflip) you have a few seconds to perform the next one to gain extra points.
-        The combo counter will eventually run out if you stay on the ground for too long. If you crash, the combo points are lost.
-        The points are only applied once the counter runs out or you reach the finish line.
-      </span></span>
+
+      <span class="col col-4 flex-center control-img">
+        <img class="combo-counter" src="assets/img/controls/combo_counter.png" alt="Combo counter UI">
+      </span>
+      <span class="row game-premise"><span class="col col-12">After each trick (backflip, frontflip) you have a few
+          seconds to perform the next one to gain extra points.
+          The combo counter will eventually run out if you stay on the ground for too long. If you crash, the combo
+          points are lost.
+          The points are only applied once the counter runs out or you reach the finish line.
+
+          Keeping the combo counter up is the key to high scores!
+        </span></span>
     </div>
 
     <!-- BACK-->
@@ -613,7 +628,8 @@
     <div class="panel-title">Leaderboards</div>
     <div class="row">
       <div class="col col-12 leaderboard-note">
-        Current version of the game doesn't have the online leaderboards enabled. You will only see your own past high-scores below.
+        Current version of the game doesn't have the online leaderboards enabled. You will only see your own past
+        high-scores below.
       </div>
     </div>
     <div class="row leaderboard-header">
@@ -655,37 +671,37 @@
       <div class="row">
         <span class="col col-3 settings-name">Resolution</span>
         <span class="col col-9 settings-resolution-radios">
-        <label>
-          <input class="with-gap" name="resolution" type="radio" value="0.5"/>
-          <span>640x360</span>
-        </label>
-        <label>
-          <input class="with-gap" name="resolution" type="radio" value="0.75"/>
-          <span>960x540</span>
-        </label>
-        <label>
-          <input class="with-gap" name="resolution" type="radio" value="1" checked/>
-          <span>1280x720</span>
-        </label>
-    </span>
+          <label>
+            <input class="with-gap" name="resolution" type="radio" value="0.5" />
+            <span>640x360</span>
+          </label>
+          <label>
+            <input class="with-gap" name="resolution" type="radio" value="0.75" />
+            <span>960x540</span>
+          </label>
+          <label>
+            <input class="with-gap" name="resolution" type="radio" value="1" checked />
+            <span>1280x720</span>
+          </label>
+        </span>
       </div>
       <!-- VOLUME MUSIC -->
       <div class="row">
         <span class="col col-3 settings-name">Volume Music</span>
         <span class="col col-9">
-        <div class="range-field">
-          <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value="80"/>
-        </div>
-      </span>
+          <div class="range-field">
+            <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value="80" />
+          </div>
+        </span>
       </div>
       <!-- VOLUME SFX -->
       <div class="row">
         <span class="col col-3 settings-name">Volume SFX</span>
         <span class="col col-9">
-        <div class="range-field">
-          <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value="80"/>
-        </div>
-      </span>
+          <div class="range-field">
+            <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value="80" />
+          </div>
+        </span>
       </div>
       <!-- SAVE SETTINGS -->
       <div class="row">
@@ -715,45 +731,53 @@
       <span class="row credits-title"><span class="col col-12 flex-center">Developed by</span></span>
       <span class="row">
         <span class="col col-6 credits-name">Andreas Schoch</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://github.com/andreas-schoch" target="_blank">Github</a>
-        <a class="col col-3 credits-link" rel="noopener" href="https://www.linkedin.com/in/andreas-schoch/" target="_blank">Linkedin</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://github.com/andreas-schoch"
+          target="_blank">Github</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://www.linkedin.com/in/andreas-schoch/"
+          target="_blank">Linkedin</a>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Music by</span></span>
       <span class="row">
-        <span class="col col-6 credits-name">Matthew Pablo</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/riverside-ride" target="_blank">Source</a>
-        <a class="col col-3 credits-link" rel="noopener" href="http://www.matthewpablo.com" target="_blank">Website</a>
+        <span class="col col-6 credits-name">Kevin MacLeod</span>
+        <a class="col col-3 credits-link" rel="noopener" href="https://incompetech.com/music/royalty-free/music.html"
+          target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://incompetech.com" target="_blank">Website</a>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Soundeffects by</span></span>
       <span class="row">
         <span class="col col-6 credits-name">independent.nu</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/8-wet-squish-slurp-impacts" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener"
+          href="https://opengameart.org/content/8-wet-squish-slurp-impacts" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
       <span class="row">
         <span class="col col-6 credits-name">Blender Foundation</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/applause" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/applause"
+          target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Texture Assets by</span></span>
       <span class="row">
         <span class="col col-6">Tokegameart</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://tokegameart.net/item/santa-claus/" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://tokegameart.net/item/santa-claus/"
+          target="_blank">Source</a>
         <a class="col col-3 credits-link" rel="noopener" href="https://tokegameart.net" target="_blank">Website</a>
       </span>
 
       <span class="row">
         <span class="col col-6">Lukas Mrazik</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/space-background-7" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/space-background-7"
+          target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
       <span class="row">
         <span class="col col-6">pzUH</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/winter-platformer-game-tileset" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener"
+          href="https://opengameart.org/content/winter-platformer-game-tileset" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
@@ -764,7 +788,8 @@
       </span>
       <span class="row">
         <span class="col col-6">Nicolae (Xelu) Berbece</span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack" target="_blank">Source</a>
+        <a class="col col-3 credits-link" rel="noopener"
+          href="https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack" target="_blank">Source</a>
         <span class="col col-3"></span>
       </span>
 
@@ -775,33 +800,34 @@
       </span>
 
       <span class="row credits-title"><span class="col col-12 flex-center">Special Thanks to</span></span>
-      <span class="row">
-        <span class="col col-6">Legartis</span>
-        <span class="col col-3"></span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://legartis.ai" target="_blank">Website</a>
-      </span>
-      <span class="row"><span class="col col-12" style="color: var(--grey-600)">For giving me a chance when I (Andreas Schoch) started out as a professional developer.
-        The 3 years I worked here were amazing and if it wasn't for my upcoming travel plans, I wouldn't have left! Consider this game my farewell gift. Thanks everyone! :)</span></span>
-
       <span class="row" style="margin-top: 2rem">
         <span class="col col-6">Chris Campbell</span>
         <span class="col col-3"></span>
-        <a class="col col-3 credits-link" rel="noopener" href="https://www.iforce2d.net/rube/" target="_blank">Website</a>
+        <a class="col col-3 credits-link" rel="noopener" href="https://www.iforce2d.net/rube/"
+          target="_blank">Website</a>
       </span>
-      <span class="row"><span class="col col-12" style="color: var(--grey-600)">For the awesome R.U.B.E Editor which made it so much easier to create box2d levels.</span></span>
+      <span class="row"><span class="col col-12" style="color: var(--grey-600)">For the awesome R.U.B.E Editor which
+          made it so much easier to create box2d levels.</span></span>
 
 
       <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
       <span class="row">
         <span class="col col-12">
-          <span>The game is released under the open-source MIT license: </span>
-          <a class="credits-link" rel="noopener" href="https://github.com/andreas-schoch/snowboarding-game" target="_blank">Source code</a>.
+          <span>The game is released under the open-source GPL-3.0 license (initially MIT): </span>
+          <a class="credits-link" rel="noopener" href="https://github.com/andreas-schoch/snowboarding-game"
+            target="_blank">Source code</a>.
         </span>
       </span>
-      <span class="row"><span class="col col-12">It is inspired by Alto's Adventure, iStunt and old flash based browser games.</span></span>
-      <span class="row"><span class="col col-12">While initially intended as a small and simple christmas game for legartis that was built outside of working hours, the development will continue independently. The game will remain fully free and open-source.</span></span>
-      <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
-      <span class="row"><span class="col col-12">It would be awesome to allow people to create and upload their own custom levels, themes, characters etc. and build a little community around this game in the future.</span></span>
+      <span class="row"><span class="col col-12">It is inspired by Alto's Adventure, iStunt and old flash based browser
+          games.</span></span>
+      <span class="row"><span class="col col-12">I have the ambition to extend it further by adding a level editor and
+          some form of multiplayer. Currently thinking of making it somewhat Trackmania like where you can compete in ~5
+          minute rounds in realtime with others. For that I may need a fully deterministic physics engine
+          though.</span></span>
+      <span class="row"><span class="col col-12">On top of that I want to create a relaxed game with the same vibe
+          "Zen-mode" in Alto's Adventure with an endless level and relaxing music.</span></span>
+      <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a
+            href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
     </div>
     <!-- BACK-->
     <div class="row last">
@@ -845,18 +871,22 @@
     </div>
 
     <div class="row summary summary-rank">
-      <span class="col col-12">You are ranked <span id="your-score-rank-value">-/-</span> in the leaderboards on this level!</span>
+      <span class="col col-12">You are ranked <span id="your-score-rank-value">-/-</span> in the leaderboards on this
+        level!</span>
     </div>
 
     <!--  SUBMIT SCORE -->
     <div class="submit-score">
-      <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet. Please choose your name.
-        The next time you finish a level, your score will be submitted automatically.</span></div>
-      <div class="row submit-score-offline-info"><span class="col col-12">This version of the game has online leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div>
+      <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet.
+          Please choose your name.
+          The next time you finish a level, your score will be submitted automatically.</span></div>
+      <div class="row submit-score-offline-info"><span class="col col-12">This version of the game has online
+          leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div>
       <div class="row" id="your-score-name-form">
         <div class="col col-8">
           <div class="form-group">
-            <input id="username" class="form-text-input" name="username" value="" type="text" autofocus autocomplete="off" onkeyup="this.setAttribute('value', this.value)">
+            <input id="username" class="form-text-input" name="username" value="" type="text" autofocus
+              autocomplete="off" onkeyup="this.setAttribute('value', this.value)">
             <label for="username" class="floating-label">Your name</label>
           </div>
         </div>
