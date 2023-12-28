@@ -1,7 +1,7 @@
 # Snowboarding Game
 
 <p align="center">
-<img src="./src/assets/img/thumbnails/level_001_santas_backyard.png" alt="Snowboarding Game Leaderboards" width="400" height="auto">
+<img src="./src/assets/img/thumbnails/intro.png" alt="screenshot of game" width="400" height="auto">
 </p>
 
 
@@ -9,7 +9,7 @@
 
 &nbsp;&nbsp;&nbsp;<kbd>&uarr;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;Jump (hold to jump with full power)<br>
 <kbd>&larr;</kbd> <kbd>&rarr;</kbd> &nbsp; Rotate and flip<br>
-&nbsp;&nbsp;&nbsp;<kbd>&darr;</kbd> &nbsp;&nbsp;&nbsp; Bend legs
+&nbsp;&nbsp;&nbsp;<kbd>&darr;</kbd> &nbsp;&nbsp;&nbsp; Bend legs (spin faster while in air)
 
 <kbd>SPACE</kbd> or <kbd>ESC</kbd> Open Menu (Also pauses the game)
 
@@ -25,11 +25,11 @@ Levels are created with [R.U.B.E](https://www.iforce2d.net/rube/) (Really Useful
 
 The JSON files are then loaded into the game using a loader that is part of this project 
 
-_Loader might be useful for any project that uses Phaser3 and [lusito/Box2d.ts](https://github.com/lusito/box2d.ts). I want to turn it into a NPM package and create adapters to support various box2d ports_
+_Loader might be useful for any project that uses Phaser3 and [Birch-san/box2d-wasm](https://github.com/Birch-san/box2d-wasm). I want to turn it into a NPM package and create adapters to support various box2d ports_
 
 For the GUI and menus, plain old HTML/CSS is used and rendered on top of the canvas.
 
-Eventually I want to add a level editor to the game so that players can create their own levels and share them with others with the click of a button (checkout 'level-editor' branch for progress on this)
+Eventually I want to add a level editor to the game so that players can create their own levels and share them with others with the click of a button (checkout 'level-editor' branch for progress on this).
 
 
 ## Run the game locally
@@ -89,4 +89,6 @@ If no custom domain is specified, it will be available via `https://<your-github
 
 
 ## License
-MIT
+GPL-3.0 License
+
+(Note: Project may contain assets that are licensed differently in which cases the license is indicated within the assets folder)

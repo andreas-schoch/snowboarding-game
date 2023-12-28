@@ -1,5 +1,6 @@
 /*
-*  R.U.B.E. Scene Loader for Phaser3 and https://github.com/lusito/box2d.ts.
+*  R.U.B.E. Scene Loader for Phaser3 and https://github.com/Birch-san/box2d-wasm
+* (see commit before SHA 5afd7c2 to find previous RubeLoader version for https://github.com/lusito/box2d.ts)
 * Based on provided example by Chris Campbell: https://www.iforce2d.net/rube/loaders/rube-phaser-sample.zip
 */
 
