@@ -1,13 +1,19 @@
+import { channel } from 'diagnostics_channel';
 import { b2 } from '../..';
-import { RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon } from './RubeLoaderInterfaces'; // Adjust the import paths as needed
+import { CustomPropOwner, RubeLoader } from './RubeLoader';
+import { RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
 
-export class RubeSerializer {
+export class RubeSerializer<IMG = unknown> {
+  handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented') };
+
   private world: Box2D.b2World;
+  private loader: RubeLoader<IMG>;
   private indexByBody: Map<Box2D.b2Body, number> = new Map();
 
-  constructor(world: Box2D.b2World) {
+  constructor(world: Box2D.b2World, loader: RubeLoader<IMG>) {
     this.world = world;
+    this.loader = loader;
   }
 
   serialize(): RubeScene {
@@ -15,19 +21,18 @@ export class RubeSerializer {
       gravity: this.serializeVector(this.world.GetGravity()),
       allowSleep: this.world.GetAllowSleeping(),
       autoClearForces: this.world.GetAutoClearForces(),
-      positionIterations: 10, // These are typical values but might need adjustments
+      positionIterations: 10, // TODO 
       velocityIterations: 10,
       stepsPerSecond: 60,
       warmStarting: this.world.GetWarmStarting(),
       continuousPhysics: this.world.GetContinuousPhysics(),
       subStepping: this.world.GetSubStepping(),
-      customProperties: [], // Custom properties serialization is not covered here
+      customProperties: [], // TODO
 
       body: this.serializeBodies(), // needs to be serialized before joints because joints rely on the order of bodies in the array
       joint: this.serializeJoints(),
-      // image: [], // Image serialization is not covered here
+      image: this.serializeImages(),
     };
-
 
     const jsonStr = JSON.stringify(scene);
     const blob = new Blob([jsonStr], { type: "application/json" });
@@ -36,9 +41,7 @@ export class RubeSerializer {
     a.href = url;
     a.download = 'rube scene test.json';
     a.click();
-
     URL.revokeObjectURL(url);
-
 
     return scene;
   }
@@ -69,9 +72,23 @@ export class RubeSerializer {
       'massData-mass': body.GetMass(),
       'massData-center': this.serializeVector(body.GetLocalCenter()),
       'massData-I': body.GetInertia(),
-      customProperties: [], // Custom properties serialization is not covered here
+      customProperties: this.serializeCustomProperties(body),
       fixture: this.serializeFixtures(body),
     };
+  }
+  serializeCustomProperties(owner: CustomPropOwner | IMG): RubeCustomProperty[] | undefined {
+    const props = this.loader.customPropertiesMap.get(owner);
+    if (!props) return undefined;
+    const serialized: RubeCustomProperty[] = [];
+    for (const [name, value] of Object.entries(props)) {
+      if (typeof value === 'number' && Number.isInteger(value)) serialized.push({ name, int: value });
+      else if (typeof value === 'number') serialized.push({ name, float: value });
+      else if (typeof value === 'string') serialized.push({ name, string: value });
+      else if (typeof value === 'boolean') serialized.push({ name, bool: value });
+      else if (value instanceof b2.b2Vec2) serialized.push({ name, vec2: this.serializeVector(value) });
+      else throw new Error('Custom property type not supported');
+    }
+    return serialized;
   }
 
   private serializeFixtures(body: Box2D.b2Body): RubeFixture[] {
@@ -97,7 +114,7 @@ export class RubeSerializer {
       friction: fixture.GetFriction(),
       restitution: fixture.GetRestitution(),
       sensor: fixture.IsSensor(),
-      customProperties: [], // Custom properties serialization is not covered here
+      customProperties: this.serializeCustomProperties(fixture),
     };
 
     if (shapeType === b2.b2Shape.e_circle) serialized.circle = this.serializeCircleShape(shape);
@@ -129,18 +146,12 @@ export class RubeSerializer {
 
   private serializeChainShape(shape: Box2D.b2Shape): RubeFixtureShapeChain {
     const chainShape = b2.castObject(shape, b2.b2ChainShape);
-    const edgeShape = new b2.b2EdgeShape();
+    const b2Verts = b2.reifyArray(b2.getPointer(chainShape.m_vertices), chainShape.m_count, 8, b2.b2Vec2);
     const vertices: RubeVectorArray = { x: [], y: [] };
-    for (let i = 0; i < chainShape.get_m_count() - 1; i++) {
-      chainShape.GetChildEdge(edgeShape, i);
-      vertices.x.push(edgeShape.m_vertex1.x, edgeShape.m_vertex2.x);
-      vertices.y.push(edgeShape.m_vertex1.y, edgeShape.m_vertex2.y);
+    for (const { x, y } of b2Verts.reverse()) {
+      vertices.x.push(x);
+      vertices.y.push(y);
     }
-    b2.destroy(edgeShape);
-
-    // Winding order determines which side of an edge has collision
-    vertices.x.reverse();
-    vertices.y.reverse();
     return {
       vertices,
       hasNextVertex: Boolean(chainShape.m_nextVertex),
@@ -191,7 +202,7 @@ export class RubeSerializer {
     const bodyB = joint.GetBodyB();
     const indexA = this.indexByBody.get(bodyA);
     const indexB = this.indexByBody.get(bodyB);
-    
+
     const anchorAWorld = joint.GetAnchorA();
     const anchorBWorld = joint.GetAnchorB();
     const anchorALocal = vec2Util.Rotate(new b2.b2Vec2(anchorAWorld.x - bodyA.GetPosition().x, anchorAWorld.y - bodyA.GetPosition().y), -bodyA.GetAngle());
@@ -206,7 +217,7 @@ export class RubeSerializer {
       bodyA: indexA,
       bodyB: indexB,
       collideConnected: joint.GetCollideConnected(),
-      customProperties: [], // TODO Custom properties serialization is not covered here
+      customProperties: this.serializeCustomProperties(joint),
     };
   }
 
@@ -299,6 +310,17 @@ export class RubeSerializer {
       maxTorque: motorJoint.GetMaxTorque(),
       correctionFactor: motorJoint.GetCorrectionFactor(),
     };
+  }
+
+  private serializeImages(): RubeImage[] {
+    const images: RubeImage[] = [];
+    for (const image of this.loader.loadedImages) {
+      if (!image) throw new Error('Image not loaded');
+      const serialized = this.handleSerializeImage(image);
+      images.push(serialized);
+    }
+
+    return images;
   }
 
   private serializeVector(vec: Box2D.b2Vec2): RubeVector {

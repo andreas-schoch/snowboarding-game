@@ -183,7 +183,7 @@ export class State {
       if ((bodyA === this.parts.head || bodyB === this.parts.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    const customProps = this.b2Physics.loader.customPropertiesMapMap;
+    const customProps = this.b2Physics.loader.customPropertiesMap;
     this.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
@@ -200,7 +200,7 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.levelFinished) return;
-    switch (this.b2Physics.loader.customPropertiesMapMap.get(fixture)?.phaserSensorType) {
+    switch (this.b2Physics.loader.customPropertiesMap.get(fixture)?.phaserSensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;

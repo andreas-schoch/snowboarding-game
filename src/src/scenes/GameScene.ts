@@ -8,6 +8,7 @@ import { SCENE_GAME, SCENE_GAME_UI } from "..";
 import { PlayerController } from '../components/PlayerController';
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { getSelectedCharacter } from '../util/getCurrentCharacter';
+import { RubeSerializer } from '../util/RUBE/RubeSerializer';
 
 export default class GameScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter;
@@ -41,7 +42,7 @@ export default class GameScene extends Phaser.Scene {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    this.body = this.b2Physics.loader.getBodiesByCustomProperty('string', 'phaserPlayerCharacterPart', 'body')[0]
+    this.body = this.b2Physics.loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', 'body')[0]
     const userdata = this.b2Physics.loader.bodyUserDataMap.get(this.body);
     if (userdata?.image) camera.startFollow(userdata.image, false, 0.5, 0.5);
 
@@ -83,6 +84,10 @@ export default class GameScene extends Phaser.Scene {
       b2.destroy(this.b2Physics.world);
     }]);
 
+    // TODO remove. Temporary to serialize open level
+    this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
+
+
     this.observer.on('enter_crashed', () => this.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
   }
 
@@ -91,8 +96,6 @@ export default class GameScene extends Phaser.Scene {
     this.playerController.update();
     this.setZoomLevel();
     this.setWindNoise();
-
-    // slightly move camera towards the look at direction so player sees more of the upcoming terrain
     this.setFollowOffset();
   }
 
@@ -108,15 +111,16 @@ export default class GameScene extends Phaser.Scene {
     const newZoom = currentZoom + lerpFactor * (targetZoom - currentZoom);
     this.cameras.main.setZoom(newZoom);
   }
-
+  
   private setWindNoise() {
     const maxSpeed = 60;
     const headSpeed = this.playerController.parts.head.GetLinearVelocity().Length();
     this.windNoise.setVolume(Math.min(Math.max((headSpeed / maxSpeed) * 0.3, 0.02), 0.5));
     this.windNoise.setRate(Math.min(Math.max((headSpeed / maxSpeed) * 1.5, 0.5), 1.5));
   }
-
+  
   private setFollowOffset() {
+    // slightly move camera towards the look at direction so player sees more of the upcoming terrain
     const velocityX = this.body.GetLinearVelocity().x * 10;
     const lerpFactor = 0.01;
     this.cameras.main.setFollowOffset(this.cameras.main.followOffset.x + lerpFactor * (-velocityX - this.cameras.main.followOffset.x), 0);

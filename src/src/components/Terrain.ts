@@ -13,7 +13,7 @@ export default class Terrain {
     this.scene = scene;
     this.b2Physics = physics;
 
-    const terrainBodies = this.b2Physics.loader.getBodiesByCustomProperty('string', 'surfaceType', 'snow');
+    const terrainBodies = this.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow');
     if (!terrainBodies.length) return; // There may be levels where no terrain is present
     const scale = this.b2Physics.worldScale;
 

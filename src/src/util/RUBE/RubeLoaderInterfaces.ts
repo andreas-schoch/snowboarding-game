@@ -8,6 +8,7 @@ export interface RubeScene {
   warmStarting: boolean;
   continuousPhysics: boolean;
   subStepping: boolean,
+  collisionbitplanes?: { names: string[] };
   customProperties?: RubeCustomProperty[];
 
   body?: RubeBody[];
@@ -91,10 +92,10 @@ export interface RubeFixtureShapeChain {
   vertices: RubeVectorArray;
   // If the following properties are not present, the shape is an open-ended
   // chain shape. If they are present, the shape is a closed loop shape.
-  hasNextVertex: boolean;
-  hasPrevVertex: boolean;
-  nextVertex: RubeVector
-  prevVertex: RubeVector
+  hasNextVertex?: boolean;
+  hasPrevVertex?: boolean;
+  nextVertex?: RubeVector
+  prevVertex?: RubeVector
 }
 
 ////////////////////////////////////////////////////////////////////////////

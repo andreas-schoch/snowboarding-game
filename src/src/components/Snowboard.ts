@@ -40,7 +40,7 @@ export class Snowboard {
     this.initRays(this.b2Physics.worldScale / 4);
     this.particles = this.initParticles();
 
-    const { worldScale, loader: { customPropertiesMapMap } } = this.b2Physics;
+    const { worldScale, loader: { customPropertiesMap: customPropertiesMapMap } } = this.b2Physics;
     this.b2Physics.on('post_solve', ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
       const propsBA = customPropertiesMapMap.get(bodyA);
       const propsBB = customPropertiesMapMap.get(bodyB);

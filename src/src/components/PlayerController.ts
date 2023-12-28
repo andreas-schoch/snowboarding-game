@@ -200,14 +200,13 @@ export class PlayerController {
   }
 
   private initBodyParts() {
-    const propType = 'string';
     const propName = 'phaserPlayerCharacterPart';
-    const head = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'head')[0];
-    const body = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'body')[0];
-    const armUpperLeft = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armUpperLeft')[0];
-    const armLowerLeft = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armLowerLeft')[0];
-    const armUpperRight = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armUpperRight')[0];
-    const armLowerRight = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'armLowerRight')[0];
+    const head = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'head')[0];
+    const body = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'body')[0];
+    const armUpperLeft = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'armUpperLeft')[0];
+    const armLowerLeft = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'armLowerLeft')[0];
+    const armUpperRight = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'armUpperRight')[0];
+    const armLowerRight = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'armLowerRight')[0];
     
     const headImage = this.b2Physics.loader.bodyUserDataMap.get(head)!.image;
     const bodyImage = this.b2Physics.loader.bodyUserDataMap.get(body)!.image;
@@ -219,10 +218,10 @@ export class PlayerController {
     if (!head || !body || !armUpperLeft || !armLowerLeft || !armUpperRight || !armLowerRight) throw new Error('Player character b2Bodies not found');
     if (!headImage || !bodyImage || !armUpperLeftImage || !armLowerLeftImage || !armUpperRightImage || !armLowerRightImage) throw new Error('Player character images not found');
     
-    const segments = this.b2Physics.loader.getBodiesByCustomProperty(propType, propName, 'boardSegment');
+    const segments = this.b2Physics.loader.getBodiesByCustomProperty(propName, 'boardSegment');
     segments.sort((a, b) => {
-      const aIndex = Number(this.b2Physics.loader.customPropertiesMapMap.get(a)!['phaserBoardSegmentIndex']);
-      const bIndex = Number(this.b2Physics.loader.customPropertiesMapMap.get(b)!['phaserBoardSegmentIndex']);
+      const aIndex = Number(this.b2Physics.loader.customPropertiesMap.get(a)!['phaserBoardSegmentIndex']);
+      const bIndex = Number(this.b2Physics.loader.customPropertiesMap.get(b)!['phaserBoardSegmentIndex']);
       return aIndex - bIndex;
     });
 
@@ -244,12 +243,12 @@ export class PlayerController {
       armUpperRightDepth: armUpperRightImage.depth,
       armLowerRightDepth: armLowerRightImage.depth,
       boardSegments: segments,
-      bindingLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
-      bindingRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
-      distanceLegLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegLeft')[0], b2.b2DistanceJoint),
-      distanceLegRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'distanceLegRight')[0], b2.b2DistanceJoint),
-      weldCenter: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'weldCenter')[0], b2.b2WeldJoint),
-      prismatic: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('string', 'phaserPlayerCharacterSpring', 'prismatic')[0], b2.b2PrismaticJoint),
+      bindingLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'bindingLeft')[0], b2.b2RevoluteJoint),
+      bindingRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'bindingRight')[0], b2.b2RevoluteJoint),
+      distanceLegLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'distanceLegLeft')[0], b2.b2DistanceJoint),
+      distanceLegRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'distanceLegRight')[0], b2.b2DistanceJoint),
+      weldCenter: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'weldCenter')[0], b2.b2WeldJoint),
+      prismatic: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', 'prismatic')[0], b2.b2PrismaticJoint),
     };
   }
 }

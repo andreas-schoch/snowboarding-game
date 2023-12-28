@@ -4,22 +4,23 @@
 */
 
 import { b2 } from '../..';
-import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeCustomPropertyTypes, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
+import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
 
-type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
+export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
 
 export class RubeLoader<IMG = unknown> {
-  private world: Box2D.b2World;
+  handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => IMG | null = () => null;
 
   loadedBodies: (Box2D.b2Body | null)[] = [];
   loadedJoints: (Box2D.b2Joint | null)[] = [];
-  loadedImages: (unknown | null)[] = []; // depends on with what engine this loader is used. Maybe make generic
+  loadedImages: (IMG | null)[] = []; // depends on with what engine this loader is used. Maybe make generic
+
+  private world: Box2D.b2World;
+  private bodyByName: Map<string, Box2D.b2Body[]> = new Map();
 
   bodyUserDataMap: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
-  bodyByName: Map<string, Box2D.b2Body[]> = new Map();
-  customPropertiesArrayMap: Map<CustomPropOwner | IMG, RubeCustomProperty[]> = new Map();
-  customPropertiesMapMap: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
+  customPropertiesMap: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
 
   constructor(world: Box2D.b2World) {
     this.world = world;
@@ -36,9 +37,51 @@ export class RubeLoader<IMG = unknown> {
     return success;
   }
 
-  handleLoadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null): IMG | null {
-    return null;
-    // throw new Error('Method not implemented. This method gives you a chance to implement how you want to load images.');
+  getBodiesByName(name) {
+    const bodies = this.bodyByName.get(name) || [];
+    return bodies;
+  }
+
+  getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Body[] {
+    const bodies: Box2D.b2Body[] = [];
+    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+      const props = this.customPropertiesMap.get(body);
+      if (!props) continue;
+      if (props[propertyName] !== valueToMatch) continue;
+      bodies.push(body);
+    }
+    return bodies;
+  }
+
+  getFixturesByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Fixture[] {
+    const fixtures: Box2D.b2Fixture[] = [];
+    type f = Box2D.b2Fixture | null;
+    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
+      for (let fixture: f = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+        const props = this.customPropertiesMap.get(fixture);
+        if (!props) continue;
+        if (props[propertyName] !== valueToMatch) continue;
+        fixtures.push(fixture);
+      }
+    }
+    return fixtures;
+  }
+
+  getJointsByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Joint[] {
+    const joints: Box2D.b2Joint[] = [];
+    type j = Box2D.b2Joint | null;
+    for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
+      const props = this.customPropertiesMap.get(joint);
+      if (!props) continue;
+      if (props[propertyName] !== valueToMatch) continue;
+      joints.push(joint);
+    }
+    return joints;
+  }
+
+  rubeToVec2(val?: RubeVector, vec: Box2D.b2Vec2 = new b2.b2Vec2(0, 0)): Box2D.b2Vec2 {
+    this.isXY(val) ? vec.Set(val.x, val.y) : vec.Set(0, 0);
+    return vec;
   }
 
   private loadBody(bodyJson: RubeBody): Box2D.b2Body | null {
@@ -66,8 +109,7 @@ export class RubeLoader<IMG = unknown> {
     b2.destroy(bd);
 
     this.bodyUserDataMap.set(body, { name: bodyJson.name || '', image: null });
-    this.customPropertiesArrayMap.set(body, bodyJson.customProperties || []);
-    this.customPropertiesMapMap.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
+    this.customPropertiesMap.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
     (bodyJson.fixture || []).forEach(fixtureJson => this.loadFixture(body, fixtureJson));
     return body;
   }
@@ -88,8 +130,7 @@ export class RubeLoader<IMG = unknown> {
     const fixture: Box2D.b2Fixture = body.CreateFixture(fd);
     b2.destroy(fd);
     b2.destroy(filter);
-    this.customPropertiesArrayMap.set(fixture, fixtureJso.customProperties || []);
-    this.customPropertiesMapMap.set(fixture, this.customPropertiesArrayToMap(fixtureJso.customProperties || []));
+    this.customPropertiesMap.set(fixture, this.customPropertiesArrayToMap(fixtureJso.customProperties || []));
     return fixture;
   }
 
@@ -201,8 +242,7 @@ export class RubeLoader<IMG = unknown> {
         throw new Error('Unsupported joint type: ' + jointJson.type);
     }
 
-    this.customPropertiesArrayMap.set(joint, jointJson.customProperties || []);
-    this.customPropertiesMapMap.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
+    this.customPropertiesMap.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
     return joint;
   }
 
@@ -227,10 +267,13 @@ export class RubeLoader<IMG = unknown> {
   }
 
   private loadImage(imageJson: RubeImage): IMG | null {
-    const { body } = imageJson;
+    const { body, customProperties } = imageJson;
     const bodyObj = this.loadedBodies[body];
-    const img = this.handleLoadImage(imageJson, bodyObj);
+    const customProps = this.customPropertiesArrayToMap(customProperties || []);
+    const img = this.handleLoadImage(imageJson, bodyObj, customProps);
     if (!img) return null;
+    const props = this.customPropertiesArrayToMap(customProperties || []);
+    this.customPropertiesMap.set(img, props);
     if (bodyObj) {
       const userData = this.bodyUserDataMap.get(bodyObj);
       if (!userData) throw new Error('bodyUserDataMap is missing bodyObj. this should never happen');
@@ -239,83 +282,7 @@ export class RubeLoader<IMG = unknown> {
     return img;
   }
 
-  rubeToVec2(val?: RubeVector, vec: Box2D.b2Vec2 = new b2.b2Vec2(0, 0)): Box2D.b2Vec2 {
-    this.isXY(val) ? vec.Set(val.x, val.y) : vec.Set(0, 0);
-    return vec;
-  }
-
-  getBodiesByName(name) {
-    const bodies: Box2D.b2Body[] = [];
-    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
-      if (!body) continue;
-      // @ts-ignore
-      if (body.name === name) bodies.push(body);
-    }
-    return bodies;
-  }
-
-  getBodiesByCustomProperty(propertyType: RubeCustomPropertyTypes, propertyName: string, valueToMatch: unknown): Box2D.b2Body[] {
-    const bodies: Box2D.b2Body[] = [];
-    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
-      const props = this.customPropertiesArrayMap.get(body);
-      if (!body || !props) continue;
-      for (const prop of Object.values(props)) {
-        if (!prop.hasOwnProperty('name')) continue;
-        if (!prop.hasOwnProperty(propertyType)) continue;
-        if (prop.name == propertyName && prop[propertyType] == valueToMatch) bodies.push(body); // TODO refactor to strict equals
-      }
-    }
-    return bodies;
-  }
-
-  getFixturesByCustomProperty(propertyType: RubeCustomPropertyTypes, propertyName: string, valueToMatch: unknown): Box2D.b2Fixture[] {
-    const fixtures: Box2D.b2Fixture[] = [];
-    type f = Box2D.b2Fixture | null;
-    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
-      for (let fixture: f = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
-        const props = this.customPropertiesArrayMap.get(fixture);
-        if (!fixture || !props) continue;
-        for (let i = 0; i < props.length; i++) {
-          if (!props[i].hasOwnProperty('name')) continue;
-          if (!props[i].hasOwnProperty(propertyType)) continue;
-          if (props[i].name == propertyName &&
-            props[i][propertyType] == valueToMatch) // TODO refactor to strict equals
-            fixtures.push(fixture);
-        }
-      }
-    }
-    return fixtures;
-  }
-
-  getJointsByCustomProperty(propertyType: RubeCustomPropertyTypes, propertyName: string, valueToMatch: unknown): Box2D.b2Joint[] {
-    const joints: Box2D.b2Joint[] = [];
-    type j = Box2D.b2Joint | null;
-    for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
-      const props = this.customPropertiesArrayMap.get(joint);
-      if (!joint || !props) continue;
-      for (let i = 0; i < props.length; i++) {
-        if (!props[i].hasOwnProperty('name')) continue;
-        if (!props[i].hasOwnProperty(propertyType)) continue;
-        if (props[i].name == propertyName &&
-          props[i][propertyType] == valueToMatch) // TODO refactor to strict equals
-          joints.push(joint);
-      }
-    }
-    return joints;
-  }
-
-  // TODO turn into map instead of having to iterate over custom props
-  getCustomProperty<A = unknown>(entity: CustomPropOwner| IMG, propertyType: RubeCustomPropertyTypes, propertyName: string, defaultValue: A): A {
-    const props = this.customPropertiesArrayMap.get(entity);
-    if (!props) return defaultValue;
-    for (const prop of Object.values(props)) {
-      if (!prop.name || !prop.hasOwnProperty(propertyType)) continue;
-      if (prop.name === propertyName) return prop[propertyType] as A;
-    }
-    return defaultValue;
-  }
-
-  customPropertiesArrayToMap(customProperties: RubeCustomProperty[]): Record<string, unknown> {
+  private customPropertiesArrayToMap(customProperties: RubeCustomProperty[]): Record<string, unknown> {
     return customProperties.reduce((obj, cur) => {
       if (cur.hasOwnProperty('int')) obj[cur.name] = cur.int;
       else if (cur.hasOwnProperty('float')) obj[cur.name] = cur.float;

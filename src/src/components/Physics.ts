@@ -3,6 +3,7 @@ import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 import DebugDrawer from './DebugDraw';
+import { RubeSerializer } from '../util/RUBE/RubeSerializer';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -24,6 +25,7 @@ export interface IPostSolveEvent {
 
 export class Physics extends Phaser.Events.EventEmitter {
   world: Box2D.b2World;
+  serializer: RubeSerializer<Phaser.GameObjects.Image>;
   loader: RubeLoader<Phaser.GameObjects.Image>;
   worldScale: number;
   isPaused: boolean = false;
@@ -71,16 +73,15 @@ export class Physics extends Phaser.Events.EventEmitter {
     // b2.destroy(listeners); // error when we destroy this
 
     this.loader = new RubeLoader(this.world);
-    this.loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body) => {
-      const { file, center, customProperties, angle, aspectScale, scale, flip, renderOrder } = imageJson;
+    this.loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => {
+      const { file, center, angle, aspectScale, scale, flip, renderOrder } = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
       if (!pos) return null;
-      const props = this.loader.customPropertiesArrayToMap(customProperties || []);
 
       const textureFallback = (file || '').split('/').reverse()[0];
-      const texture = props['phaserTexture'] as string || textureFallback;
-      const textureFrame = props['phaserTextureFrame'] as string || textureFallback; // TODO obsolete if filename matches texture name in altas
+      const texture = customPropsMap['phaserTexture'] as string || textureFallback;
+      const textureFrame = customPropsMap['phaserTextureFrame'] as string || textureFallback; // TODO obsolete if filename matches texture name in altas
       const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, texture, textureFrame);
       img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
       img.scaleY = (this.worldScale / img.height) * scale;
@@ -89,11 +90,15 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.flipX = flip;
       img.setDepth(renderOrder);
       img.setDataEnabled();
+      // TODO not sure if this is the way to go. If I want to keep full compatibility with RUBE, I need to somehow keep the opengl specific data.
+      //  I don't know yet if I can derive them fully from just the generated phaser image. Once I start with the level editor, I'll look into it.
+      img.data.set('image-json', imageJson);
       img.data.set('angle_offset', -(angle || 0)); // need to preserve original angle it was expeorted with
-      this.loader.customPropertiesArrayMap.set(img, customProperties || []);
-      this.loader.customPropertiesMapMap.set(img, props);
       return img;
     }
+
+    this.serializer = new RubeSerializer(this.world, this.loader);
+    this.serializer.handleSerializeImage = (image) => (image as Phaser.GameObjects.Image).data.get('image-json') as RubeImage;
   }
 
   loadRubeScene(rubeScene: LevelKeys | CharacterKeys) {
