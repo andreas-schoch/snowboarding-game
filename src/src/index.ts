@@ -65,14 +65,16 @@ export const BackgroundMusicKeys = {
   StagesOfGrief: 'KevinMacLeod/Stages of Grief',
 };
 
+export const RUBE_SCENE_CHARACTER = 'character';
+
 export const enum CharacterKeys {
-  character_santa = 'character_santa',
-  character_santa_old = 'character_santa_old',
+  character_neutral = 'atlas_character_neutral',
+  character_santa = 'atlas_character_santa',
 }
 
 export const CHARACTERS = [
+  CharacterKeys.character_neutral,
   CharacterKeys.character_santa,
-  CharacterKeys.character_santa_old,
 ];
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {

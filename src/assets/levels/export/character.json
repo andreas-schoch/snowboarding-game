@@ -595,7 +595,7 @@
 		},
 		
 		{
-			"angle" : -1.570796370506287,
+			"angle" : -1.570799946784973,
 			"angularDamping" : 0.1,
 			"angularVelocity" : 0,
 			"awake" : true,
@@ -1658,67 +1658,9 @@
 	[
 		
 		{
+			"angle" : 3.141592741012573,
 			"aspectScale" : 1,
 			"body" : 8,
-			"center" : 
-			{
-				"x" : -8.983896293557336e-09,
-				"y" : -8.301412890432402e-10
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.09726297855377197,
-					0.09726296365261078,
-					0.09726296365261078,
-					-0.09726297855377197
-				],
-				"y" : 
-				[
-					-0.2251457571983337,
-					-0.2251457571983337,
-					0.2251457571983337,
-					0.2251457571983337
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "armUpperRight.png"
-				}
-			],
-			"file" : "../img/character_santa/armUpperRight.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.09726297855377197,
-				-0.2251457571983337,
-				0.09726296365261078,
-				-0.2251457571983337,
-				0.09726296365261078,
-				0.2251457571983337,
-				-0.09726297855377197,
-				0.2251457571983337
-			],
-			"name" : "armUpperRight",
-			"opacity" : 1,
-			"renderOrder" : -3,
-			"scale" : 0.4502915143966675
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 0,
 			"center" : 
 			{
 				"x" : -8.983899846271015e-09,
@@ -1728,17 +1670,17 @@
 			{
 				"x" : 
 				[
-					-0.09726297855377197,
-					0.09726296365261078,
-					0.09726296365261078,
-					-0.09726297855377197
+					0.09726294130086899,
+					-0.09726300090551376,
+					-0.09726295620203018,
+					0.09726298600435257
 				],
 				"y" : 
 				[
-					-0.2251457571983337,
-					-0.2251457571983337,
-					0.2251457571983337,
-					0.2251457571983337
+					0.2251457720994949,
+					0.2251457422971725,
+					-0.2251457720994949,
+					-0.2251457422971725
 				]
 			},
 			"customProperties" : 
@@ -1746,32 +1688,27 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "legUpperLeft"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/legUpperLeft.png",
+			"file" : "../img/character_neutral/armUpperRight.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : 
 			[
-				-0.09726297855377197,
-				-0.2251457571983337,
-				0.09726296365261078,
-				-0.2251457571983337,
-				0.09726296365261078,
-				0.2251457571983337,
-				-0.09726297855377197,
-				0.2251457571983337
+				0.09726294130086899,
+				0.2251457720994949,
+				-0.09726300090551376,
+				0.2251457422971725,
+				-0.09726295620203018,
+				-0.2251457720994949,
+				0.09726298600435257,
+				-0.2251457422971725
 			],
-			"name" : "legUpperLeft",
+			"name" : "armUpperRight",
 			"opacity" : 1,
-			"renderOrder" : -1,
+			"renderOrder" : -3,
 			"scale" : 0.4502915143966675
 		},
 		
@@ -1805,15 +1742,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "legUpperRight.png"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/legUpperRight.png",
+			"file" : "../img/character_neutral/legUpperRight.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1829,6 +1761,60 @@
 				0.2251457571983337
 			],
 			"name" : "legUpperRight",
+			"opacity" : 1,
+			"renderOrder" : -1,
+			"scale" : 0.4502915143966675
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 0,
+			"center" : 
+			{
+				"x" : -8.983899846271015e-09,
+				"y" : -8.301410114874841e-10
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.09726297855377197,
+					0.09726296365261078,
+					0.09726296365261078,
+					-0.09726297855377197
+				],
+				"y" : 
+				[
+					-0.2251457571983337,
+					-0.2251457571983337,
+					0.2251457571983337,
+					0.2251457571983337
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_neutral/legUpperLeft.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.09726297855377197,
+				-0.2251457571983337,
+				0.09726296365261078,
+				-0.2251457571983337,
+				0.09726296365261078,
+				0.2251457571983337,
+				-0.09726297855377197,
+				0.2251457571983337
+			],
+			"name" : "legUpperLeft",
 			"opacity" : 1,
 			"renderOrder" : -1,
 			"scale" : 0.4502915143966675
@@ -1852,15 +1838,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "body.png"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/body.png",
+			"file" : "../img/character_neutral/body.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1868,65 +1849,6 @@
 			"name" : "body",
 			"opacity" : 1,
 			"scale" : 1
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 2,
-			"center" : 
-			{
-				"x" : 3.378685775601298e-09,
-				"y" : -3.152774041836892e-09
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1356996893882751,
-					0.1356996893882751,
-					0.1356996893882751,
-					-0.1356996893882751
-				],
-				"y" : 
-				[
-					-0.2186272889375687,
-					-0.2186272889375687,
-					0.2186272889375687,
-					0.2186272889375687
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "legLowerRight.png"
-				}
-			],
-			"file" : "../img/character_santa/legLowerRight.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				-0.2186272889375687,
-				0.1356996893882751,
-				0.2186272889375687,
-				-0.1356996893882751,
-				0.2186272889375687
-			],
-			"name" : "legLowerRight",
-			"opacity" : 1,
-			"renderOrder" : 1,
-			"scale" : 0.4372545778751373
 		},
 		
 		{
@@ -1959,15 +1881,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "legLowerLeft"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/legLowerLeft.png",
+			"file" : "../img/character_neutral/legLowerLeft.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -1983,6 +1900,60 @@
 				0.2186272889375687
 			],
 			"name" : "legLowerLeft",
+			"opacity" : 1,
+			"renderOrder" : 1,
+			"scale" : 0.4372545778751373
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 2,
+			"center" : 
+			{
+				"x" : 3.378685775601298e-09,
+				"y" : -3.152774041836892e-09
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1356996893882751,
+					0.1356996893882751,
+					0.1356996893882751,
+					-0.1356996893882751
+				],
+				"y" : 
+				[
+					-0.2186272889375687,
+					-0.2186272889375687,
+					0.2186272889375687,
+					0.2186272889375687
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_neutral/legLowerRight.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				-0.2186272889375687,
+				0.1356996893882751,
+				0.2186272889375687,
+				-0.1356996893882751,
+				0.2186272889375687
+			],
+			"name" : "legLowerRight",
 			"opacity" : 1,
 			"renderOrder" : 1,
 			"scale" : 0.4372545778751373
@@ -2018,15 +1989,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "head"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/head.png",
+			"file" : "../img/character_neutral/head.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2077,15 +2043,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "armUpperLeft"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/armUpperLeft.png",
+			"file" : "../img/character_neutral/armUpperLeft.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2104,124 +2065,6 @@
 			"opacity" : 1,
 			"renderOrder" : 3,
 			"scale" : 0.4502915143966675
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 12,
-			"center" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
-				],
-				"y" : 
-				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentTwoCap"
-				}
-			],
-			"file" : "../img/character_santa/boardSegmentTwoCap.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
-			],
-			"name" : "boardSegment",
-			"opacity" : 1,
-			"renderOrder" : 4,
-			"scale" : 0.1163636371493340
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 11,
-			"center" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
-				],
-				"y" : 
-				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentTwoCap"
-				}
-			],
-			"file" : "../img/character_santa/boardSegmentTwoCap.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
-			],
-			"name" : "boardSegment",
-			"opacity" : 1,
-			"renderOrder" : 4,
-			"scale" : 0.1163636371493340
 		},
 		
 		{
@@ -2254,15 +2097,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "armLowerLeft"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/armLowerLeft.png",
+			"file" : "../img/character_neutral/armLowerLeft.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2281,6 +2119,114 @@
 			"opacity" : 1,
 			"renderOrder" : 4,
 			"scale" : 0.4301607608795166
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 11,
+			"center" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
+				],
+				"y" : 
+				[
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_neutral/boardSegmentTwoCap.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
+			],
+			"name" : "boardSegment",
+			"opacity" : 1,
+			"renderOrder" : 4,
+			"scale" : 0.1163636371493340
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 12,
+			"center" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
+				],
+				"y" : 
+				[
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_neutral/boardSegmentTwoCap.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
+			],
+			"name" : "boardSegment",
+			"opacity" : 1,
+			"renderOrder" : 4,
+			"scale" : 0.1163636371493340
 		},
 		
 		{
@@ -2313,15 +2259,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentTwoCap"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/boardSegmentTwoCap.png",
+			"file" : "../img/character_neutral/boardSegmentTwoCap.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2372,15 +2313,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentNoCap"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/boardSegmentNoCap.png",
+			"file" : "../img/character_neutral/boardSegmentNoCap.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2431,15 +2367,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentOneCap"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/boardSegmentOneCap.png",
+			"file" : "../img/character_neutral/boardSegmentOneCap.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2462,7 +2393,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 16,
+			"body" : 15,
 			"center" : 
 			{
 				"x" : 0,
@@ -2472,17 +2403,17 @@
 			{
 				"x" : 
 				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
+					-0.2218188792467117,
+					0.2218188792467117,
+					0.2218188792467117,
+					-0.2218188792467117
 				],
 				"y" : 
 				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
+					-0.05818200111389160,
+					-0.05818200111389160,
+					0.05818200111389160,
+					0.05818200111389160
 				]
 			},
 			"customProperties" : 
@@ -2490,33 +2421,29 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentNoCap"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/boardSegmentNoCap.png",
+			"file" : "../img/character_neutral/boardSegmentOneCap.png",
 			"filter" : 1,
+			"flip" : true,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
 			"glVertexPointer" : 
 			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
+				-0.2218188792467117,
+				-0.05818200111389160,
+				0.2218188792467117,
+				-0.05818200111389160,
+				0.2218188792467117,
+				0.05818200111389160,
+				-0.2218188792467117,
+				0.05818200111389160
 			],
-			"name" : "boardSegment",
+			"name" : "boardSegmentTail",
 			"opacity" : 1,
 			"renderOrder" : 5,
-			"scale" : 0.1163636371493340
+			"scale" : 0.1163640022277832
 		},
 		
 		{
@@ -2550,15 +2477,10 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "armLowerRight.png"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/armLowerRight.png",
+			"file" : "../img/character_neutral/armLowerRight.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -2581,7 +2503,7 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 15,
+			"body" : 16,
 			"center" : 
 			{
 				"x" : 0,
@@ -2591,17 +2513,17 @@
 			{
 				"x" : 
 				[
-					-0.2218188792467117,
-					0.2218188792467117,
-					0.2218188792467117,
-					-0.2218188792467117
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
 				],
 				"y" : 
 				[
-					-0.05818200111389160,
-					-0.05818200111389160,
-					0.05818200111389160,
-					0.05818200111389160
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
 				]
 			},
 			"customProperties" : 
@@ -2609,38 +2531,132 @@
 				
 				{
 					"name" : "phaserTexture",
-					"string" : "atlas_character_santa"
-				},
-				
-				{
-					"name" : "phaserTextureFrame",
-					"string" : "boardSegmentOneCap"
+					"string" : "atlas_character_neutral"
 				}
 			],
-			"file" : "../img/character_santa/boardSegmentOneCap.png",
+			"file" : "../img/character_neutral/boardSegmentNoCap.png",
 			"filter" : 1,
-			"flip" : true,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : 
 			[
-				-0.2218188792467117,
-				-0.05818200111389160,
-				0.2218188792467117,
-				-0.05818200111389160,
-				0.2218188792467117,
-				0.05818200111389160,
-				-0.2218188792467117,
-				0.05818200111389160
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
 			],
-			"name" : "boardSegmentTail",
+			"name" : "boardSegment",
 			"opacity" : 1,
 			"renderOrder" : 5,
-			"scale" : 0.1163640022277832
+			"scale" : 0.1163636371493340
 		}
 	],
 	"joint" : 
 	[
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0,
+				"y" : 0.4
+			},
+			"anchorB" : 
+			{
+				"x" : 0,
+				"y" : -0.25
+			},
+			"bodyA" : 6,
+			"bodyB" : 1,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : -0.1221730485558510,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "neck",
+			"refAngle" : 0,
+			"type" : "revolute",
+			"upperLimit" : 0.1221730485558510
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -8.305163667898796e-09,
+				"y" : 0.19
+			},
+			"anchorB" : 
+			{
+				"x" : 6.993820633738324e-09,
+				"y" : -0.16
+			},
+			"bodyA" : 3,
+			"bodyB" : 4,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : -1.134464025497437,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "elbowLeft",
+			"refAngle" : 0,
+			"type" : "revolute",
+			"upperLimit" : -0.1745329201221466
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -1.023611275741132e-07,
+				"y" : 0.16
+			},
+			"anchorB" : 
+			{
+				"x" : 6.877980922581628e-07,
+				"y" : 0.19
+			},
+			"bodyA" : 8,
+			"bodyB" : 9,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : -1.134464025497437,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "elbowRight",
+			"refAngle" : 3.141592741012573,
+			"type" : "revolute",
+			"upperLimit" : -0.1745329201221466
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : 0.37,
+				"y" : 0.2
+			},
+			"anchorB" : 
+			{
+				"x" : -6.238451533135958e-09,
+				"y" : -0.13
+			},
+			"bodyA" : 6,
+			"bodyB" : 8,
+			"enableLimit" : true,
+			"enableMotor" : false,
+			"jointSpeed" : 0,
+			"lowerLimit" : -0.9599310159683228,
+			"maxMotorTorque" : 0,
+			"motorSpeed" : 0,
+			"name" : "shoulderRight",
+			"refAngle" : -1.570799946784973,
+			"type" : "revolute",
+			"upperLimit" : 0
+		},
 		
 		{
 			"anchorA" : 
@@ -2665,31 +2681,6 @@
 			"refAngle" : -1.570796370506287,
 			"type" : "revolute",
 			"upperLimit" : 0.9599310755729675
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : -6.993820633738324e-09,
-				"y" : 0.16
-			},
-			"anchorB" : 
-			{
-				"x" : 6.877980922581628e-07,
-				"y" : 0.19
-			},
-			"bodyA" : 8,
-			"bodyB" : 9,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : -1.134464025497437,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "elbowRight",
-			"refAngle" : 3.141592741012573,
-			"type" : "revolute",
-			"upperLimit" : -0.1745329201221466
 		},
 		
 		{
@@ -2811,81 +2802,6 @@
 			"length" : 0.7,
 			"name" : "distanceLegLeft",
 			"type" : "distance"
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0.37,
-				"y" : 0.2
-			},
-			"anchorB" : 
-			{
-				"x" : 5.682480264113110e-09,
-				"y" : -0.13
-			},
-			"bodyA" : 6,
-			"bodyB" : 8,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : -0.9599310755729675,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "shoulderRight",
-			"refAngle" : -1.570796370506287,
-			"type" : "revolute",
-			"upperLimit" : 0
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : 0,
-				"y" : 0.4
-			},
-			"anchorB" : 
-			{
-				"x" : 0,
-				"y" : -0.25
-			},
-			"bodyA" : 6,
-			"bodyB" : 1,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : 0,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "neck",
-			"refAngle" : 0,
-			"type" : "revolute",
-			"upperLimit" : 0
-		},
-		
-		{
-			"anchorA" : 
-			{
-				"x" : -8.305163667898796e-09,
-				"y" : 0.19
-			},
-			"anchorB" : 
-			{
-				"x" : 6.993820633738324e-09,
-				"y" : -0.16
-			},
-			"bodyA" : 3,
-			"bodyB" : 4,
-			"enableLimit" : true,
-			"enableMotor" : false,
-			"jointSpeed" : 0,
-			"lowerLimit" : -1.134464025497437,
-			"maxMotorTorque" : 0,
-			"motorSpeed" : 0,
-			"name" : "elbowLeft",
-			"refAngle" : 0,
-			"type" : "revolute",
-			"upperLimit" : -0.1745329201221466
 		},
 		
 		{

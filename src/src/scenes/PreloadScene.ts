@@ -1,4 +1,4 @@
-import { BackgroundMusicKeys, CharacterKeys, LEVELS, LevelKeys } from '../index';
+import { BackgroundMusicKeys, CharacterKeys, LEVELS, LevelKeys, RUBE_SCENE_CHARACTER } from '../index';
 import { RESOLUTION_SCALE } from "..";
 import { DEFAULT_HEIGHT } from "..";
 import { SCENE_GAME, SCENE_PRELOAD } from "..";
@@ -36,14 +36,15 @@ export default class PreloadScene extends Phaser.Scene {
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
     const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
-    this.load.atlas('atlas_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
+    this.load.atlas('atlas_character_neutral', `assets/img/packed/character_neutral_${size}.png`, `assets/img/packed/character_neutral_${size}.json`);
+    this.load.atlas('atlas_character_santa', `assets/img/packed/character_santa_${size}.png`, `assets/img/packed/character_santa_${size}.json`);
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
   }
 
   private loadLevels() {
     // Character itself is currently imported by levels themselves (as RUBE Object) but will be loaded separately once game allows character selection
     // (e.g. Santa clause, Mrs. Clause, Snowman, Easter Bunny, The Hoff etc.)
-    this.load.json(CharacterKeys.character_santa, `assets/levels/export/${CharacterKeys.character_santa}.json`);
+    this.load.json(RUBE_SCENE_CHARACTER, `assets/levels/export/${RUBE_SCENE_CHARACTER}.json`);
 
     LEVELS.forEach(level => this.load.json(level, `assets/levels/export/${level}.json`));
   }

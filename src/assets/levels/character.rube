@@ -43,6 +43,13 @@
     
     {
       "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
       "comboboxEntries" : 
       [
         
@@ -92,112 +99,14 @@
         
         {
           "entry" : "boardSegmentNose"
+        },
+        
+        {
+          "entry" : "boardSegmentTail"
         }
       ],
       "displayName" : "phaserPlayerBodyPart",
       "name" : "phaserPlayerCharacterPart",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "joint",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "distanceLegLeft"
-        },
-        
-        {
-          "entry" : "distanceLegRight"
-        },
-        
-        {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
-        }
-      ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "atlas_santa"
-        },
-        
-        {
-          "entry" : "atlas_environment"
-        }
-      ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
       "type" : "string"
     },
     
@@ -249,6 +158,101 @@
       "displayName" : "phaserBoardSegmentIndex",
       "name" : "phaserBoardSegmentIndex",
       "type" : "int"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -306,7 +310,7 @@
           {
             "density" : 30.0,
             "id" : 1,
-            "name" : "fixture5",
+            "name" : "boardSegment",
             "shapes" : 
             [
               
@@ -363,7 +367,7 @@
           "y" : 6.156102294596622e-10
         },
         "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "name" : "boardSegment",
         "position" : 
         {
           "x" : -0.64,
@@ -398,7 +402,7 @@
           {
             "density" : 30.0,
             "id" : 2,
-            "name" : "fixture5",
+            "name" : "boardSegment",
             "shapes" : 
             [
               
@@ -455,7 +459,7 @@
           "y" : 6.156102294596622e-10
         },
         "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "name" : "boardSegment",
         "position" : 
         {
           "x" : -0.32,
@@ -481,7 +485,7 @@
           
           {
             "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
+            "string" : "boardSegmentTail"
           }
         ],
         "fixture" : 
@@ -490,7 +494,7 @@
           {
             "density" : 30.0,
             "id" : 3,
-            "name" : "fixture5",
+            "name" : "boardSegmentTail",
             "shapes" : 
             [
               
@@ -549,7 +553,7 @@
             "density" : 1,
             "friction" : 0.9,
             "id" : 11,
-            "name" : "fixture7",
+            "name" : "boardSegmentTailFriction",
             "shapes" : 
             [
               
@@ -575,7 +579,7 @@
           "y" : 6.085023596114070e-10
         },
         "massData-mass" : 1.530515909194946,
-        "name" : "body0",
+        "name" : "boardSegmentTail",
         "position" : 
         {
           "x" : -0.96,
@@ -610,7 +614,7 @@
           {
             "density" : 30.0,
             "id" : 4,
-            "name" : "fixture5",
+            "name" : "boardSegment",
             "shapes" : 
             [
               
@@ -667,7 +671,7 @@
           "y" : 6.156102294596622e-10
         },
         "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "name" : "boardSegment",
         "position" : 
         {
           "x" : 0.32,
@@ -693,7 +697,7 @@
           
           {
             "name" : "phaserPlayerCharacterPart",
-            "string" : "boardSegment"
+            "string" : "boardSegmentNose"
           }
         ],
         "fixture" : 
@@ -702,7 +706,7 @@
           {
             "density" : 30.0,
             "id" : 5,
-            "name" : "fixture5",
+            "name" : "boardSegmentNose",
             "shapes" : 
             [
               
@@ -761,7 +765,7 @@
             "density" : 1,
             "friction" : 0.9,
             "id" : 16,
-            "name" : "fixture9",
+            "name" : "boardSegmentNoseFriction",
             "shapes" : 
             [
               
@@ -783,11 +787,11 @@
         "massData-I" : 0.02498216927051544,
         "massData-center" : 
         {
-          "x" : 0.001900733914226294,
-          "y" : 5.566448990634854e-08
+          "x" : 0.001900732517242432,
+          "y" : 5.537371450259343e-08
         },
-        "massData-mass" : 1.530516028404236,
-        "name" : "body0",
+        "massData-mass" : 1.530515909194946,
+        "name" : "boardSegmentNose",
         "position" : 
         {
           "x" : 0.96,
@@ -822,7 +826,7 @@
           {
             "density" : 30.0,
             "id" : 6,
-            "name" : "fixture5",
+            "name" : "boardSegment",
             "shapes" : 
             [
               
@@ -879,7 +883,7 @@
           "y" : 6.156102294596622e-10
         },
         "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "name" : "boardSegment",
         "position" : 
         {
           "x" : 0,
@@ -914,7 +918,7 @@
           {
             "density" : 30.0,
             "id" : 7,
-            "name" : "fixture5",
+            "name" : "boardSegment",
             "shapes" : 
             [
               
@@ -971,7 +975,7 @@
           "y" : 6.156102294596622e-10
         },
         "massData-mass" : 1.512844562530518,
-        "name" : "body0",
+        "name" : "boardSegment",
         "position" : 
         {
           "x" : 0.64,
@@ -989,10 +993,10 @@
         [
           
           {
-            "density" : 1,
+            "density" : 2,
             "friction" : 0.2,
             "id" : 9,
-            "name" : "fixture11",
+            "name" : "centerWeld",
             "sensor" : true,
             "shapes" : 
             [
@@ -1022,9 +1026,9 @@
         ],
         "id" : 11,
         "linearVelocity" : 0,
-        "massData-I" : 7.711876969551668e-05,
-        "massData-mass" : 0.02151075564324856,
-        "name" : "body1",
+        "massData-I" : 0.0001542375393910334,
+        "massData-mass" : 0.04302151128649712,
+        "name" : "centerWeld",
         "position" : 
         {
           "x" : 0,
@@ -1054,7 +1058,7 @@
             "filter-categoryBits" : 2,
             "friction" : 1,
             "id" : 39,
-            "name" : "fixture4",
+            "name" : "armLowerRight",
             "sensor" : true,
             "shapes" : 
             [
@@ -1096,7 +1100,7 @@
           "y" : -0.002244737697765231
         },
         "massData-mass" : 0.9695250988006592,
-        "name" : "ARM ",
+        "name" : "armLowerRight",
         "position" : 
         {
           "x" : 0.85,
@@ -1106,7 +1110,7 @@
       },
       
       {
-        "angle" : -1.570796370506287,
+        "angle" : -1.570799946784973,
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
@@ -1125,7 +1129,7 @@
             "density" : 13.0,
             "friction" : 1,
             "id" : 40,
-            "name" : "fixture0",
+            "name" : "armUpperRight",
             "shapes" : 
             [
               
@@ -1166,7 +1170,7 @@
           "y" : 0.0002583458553999662
         },
         "massData-mass" : 0.8968500494956970,
-        "name" : "UPPER",
+        "name" : "armUpperRight",
         "position" : 
         {
           "x" : 0.5,
@@ -1180,6 +1184,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "legLowerLeft"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1187,7 +1199,7 @@
             "density" : 15.0,
             "friction" : 1,
             "id" : 41,
-            "name" : "fixture3",
+            "name" : "legLowerLeft",
             "shapes" : 
             [
               
@@ -1236,7 +1248,7 @@
           "y" : -0.001775404438376427
         },
         "massData-mass" : 1.093938827514648,
-        "name" : "LEG",
+        "name" : "legLowerLeft",
         "position" : 
         {
           "x" : -0.48,
@@ -1270,7 +1282,7 @@
             "density" : 35.0,
             "friction" : 1,
             "id" : 42,
-            "name" : "fixture1",
+            "name" : "body",
             "shapes" : 
             [
               
@@ -1295,7 +1307,7 @@
           "y" : -0.01689496636390686
         },
         "massData-mass" : 25.54999923706055,
-        "name" : "BODY",
+        "name" : "body",
         "position" : 
         {
           "x" : 0,
@@ -1309,6 +1321,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "legUpperRight"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1316,7 +1336,7 @@
             "density" : 15.0,
             "friction" : 1,
             "id" : 43,
-            "name" : "fixture0",
+            "name" : "legUpperRight",
             "shapes" : 
             [
               
@@ -1357,7 +1377,7 @@
           "y" : -0.001275925547815859
         },
         "massData-mass" : 1.026989221572876,
-        "name" : "UPPER",
+        "name" : "legUpperRight",
         "position" : 
         {
           "x" : 0.4,
@@ -1386,7 +1406,7 @@
             "density" : 13.0,
             "friction" : 1,
             "id" : 44,
-            "name" : "fixture0",
+            "name" : "armUpperLeft",
             "shapes" : 
             [
               
@@ -1427,7 +1447,7 @@
           "y" : 0.0002583458553999662
         },
         "massData-mass" : 0.8968500494956970,
-        "name" : "UPPER",
+        "name" : "armUpperLeft",
         "position" : 
         {
           "x" : -0.5,
@@ -1457,7 +1477,7 @@
             "filter-categoryBits" : 2,
             "friction" : 1,
             "id" : 45,
-            "name" : "fixture4",
+            "name" : "armLowerLeft",
             "sensor" : true,
             "shapes" : 
             [
@@ -1499,7 +1519,7 @@
           "y" : -0.002244647126644850
         },
         "massData-mass" : 0.9695252776145935,
-        "name" : "ARM ",
+        "name" : "armLowerLeft",
         "position" : 
         {
           "x" : -0.85,
@@ -1513,6 +1533,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "legLowerRight"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1520,7 +1548,7 @@
             "density" : 15.0,
             "friction" : 1,
             "id" : 46,
-            "name" : "fixture3",
+            "name" : "legLowerRight",
             "shapes" : 
             [
               
@@ -1569,7 +1597,7 @@
           "y" : -0.001775404438376427
         },
         "massData-mass" : 1.093938827514648,
-        "name" : "LEG",
+        "name" : "legLowerRight",
         "position" : 
         {
           "x" : 0.48,
@@ -1598,7 +1626,7 @@
             "density" : 2.5,
             "friction" : 1,
             "id" : 47,
-            "name" : "fixture2",
+            "name" : "head",
             "shapes" : 
             [
               
@@ -1619,7 +1647,7 @@
         "linearVelocity" : 0,
         "massData-I" : 0.06277380883693695,
         "massData-mass" : 0.9929998517036438,
-        "name" : "HEAD -",
+        "name" : "head",
         "position" : 
         {
           "x" : 0,
@@ -1633,6 +1661,14 @@
         "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserPlayerCharacterPart",
+            "string" : "legUpperLeft"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1640,7 +1676,7 @@
             "density" : 15.0,
             "friction" : 1,
             "id" : 53,
-            "name" : "fixture0",
+            "name" : "legUpperLeft",
             "shapes" : 
             [
               
@@ -1681,7 +1717,7 @@
           "y" : 0.0002576643601059914
         },
         "massData-mass" : 1.034830927848816,
-        "name" : "UPPER",
+        "name" : "legUpperLeft",
         "position" : 
         {
           "x" : -0.4,
@@ -1702,21 +1738,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentNoCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 2,
-        "name" : "image5",
+        "name" : "boardSegment",
         "opacity" : 1,
-        "renderOrder" : 6,
+        "renderOrder" : 5,
         "scale" : 0.1163636371493340
       },
       
@@ -1729,21 +1760,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentOneCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 3,
-        "name" : "image5",
+        "name" : "boardSegmentNose",
         "opacity" : 1,
-        "renderOrder" : 4,
+        "renderOrder" : 5,
         "scale" : 0.1163636371493340
       },
       
@@ -1756,21 +1782,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentNoCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 5,
-        "name" : "image5",
+        "name" : "boardSegment",
         "opacity" : 1,
-        "renderOrder" : 8,
+        "renderOrder" : 5,
         "scale" : 0.1163636371493340
       },
       
@@ -1783,21 +1804,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentTwoCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 6,
-        "name" : "image5",
+        "name" : "boardSegment",
         "opacity" : 1,
-        "renderOrder" : 7,
+        "renderOrder" : 4,
         "scale" : 0.1163636371493340
       },
       
@@ -1810,21 +1826,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentTwoCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 7,
-        "name" : "image5",
+        "name" : "boardSegment",
         "opacity" : 1,
-        "renderOrder" : 9,
+        "renderOrder" : 4,
         "scale" : 0.1163636371493340
       },
       
@@ -1837,21 +1848,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentOneCap.png",
         "filter" : 1,
-        "flip" : false,
+        "flip" : true,
         "id" : 8,
-        "name" : "image5",
+        "name" : "boardSegmentTail",
         "opacity" : 1,
-        "renderOrder" : 10,
+        "renderOrder" : 5,
         "scale" : 0.1163640022277832
       },
       
@@ -1864,21 +1870,16 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "board.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/board.png",
+        "file" : "../img/character_neutral/boardSegmentTwoCap.png",
         "filter" : 1,
         "flip" : false,
         "id" : 9,
-        "name" : "image5",
+        "name" : "boardSegment",
         "opacity" : 1,
-        "renderOrder" : 5,
+        "renderOrder" : 4,
         "scale" : 0.1163636371493340
       },
       
@@ -1895,19 +1896,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa upper.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa upper.png",
+        "file" : "../img/character_neutral/armUpperLeft.png",
         "filter" : 1,
         "flip" : false,
         "id" : 24,
-        "name" : "image0",
+        "name" : "armUpperLeft",
         "opacity" : 1,
         "renderOrder" : 3,
         "scale" : 0.4502915143966675
@@ -1926,19 +1922,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-head-with-face.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-head-with-face.png",
+        "file" : "../img/character_neutral/head.png",
         "filter" : 1,
         "flip" : false,
         "id" : 25,
-        "name" : "image2",
+        "name" : "head",
         "opacity" : 1,
         "renderOrder" : 2,
         "scale" : 1
@@ -1953,19 +1944,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-body.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-body.png",
+        "file" : "../img/character_neutral/body.png",
         "filter" : 1,
         "flip" : false,
         "id" : 26,
-        "name" : "image1",
+        "name" : "body",
         "opacity" : 1,
         "scale" : 1
       },
@@ -1983,19 +1969,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa upper.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa upper.png",
+        "file" : "../img/character_neutral/legUpperLeft.png",
         "filter" : 1,
         "flip" : false,
         "id" : 27,
-        "name" : "image0",
+        "name" : "legUpperLeft",
         "opacity" : 1,
         "renderOrder" : -1,
         "scale" : 0.4502915143966675
@@ -2014,19 +1995,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa upper.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa upper.png",
+        "file" : "../img/character_neutral/legUpperRight.png",
         "filter" : 1,
         "flip" : false,
         "id" : 28,
-        "name" : "image0",
+        "name" : "legUpperRight",
         "opacity" : 1,
         "renderOrder" : -1,
         "scale" : 0.4502915143966675
@@ -2045,19 +2021,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-arm-lower-left.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
+        "file" : "../img/character_neutral/armLowerLeft.png",
         "filter" : 1,
         "flip" : false,
         "id" : 29,
-        "name" : "image4",
+        "name" : "armLowerLeft",
         "opacity" : 1,
         "renderOrder" : 4,
         "scale" : 0.4301607608795166
@@ -2076,19 +2047,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-leg-lower.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-leg-lower.png",
+        "file" : "../img/character_neutral/legLowerLeft.png",
         "filter" : 1,
         "flip" : false,
         "id" : 30,
-        "name" : "image3",
+        "name" : "legLowerLeft",
         "opacity" : 1,
         "renderOrder" : 1,
         "scale" : 0.4372545778751373
@@ -2107,19 +2073,14 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-leg-lower.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-leg-lower.png",
+        "file" : "../img/character_neutral/legLowerRight.png",
         "filter" : 1,
         "flip" : false,
         "id" : 31,
-        "name" : "image3",
+        "name" : "legLowerRight",
         "opacity" : 1,
         "renderOrder" : 1,
         "scale" : 0.4372545778751373
@@ -2139,50 +2100,41 @@
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa-arm-lower-left.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-arm-lower-left.png",
+        "file" : "../img/character_neutral/armLowerRight.png",
         "filter" : 1,
-        "flip" : true,
+        "flip" : false,
         "id" : 32,
-        "name" : "image4",
+        "name" : "armLowerRight",
         "opacity" : 1,
         "renderOrder" : 5,
         "scale" : -0.4301609992980957
       },
       
       {
+        "angle" : 3.141592741012573,
         "aspectScale" : 1,
         "body" : 39,
         "center" : 
         {
-          "x" : -8.983896293557336e-09,
-          "y" : -8.301412890432402e-10
+          "x" : -8.983899846271015e-09,
+          "y" : -8.301410114874841e-10
         },
         "customProperties" : 
         [
           
           {
             "name" : "phaserTexture",
-            "string" : "atlas_santa"
-          },
-          
-          {
-            "name" : "phaserTextureFrame",
-            "string" : "santa upper.png"
+            "string" : "atlas_character_neutral"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa upper.png",
+        "file" : "../img/character_neutral/armUpperRight.png",
         "filter" : 1,
         "flip" : false,
         "id" : 33,
-        "name" : "image0",
+        "name" : "armUpperRight",
         "opacity" : 1,
         "renderOrder" : -3,
         "scale" : 0.4502915143966675
@@ -2208,7 +2160,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 1,
-        "name" : "joint47",
+        "name" : "weldBoard",
         "referenceAngle" : 0.08726646006107330,
         "type" : "weld"
       },
@@ -2230,7 +2182,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 2,
-        "name" : "joint50",
+        "name" : "weldBoard",
         "referenceAngle" : 0.08726646006107330,
         "type" : "weld"
       },
@@ -2252,7 +2204,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 3,
-        "name" : "joint52",
+        "name" : "weldBoard",
         "referenceAngle" : 0.4363323152065277,
         "type" : "weld"
       },
@@ -2274,7 +2226,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 4,
-        "name" : "joint46",
+        "name" : "weldBoard",
         "referenceAngle" : 0.4363323152065277,
         "type" : "weld"
       },
@@ -2296,7 +2248,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 5,
-        "name" : "joint51",
+        "name" : "weldBoard",
         "referenceAngle" : 0,
         "type" : "weld"
       },
@@ -2318,7 +2270,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 30.0,
         "id" : 6,
-        "name" : "joint48",
+        "name" : "weldBoard",
         "referenceAngle" : 0,
         "type" : "weld"
       },
@@ -2343,7 +2295,7 @@
         "lowerLimit" : -2.530727386474609,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint4",
+        "name" : "kneeRight",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : -0.3490658402442932
@@ -2369,7 +2321,7 @@
         "lowerLimit" : -0.4363323152065277,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint5",
+        "name" : "hipRight",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : 2.181661605834961
@@ -2395,7 +2347,7 @@
         "lowerLimit" : -2.181661605834961,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint10",
+        "name" : "hipLeft",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : 0.4363323152065277
@@ -2421,7 +2373,7 @@
         "lowerLimit" : 0.3490658402442932,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint11",
+        "name" : "kneeLeft",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : 2.530727386474609
@@ -2455,7 +2407,7 @@
         "lowerLimit" : 0,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint12",
+        "name" : "bindingLeft",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : 0
@@ -2489,7 +2441,7 @@
         "lowerLimit" : 0,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint13",
+        "name" : "bindingRight",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : 0
@@ -2503,7 +2455,7 @@
         },
         "anchorB" : 
         {
-          "x" : 6.993823298273583e-09,
+          "x" : 6.993820189649114e-09,
           "y" : -0.16
         },
         "bodyA" : 44,
@@ -2515,7 +2467,7 @@
         "lowerLimit" : -1.134464025497437,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint6",
+        "name" : "elbowLeft",
         "referenceAngle" : 0,
         "type" : "revolute",
         "upperLimit" : -0.1745329201221466
@@ -2538,13 +2490,13 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 46,
-        "lowerLimit" : 0,
+        "lowerLimit" : -0.1221730485558510,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint18",
+        "name" : "neck",
         "referenceAngle" : 0,
         "type" : "revolute",
-        "upperLimit" : 0
+        "upperLimit" : 0.1221730485558510
       },
       
       {
@@ -2564,11 +2516,11 @@
         "enableLimit" : true,
         "enableMotor" : false,
         "id" : 48,
-        "lowerLimit" : -0.9599310755729675,
+        "lowerLimit" : -0.9599310159683228,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint8",
-        "referenceAngle" : -1.570796370506287,
+        "name" : "shoulderRight",
+        "referenceAngle" : -1.570799946784973,
         "type" : "revolute",
         "upperLimit" : 0
       },
@@ -2595,7 +2547,7 @@
         "frequency" : 7,
         "id" : 49,
         "length" : 0.7,
-        "name" : "joint15",
+        "name" : "distanceLegLeft",
         "type" : "distance"
       },
       
@@ -2621,7 +2573,7 @@
         "frequency" : 7,
         "id" : 50,
         "length" : 0.7,
-        "name" : "joint19",
+        "name" : "distanceLegRight",
         "type" : "distance"
       },
       
@@ -2654,7 +2606,7 @@
         "lowerLimit" : 0,
         "maxMotorForce" : 0,
         "motorSpeed" : 0,
-        "name" : "joint14",
+        "name" : "prismatic",
         "referenceAngle" : 0,
         "type" : "prismatic",
         "upperLimit" : 0
@@ -2681,7 +2633,7 @@
         "dampingRatio" : 0.5,
         "frequency" : 20.0,
         "id" : 52,
-        "name" : "joint16",
+        "name" : "weldCenter",
         "referenceAngle" : 0,
         "type" : "weld"
       },
@@ -2689,7 +2641,7 @@
       {
         "anchorA" : 
         {
-          "x" : -6.993823298273583e-09,
+          "x" : -6.993820189649114e-09,
           "y" : 0.16
         },
         "anchorB" : 
@@ -2706,7 +2658,7 @@
         "lowerLimit" : -1.134464025497437,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint9",
+        "name" : "elbowRight",
         "referenceAngle" : 3.141592741012573,
         "type" : "revolute",
         "upperLimit" : -0.1745329201221466
@@ -2732,7 +2684,7 @@
         "lowerLimit" : 0,
         "maxMotorTorque" : 0,
         "motorSpeed" : 0,
-        "name" : "joint7",
+        "name" : "shoulderLeft",
         "referenceAngle" : -1.570796370506287,
         "type" : "revolute",
         "upperLimit" : 0.9599310755729675

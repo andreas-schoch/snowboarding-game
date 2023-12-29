@@ -1,0 +1,293 @@
+{
+	"textures": [
+		{
+			"image": "character_neutral_960x540.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 128,
+				"h": 245
+			},
+			"scale": 0.375,
+			"frames": [
+				{
+					"filename": "body.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 103,
+						"h": 103
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 102,
+						"h": 103
+					},
+					"frame": {
+						"x": 2,
+						"y": 2,
+						"w": 102,
+						"h": 103
+					}
+				},
+				{
+					"filename": "legUpperLeft.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 20,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 47
+					},
+					"frame": {
+						"x": 106,
+						"y": 2,
+						"w": 20,
+						"h": 47
+					}
+				},
+				{
+					"filename": "legUpperRight.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 20,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 47
+					},
+					"frame": {
+						"x": 106,
+						"y": 2,
+						"w": 20,
+						"h": 47
+					}
+				},
+				{
+					"filename": "armUpperLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 20,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 4,
+						"w": 20,
+						"h": 43
+					},
+					"frame": {
+						"x": 106,
+						"y": 51,
+						"w": 20,
+						"h": 43
+					}
+				},
+				{
+					"filename": "armUpperRight.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 20,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 4,
+						"w": 20,
+						"h": 43
+					},
+					"frame": {
+						"x": 106,
+						"y": 51,
+						"w": 20,
+						"h": 43
+					}
+				},
+				{
+					"filename": "head.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 118,
+						"h": 114
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 1,
+						"w": 87,
+						"h": 89
+					},
+					"frame": {
+						"x": 2,
+						"y": 107,
+						"w": 87,
+						"h": 89
+					}
+				},
+				{
+					"filename": "boardSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 0,
+						"w": 34,
+						"h": 12
+					},
+					"frame": {
+						"x": 91,
+						"y": 107,
+						"w": 34,
+						"h": 12
+					}
+				},
+				{
+					"filename": "armLowerRight.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 27,
+						"h": 46
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 27,
+						"h": 46
+					},
+					"frame": {
+						"x": 91,
+						"y": 121,
+						"w": 27,
+						"h": 46
+					}
+				},
+				{
+					"filename": "armLowerLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 27,
+						"h": 46
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 26,
+						"h": 46
+					},
+					"frame": {
+						"x": 91,
+						"y": 169,
+						"w": 26,
+						"h": 46
+					}
+				},
+				{
+					"filename": "legLowerLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 27,
+						"h": 44
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 25,
+						"h": 44
+					},
+					"frame": {
+						"x": 2,
+						"y": 198,
+						"w": 25,
+						"h": 44
+					}
+				},
+				{
+					"filename": "legLowerRight.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 27,
+						"h": 44
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 25,
+						"h": 44
+					},
+					"frame": {
+						"x": 29,
+						"y": 198,
+						"w": 25,
+						"h": 44
+					}
+				},
+				{
+					"filename": "boardSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 46,
+						"h": 12
+					},
+					"frame": {
+						"x": 56,
+						"y": 217,
+						"w": 46,
+						"h": 12
+					}
+				},
+				{
+					"filename": "boardSegmentOneCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 0,
+						"w": 40,
+						"h": 12
+					},
+					"frame": {
+						"x": 56,
+						"y": 231,
+						"w": 40,
+						"h": 12
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:9ad1ea4d496176b1e1e015d4bc008e01:b25eac077c4c92cfcc42e131c1756d7e:d440f3890b7be02bbe9df843a5ae2e9f$"
+	}
+}

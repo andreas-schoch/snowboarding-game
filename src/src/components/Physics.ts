@@ -4,6 +4,7 @@ import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 import DebugDrawer from './DebugDraw';
 import { RubeSerializer } from '../util/RUBE/RubeSerializer';
+import { getSelectedCharacterSkin } from '../util/getCurrentCharacterSkin';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -77,12 +78,14 @@ export class Physics extends Phaser.Events.EventEmitter {
       const { file, center, angle, aspectScale, scale, flip, renderOrder } = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
+      const bodyProps = bodyObj ? this.loader.customPropertiesMap.get(bodyObj) : null;
+      const isPlayerCharacterPart = Boolean(bodyProps?.['phaserPlayerCharacterPart']);
+      
       if (!pos) return null;
 
-      const textureFallback = (file || '').split('/').reverse()[0];
-      const texture = customPropsMap['phaserTexture'] as string || textureFallback;
-      const textureFrame = customPropsMap['phaserTextureFrame'] as string || textureFallback; // TODO obsolete if filename matches texture name in altas
-      const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, texture, textureFrame);
+      const textureFrame = (file || '').split('/').reverse()[0];
+      const textureAtlas = isPlayerCharacterPart ? getSelectedCharacterSkin() : customPropsMap['phaserTexture'] as string;
+      const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, textureAtlas || textureFrame, textureFrame);
       img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
       img.scaleY = (this.worldScale / img.height) * scale;
       img.scaleX = img.scaleY * aspectScale;
@@ -101,7 +104,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.serializer.handleSerializeImage = (image) => (image as Phaser.GameObjects.Image).data.get('image-json') as RubeImage;
   }
 
-  loadRubeScene(rubeScene: LevelKeys | CharacterKeys) {
+  loadRubeScene(rubeScene: string) {
     const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     if (this.loader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
     else throw new Error('Failed to load RUBE scene');

@@ -70,7 +70,7 @@ export default class GameUIScene extends Phaser.Scene {
     const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
     this.music = this.sound.add(randomMusicKey, { loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0 });
-    this.music.play();
+    // this.music.play();
     const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
     this.sfx_pickup_present = this.sound.add('pickup_present', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
     this.sfx_death = this.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
