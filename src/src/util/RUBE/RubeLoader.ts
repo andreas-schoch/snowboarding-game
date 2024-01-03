@@ -4,7 +4,7 @@
 * Based on example loader by Chris Campbell (creator of RUBE editor): https://github.com/iforce2d/b2dJson/blob/master/js/loadrube.js
 */
 
-import { b2 } from '../..';
+import { b2, recordLeak } from '../..';
 import { pseudoRandomId } from '../pseudoRandomId';
 import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
@@ -41,12 +41,15 @@ export class RubeLoader<IMG = unknown> {
     else console.error(`R.U.B.E. scene failed to load fully`, this.loadingBodies, this.loadingJoints, this.loadingImages);
     const id = pseudoRandomId();
     this.loadedScenes.set(id, { bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id });
+    this.loadingBodies = [];
+    this.loadingJoints = [];
+    this.loadingImages = [];
     return [success, id];
   }
 
   getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Body[] {
     const bodies: Box2D.b2Body[] = [];
-    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
       const props = this.customProps.get(body);
       if (!props) continue;
@@ -58,10 +61,9 @@ export class RubeLoader<IMG = unknown> {
 
   getFixturesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Fixture[] {
     const fixtures: Box2D.b2Fixture[] = [];
-    type f = Box2D.b2Fixture | null;
-    for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
+    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
-      for (let fixture: f = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+      for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
         const props = this.customProps.get(fixture);
         if (!props) continue;
         if (props[propertyName] !== valueToMatch) continue;
@@ -74,7 +76,7 @@ export class RubeLoader<IMG = unknown> {
   getJointsByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Joint[] {
     const joints: Box2D.b2Joint[] = [];
     type j = Box2D.b2Joint | null;
-    for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
+    for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.joints.includes(joint)) continue; // TODO turn into set
       const props = this.customProps.get(joint);
       if (!props) continue;
@@ -89,6 +91,17 @@ export class RubeLoader<IMG = unknown> {
     const vec = new b2.b2Vec2(0, 0);
     if (this.isXY(val)) vec.Set(val.x + offsetX, val.y + offsetY);
     return vec;
+  }
+
+  cleanup() {
+    // Seems to be recommended https://github.com/Birch-san/box2d-wasm/blob/master/docs/memory-model.md
+    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
+      this.world.DestroyBody(body);
+    }
+
+    for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
+      this.world.DestroyJoint(joint);
+    }
   }
 
   private loadBody(bodyJson: RubeBody, offsetX: number, offsetY: number): Box2D.b2Body | null {

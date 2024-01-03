@@ -122,11 +122,16 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
 };
 
 export let b2: typeof Box2D & EmscriptenModule;
+export let freeLeaked: () => void;
+export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
 window.addEventListener('load', () => {
   simd().then(simdSupported => {
     // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
     Box2DFactory({ locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm' }).then((_b2) => {
       b2 = _b2;
+      const LeakMitigator = new b2.LeakMitigator();
+      freeLeaked = LeakMitigator.freeLeaked;
+      recordLeak = LeakMitigator.recordLeak;
       new Phaser.Game(gameConfig);
 
       if (navigator.onLine) {

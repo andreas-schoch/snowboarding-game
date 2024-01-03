@@ -1,6 +1,6 @@
 import { IPostSolveEvent } from './Physics';
 import GameScene from '../scenes/GameScene';
-import { b2 } from '../index';
+import { b2, recordLeak } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
 import { CharacterPartId } from './Character';
 import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
@@ -58,6 +58,7 @@ export class Snowboard {
           this.scene.observer.emit(SURFACE_IMPACT, normalImpulse, 'snow', false, centerGrounded, false);
         }
       }
+      b2.destroy(manifold);
     });
   }
 

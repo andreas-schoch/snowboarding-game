@@ -1,4 +1,4 @@
-import { CharacterKeys, LevelKeys, b2 } from '../index';
+import { CharacterKeys, LevelKeys, b2, recordLeak } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
@@ -37,7 +37,6 @@ export class Physics extends Phaser.Events.EventEmitter {
   constructor(private scene: GameScene, private config: { worldScale: number, gravityX: number, gravityY: number }) {
     super();
     this.worldScale = config.worldScale;
-
     this.debugDrawer = new DebugDrawer(this.scene.add.graphics().setDepth(5000), this.config.worldScale);
     this.world = this.initWorld();
     this.loader = this.initLoader();
@@ -58,7 +57,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
     // this.world.DebugDraw();
     const worldScale = this.worldScale;
-    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (!body) continue;
       const userdata = this.loader.userData.get(body);
       const image = userdata?.image;

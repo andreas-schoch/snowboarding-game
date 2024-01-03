@@ -1,4 +1,5 @@
 import { b2 } from "../..";
+import { XY } from "../../components/Terrain";
 
 export class vec2Util {
 
@@ -6,7 +7,7 @@ export class vec2Util {
     return new b2.b2Vec2(v.x, v.y);
   }
 
-  static Add(v1: Box2D.b2Vec2, v2: Box2D.b2Vec2): Box2D.b2Vec2 {
+  static Add(v1: Box2D.b2Vec2, v2: Box2D.b2Vec2 | XY): Box2D.b2Vec2 {
     v1.x += v2.x;
     v1.y += v2.y;
     return v1;

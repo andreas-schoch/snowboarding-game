@@ -1,10 +1,11 @@
-import { b2 } from "..";
+import { b2, recordLeak } from "..";
 import GameScene from "../scenes/GameScene";
 import { vec2Util } from "../util/RUBE/Vec2Math";
 import { Snowboard } from "./Snowboard";
 import { State } from "./State";
 
 export class Character {
+  static instances: Character[] = [];
   id: string;
   head: Box2D.b2Body;
   body: Box2D.b2Body;
@@ -48,6 +49,7 @@ export class Character {
     this.id = rubeSceneId
     this.state = new State(this);
     this.board = new Snowboard(scene, this.rubeSceneId);
+    Character.instances.push(this);
   }
 
   private resetLegs() {
@@ -89,8 +91,8 @@ export class Character {
     const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
       const jumpVector = isCenterGrounded
-        ? vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), new b2.b2Vec2(0, this.jumpForce * 1.2))
-        : vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), new b2.b2Vec2(0, this.jumpForce * 0.8));
+        ? vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), {x: 0, y: this.jumpForce * 1.2})
+        : vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), {x: 0, y: this.jumpForce * 0.8});
 
       // const velocity = this.body.GetLinearVelocity();
       // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);

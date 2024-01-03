@@ -1,5 +1,5 @@
 import { channel } from 'diagnostics_channel';
-import { b2 } from '../..';
+import { b2, recordLeak } from '../..';
 import { CustomPropOwner, RubeLoader } from './RubeLoader';
 import { RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
@@ -44,7 +44,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeBodies(): RubeBody[] {
     const bodies: RubeBody[] = [];
-    for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       this.indexByBody.set(body, bodies.length);
       bodies.push(this.serializeBody(body));
     }
@@ -89,7 +89,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeFixtures(body: Box2D.b2Body): RubeFixture[] {
     const fixtures: RubeFixture[] = [];
-    for (let fixture = body.GetFixtureList(); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = fixture.GetNext()) {
+    for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
       fixtures.push(this.serializeFixture(fixture));
     }
     return fixtures;
@@ -161,7 +161,7 @@ export class RubeSerializer<IMG = unknown> {
     if (this.world.GetJointCount() !== 0 && this.indexByBody.size === 0) throw new Error('Joints cannot be serialized before bodies');
 
     const joints: RubeJoint[] = [];
-    for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
+    for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
       joints.push(this.serializeJoint(joint));
     }
     return joints;

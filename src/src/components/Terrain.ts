@@ -1,4 +1,4 @@
-import { b2 } from '../index';
+import { b2, recordLeak } from '../index';
 import GameScene from '../scenes/GameScene';
 
 
@@ -17,7 +17,7 @@ export default class Terrain {
       const bodyPos = body.GetPosition();
       // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
       let edgeShape = new b2.b2EdgeShape();
-      for (let fixture = body.GetFixtureList(); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = fixture.GetNext()) {
+      for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
         const shape = b2.castObject(fixture.GetShape(), b2.b2ChainShape);
         const chunkPoints: XY[] = [];
         for (let i = 0; i < shape.get_m_count() - 1; i++) {

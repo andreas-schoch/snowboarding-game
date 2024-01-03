@@ -2,8 +2,8 @@ import { IComboTrickScore, IScore } from '../components/State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
 import { getCurrentLevel } from '../util/getCurrentLevel';
-import { BackgroundMusicKeys, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
-import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
+import { DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
+import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
 
 
 export enum PanelIds {
@@ -27,14 +27,6 @@ enum HudIds {
 
 export default class GameUIScene extends Phaser.Scene {
   private observer: Phaser.Events.EventEmitter;
-  private restartGame: () => void;
-
-  private music: Phaser.Sound.BaseSound;
-  private sfx_pickup_present: Phaser.Sound.BaseSound;
-  private sfx_death: Phaser.Sound.BaseSound;
-  private sfx_grunt: Phaser.Sound.BaseSound;
-  private sfx_applause: Phaser.Sound.BaseSound;
-  private sfx_game_over_demon: Phaser.Sound.BaseSound;
 
   private comboLeewayChart: Phaser.GameObjects.Graphics;
   private resolutionMod: number;
@@ -61,24 +53,12 @@ export default class GameUIScene extends Phaser.Scene {
     super({ key: SCENE_GAME_UI });
   }
 
-  init([observer, restartGameCB]: [Phaser.Events.EventEmitter, () => void]) {
+  init([observer]: [Phaser.Events.EventEmitter]) {
     this.observer = observer;
-    this.restartGame = restartGameCB;
     this.resolutionMod = this.game.canvas.width / DEFAULT_WIDTH;
   }
 
   create() {
-    const musicVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || 80) / 100;
-    const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
-    this.music = this.sound.add(randomMusicKey, { loop: true, volume: musicVolume * 1, rate: 1, delay: 1, detune: 0 });
-    // this.music.play();
-    const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
-    this.sfx_pickup_present = this.sound.add('pickup_present', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
-    this.sfx_death = this.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
-    this.sfx_grunt = this.sound.add('grunt', { detune: 400, rate: 1.25, volume: sfxVolume * 0.5 });
-    this.sfx_applause = this.sound.add('applause', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
-    this.sfx_game_over_demon = this.sound.add('game_over_demon', { detune: 0, rate: 0.95, volume: sfxVolume * 0.6 });
-
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
@@ -86,16 +66,9 @@ export default class GameUIScene extends Phaser.Scene {
     this.initDomUi();
 
     this.observer.on(TOGGLE_PAUSE, (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on(PICKUP_PRESENT, total => {
-      if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
-      this.sfx_pickup_present.play();
-    });
-    this.observer.on(COMBO_CHANGE, (accumulated, multiplier) => {
-      if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-';
-    });
-    this.observer.on(SCORE_CHANGE, score => {
-      if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score));
-    });
+    this.observer.on(PICKUP_PRESENT, total => { if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x' });
+    this.observer.on(COMBO_CHANGE, (accumulated, multiplier) => { if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-' });
+    this.observer.on(SCORE_CHANGE, score => { if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score)) });
 
     this.comboLeewayChart = this.add.graphics();
     this.observer.on(COMBO_LEEWAY_UPDATE, (value) => {
@@ -109,42 +82,24 @@ export default class GameUIScene extends Phaser.Scene {
     this.observer.on(ENTER_CRASHED, (score: IScore) => {
       this.pendingScore = score;
       this.crashed = true;
-      this.sfx_death.play();
-      this.sfx_grunt.play();
       if (this.finished) return;
-      this.comboLeewayChart.clear();
       if (this.hudCombo) this.hudCombo.innerText = '-';
-      this.sfx_game_over_demon.play();
-      this.tweens.add({
-        targets: this.music,
-        volume: 0.0,
-        detune: -500,
-        rate: 0.5,
-        duration: 750,
-        onComplete: async () => {
-          this.music.stop();
-          await this.updateYourScorePanelData(score);
-          this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
-        },
-      });
+      this.comboLeewayChart.clear();
+      setTimeout(async () => {
+        await this.updateYourScorePanelData(score);
+        this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
+      }, 750);
     });
 
     this.observer.on(LEVEL_FINISH, (score: IScore) => {
       if (this.crashed) return;
       this.pendingScore = score;
       this.finished = true;
-      this.sfx_applause.play();
       this.comboLeewayChart.clear();
-      this.tweens.add({
-        targets: this.music,
-        volume: 0,
-        duration: 2000,
-        onComplete: async () => {
-          this.music.stop();
-          await this.updateYourScorePanelData(score);
-          this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
-        },
-      });
+      setTimeout(async () => {
+        await this.updateYourScorePanelData(score);
+        this.setPanelVisibility(PanelIds.PANEL_YOUR_SCORE);
+      }, 2000);
     });
   }
 
@@ -319,11 +274,9 @@ export default class GameUIScene extends Phaser.Scene {
   }
 
   private playAgain() {
-    this.music.stop();
-    this.sfx_game_over_demon.stop();
     this.crashed = false;
     this.finished = false;
-    this.restartGame();
+    this.observer.emit(RESTART_GAME);
   }
 
   private setPanelVisibility(panelId: PanelIds) {
@@ -419,7 +372,7 @@ export default class GameUIScene extends Phaser.Scene {
       note && note.classList.add('hidden');
     }
 
-    // TODO cleanup this mess
+    // TODO replace firebase with pocketbase backend
     let fbScores = leaderboardService.auth
       ? await leaderboardService.rexLeaderboard.loadFirstPage()
       : (JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}')[getCurrentLevel()] || []).map(s => ({ ...s, userName: localStorage.getItem(KEY_USER_NAME) }));
