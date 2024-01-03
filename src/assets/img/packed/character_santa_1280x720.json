@@ -4,8 +4,8 @@
 			"image": "character_santa_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 488,
-				"h": 174
+				"w": 414,
+				"h": 230
 			},
 			"scale": 0.5,
 			"frames": [
@@ -73,45 +73,24 @@
 					}
 				},
 				{
-					"filename": "legLowerLeft.png",
+					"filename": "crotch.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 36,
-						"h": 58
+						"w": 50,
+						"h": 30
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 0,
-						"w": 36,
-						"h": 58
+						"y": 8,
+						"w": 50,
+						"h": 19
 					},
 					"frame": {
 						"x": 167,
 						"y": 2,
-						"w": 36,
-						"h": 58
-					}
-				},
-				{
-					"filename": "legLowerRight.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 36,
-						"h": 58
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 36,
-						"h": 58
-					},
-					"frame": {
-						"x": 205,
-						"y": 2,
-						"w": 36,
-						"h": 58
+						"w": 50,
+						"h": 19
 					}
 				},
 				{
@@ -129,7 +108,7 @@
 						"h": 61
 					},
 					"frame": {
-						"x": 243,
+						"x": 219,
 						"y": 2,
 						"w": 36,
 						"h": 61
@@ -150,7 +129,7 @@
 						"h": 61
 					},
 					"frame": {
-						"x": 281,
+						"x": 257,
 						"y": 2,
 						"w": 36,
 						"h": 61
@@ -171,7 +150,7 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 319,
+						"x": 295,
 						"y": 2,
 						"w": 27,
 						"h": 63
@@ -192,94 +171,136 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 319,
+						"x": 295,
 						"y": 2,
 						"w": 27,
 						"h": 63
+					}
+				},
+				{
+					"filename": "legLowerLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 67,
+						"h": 107
+					},
+					"spriteSourceSize": {
+						"x": 10,
+						"y": 23,
+						"w": 43,
+						"h": 71
+					},
+					"frame": {
+						"x": 324,
+						"y": 2,
+						"w": 43,
+						"h": 71
+					}
+				},
+				{
+					"filename": "legLowerRight.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 67,
+						"h": 107
+					},
+					"spriteSourceSize": {
+						"x": 14,
+						"y": 23,
+						"w": 43,
+						"h": 71
+					},
+					"frame": {
+						"x": 369,
+						"y": 2,
+						"w": 43,
+						"h": 71
 					}
 				},
 				{
 					"filename": "legUpperLeft.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 27,
-						"h": 63
+						"w": 60,
+						"h": 139
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 0,
-						"w": 27,
-						"h": 63
+						"y": 14,
+						"w": 56,
+						"h": 105
 					},
 					"frame": {
-						"x": 319,
-						"y": 2,
-						"w": 27,
-						"h": 63
+						"x": 2,
+						"y": 20,
+						"w": 56,
+						"h": 105
 					}
 				},
 				{
 					"filename": "legUpperRight.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 27,
-						"h": 63
+						"w": 60,
+						"h": 139
 					},
 					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 27,
-						"h": 63
+						"x": 4,
+						"y": 14,
+						"w": 56,
+						"h": 105
 					},
 					"frame": {
-						"x": 319,
-						"y": 2,
-						"w": 27,
-						"h": 63
+						"x": 60,
+						"y": 20,
+						"w": 56,
+						"h": 105
 					}
 				},
 				{
 					"filename": "body.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 138,
-						"h": 138
+						"w": 165,
+						"h": 165
 					},
 					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 138,
+						"x": 26,
+						"y": 12,
+						"w": 117,
 						"h": 138
 					},
 					"frame": {
-						"x": 348,
-						"y": 2,
-						"w": 138,
+						"x": 118,
+						"y": 65,
+						"w": 117,
 						"h": 138
 					}
 				},
 				{
 					"filename": "head.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 157,
-						"h": 152
+						"w": 170,
+						"h": 170
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 0,
-						"w": 157,
-						"h": 152
+						"y": 17,
+						"w": 158,
+						"h": 153
 					},
 					"frame": {
-						"x": 2,
-						"y": 20,
-						"w": 157,
-						"h": 152
+						"x": 237,
+						"y": 75,
+						"w": 158,
+						"h": 153
 					}
 				}
 			]
@@ -288,6 +309,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:62cd63053ac14960c8ee3221dcafbb70:2c4de985462d61a6eb2bf65c87381f95:be16ff2351b5d4651988a32aa9bdbe9d$"
+		"smartupdate": "$TexturePacker:SmartUpdate:10596d24685e74231332261a77836a06:991f7a74025b44f455a48a2cde27e186:be16ff2351b5d4651988a32aa9bdbe9d$"
 	}
 }

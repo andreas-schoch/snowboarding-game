@@ -25,6 +25,7 @@ export const KEY_USER_NAME = 'snowboarding_game_user_name';
 export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
 export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
 export const KEY_SELECTED_CHARACTER = 'snowboarding_game_selected_character';
+export const KEY_SELECTED_CHARACTER_SKIN = 'snowboarding_game_selected_character_skin';
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
@@ -68,13 +69,27 @@ export const BackgroundMusicKeys = {
 export const RUBE_SCENE_CHARACTER = 'character';
 
 export const enum CharacterKeys {
-  character_neutral = 'atlas_character_neutral',
-  character_santa = 'atlas_character_santa',
+  character_v01 = 'character_v01',
+  character_v02 = 'character_v02',
 }
 
 export const CHARACTERS = [
-  CharacterKeys.character_neutral,
-  CharacterKeys.character_santa,
+  CharacterKeys.character_v01,
+  CharacterKeys.character_v02,
+];
+
+export const enum CharacterSkinKeys {
+  character_v01_neutral = 'character_v01_neutral',
+  character_v01_santa = 'character_v01_santa',
+  character_v02_neutral = 'character_v02_neutral',
+  character_v02_santa = 'character_v02_santa',
+}
+
+export const CHARACTER_SKINS = [
+  CharacterSkinKeys.character_v01_neutral,
+  CharacterSkinKeys.character_v01_santa,
+  CharacterSkinKeys.character_v02_neutral,
+  CharacterSkinKeys.character_v02_santa,
 ];
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {

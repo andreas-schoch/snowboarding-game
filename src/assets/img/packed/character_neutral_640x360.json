@@ -4,30 +4,93 @@
 			"image": "character_neutral_640x360.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 91,
-				"h": 167
+				"w": 144,
+				"h": 124
 			},
 			"scale": 0.25,
 			"frames": [
 				{
 					"filename": "body.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 69,
-						"h": 69
+						"w": 83,
+						"h": 83
 					},
 					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 69,
-						"h": 69
+						"x": 8,
+						"y": 6,
+						"w": 62,
+						"h": 74
 					},
 					"frame": {
 						"x": 2,
 						"y": 2,
-						"w": 69,
-						"h": 69
+						"w": 62,
+						"h": 74
+					}
+				},
+				{
+					"filename": "legUpperLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 25,
+						"h": 58
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 1,
+						"w": 24,
+						"h": 44
+					},
+					"frame": {
+						"x": 2,
+						"y": 78,
+						"w": 24,
+						"h": 44
+					}
+				},
+				{
+					"filename": "legUpperRight.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 25,
+						"h": 58
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 24,
+						"h": 44
+					},
+					"frame": {
+						"x": 28,
+						"y": 78,
+						"w": 24,
+						"h": 44
+					}
+				},
+				{
+					"filename": "legLowerLeft.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 33,
+						"h": 54
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 11,
+						"w": 19,
+						"h": 38
+					},
+					"frame": {
+						"x": 54,
+						"y": 78,
+						"w": 19,
+						"h": 38
 					}
 				},
 				{
@@ -35,104 +98,20 @@
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 79,
-						"h": 76
+						"w": 85,
+						"h": 85
 					},
 					"spriteSourceSize": {
-						"x": 14,
-						"y": 1,
-						"w": 59,
-						"h": 59
+						"x": 13,
+						"y": 12,
+						"w": 60,
+						"h": 65
 					},
 					"frame": {
-						"x": 2,
-						"y": 73,
-						"w": 59,
-						"h": 59
-					}
-				},
-				{
-					"filename": "armLowerLeft.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 18,
-						"h": 31
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 18,
-						"h": 31
-					},
-					"frame": {
-						"x": 2,
-						"y": 134,
-						"w": 18,
-						"h": 31
-					}
-				},
-				{
-					"filename": "armLowerRight.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 18,
-						"h": 31
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 18,
-						"h": 31
-					},
-					"frame": {
-						"x": 22,
-						"y": 134,
-						"w": 18,
-						"h": 31
-					}
-				},
-				{
-					"filename": "legUpperLeft.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 14,
-						"h": 31
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 14,
-						"h": 31
-					},
-					"frame": {
-						"x": 42,
-						"y": 134,
-						"w": 14,
-						"h": 31
-					}
-				},
-				{
-					"filename": "legUpperRight.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 14,
-						"h": 31
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 14,
-						"h": 31
-					},
-					"frame": {
-						"x": 42,
-						"y": 134,
-						"w": 14,
-						"h": 31
+						"x": 66,
+						"y": 2,
+						"w": 60,
+						"h": 65
 					}
 				},
 				{
@@ -150,7 +129,7 @@
 						"h": 29
 					},
 					"frame": {
-						"x": 73,
+						"x": 128,
 						"y": 2,
 						"w": 14,
 						"h": 29
@@ -171,30 +150,9 @@
 						"h": 29
 					},
 					"frame": {
-						"x": 73,
+						"x": 128,
 						"y": 2,
 						"w": 14,
-						"h": 29
-					}
-				},
-				{
-					"filename": "legLowerLeft.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 18,
-						"h": 29
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 17,
-						"h": 29
-					},
-					"frame": {
-						"x": 63,
-						"y": 73,
-						"w": 17,
 						"h": 29
 					}
 				},
@@ -203,20 +161,20 @@
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 18,
-						"h": 29
+						"w": 33,
+						"h": 54
 					},
 					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 17,
-						"h": 29
+						"x": 7,
+						"y": 11,
+						"w": 19,
+						"h": 38
 					},
 					"frame": {
-						"x": 63,
-						"y": 104,
-						"w": 17,
-						"h": 29
+						"x": 75,
+						"y": 69,
+						"w": 19,
+						"h": 38
 					}
 				},
 				{
@@ -234,10 +192,31 @@
 						"h": 8
 					},
 					"frame": {
-						"x": 58,
-						"y": 135,
+						"x": 75,
+						"y": 109,
 						"w": 31,
 						"h": 8
+					}
+				},
+				{
+					"filename": "armLowerLeft.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 31
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 31
+					},
+					"frame": {
+						"x": 96,
+						"y": 69,
+						"w": 18,
+						"h": 31
 					}
 				},
 				{
@@ -255,8 +234,8 @@
 						"h": 8
 					},
 					"frame": {
-						"x": 58,
-						"y": 145,
+						"x": 108,
+						"y": 102,
 						"w": 27,
 						"h": 8
 					}
@@ -276,10 +255,31 @@
 						"h": 8
 					},
 					"frame": {
-						"x": 58,
-						"y": 155,
+						"x": 108,
+						"y": 112,
 						"w": 23,
 						"h": 8
+					}
+				},
+				{
+					"filename": "armLowerRight.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 18,
+						"h": 31
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 18,
+						"h": 31
+					},
+					"frame": {
+						"x": 116,
+						"y": 69,
+						"w": 18,
+						"h": 31
 					}
 				}
 			]
@@ -288,6 +288,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:9ad1ea4d496176b1e1e015d4bc008e01:b25eac077c4c92cfcc42e131c1756d7e:d440f3890b7be02bbe9df843a5ae2e9f$"
+		"smartupdate": "$TexturePacker:SmartUpdate:12ca0f5c299321a4e9a20c2dfdd72eef:49e262e82fd224d8584c3c4a26266060:d440f3890b7be02bbe9df843a5ae2e9f$"
 	}
 }

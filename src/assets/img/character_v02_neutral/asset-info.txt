@@ -1,0 +1,5 @@
+/**
+ * source       here
+ * author       Andreas Schoch
+ * license      https://creativecommons.org/publicdomain/zero/1.0/
+ */

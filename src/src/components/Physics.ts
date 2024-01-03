@@ -1,10 +1,10 @@
-import { CharacterKeys, LevelKeys, b2 } from '../index';
+import { CharacterKeys, CharacterSkinKeys, LevelKeys, b2 } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 import DebugDrawer from './DebugDraw';
 import { RubeSerializer } from '../util/RUBE/RubeSerializer';
-import { getSelectedCharacterSkin } from '../util/getCurrentCharacterSkin';
+import { getSelectedCharacterSkin } from '../util/getCurrentCharacter';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -34,6 +34,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly debugDrawer: DebugDrawer;
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = { positionIterations: 12, velocityIterations: 12 };
+  private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
 
   constructor(scene: GameScene, worldScale: number, gravity: { x: number, y: number }) {
     super();
@@ -78,6 +79,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const { file, center, angle, aspectScale, scale, flip, renderOrder } = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
+      // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
       const bodyProps = bodyObj ? this.loader.customPropertiesMap.get(bodyObj) : null;
       const isPlayerCharacterPart = Boolean(bodyProps?.['phaserPlayerCharacterPart']);
       
@@ -104,7 +106,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.serializer.handleSerializeImage = (image) => (image as Phaser.GameObjects.Image).data.get('image-json') as RubeImage;
   }
 
-  loadRubeScene(rubeScene: string) {
+  loadRubeScene(rubeScene: CharacterKeys | LevelKeys) {
     const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     if (this.loader.loadScene(sceneJson)) console.log('RUBE scene loaded successfully.');
     else throw new Error('Failed to load RUBE scene');

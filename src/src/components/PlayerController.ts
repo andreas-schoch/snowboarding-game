@@ -15,8 +15,8 @@ export class PlayerController {
   board: Snowboard;
   state: State;
 
-  private readonly jumpForce: number = 13;
-  private readonly leanForce: number = 2.75;
+  private readonly jumpForce: number = 11 ;
+  private readonly leanForce: number = 2.5 ;
   private readonly jumpCooldown: number = 15; // in num frames. Prevents player from jumping too quickly after a landing
   private keyW: Phaser.Input.Keyboard.Key;
   private keyA: Phaser.Input.Keyboard.Key;
@@ -70,7 +70,7 @@ export class PlayerController {
     };
     this.keyW.onDown = onJump;
     this.keyArrowUp.onDown = onJump;
-    this.keyW.onUp = () => this.jumpKeyDown = false;
+    this.keyW.onUp = () => this.jumpKeyDown = false; 
     this.keyArrowUp.onUp = () => this.jumpKeyDown = false;
 
   }
@@ -151,8 +151,8 @@ export class PlayerController {
       // TODO these kind of values should come from the RUBE export.
       //  That would make the game somewhat moddable once players can create and download custom levels and characters.
       const jumpVector = isCenterGrounded
-        ? vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.3)), new b2.b2Vec2(0, this.jumpForce * 1.25))
-        : vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.5)), new b2.b2Vec2(0, this.jumpForce * 0.85));
+        ? vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), new b2.b2Vec2(0, this.jumpForce * 1.2))
+        : vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), new b2.b2Vec2(0, this.jumpForce * 0.8));
 
       // const velocity = this.parts.body.GetLinearVelocity();
       // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);
@@ -173,30 +173,36 @@ export class PlayerController {
   }
 
   private resetLegs() {
-    this.parts.distanceLegLeft?.SetLength(0.65);
-    this.parts.distanceLegRight?.SetLength(0.65);
+    const { legLengthRelaxed } = this.parts;
+    this.parts.distanceLegLeft?.SetLength(legLengthRelaxed);
+    this.parts.distanceLegRight?.SetLength(legLengthRelaxed);
   }
 
   private leanBackward() {
-    this.parts.distanceLegLeft?.SetLength(0.5);
-    this.parts.distanceLegRight?.SetLength(0.8);
+    const { legLengthBent, legLengthExtended } = this.parts;
+    this.parts.distanceLegLeft?.SetLength(legLengthBent);
+    this.parts.distanceLegRight?.SetLength(legLengthExtended);
     this.parts.body.ApplyAngularImpulse(this.leanForce, true);
   }
 
   private leanForward() {
-    this.parts.distanceLegLeft?.SetLength(0.8);
-    this.parts.distanceLegRight?.SetLength(0.5);
+    const { legLengthBent, legLengthExtended } = this.parts;
+    this.parts.distanceLegLeft?.SetLength(legLengthExtended);
+    this.parts.distanceLegRight?.SetLength(legLengthBent);
     this.parts.body.ApplyAngularImpulse(-this.leanForce, true);
   }
 
   private leanCenter() {
-    this.parts.distanceLegLeft?.SetLength(0.5);
-    this.parts.distanceLegRight?.SetLength(0.5);
+    const { legLengthBent } = this.parts;
+
+    this.parts.distanceLegLeft?.SetLength(legLengthBent);
+    this.parts.distanceLegRight?.SetLength(legLengthBent);
   }
 
   private leanUp() {
-    this.parts.distanceLegLeft?.SetLength(0.8);
-    this.parts.distanceLegRight?.SetLength(0.8);
+    const { legLengthExtended } = this.parts;
+    this.parts.distanceLegLeft?.SetLength(legLengthExtended);
+    this.parts.distanceLegRight?.SetLength(legLengthExtended);
   }
 
   private initBodyParts() {
@@ -217,10 +223,16 @@ export class PlayerController {
     const armUpperRightImage = this.b2Physics.loader.bodyUserDataMap.get(armUpperRight)!.image;
     const armLowerRightImage = this.b2Physics.loader.bodyUserDataMap.get(armLowerRight)!.image;
 
+    const legLengthExtended: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthExtended'] as number;
+    const legLengthRelaxed: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthRelaxed'] as number;
+    const legLengthBent: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthBent'] as number;
+
     if (!head || !body || !armUpperLeft || !armLowerLeft || !armUpperRight || !armLowerRight) throw new Error('Player character b2Bodies not found');
     if (!headImage || !bodyImage || !armUpperLeftImage || !armLowerLeftImage || !armUpperRightImage || !armLowerRightImage) throw new Error('Player character images not found');
+    if (!legLengthExtended || !legLengthRelaxed || !legLengthBent) throw new Error('Player character leg lengths not found. Need to be set on character torso body');
 
     const segments = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.BOARD_SEGMENT);
+    if (segments.length !== 7) throw new Error('Player character board segments missing');
     segments.sort((a, b) => {
       const aIndex = Number(this.b2Physics.loader.customPropertiesMap.get(a)![propSegmentIndex]);
       const bIndex = Number(this.b2Physics.loader.customPropertiesMap.get(b)![propSegmentIndex]);
@@ -251,6 +263,9 @@ export class PlayerController {
       distanceLegRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_RIGHT)[0], b2.b2DistanceJoint),
       weldCenter: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.WELD_CENTER)[0], b2.b2WeldJoint),
       prismatic: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.PRISMATIC)[0], b2.b2PrismaticJoint),
+      legLengthExtended,
+      legLengthRelaxed,
+      legLengthBent,
     };
   }
 }
@@ -282,6 +297,10 @@ export interface IBodyParts {
   distanceLegRight: Box2D.b2DistanceJoint | null;
   weldCenter: Box2D.b2WeldJoint | null;
   prismatic: Box2D.b2PrismaticJoint | null;
+
+  legLengthExtended: number;
+  legLengthRelaxed: number;
+  legLengthBent: number;
 }
 
 export const enum CharacterPartId {

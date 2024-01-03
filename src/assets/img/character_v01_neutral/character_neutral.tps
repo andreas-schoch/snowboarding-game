@@ -158,7 +158,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../packed/character_neutral_{v}.json</filename>
+                <filename>../packed/character_v01_neutral_{v}.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>

@@ -27,10 +27,13 @@ The JSON files are then loaded into the game using a loader that is part of this
 
 _Loader might be useful for any project that uses Phaser3 and [Birch-san/box2d-wasm](https://github.com/Birch-san/box2d-wasm). I want to turn it into a NPM package and create adapters to support various box2d ports_
 
-For the GUI and menus, plain old HTML/CSS is used and rendered on top of the canvas.
+For the GUI and menus, plain old HTML/CSS is used and rendered on top of the canvas. This will likely change as it is a bit of a pain to maintain.
 
-Eventually I want to add a level editor to the game so that players can create their own levels and share them with others with the click of a button (checkout 'level-editor' branch for progress on this).
+At this point I'm not too concerned with super clean architechture and code quality. You will see some messy code and unstructured commits that I clean up as things take shape.
 
+Eventually I want to add a level editor to the game and build infrastructure to allow players to share their levels with each other, rate them and so on. Each level would have their own leaderboard.
+
+I would really like for the physics to be fully deterministic so I can store input data (for replays and ghosts) along with the scores. That probably won't be possible using box2d cross all platforms, so will experiment switching to the Rapier physics engine (possibly switching from TS to Rust altogether in the process).
 
 ## Run the game locally
 ```shell

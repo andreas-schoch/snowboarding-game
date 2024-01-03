@@ -4,8 +4,8 @@
 			"image": "environment_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 511,
-				"h": 390
+				"w": 655,
+				"h": 294
 			},
 			"scale": 0.25,
 			"frames": [
@@ -24,31 +24,10 @@
 						"h": 288
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 3,
+						"y": 3,
 						"w": 275,
 						"h": 288
-					}
-				},
-				{
-					"filename": "santa-board.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 313,
-						"h": 33
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 313,
-						"h": 33
-					},
-					"frame": {
-						"x": 1,
-						"y": 291,
-						"w": 313,
-						"h": 33
 					}
 				},
 				{
@@ -66,73 +45,10 @@
 						"h": 275
 					},
 					"frame": {
-						"x": 278,
-						"y": 1,
+						"x": 282,
+						"y": 3,
 						"w": 232,
 						"h": 275
-					}
-				},
-				{
-					"filename": "ice_block.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 69,
-						"h": 69
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 69,
-						"h": 69
-					},
-					"frame": {
-						"x": 316,
-						"y": 278,
-						"w": 69,
-						"h": 69
-					}
-				},
-				{
-					"filename": "wooden_crate.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 69,
-						"h": 69
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 69,
-						"h": 69
-					},
-					"frame": {
-						"x": 387,
-						"y": 278,
-						"w": 69,
-						"h": 69
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 50,
-						"h": 50
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 46,
-						"h": 50
-					},
-					"frame": {
-						"x": 458,
-						"y": 278,
-						"w": 46,
-						"h": 50
 					}
 				},
 				{
@@ -150,10 +66,52 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 1,
-						"y": 326,
+						"x": 518,
+						"y": 3,
 						"w": 78,
 						"h": 63
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 46,
+						"h": 50
+					},
+					"frame": {
+						"x": 600,
+						"y": 3,
+						"w": 46,
+						"h": 50
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 45,
+						"h": 16
+					},
+					"frame": {
+						"x": 600,
+						"y": 57,
+						"w": 45,
+						"h": 16
 					}
 				},
 				{
@@ -171,10 +129,94 @@
 						"h": 56
 					},
 					"frame": {
-						"x": 81,
-						"y": 326,
+						"x": 518,
+						"y": 70,
 						"w": 78,
 						"h": 56
+					}
+				},
+				{
+					"filename": "ice_block.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 69
+					},
+					"frame": {
+						"x": 518,
+						"y": 130,
+						"w": 69,
+						"h": 69
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 61,
+						"h": 16
+					},
+					"frame": {
+						"x": 591,
+						"y": 130,
+						"w": 61,
+						"h": 16
+					}
+				},
+				{
+					"filename": "bridgeSegmentOneCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 53,
+						"h": 16
+					},
+					"frame": {
+						"x": 591,
+						"y": 150,
+						"w": 53,
+						"h": 16
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 69
+					},
+					"frame": {
+						"x": 518,
+						"y": 203,
+						"w": 69,
+						"h": 69
 					}
 				}
 			]
@@ -183,6 +225,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:63a7c12ba3883ce4ce0da99cf6d004a2:2a3cdbca6b97455ce951997bd8bca82c:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

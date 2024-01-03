@@ -7,7 +7,7 @@ import { SCENE_GAME, SCENE_GAME_UI } from "..";
 // import { Backdrop } from '../components/Backdrop';
 import { PlayerController } from '../components/PlayerController';
 import { getCurrentLevel } from '../util/getCurrentLevel';
-import { getSelectedCharacterSkin } from '../util/getCurrentCharacterSkin';
+import { getSelectedCharacter, getSelectedCharacterSkin } from '../util/getCurrentCharacter';
 import { RubeSerializer } from '../util/RUBE/RubeSerializer';
 
 export default class GameScene extends Phaser.Scene {
@@ -30,7 +30,7 @@ export default class GameScene extends Phaser.Scene {
     this.observer = new Phaser.Events.EventEmitter();
     this.b2Physics = new Physics(this, 40, { x: 0, y: -10 });
     this.b2Physics.loadRubeScene(getCurrentLevel())
-    this.b2Physics.loadRubeScene(RUBE_SCENE_CHARACTER)
+    this.b2Physics.loadRubeScene(getSelectedCharacter())
     this.playerController = new PlayerController(this, this.b2Physics);
     this.terrain = new Terrain(this, this.b2Physics);
 

@@ -138,7 +138,7 @@
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
-                <enum type="AlgorithmMaxRectsSettings::Heuristic">BottomLeft</enum>
+                <enum type="AlgorithmMaxRectsSettings::Heuristic">Best</enum>
             </struct>
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
@@ -158,7 +158,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../packed/character_santa_{v}.json</filename>
+                <filename>../packed/character_v02_neutral_{v}.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -187,7 +187,7 @@
             <key>scale</key>
             <double>0.5</double>
             <key>scaleMode</key>
-            <enum type="ScaleMode">Smooth</enum>
+            <enum type="ScaleMode">Fast</enum>
             <key>extrude</key>
             <uint>0</uint>
             <key>trimThreshold</key>

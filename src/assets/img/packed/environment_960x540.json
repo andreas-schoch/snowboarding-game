@@ -4,8 +4,8 @@
 			"image": "environment_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 246,
-				"h": 453
+				"w": 496,
+				"h": 222
 			},
 			"scale": 0.1875,
 			"frames": [
@@ -24,8 +24,8 @@
 						"h": 216
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 3,
+						"y": 3,
 						"w": 206,
 						"h": 216
 					}
@@ -45,31 +45,10 @@
 						"h": 206
 					},
 					"frame": {
-						"x": 1,
-						"y": 219,
+						"x": 213,
+						"y": 3,
 						"w": 174,
 						"h": 206
-					}
-				},
-				{
-					"filename": "santa-board.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 234,
-						"h": 25
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 234,
-						"h": 25
-					},
-					"frame": {
-						"x": 1,
-						"y": 427,
-						"w": 234,
-						"h": 25
 					}
 				},
 				{
@@ -87,8 +66,8 @@
 						"h": 52
 					},
 					"frame": {
-						"x": 177,
-						"y": 219,
+						"x": 391,
+						"y": 3,
 						"w": 52,
 						"h": 52
 					}
@@ -108,8 +87,8 @@
 						"h": 52
 					},
 					"frame": {
-						"x": 177,
-						"y": 273,
+						"x": 391,
+						"y": 59,
 						"w": 52,
 						"h": 52
 					}
@@ -129,8 +108,8 @@
 						"h": 47
 					},
 					"frame": {
-						"x": 177,
-						"y": 327,
+						"x": 391,
+						"y": 115,
 						"w": 58,
 						"h": 47
 					}
@@ -150,8 +129,8 @@
 						"h": 42
 					},
 					"frame": {
-						"x": 177,
-						"y": 376,
+						"x": 391,
+						"y": 166,
 						"w": 58,
 						"h": 42
 					}
@@ -171,10 +150,73 @@
 						"h": 38
 					},
 					"frame": {
-						"x": 209,
-						"y": 1,
+						"x": 447,
+						"y": 3,
 						"w": 36,
 						"h": 38
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 46,
+						"h": 12
+					},
+					"frame": {
+						"x": 447,
+						"y": 45,
+						"w": 46,
+						"h": 12
+					}
+				},
+				{
+					"filename": "bridgeSegmentOneCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 41,
+						"h": 12
+					},
+					"frame": {
+						"x": 447,
+						"y": 61,
+						"w": 41,
+						"h": 12
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 36,
+						"h": 12
+					},
+					"frame": {
+						"x": 447,
+						"y": 77,
+						"w": 36,
+						"h": 12
 					}
 				}
 			]
@@ -183,6 +225,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:63a7c12ba3883ce4ce0da99cf6d004a2:2a3cdbca6b97455ce951997bd8bca82c:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }
