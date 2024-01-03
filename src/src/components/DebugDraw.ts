@@ -3,15 +3,9 @@ import { b2 } from "..";
 const sizeOfB2Vec2 = Float32Array.BYTES_PER_ELEMENT * 2;
 
 export default class DebugDrawer {
-  graphics: Phaser.GameObjects.Graphics;
-  pixelsPerMeter: number;
   instance: Box2D.JSDraw = new b2.JSDraw();
-  lineWidth: number;
 
-  constructor(graphics: Phaser.GameObjects.Graphics, pixelsPerMeter: number, lineWidth: number = 2) {
-    this.graphics = graphics;
-    this.pixelsPerMeter = pixelsPerMeter;
-    this.lineWidth = lineWidth;
+  constructor(private graphics: Phaser.GameObjects.Graphics, private pixelsPerMeter: number, private lineWidth: number = 2) {
     this.instance.AppendFlags(b2.b2Draw.e_shapeBit);
     this.instance.AppendFlags(b2.b2Draw.e_jointBit);
     // this.instance.AppendFlags(b2.b2Draw.e_aabbBit);

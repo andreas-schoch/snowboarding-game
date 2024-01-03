@@ -1,52 +1,53 @@
 /*
-*  R.U.B.E. Scene Loader for Phaser3 and https://github.com/Birch-san/box2d-wasm
+*  R.U.B.E. Scene Loader for https://github.com/Birch-san/box2d-wasm
 * (see commit before SHA 5afd7c2 to find previous RubeLoader version for https://github.com/lusito/box2d.ts)
-* Based on provided example by Chris Campbell: https://www.iforce2d.net/rube/loaders/rube-phaser-sample.zip
+* Based on example loader by Chris Campbell (creator of RUBE editor): https://github.com/iforce2d/b2dJson/blob/master/js/loadrube.js
 */
 
 import { b2 } from '../..';
+import { pseudoRandomId } from '../pseudoRandomId';
 import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
 import { vec2Util } from './Vec2Math';
 
 export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
 
+export interface LoadedScene<IMG = unknown> {
+  id: string;
+  bodies: (Box2D.b2Body | null)[];
+  joints: (Box2D.b2Joint | null)[];
+  images: (IMG | null)[];
+}
+
 export class RubeLoader<IMG = unknown> {
   handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => IMG | null = () => null;
+  readonly userData: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
+  readonly customProps: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
+  readonly loadedScenes: Map<LoadedScene['id'], LoadedScene<IMG>> = new Map();
 
-  // TODO turn into map with uid as key and {bodies, joints, images} as value to be able to filter by load
-  loadedBodies: (Box2D.b2Body | null)[] = [];
-  loadedJoints: (Box2D.b2Joint | null)[] = [];
-  loadedImages: (IMG | null)[] = []; // depends on with what engine this loader is used. Maybe make generic
+  private loadingBodies: LoadedScene['bodies'] = [];
+  private loadingJoints: LoadedScene['joints'] = [];
+  private loadingImages: LoadedScene<IMG>['images'] = [];
 
-  private world: Box2D.b2World;
-  private bodyByName: Map<string, Box2D.b2Body[]> = new Map();
-
-  userData: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
-  customProps: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
-
-  constructor(world: Box2D.b2World) {
-    this.world = world;
+  constructor(private world: Box2D.b2World) {
   }
 
-  loadScene(scene: RubeScene): boolean {
-    this.loadedBodies = scene.body ? scene.body.map(bodyJson => this.loadBody(bodyJson)) : this.loadedBodies;
-    this.loadedJoints = scene.joint ? scene.joint.map(jointJson => this.loadJoint(jointJson)) : this.loadedJoints;
-    this.loadedImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : this.loadedImages;
+  load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0): [boolean, LoadedScene['id']] {
+    this.loadingBodies = scene.body ? scene.body.map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY)) : [];
+    this.loadingJoints = scene.joint ? scene.joint.map(jointJson => this.loadJoint(jointJson)) : [];
+    this.loadingImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
 
-    const success = this.loadedBodies.every(b => b) && this.loadedJoints.every(j => j) && this.loadedImages.every(i => i);
-    if (success) console.log(`R.U.B.E. scene loaded successfully`, this.loadedBodies, this.loadedJoints, this.loadedImages);
-    else console.error(`R.U.B.E. scene failed to load fully`, this.loadedBodies, this.loadedJoints, this.loadedImages);
-    return success;
+    const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
+    if (success) console.log(`R.U.B.E. scene loaded successfully`, this.loadingBodies, this.loadingJoints, this.loadingImages);
+    else console.error(`R.U.B.E. scene failed to load fully`, this.loadingBodies, this.loadingJoints, this.loadingImages);
+    const id = pseudoRandomId();
+    this.loadedScenes.set(id, { bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id });
+    return [success, id];
   }
 
-  getBodiesByName(name) {
-    const bodies = this.bodyByName.get(name) || [];
-    return bodies;
-  }
-
-  getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Body[] {
+  getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Body[] {
     const bodies: Box2D.b2Body[] = [];
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
+      if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
       const props = this.customProps.get(body);
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
@@ -55,10 +56,11 @@ export class RubeLoader<IMG = unknown> {
     return bodies;
   }
 
-  getFixturesByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Fixture[] {
+  getFixturesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Fixture[] {
     const fixtures: Box2D.b2Fixture[] = [];
     type f = Box2D.b2Fixture | null;
     for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
+      if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
       for (let fixture: f = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
         const props = this.customProps.get(fixture);
         if (!props) continue;
@@ -69,10 +71,11 @@ export class RubeLoader<IMG = unknown> {
     return fixtures;
   }
 
-  getJointsByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Joint[] {
+  getJointsByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Joint[] {
     const joints: Box2D.b2Joint[] = [];
     type j = Box2D.b2Joint | null;
     for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
+      if (sceneId && !this.loadedScenes.get(sceneId)!.joints.includes(joint)) continue; // TODO turn into set
       const props = this.customProps.get(joint);
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
@@ -81,12 +84,14 @@ export class RubeLoader<IMG = unknown> {
     return joints;
   }
 
-  rubeToVec2(val?: RubeVector, vec: Box2D.b2Vec2 = new b2.b2Vec2(0, 0)): Box2D.b2Vec2 {
-    this.isXY(val) ? vec.Set(val.x, val.y) : vec.Set(0, 0);
+  rubeToVec2(val?: RubeVector, offsetX = 0, offsetY = 0): Box2D.b2Vec2 {
+    // TODO rethink wheather good idea to make impure
+    const vec = new b2.b2Vec2(0, 0);
+    if (this.isXY(val)) vec.Set(val.x + offsetX, val.y + offsetY);
     return vec;
   }
 
-  private loadBody(bodyJson: RubeBody): Box2D.b2Body | null {
+  private loadBody(bodyJson: RubeBody, offsetX: number, offsetY: number): Box2D.b2Body | null {
     const bd = new b2.b2BodyDef();
     bd.set_type(Math.min(Math.max(bodyJson.type || 0, 0), 2)); // clamp between 0-2.
     bd.set_angle(bodyJson.angle || 0);
@@ -97,7 +102,7 @@ export class RubeLoader<IMG = unknown> {
     bd.set_linearVelocity(this.rubeToVec2(bodyJson.linearVelocity));
     bd.set_linearDamping(bodyJson.linearDamping || 0);
     bd.set_angularDamping(bodyJson.angularDamping || 0);
-    bd.set_position(this.rubeToVec2(bodyJson.position));
+    bd.set_position(this.rubeToVec2(bodyJson.position, offsetX, offsetY));
     bd.set_bullet(Boolean(bodyJson.bullet || false));
 
     const massData = new b2.b2MassData();
@@ -137,19 +142,19 @@ export class RubeLoader<IMG = unknown> {
   }
 
   private loadJoint(jointJson: RubeJoint): Box2D.b2Joint | null {
-    if (jointJson.bodyA >= this.loadedBodies.length) {
+    if (jointJson.bodyA >= this.loadingBodies.length) {
       console.error('Index for bodyA is invalid: ' + jointJson);
       return null;
     }
-    if (jointJson.bodyB >= this.loadedBodies.length) {
+    if (jointJson.bodyB >= this.loadingBodies.length) {
       console.error('Index for bodyB is invalid: ' + jointJson);
       return null;
     }
 
-    const bodyA = this.loadedBodies[jointJson.bodyA];
-    const bodyB = this.loadedBodies[jointJson.bodyB];
+    const bodyA = this.loadingBodies[jointJson.bodyA];
+    const bodyB = this.loadingBodies[jointJson.bodyB];
     if (!bodyA || !bodyB) {
-      console.error('bodyA or bodyB are invalid', bodyA, bodyB, this.loadedBodies);
+      console.error('bodyA or bodyB are invalid', bodyA, bodyB, this.loadingBodies);
       return null;
     }
 
@@ -270,7 +275,7 @@ export class RubeLoader<IMG = unknown> {
 
   private loadImage(imageJson: RubeImage): IMG | null {
     const { body, customProperties } = imageJson;
-    const bodyObj = this.loadedBodies[body];
+    const bodyObj = this.loadingBodies[body];
     const customProps = this.customPropertiesArrayToMap(customProperties || []);
     const img = this.handleLoadImage(imageJson, bodyObj, customProps);
     if (!img) return null;

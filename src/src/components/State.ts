@@ -1,7 +1,8 @@
-import { IBeginContactEvent, IPostSolveEvent, Physics } from './Physics';
+import { IBeginContactEvent, IPostSolveEvent } from './Physics';
 import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION } from "..";
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { Character } from './Character';
+import GameScene from '../scenes/GameScene';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';
@@ -46,9 +47,6 @@ export class State {
   isCrashed = false;
   timeGrounded = 0;
 
-  private readonly b2Physics: Physics;
-  private readonly character: Character;
-
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
   private comboLeeway: Phaser.Tweens.Tween | null = null;
@@ -67,15 +65,16 @@ export class State {
   private landedBackFlips = 0;
   private lastDistance = 0;
   private lastIsInAir: boolean = false;
+  private scene: GameScene;
 
-  constructor(character: Character) {
+  constructor(private character: Character) {
     this.character = character;
-    this.b2Physics = character.b2Physics;
+    this.scene = character.scene;
     this.registerCollisionListeners(); // TODO fix
 
-    // this.character.scene.observer.on('enter_in_air', () => this.isGrounded = false);
-    this.character.scene.observer.on('enter_grounded', () => {
-      this.timeGrounded = this.character.scene.game.getFrame();
+    // this.scene.observer.on('enter_in_air', () => this.isGrounded = false);
+    this.scene.observer.on('enter_grounded', () => {
+      this.timeGrounded = this.scene.game.getFrame();
       this.landedFrontFlips += this.pendingFrontFlips;
       this.landedBackFlips += this.pendingBackFlips;
 
@@ -86,8 +85,8 @@ export class State {
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
         this.comboMultiplier++;
-        this.character.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
-        this.character.scene.observer.emit('score_change', this.getCurrentScore());
+        this.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
+        this.scene.observer.emit('score_change', this.getCurrentScore());
 
         this.resetComboLeewayTween();
         this.comboLeeway = this.createComboLeewayTween(false);
@@ -117,12 +116,12 @@ export class State {
   }
 
   createComboLeewayTween(paused: boolean = true): Phaser.Tweens.Tween {
-    return this.character.scene.tweens.addCounter({
+    return this.scene.tweens.addCounter({
       paused,
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 4000,
-      onUpdate: (tween) => this.character.scene.observer.emit('combo_leeway_update', tween.getValue()),
+      onUpdate: (tween) => this.scene.observer.emit('combo_leeway_update', tween.getValue()),
       onComplete: tween => this.handleComboComplete(),
     });
   }
@@ -158,7 +157,7 @@ export class State {
   }
 
   private registerCollisionListeners() {
-    this.b2Physics.on('post_solve', ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
+    this.scene.b2Physics.on('post_solve', ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
@@ -168,8 +167,8 @@ export class State {
       if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    const customProps = this.b2Physics.loader.customProps;
-    this.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
+    const customProps = this.scene.b2Physics.loader.customProps;
+    this.scene.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
@@ -177,7 +176,7 @@ export class State {
 
   private setCrashed() {
     this.isCrashed = true;
-    this.character.scene.observer.emit('enter_crashed', this.getCurrentScore());
+    this.scene.observer.emit('enter_crashed', this.getCurrentScore());
     this.resetComboLeewayTween();
   }
 
@@ -185,20 +184,20 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.isLevelFinished) return;
-    const sensorType = this.b2Physics.loader.customProps.get(fixture)?.phaserSensorType;
+    const sensorType = this.scene.b2Physics.loader.customProps.get(fixture)?.phaserSensorType;
     switch (sensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;
       }
       case 'level_finish': {
-        this.character.scene.cameras.main.stopFollow();
+        this.scene.cameras.main.stopFollow();
         this.handleComboComplete();
         this.isLevelFinished = true;
         this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
-        this.character.scene.observer.emit('score_change', currentScore);
-        this.character.scene.observer.emit('level_finish', currentScore);
+        this.scene.observer.emit('score_change', currentScore);
+        this.scene.observer.emit('level_finish', currentScore);
         break;
       }
       case 'level_deathzone': {
@@ -212,8 +211,8 @@ export class State {
     this.processPickups();
     const isInAir = this.character.board.isInAir();
     // TODO check is chrashed only once
-    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.character.scene.observer.emit('enter_in_air');
-    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.character.scene.observer.emit('enter_grounded');
+    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.scene.observer.emit('enter_in_air');
+    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.scene.observer.emit('enter_grounded');
     this.updateTrickCounter();
     this.updateComboLeeway();
     this.updateDistance();
@@ -222,17 +221,17 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const userdata = this.b2Physics.loader.userData.get(body);
+      const userdata = this.scene.b2Physics.loader.userData.get(body);
       const image = userdata?.image;
       if (image) {
         userdata.image = null;
         image.destroy();
       }
-      this.b2Physics.loader.userData.delete(body);
-      this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
+      this.scene.b2Physics.loader.userData.delete(body);
+      this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       this.totalCollectedPresents++;
-      this.character.scene.observer.emit('pickup_present', this.totalCollectedPresents);
-      this.character.scene.observer.emit('score_change', this.getCurrentScore());
+      this.scene.observer.emit('pickup_present', this.totalCollectedPresents);
+      this.scene.observer.emit('score_change', this.getCurrentScore());
 
     }
     this.pickupsToProcess.clear();
@@ -265,7 +264,7 @@ export class State {
     //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
     //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
-      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.b2Physics.isPaused) {
+      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.scene.b2Physics.isPaused) {
         this.comboLeeway.isPlaying() && this.comboLeeway.pause();
       } else {
         this.comboLeeway.isPaused() && this.comboLeeway.resume();
@@ -292,8 +291,8 @@ export class State {
   private updateDistance() {
     const distance = this.getTravelDistanceMeters();
     if (distance !== this.lastDistance && !this.isCrashed && !this.isLevelFinished) {
-      this.character.scene.observer.emit('distance_change', distance);
-      this.character.scene.observer.emit('score_change', this.getCurrentScore());
+      this.scene.observer.emit('distance_change', distance);
+      this.scene.observer.emit('score_change', this.getCurrentScore());
       this.lastDistance = distance;
     }
   }
@@ -303,8 +302,8 @@ export class State {
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
     this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
-    this.character.scene.observer.emit('score_change', this.getCurrentScore());
-    this.character.scene.observer.emit('combo_change', 0, 0);
+    this.scene.observer.emit('score_change', this.getCurrentScore());
+    this.scene.observer.emit('combo_change', 0, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
   }

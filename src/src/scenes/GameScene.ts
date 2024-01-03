@@ -19,13 +19,14 @@ export default class GameScene extends Phaser.Scene {
   private create() {
     if (this.observer) this.observer.destroy(); // clear previous runs
     this.observer = new Phaser.Events.EventEmitter();
-    this.b2Physics = new Physics(this, 40, { x: 0, y: -10 });
-    this.b2Physics.loadRubeScene(getCurrentLevel())
-    new TerrainRenderer(this, this.b2Physics);
+    this.b2Physics = new Physics(this, { worldScale: 40, gravityX: 0, gravityY: -10} );
+    this.b2Physics.load(getCurrentLevel())
+    new TerrainRenderer(this);
     // TODO this allows only one character per level. For each loadRubeScene call generate unique id and store it as custom props for each entity loaded
     // Then allow finding entities filtered by this uid
-    this.b2Physics.loadRubeScene(getSelectedCharacter())
-    const character = new Character(this);
+    const id = this.b2Physics.load(getSelectedCharacter(), 0 , 5);
+    //  this.b2Physics.load(getSelectedCharacter());
+    const character = new Character(this, id);
     this.playerController = new CharacterController(this);
     this.playerController.possessCharacter(character);
 

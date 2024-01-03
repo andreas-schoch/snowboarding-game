@@ -1,24 +1,21 @@
-import { Physics } from './Physics';
 import GameScene from '../scenes/GameScene';
 import { b2 } from '../index';
 
 
 export type XY = { x: number, y: number };
 
-export default class Terrain {
-  private readonly b2Physics: Physics;
-  private readonly scene: GameScene;
+export default class TerrainRenderer {
 
-  constructor(scene: GameScene, physics: Physics) {
+  constructor(private scene: GameScene) {
     this.scene = scene;
-    this.b2Physics = physics;
 
-    const terrainBodies = this.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow');
+    const terrainBodies = this.scene.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow');
     if (!terrainBodies.length) return; // There may be levels where no terrain is present
-    const scale = this.b2Physics.worldScale;
+    const scale = this.scene.b2Physics.worldScale;
 
     for (const body of terrainBodies) {
       const bodyPos = body.GetPosition();
+      // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
       let edgeShape = new b2.b2EdgeShape();
       for (let fix = body.GetFixtureList(); b2.getPointer(fix) !== b2.getPointer(b2.NULL); fix = fix.GetNext()) {
         const shape = b2.castObject(fix.GetShape(), b2.b2ChainShape);
@@ -31,7 +28,6 @@ export default class Terrain {
         }
         this.drawTerrain(chunkPoints);
       }
-      b2.destroy(edgeShape);
     }
   }
 
@@ -41,7 +37,7 @@ export default class Terrain {
     const graphics = this.scene.add.graphics().setDepth(10);
     graphics.setPosition(minX, minY)
     // TODO don't use b2Vec2 for non-box2d stuff!!
-    const pointsLocal = pointsWorld.map(point => new b2.b2Vec2(point.x - minX, point.y - minY));
+    const pointsLocal: XY[] = pointsWorld.map(point => ({x:point.x - minX, y: point.y - minY}));
     graphics.fillStyle(0xb3cef2, 1);
     graphics.fillPoints(pointsLocal, true, false);
     // The terrain within RUBE is represented as chunks of non-loopped edge fixtures

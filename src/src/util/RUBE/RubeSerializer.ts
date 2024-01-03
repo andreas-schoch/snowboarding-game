@@ -7,13 +7,9 @@ import { vec2Util } from './Vec2Math';
 export class RubeSerializer<IMG = unknown> {
   handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented') };
 
-  private world: Box2D.b2World;
-  private loader: RubeLoader<IMG>;
   private indexByBody: Map<Box2D.b2Body, number> = new Map();
 
-  constructor(world: Box2D.b2World, loader: RubeLoader<IMG>) {
-    this.world = world;
-    this.loader = loader;
+  constructor(private world: Box2D.b2World, private loader: RubeLoader<IMG>) {
   }
 
   serialize(): RubeScene {
@@ -314,7 +310,8 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeImages(): RubeImage[] {
     const images: RubeImage[] = [];
-    for (const image of this.loader.loadedImages) {
+    // for (const image of this.loader.loadedImages) {
+    for (const image of []) { // TODO FIX --------------------------------------------------------
       if (!image) throw new Error('Image not loaded');
       const serialized = this.handleSerializeImage(image);
       images.push(serialized);

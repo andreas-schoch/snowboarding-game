@@ -1,9 +1,8 @@
-import { IPostSolveEvent, Physics } from './Physics';
+import { IPostSolveEvent } from './Physics';
 import GameScene from '../scenes/GameScene';
-import { CharacterController } from './PlayerController';
 import { b2 } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
-import { Character } from './Character';
+import { CharacterPartId } from './Character';
 
 interface IRayCastResult {
   hit: boolean;
@@ -25,24 +24,18 @@ export class Snowboard {
   isNoseGrounded: boolean;
   isCenterGrounded: boolean;
 
-  private readonly character: Character;
-  private readonly scene: GameScene;
-  private readonly b2Physics: Physics;
   private readonly segments: ISegment[] = [];
   private readonly ZERO: Box2D.b2Vec2;
   private readonly particles: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  constructor(character: Character) {
-    this.scene = character.scene;
-    this.b2Physics = character.b2Physics;
-    this.character = character;
+  constructor(private scene: GameScene, private sceneId: string) {
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.initRays(this.b2Physics.worldScale / 4);
+    this.initRays(this.scene.b2Physics.worldScale / 4, this.sceneId);
     this.particles = this.initParticles();
 
-    const { worldScale, loader: { customProps: customPropertiesMapMap } } = this.b2Physics;
-    this.b2Physics.on('post_solve', ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
+    const { worldScale, loader: { customProps: customPropertiesMapMap } } = this.scene.b2Physics;
+    this.scene.b2Physics.on('post_solve', ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
       const propsBA = customPropertiesMapMap.get(bodyA);
       const propsBB = customPropertiesMapMap.get(bodyB);
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
@@ -65,6 +58,66 @@ export class Snowboard {
         }
       }
     });
+  }
+
+  getFramesInAir(): number {
+    if (this.segments.some(s => s.groundRayResult.hit)) return -1;
+    let mostRecentHit = 0;
+    for (const segment of this.segments) mostRecentHit = Math.max(mostRecentHit, segment.groundRayResult.lastHitFrame);
+    return this.scene.game.getFrame() - mostRecentHit;
+  }
+
+  isInAir(): boolean {
+    return this.getFramesInAir() !== -1;
+  }
+
+  update() {
+    const segments = this.segments;
+    for (const segment of this.segments) {
+      segment.groundRayResult.hit = false;
+      segment.groundRayResult.point.SetZero();
+      segment.groundRayResult.normal.SetZero();
+      segment.groundRayResult.fraction = -1;      // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
+      const pointStart = vec2Util.Clone(segment.body.GetWorldPoint(this.ZERO));
+      const pointEnd = vec2Util.Clone(segment.body.GetWorldPoint(segment.groundRayDirection));
+      this.scene.b2Physics.world.RayCast(segment.groundRayCallback, pointStart, pointEnd);
+    }
+
+    this.isTailGrounded = segments[0].groundRayResult.hit;
+    this.isNoseGrounded = segments[segments.length - 1].groundRayResult.hit;
+    this.isCenterGrounded = segments[3].groundRayResult.hit;
+  }
+
+  private initRays(rayLength: number, sceneId: string) {
+    const { loader } = this.scene.b2Physics;
+    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', CharacterPartId.BOARD_SEGMENT, sceneId);
+    if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
+    segmentBodies.sort((a, b) => {
+      const aIndex = Number(loader.customProps.get(a)!['phaserBoardSegmentIndex']);
+      const bIndex = Number(loader.customProps.get(b)!['phaserBoardSegmentIndex']);
+      return aIndex - bIndex;
+    });
+
+    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.scene.b2Physics.worldScale);
+    for (const body of segmentBodies) {
+      const groundRayResult: IRayCastResult = { hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1 };
+
+      const groundRayCallback = new b2.JSRayCastCallback();
+      groundRayCallback.ReportFixture = (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number) => {
+        const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
+        if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
+        const { x: pointX, y: pointY } = b2.wrapPointer(pointPtr, b2.b2Vec2);
+        const { x: normalX, y: normalY } = b2.wrapPointer(normalPtr, b2.b2Vec2);
+        groundRayResult.hit = true;
+        groundRayResult.point.Set(pointX, pointY);
+        groundRayResult.normal.Set(normalX, normalY);
+        groundRayResult.fraction = fraction;
+        groundRayResult.lastHitFrame = this.scene.game.getFrame();
+        return fraction;
+      };
+
+      this.segments.push({ body, groundRayDirection, groundRayResult, groundRayCallback });
+    }
   }
 
   private initParticles() {
@@ -93,61 +146,5 @@ export class Snowboard {
       speed: { min: 25, max: 100 },
       // tint: [0x8d8da6]
     }).setDepth(-10);
-  }
-
-  update() {
-    const segments = this.segments;
-    for (const segment of this.segments) {
-      this.resetSegment(segment);
-      // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
-      const pointStart = vec2Util.Clone(segment.body.GetWorldPoint(this.ZERO));
-      const pointEnd = vec2Util.Clone(segment.body.GetWorldPoint(segment.groundRayDirection));
-      this.b2Physics.world.RayCast(segment.groundRayCallback, pointStart, pointEnd);
-    }
-
-    this.isTailGrounded = segments[0].groundRayResult.hit;
-    this.isNoseGrounded = segments[segments.length - 1].groundRayResult.hit;
-    this.isCenterGrounded = segments[3].groundRayResult.hit;
-  }
-
-  getFramesInAir(): number {
-    if (this.segments.some(s => s.groundRayResult.hit)) return -1;
-    let mostRecentHit = 0;
-    for (const segment of this.segments) mostRecentHit = Math.max(mostRecentHit, segment.groundRayResult.lastHitFrame);
-    return this.scene.game.getFrame() - mostRecentHit;
-  }
-
-  isInAir(): boolean {
-    return this.getFramesInAir() !== -1;
-  }
-
-  private resetSegment(segment: ISegment) {
-    segment.groundRayResult.hit = false;
-    segment.groundRayResult.point.SetZero();
-    segment.groundRayResult.normal.SetZero();
-    segment.groundRayResult.fraction = -1;
-  }
-
-  private initRays(rayLength: number) {
-    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.b2Physics.worldScale);
-    for (const body of this.character.boardSegments) {
-      const groundRayResult: IRayCastResult = { hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1 };
-
-      const groundRayCallback = new b2.JSRayCastCallback();
-      groundRayCallback.ReportFixture = (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number) => {
-        const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
-        if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
-        const { x: pointX, y: pointY } = b2.wrapPointer(pointPtr, b2.b2Vec2);
-        const { x: normalX, y: normalY } = b2.wrapPointer(normalPtr, b2.b2Vec2);
-        groundRayResult.hit = true;
-        groundRayResult.point.Set(pointX, pointY);
-        groundRayResult.normal.Set(normalX, normalY);
-        groundRayResult.fraction = fraction;
-        groundRayResult.lastHitFrame = this.scene.game.getFrame();
-        return fraction;
-      };
-
-      this.segments.push({ body, groundRayDirection, groundRayResult, groundRayCallback });
-    }
   }
 }

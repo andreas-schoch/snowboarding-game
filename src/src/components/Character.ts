@@ -1,7 +1,6 @@
 import { b2 } from "..";
 import GameScene from "../scenes/GameScene";
 import { vec2Util } from "../util/RUBE/Vec2Math";
-import { Physics } from "./Physics";
 import { Snowboard } from "./Snowboard";
 import { State } from "./State";
 
@@ -12,50 +11,40 @@ export class Character {
   armLowerLeft: Box2D.b2Body;
   armUpperRight: Box2D.b2Body;
   armLowerRight: Box2D.b2Body;
-  boardSegments: (Box2D.b2Body)[];
-
-  headImage: Phaser.GameObjects.Image;
-  bodyImage: Phaser.GameObjects.Image;
-  armUpperLeftImage: Phaser.GameObjects.Image;
-  armLowerLeftImage: Phaser.GameObjects.Image;
-  armUpperRightImage: Phaser.GameObjects.Image;
-  armLowerRightImage: Phaser.GameObjects.Image;
-
-  armUpperLeftDepth: number;
-  armLowerLeftDepth: number;
-  armUpperRightDepth: number;
-  armLowerRightDepth: number;
-
   bindingLeft: Box2D.b2RevoluteJoint | null;
   bindingRight: Box2D.b2RevoluteJoint | null;
   distanceLegLeft: Box2D.b2DistanceJoint | null;
   distanceLegRight: Box2D.b2DistanceJoint | null;
   weldCenter: Box2D.b2WeldJoint | null;
   prismatic: Box2D.b2PrismaticJoint | null;
-
+  headImage: Phaser.GameObjects.Image;
+  bodyImage: Phaser.GameObjects.Image;
+  armUpperLeftImage: Phaser.GameObjects.Image;
+  armLowerLeftImage: Phaser.GameObjects.Image;
+  armUpperRightImage: Phaser.GameObjects.Image;
+  armLowerRightImage: Phaser.GameObjects.Image;
+  armUpperLeftDepth: number;
+  armLowerLeftDepth: number;
+  armUpperRightDepth: number;
+  armLowerRightDepth: number;
   legLengthExtended: number;
   legLengthRelaxed: number;
   legLengthBent: number;
-
+  jumpCooldown: number // in num frames. Prevents player from jumping too quickly after a landing
   jumpForce: number;
   leanForce: number;
-  jumpCooldown: number // in num frames. Prevents player from jumping too quickly after a landing
 
-  readonly scene: GameScene;
-  readonly b2Physics: Physics;
+  board: Snowboard;
+  state: State;
   private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
   private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
   private readonly UP: Box2D.b2Vec2 = new b2.b2Vec2(0, 1);
   private alreadyDetached: boolean = false;
   private currentBodyFlipDot: number = 1;
-  board: Snowboard;
-  state: State;
 
-  constructor(scene: GameScene) {
-    this.scene = scene;
-    this.b2Physics = scene.b2Physics;
+  constructor(public scene: GameScene, private rubeSceneId: string = '') {
     this.initBodyParts();
-    this.board = new Snowboard(this);
+    this.board = new Snowboard(scene, this.rubeSceneId);
     this.state = new State(this);
   }
 
@@ -66,22 +55,21 @@ export class Character {
   }
 
   leanBackward() {
-    const { legLengthBent, legLengthExtended } = this;
+    const { legLengthBent, legLengthExtended, leanForce } = this;
     this.distanceLegLeft?.SetLength(legLengthBent);
     this.distanceLegRight?.SetLength(legLengthExtended);
-    this.body.ApplyAngularImpulse(this.leanForce, true);
+    this.body.ApplyAngularImpulse(leanForce, true);
   }
 
   leanForward() {
-    const { legLengthBent, legLengthExtended } = this;
+    const { legLengthBent, legLengthExtended, leanForce } = this;
     this.distanceLegLeft?.SetLength(legLengthExtended);
     this.distanceLegRight?.SetLength(legLengthBent);
-    this.body.ApplyAngularImpulse(-this.leanForce, true);
+    this.body.ApplyAngularImpulse(-leanForce, true);
   }
 
   leanCenter() {
     const { legLengthBent } = this;
-
     this.distanceLegLeft?.SetLength(legLengthBent);
     this.distanceLegRight?.SetLength(legLengthBent);
   }
@@ -132,7 +120,7 @@ export class Character {
   }
 
   private updateLookAtDirection() {
-    const userDataMap = this.b2Physics.loader.userData;
+    const userDataMap = this.scene.b2Physics.loader.userData;
     const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.body.GetLinearVelocity()));
     const bodyXDirection = vec2Util.Normalize(this.body.GetWorldVector(this.FORWARD));
     // slow down change while in air to jitter while doing flips
@@ -158,7 +146,7 @@ export class Character {
   }
 
   private detachBoard() {
-    const world = this.b2Physics.world;
+    const world = this.scene.b2Physics.world;
     if (this.bindingLeft) world.DestroyJoint(b2.getPointer(this.bindingLeft));
     if (this.bindingRight) world.DestroyJoint(b2.getPointer(this.bindingRight));
     if (this.distanceLegLeft) world.DestroyJoint(b2.getPointer(this.distanceLegLeft));
@@ -168,18 +156,17 @@ export class Character {
     this.alreadyDetached = true;
   }
 
-  private initBodyParts() {
+  private initBodyParts(sceneId: string = '') {
     const propName = 'phaserPlayerCharacterPart';
     const propSpringName = 'phaserPlayerCharacterSpring';
-    const propSegmentIndex = 'phaserBoardSegmentIndex';
 
-    const loader = this.b2Physics.loader;
-    const head = loader.getBodiesByCustomProperty(propName, CharacterPartId.HEAD)[0];
-    const body = loader.getBodiesByCustomProperty(propName, CharacterPartId.BODY)[0];
-    const armUpperLeft = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_LEFT)[0];
-    const armLowerLeft = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_LEFT)[0];
-    const armUpperRight = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_RIGHT)[0];
-    const armLowerRight = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_RIGHT)[0];
+    const loader = this.scene.b2Physics.loader;
+    const head = loader.getBodiesByCustomProperty(propName, CharacterPartId.HEAD, sceneId)[0];
+    const body = loader.getBodiesByCustomProperty(propName, CharacterPartId.BODY, sceneId)[0];
+    const armUpperLeft = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_LEFT, sceneId)[0];
+    const armLowerLeft = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_LEFT, sceneId)[0];
+    const armUpperRight = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_RIGHT, sceneId)[0];
+    const armLowerRight = loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_RIGHT, sceneId)[0];
 
     const headImage = loader.userData.get(head)!.image;
     const bodyImage = loader.userData.get(body)!.image;
@@ -188,25 +175,25 @@ export class Character {
     const armUpperRightImage = loader.userData.get(armUpperRight)!.image;
     const armLowerRightImage = loader.userData.get(armLowerRight)!.image;
 
-    const legLengthExtended: number = loader.customProps.get(body)!['legLengthExtended'] as number;
-    const legLengthRelaxed: number = loader.customProps.get(body)!['legLengthRelaxed'] as number;
-    const legLengthBent: number = loader.customProps.get(body)!['legLengthBent'] as number;
-    const jumpForce: number = loader.customProps.get(body)!['jumpForce'] as number;
-    const leanForce: number = loader.customProps.get(body)!['leanForce'] as number;
-    const jumpCooldown: number = loader.customProps.get(body)!['jumpCooldown'] as number;
+    const legLengthExtended = loader.customProps.get(body)!['legLengthExtended'] as number;
+    const legLengthRelaxed = loader.customProps.get(body)!['legLengthRelaxed'] as number;
+    const legLengthBent = loader.customProps.get(body)!['legLengthBent'] as number;
+    const jumpForce = loader.customProps.get(body)!['jumpForce'] as number;
+    const leanForce = loader.customProps.get(body)!['leanForce'] as number;
+    const jumpCooldown = loader.customProps.get(body)!['jumpCooldown'] as number;
+
+    const bindingLeft = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_LEFT, sceneId)[0];
+    const bindingRight = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_RIGHT, sceneId)[0];
+    const distanceLegLeft = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_LEFT, sceneId)[0];
+    const distanceLegRight = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_RIGHT, sceneId)[0];
+    const weldCenter = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.WELD_CENTER, sceneId)[0];
+    const prismatic = loader.getJointsByCustomProperty(propSpringName, CharacterPartId.PRISMATIC, sceneId)[0];
 
     if (!headImage || !bodyImage || !armUpperLeftImage || !armLowerLeftImage || !armUpperRightImage || !armLowerRightImage) throw new Error('Player character images not found');
+    if (!bindingLeft || !bindingRight || !distanceLegLeft || !distanceLegRight || !weldCenter || !prismatic) throw new Error('Player character joints not found');
     if (!head || !body || !armUpperLeft || !armLowerLeft || !armUpperRight || !armLowerRight) throw new Error('Player character b2Bodies not found');
     if (!legLengthExtended || !legLengthRelaxed || !legLengthBent) throw new Error('Player character leg lengths not found. Need to be set on character torso body');
     if (!jumpForce || !leanForce || !jumpCooldown) throw new Error('Player character jump/lean properties not found. Need to be set on character torso body');
-
-    const segments = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.BOARD_SEGMENT);
-    if (segments.length !== 7) throw new Error('Player character board segments missing');
-    segments.sort((a, b) => {
-      const aIndex = Number(this.b2Physics.loader.customProps.get(a)![propSegmentIndex]);
-      const bIndex = Number(this.b2Physics.loader.customProps.get(b)![propSegmentIndex]);
-      return aIndex - bIndex;
-    });
 
     this.head = head;
     this.body = body;
@@ -224,13 +211,12 @@ export class Character {
     this.armLowerLeftDepth = armLowerLeftImage.depth;
     this.armUpperRightDepth = armUpperRightImage.depth;
     this.armLowerRightDepth = armLowerRightImage.depth;
-    this.boardSegments = segments;
-    this.bindingLeft = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_LEFT)[0], b2.b2RevoluteJoint);
-    this.bindingRight = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_RIGHT)[0], b2.b2RevoluteJoint);
-    this.distanceLegLeft = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_LEFT)[0], b2.b2DistanceJoint);
-    this.distanceLegRight = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_RIGHT)[0], b2.b2DistanceJoint);
-    this.weldCenter = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.WELD_CENTER)[0], b2.b2WeldJoint);
-    this.prismatic = b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.PRISMATIC)[0], b2.b2PrismaticJoint);
+    this.bindingLeft = b2.castObject(bindingLeft, b2.b2RevoluteJoint);
+    this.bindingRight = b2.castObject(bindingRight, b2.b2RevoluteJoint);
+    this.distanceLegLeft = b2.castObject(distanceLegLeft, b2.b2DistanceJoint);
+    this.distanceLegRight = b2.castObject(distanceLegRight, b2.b2DistanceJoint);
+    this.weldCenter = b2.castObject(weldCenter, b2.b2WeldJoint);
+    this.prismatic = b2.castObject(prismatic, b2.b2PrismaticJoint);
     this.legLengthExtended = legLengthExtended;
     this.legLengthRelaxed = legLengthRelaxed;
     this.legLengthBent = legLengthBent;

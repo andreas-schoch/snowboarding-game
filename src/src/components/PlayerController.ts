@@ -1,16 +1,12 @@
 import GameScene from '../scenes/GameScene';
-import { Physics } from './Physics';
 import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
 import { DEFAULT_WIDTH, DEFAULT_ZOOM } from '..';
 
 export class CharacterController {
   character: Character;
-  readonly scene: GameScene;
-  readonly b2Physics: Physics;
 
   private resolutionMod: number;
-
   private keyW: Phaser.Input.Keyboard.Key;
   private keyA: Phaser.Input.Keyboard.Key;
   private keyS: Phaser.Input.Keyboard.Key;
@@ -26,12 +22,11 @@ export class CharacterController {
   windNoise: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
-  constructor(scene: GameScene) {
-    this.scene = scene;
-    this.b2Physics = scene.b2Physics;
+  constructor(private scene: GameScene) {
+
     this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
     this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
-    this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
+    this.scene.observer.on('resume_game', () => this.scene.b2Physics.isPaused = false);
     this.scene.observer.on('enter_crashed', () => this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
     this.scene.observer.on('surface_impact', (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
       // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
@@ -70,7 +65,7 @@ export class CharacterController {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    const userdata = this.b2Physics.loader.userData.get(this.character.body);
+    const userdata = this.scene.b2Physics.loader.userData.get(this.character.body);
     if (userdata?.image) camera.startFollow(userdata.image, false, 0.5, 0.5);
 
     if (this.windNoise) this.windNoise.destroy();
@@ -88,7 +83,7 @@ export class CharacterController {
   }
 
   update() {
-    if (this.b2Physics.isPaused) return;
+    if (this.scene.b2Physics.isPaused) return;
 
     this.character.update(); // must come before inputs
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.character.jumpCooldown) this.character.jump();
@@ -146,7 +141,7 @@ export class CharacterController {
     this.keySpace.onDown = () => this.pauseGame();
     const onJump = () => {
       this.jumpKeyDown = true;
-      if (!this.character.board.isInAir() && !this.b2Physics.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
+      if (!this.character.board.isInAir() && !this.scene.b2Physics.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
     };
     this.keyW.onDown = onJump;
     this.keyArrowUp.onDown = onJump;
@@ -156,8 +151,8 @@ export class CharacterController {
 
   private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
-    this.b2Physics.isPaused = !this.b2Physics.isPaused;
+    this.scene.b2Physics.isPaused = !this.scene.b2Physics.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
+    this.scene.observer.emit('toggle_pause', this.scene.b2Physics.isPaused, activePanel);
   }
 }
