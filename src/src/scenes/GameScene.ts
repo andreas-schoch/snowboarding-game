@@ -1,4 +1,4 @@
-import TerrainRenderer from '../components/Terrain';
+import Terrain from '../components/Terrain';
 import { Physics } from '../components/Physics';
 import { b2 } from '../index';
 import { SCENE_GAME, SCENE_GAME_UI } from "..";
@@ -21,7 +21,7 @@ export default class GameScene extends Phaser.Scene {
     this.observer = new Phaser.Events.EventEmitter();
     this.b2Physics = new Physics(this, { worldScale: 40, gravityX: 0, gravityY: -10} );
     this.b2Physics.load(getCurrentLevel())
-    new TerrainRenderer(this);
+    new Terrain(this).draw();
     // TODO this allows only one character per level. For each loadRubeScene call generate unique id and store it as custom props for each entity loaded
     // Then allow finding entities filtered by this uid
     const id = this.b2Physics.load(getSelectedCharacter(), 0 , 5);

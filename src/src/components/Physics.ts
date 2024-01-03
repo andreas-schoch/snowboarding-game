@@ -5,6 +5,7 @@ import { RubeLoader } from '../util/RUBE/RubeLoader';
 import DebugDrawer from './DebugDraw';
 import { RubeSerializer } from '../util/RUBE/RubeSerializer';
 import { getSelectedCharacterSkin } from '../util/getCurrentCharacter';
+import { B2_BEGIN_CONTACT, B2_POST_SOLVE } from '../eventTypes';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -130,7 +131,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
       const data: IBeginContactEvent = { contact, fixtureA, fixtureB, bodyA, bodyB };
-      this.emit('begin_contact', data);
+      this.emit(B2_BEGIN_CONTACT, data);
     };
     listeners.EndContact = () => null;
     listeners.PreSolve = () => null;
@@ -142,7 +143,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
       const data: IPostSolveEvent = { contact, impulse, fixtureA, fixtureB, bodyA, bodyB };
-      this.emit('post_solve', data);
+      this.emit(B2_POST_SOLVE, data);
     }
     this.world.SetContactListener(listeners);
     // b2.destroy(listeners); // error when we destroy this so don't do it

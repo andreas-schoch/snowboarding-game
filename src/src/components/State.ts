@@ -1,8 +1,9 @@
 import { IBeginContactEvent, IPostSolveEvent } from './Physics';
-import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION } from "..";
+import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION, b2 } from "..";
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { Character } from './Character';
 import GameScene from '../scenes/GameScene';
+import { B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from '../eventTypes';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';
@@ -70,33 +71,7 @@ export class State {
   constructor(private character: Character) {
     this.character = character;
     this.scene = character.scene;
-    this.registerCollisionListeners(); // TODO fix
-
-    // this.scene.observer.on('enter_in_air', () => this.isGrounded = false);
-    this.scene.observer.on('enter_grounded', () => {
-      this.timeGrounded = this.scene.game.getFrame();
-      this.landedFrontFlips += this.pendingFrontFlips;
-      this.landedBackFlips += this.pendingBackFlips;
-
-      const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
-      if (numFlips >= 1) {
-        this.trickScoreLog.push({ type: 'flip', flips: numFlips, timestamp: Date.now() });
-        const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
-        this.totalTrickScore += trickScore;
-        this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
-        this.comboMultiplier++;
-        this.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
-        this.scene.observer.emit('score_change', this.getCurrentScore());
-
-        this.resetComboLeewayTween();
-        this.comboLeeway = this.createComboLeewayTween(false);
-      }
-
-      this.totalRotation = 0;
-      this.currentFlipRotation = 0;
-      this.pendingBackFlips = 0;
-      this.pendingFrontFlips = 0;
-    });
+    this.registerListeners();
   }
 
   getCurrentScore(): IScore {
@@ -121,7 +96,7 @@ export class State {
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 4000,
-      onUpdate: (tween) => this.scene.observer.emit('combo_leeway_update', tween.getValue()),
+      onUpdate: (tween) => this.scene.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
       onComplete: tween => this.handleComboComplete(),
     });
   }
@@ -156,8 +131,14 @@ export class State {
     return Math.floor(distance / 5) * 5;
   }
 
-  private registerCollisionListeners() {
-    this.scene.b2Physics.on('post_solve', ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
+  private registerListeners() {
+    const customProps = this.scene.b2Physics.loader.customProps;
+    this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
+      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
+      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
+    });
+
+    this.scene.b2Physics.on(B2_POST_SOLVE, ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
@@ -167,16 +148,36 @@ export class State {
       if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    const customProps = this.scene.b2Physics.loader.customProps;
-    this.scene.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
-      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
-      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
+    // this.scene.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
+    this.scene.observer.on(ENTER_GROUNDED, () => {
+      this.timeGrounded = this.scene.game.getFrame();
+      this.landedFrontFlips += this.pendingFrontFlips;
+      this.landedBackFlips += this.pendingBackFlips;
+
+      const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
+      if (numFlips >= 1) {
+        this.trickScoreLog.push({ type: 'flip', flips: numFlips, timestamp: Date.now() });
+        const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
+        this.totalTrickScore += trickScore;
+        this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
+        this.comboMultiplier++;
+        this.scene.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier);
+        this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+
+        this.resetComboLeewayTween();
+        this.comboLeeway = this.createComboLeewayTween(false);
+      }
+
+      this.totalRotation = 0;
+      this.currentFlipRotation = 0;
+      this.pendingBackFlips = 0;
+      this.pendingFrontFlips = 0;
     });
   }
 
   private setCrashed() {
     this.isCrashed = true;
-    this.scene.observer.emit('enter_crashed', this.getCurrentScore());
+    this.scene.observer.emit(ENTER_CRASHED, this.getCurrentScore());
     this.resetComboLeewayTween();
   }
 
@@ -196,8 +197,8 @@ export class State {
         this.isLevelFinished = true;
         this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
-        this.scene.observer.emit('score_change', currentScore);
-        this.scene.observer.emit('level_finish', currentScore);
+        this.scene.observer.emit(SCORE_CHANGE, currentScore);
+        this.scene.observer.emit(LEVEL_FINISH, currentScore);
         break;
       }
       case 'level_deathzone': {
@@ -211,8 +212,8 @@ export class State {
     this.processPickups();
     const isInAir = this.character.board.isInAir();
     // TODO check is chrashed only once
-    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.scene.observer.emit('enter_in_air');
-    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.scene.observer.emit('enter_grounded');
+    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.scene.observer.emit(ENTER_IN_AIR);
+    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.scene.observer.emit(ENTER_GROUNDED);
     this.updateTrickCounter();
     this.updateComboLeeway();
     this.updateDistance();
@@ -230,8 +231,8 @@ export class State {
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       this.totalCollectedPresents++;
-      this.scene.observer.emit('pickup_present', this.totalCollectedPresents);
-      this.scene.observer.emit('score_change', this.getCurrentScore());
+      this.scene.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
+      this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
     }
     this.pickupsToProcess.clear();
@@ -291,8 +292,8 @@ export class State {
   private updateDistance() {
     const distance = this.getTravelDistanceMeters();
     if (distance !== this.lastDistance && !this.isCrashed && !this.isLevelFinished) {
-      this.scene.observer.emit('distance_change', distance);
-      this.scene.observer.emit('score_change', this.getCurrentScore());
+      this.scene.observer.emit(DISTANCE_CHANGE, distance);
+      this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
       this.lastDistance = distance;
     }
   }
@@ -302,8 +303,8 @@ export class State {
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
     this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
-    this.scene.observer.emit('score_change', this.getCurrentScore());
-    this.scene.observer.emit('combo_change', 0, 0);
+    this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+    this.scene.observer.emit(COMBO_CHANGE, 0, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
   }

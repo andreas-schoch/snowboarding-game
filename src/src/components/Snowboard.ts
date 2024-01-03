@@ -3,6 +3,7 @@ import GameScene from '../scenes/GameScene';
 import { b2 } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
 import { CharacterPartId } from './Character';
+import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
 
 interface IRayCastResult {
   hit: boolean;
@@ -35,7 +36,7 @@ export class Snowboard {
     this.particles = this.initParticles();
 
     const { worldScale, loader: { customProps: customPropertiesMapMap } } = this.scene.b2Physics;
-    this.scene.b2Physics.on('post_solve', ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
+    this.scene.b2Physics.on(B2_POST_SOLVE, ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
       const propsBA = customPropertiesMapMap.get(bodyA);
       const propsBB = customPropertiesMapMap.get(bodyB);
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
@@ -54,7 +55,7 @@ export class Snowboard {
 
         if (propsBA && propsBA['phaserPlayerCharacterPart'] === 'boardSegment' || propsBB && propsBB['phaserPlayerCharacterPart'] === 'boardSegment') {
           const centerGrounded = this.segments[3].groundRayResult.hit;
-          this.scene.observer.emit('surface_impact', normalImpulse, 'snow', false, centerGrounded, false);
+          this.scene.observer.emit(SURFACE_IMPACT, normalImpulse, 'snow', false, centerGrounded, false);
         }
       }
     });
@@ -125,7 +126,7 @@ export class Snowboard {
     graphics.fillStyle(0xffffff, 1);
     graphics.fillCircle(8, 8, 8);
     graphics.generateTexture('circle_01', 16, 16);
-    graphics.clear();
+    graphics.destroy();
     return this.scene.add.particles(0, 0, 'circle_01', {
       active: true,
       visible: true,

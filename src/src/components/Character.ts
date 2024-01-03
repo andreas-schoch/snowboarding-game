@@ -5,6 +5,7 @@ import { Snowboard } from "./Snowboard";
 import { State } from "./State";
 
 export class Character {
+  id: string;
   head: Box2D.b2Body;
   body: Box2D.b2Body;
   armUpperLeft: Box2D.b2Body;
@@ -44,8 +45,9 @@ export class Character {
 
   constructor(public scene: GameScene, private rubeSceneId: string = '') {
     this.initBodyParts();
-    this.board = new Snowboard(scene, this.rubeSceneId);
+    this.id = rubeSceneId
     this.state = new State(this);
+    this.board = new Snowboard(scene, this.rubeSceneId);
   }
 
   private resetLegs() {

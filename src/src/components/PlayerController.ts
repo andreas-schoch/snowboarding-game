@@ -2,6 +2,7 @@ import GameScene from '../scenes/GameScene';
 import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
 import { DEFAULT_WIDTH, DEFAULT_ZOOM } from '..';
+import { ENTER_CRASHED, ENTER_IN_AIR, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, SURFACE_IMPACT, TOGGLE_PAUSE } from '../eventTypes';
 
 export class CharacterController {
   character: Character;
@@ -24,11 +25,11 @@ export class CharacterController {
 
   constructor(private scene: GameScene) {
 
-    this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
-    this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
-    this.scene.observer.on('resume_game', () => this.scene.b2Physics.isPaused = false);
-    this.scene.observer.on('enter_crashed', () => this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
-    this.scene.observer.on('surface_impact', (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
+    this.scene.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
+    this.scene.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
+    this.scene.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
+    this.scene.observer.on(ENTER_CRASHED, () => this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
+    this.scene.observer.on(SURFACE_IMPACT, (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
       // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
       const maxImpulse = 12;
       const target = center ? 0 : 1200;
@@ -41,7 +42,7 @@ export class CharacterController {
       this.snowboardSlide.setVolume(volume);
     });
 
-    this.scene.observer.on('enter_in_air', () => {
+    this.scene.observer.on(ENTER_IN_AIR, () => {
       this.scene.add.tween({
         targets: this.snowboardSlide,
         volume: 0.03,
@@ -153,6 +154,6 @@ export class CharacterController {
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.scene.b2Physics.isPaused = !this.scene.b2Physics.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    this.scene.observer.emit('toggle_pause', this.scene.b2Physics.isPaused, activePanel);
+    this.scene.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.isPaused, activePanel);
   }
 }

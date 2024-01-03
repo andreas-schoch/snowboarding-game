@@ -3,6 +3,7 @@ import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { BackgroundMusicKeys, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
+import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
 
 
 export enum PanelIds {
@@ -84,20 +85,20 @@ export default class GameUIScene extends Phaser.Scene {
     leaderboardService.setLevel(getCurrentLevel());
     this.initDomUi();
 
-    this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on('pickup_present', total => {
+    this.observer.on(TOGGLE_PAUSE, (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
+    this.observer.on(PICKUP_PRESENT, total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();
     });
-    this.observer.on('combo_change', (accumulated, multiplier) => {
+    this.observer.on(COMBO_CHANGE, (accumulated, multiplier) => {
       if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-';
     });
-    this.observer.on('score_change', score => {
+    this.observer.on(SCORE_CHANGE, score => {
       if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score));
     });
 
     this.comboLeewayChart = this.add.graphics();
-    this.observer.on('combo_leeway_update', (value) => {
+    this.observer.on(COMBO_LEEWAY_UPDATE, (value) => {
       this.comboLeewayChart
         .clear()
         .fillStyle(0xffffff)
@@ -105,7 +106,7 @@ export default class GameUIScene extends Phaser.Scene {
         .fillPath();
     });
 
-    this.observer.on('enter_crashed', (score: IScore) => {
+    this.observer.on(ENTER_CRASHED, (score: IScore) => {
       this.pendingScore = score;
       this.crashed = true;
       this.sfx_death.play();
@@ -128,7 +129,7 @@ export default class GameUIScene extends Phaser.Scene {
       });
     });
 
-    this.observer.on('level_finish', (score: IScore) => {
+    this.observer.on(LEVEL_FINISH, (score: IScore) => {
       if (this.crashed) return;
       this.pendingScore = score;
       this.finished = true;
@@ -227,7 +228,7 @@ export default class GameUIScene extends Phaser.Scene {
         }
         case 'btn-resume-game': {
           this.setPanelVisibility(PanelIds.NONE);
-          this.observer.emit('resume_game');
+          this.observer.emit(RESUME_GAME);
           break;
         }
         case 'btn-goto-select-level': {
@@ -255,13 +256,13 @@ export default class GameUIScene extends Phaser.Scene {
         }
         case 'pause-game-icon': {
           if (this.panelPauseMenu?.classList.contains('hidden')) {
-            this.observer.emit('pause_game_icon_pressed');
+            this.observer.emit(PAUSE_GAME_ICON_PRESSED);
           }
           break;
         }
         case 'how-to-play-icon': {
           if (this.panelPauseMenu?.classList.contains('hidden')) {
-            this.observer.emit('how_to_play_icon_pressed');
+            this.observer.emit(HOW_TO_PLAY_ICON_PRESSED);
           }
           break;
         }
