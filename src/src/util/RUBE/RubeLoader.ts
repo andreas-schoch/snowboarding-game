@@ -13,6 +13,7 @@ export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
 export class RubeLoader<IMG = unknown> {
   handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => IMG | null = () => null;
 
+  // TODO turn into map with uid as key and {bodies, joints, images} as value to be able to filter by load
   loadedBodies: (Box2D.b2Body | null)[] = [];
   loadedJoints: (Box2D.b2Joint | null)[] = [];
   loadedImages: (IMG | null)[] = []; // depends on with what engine this loader is used. Maybe make generic
@@ -20,8 +21,8 @@ export class RubeLoader<IMG = unknown> {
   private world: Box2D.b2World;
   private bodyByName: Map<string, Box2D.b2Body[]> = new Map();
 
-  bodyUserDataMap: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
-  customPropertiesMap: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
+  userData: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
+  customProps: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
 
   constructor(world: Box2D.b2World) {
     this.world = world;
@@ -46,7 +47,7 @@ export class RubeLoader<IMG = unknown> {
   getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown): Box2D.b2Body[] {
     const bodies: Box2D.b2Body[] = [];
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
-      const props = this.customPropertiesMap.get(body);
+      const props = this.customProps.get(body);
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       bodies.push(body);
@@ -59,7 +60,7 @@ export class RubeLoader<IMG = unknown> {
     type f = Box2D.b2Fixture | null;
     for (let body = this.world.GetBodyList(); body; body = body.GetNext()) {
       for (let fixture: f = body.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
-        const props = this.customPropertiesMap.get(fixture);
+        const props = this.customProps.get(fixture);
         if (!props) continue;
         if (props[propertyName] !== valueToMatch) continue;
         fixtures.push(fixture);
@@ -72,7 +73,7 @@ export class RubeLoader<IMG = unknown> {
     const joints: Box2D.b2Joint[] = [];
     type j = Box2D.b2Joint | null;
     for (let joint = this.world.GetJointList(); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = joint.GetNext()) {
-      const props = this.customPropertiesMap.get(joint);
+      const props = this.customProps.get(joint);
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       joints.push(joint);
@@ -109,8 +110,8 @@ export class RubeLoader<IMG = unknown> {
     b2.destroy(massData);
     b2.destroy(bd);
 
-    this.bodyUserDataMap.set(body, { name: bodyJson.name || '', image: null });
-    this.customPropertiesMap.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
+    this.userData.set(body, { name: bodyJson.name || '', image: null });
+    this.customProps.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
     (bodyJson.fixture || []).forEach(fixtureJson => this.loadFixture(body, fixtureJson));
     return body;
   }
@@ -131,7 +132,7 @@ export class RubeLoader<IMG = unknown> {
     const fixture: Box2D.b2Fixture = body.CreateFixture(fd);
     b2.destroy(fd);
     b2.destroy(filter);
-    this.customPropertiesMap.set(fixture, this.customPropertiesArrayToMap(fixtureJso.customProperties || []));
+    this.customProps.set(fixture, this.customPropertiesArrayToMap(fixtureJso.customProperties || []));
     return fixture;
   }
 
@@ -243,7 +244,7 @@ export class RubeLoader<IMG = unknown> {
         throw new Error('Unsupported joint type: ' + jointJson.type);
     }
 
-    this.customPropertiesMap.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
+    this.customProps.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
     return joint;
   }
 
@@ -274,9 +275,9 @@ export class RubeLoader<IMG = unknown> {
     const img = this.handleLoadImage(imageJson, bodyObj, customProps);
     if (!img) return null;
     const props = this.customPropertiesArrayToMap(customProperties || []);
-    this.customPropertiesMap.set(img, props);
+    this.customProps.set(img, props);
     if (bodyObj) {
-      const userData = this.bodyUserDataMap.get(bodyObj);
+      const userData = this.userData.get(bodyObj);
       if (!userData) throw new Error('bodyUserDataMap is missing bodyObj. this should never happen');
       userData.image = img;
     }

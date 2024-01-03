@@ -66,7 +66,7 @@ export class State {
   private landedFrontFlips = 0;
   private landedBackFlips = 0;
   private lastDistance = 0;
-  lastIsInAir: boolean = false;
+  private lastIsInAir: boolean = false;
 
   constructor(character: Character) {
     this.character = character;
@@ -97,8 +97,19 @@ export class State {
       this.currentFlipRotation = 0;
       this.pendingBackFlips = 0;
       this.pendingFrontFlips = 0;
-    },
-    );
+    });
+  }
+
+  getCurrentScore(): IScore {
+    return {
+      distance: this.getTravelDistanceMeters(),
+      coins: this.totalCollectedPresents,
+      trickScore: this.totalTrickScore,
+      finishedLevel: this.isLevelFinished,
+      crashed: this.isCrashed,
+      trickScoreLog: this.trickScoreLog,
+      level: getCurrentLevel()
+    };
   }
 
   getCurrentSpeed(): number {
@@ -141,18 +152,6 @@ export class State {
     this.totalRotation = 0;
   }
 
-  getCurrentScore(): IScore {
-    return {
-      distance: this.getTravelDistanceMeters(),
-      coins: this.totalCollectedPresents,
-      trickScore: this.totalTrickScore,
-      finishedLevel: this.isLevelFinished,
-      crashed: this.isCrashed,
-      trickScoreLog: this.trickScoreLog,
-      level: getCurrentLevel()
-    };
-  }
-
   getTravelDistanceMeters(): number {
     const distance = this.character.body.GetPosition().x;
     return Math.floor(distance / 5) * 5;
@@ -169,7 +168,7 @@ export class State {
       if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    const customProps = this.b2Physics.loader.customPropertiesMap;
+    const customProps = this.b2Physics.loader.customProps;
     this.b2Physics.on('begin_contact', ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
@@ -186,7 +185,8 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.isLevelFinished) return;
-    switch (this.b2Physics.loader.customPropertiesMap.get(fixture)?.phaserSensorType) {
+    const sensorType = this.b2Physics.loader.customProps.get(fixture)?.phaserSensorType;
+    switch (sensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;
@@ -222,13 +222,13 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const userdata = this.b2Physics.loader.bodyUserDataMap.get(body);
+      const userdata = this.b2Physics.loader.userData.get(body);
       const image = userdata?.image;
       if (image) {
         userdata.image = null;
         image.destroy();
       }
-      this.b2Physics.loader.bodyUserDataMap.delete(body);
+      this.b2Physics.loader.userData.delete(body);
       this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       this.totalCollectedPresents++;
       this.character.scene.observer.emit('pickup_present', this.totalCollectedPresents);

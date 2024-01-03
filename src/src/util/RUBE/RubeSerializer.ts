@@ -77,7 +77,7 @@ export class RubeSerializer<IMG = unknown> {
     };
   }
   serializeCustomProperties(owner: CustomPropOwner | IMG): RubeCustomProperty[] | undefined {
-    const props = this.loader.customPropertiesMap.get(owner);
+    const props = this.loader.customProps.get(owner);
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
     for (const [name, value] of Object.entries(props)) {

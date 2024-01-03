@@ -80,7 +80,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
       // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
-      const bodyProps = bodyObj ? this.loader.customPropertiesMap.get(bodyObj) : null;
+      const bodyProps = bodyObj ? this.loader.customProps.get(bodyObj) : null;
       const isPlayerCharacterPart = Boolean(bodyProps?.['phaserPlayerCharacterPart']);
       
       if (!pos) return null;
@@ -120,7 +120,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     const worldScale = this.worldScale;
     for (let body = this.world.GetBodyList(); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = body.GetNext()) {
       if (!body) continue;
-      const userdata = this.loader.bodyUserDataMap.get(body);
+      const userdata = this.loader.userData.get(body);
       const image = userdata?.image;
       if (!image) continue;
       if (body.IsEnabled()) {

@@ -70,7 +70,7 @@ export class CharacterController {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    const userdata = this.b2Physics.loader.bodyUserDataMap.get(this.character.body);
+    const userdata = this.b2Physics.loader.userData.get(this.character.body);
     if (userdata?.image) camera.startFollow(userdata.image, false, 0.5, 0.5);
 
     if (this.windNoise) this.windNoise.destroy();
