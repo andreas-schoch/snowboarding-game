@@ -1,23 +1,16 @@
-import { Physics } from './Physics';
-import { b2 } from '../index';
 import GameScene from '../scenes/GameScene';
-import { Snowboard } from './Snowboard';
-import { State } from './State';
+import { Physics } from './Physics';
+import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
-import { vec2Util } from '../util/RUBE/Vec2Math';
+import { DEFAULT_WIDTH, DEFAULT_ZOOM } from '..';
 
-
-export class PlayerController {
+export class CharacterController {
+  character: Character;
   readonly scene: GameScene;
   readonly b2Physics: Physics;
 
-  parts: IBodyParts;
-  board: Snowboard;
-  state: State;
+  private resolutionMod: number;
 
-  private readonly jumpForce: number = 11 ;
-  private readonly leanForce: number = 2.5 ;
-  private readonly jumpCooldown: number = 15; // in num frames. Prevents player from jumping too quickly after a landing
   private keyW: Phaser.Input.Keyboard.Key;
   private keyA: Phaser.Input.Keyboard.Key;
   private keyS: Phaser.Input.Keyboard.Key;
@@ -29,292 +22,142 @@ export class PlayerController {
   private keySpace: Phaser.Input.Keyboard.Key;
   private jumpKeyDownStartFrame: number = 0;
   private jumpKeyDown: boolean;
-  private alreadyDetached = false;
-  private currentBodyFlipDot = 1;
-  private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
-  private readonly UP: Box2D.b2Vec2 = new b2.b2Vec2(0, 1);
-  private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
 
-  constructor(scene: GameScene, b2Physics: Physics) {
+  windNoise: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+  snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+
+  constructor(scene: GameScene) {
     this.scene = scene;
-    this.b2Physics = b2Physics;
+    this.b2Physics = scene.b2Physics;
     this.scene.observer.on('pause_game_icon_pressed', () => this.pauseGame());
     this.scene.observer.on('how_to_play_icon_pressed', () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
     this.scene.observer.on('resume_game', () => this.b2Physics.isPaused = false);
+    this.scene.observer.on('enter_crashed', () => this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
+    this.scene.observer.on('surface_impact', (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
+      // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
+      const maxImpulse = 12;
+      const target = center ? 0 : 1200;
+      const lerpFactor = 0.7;
+      const currentDetune = this.snowboardSlide.detune;
+      const newDetune = currentDetune + lerpFactor * (target - currentDetune);
+      this.snowboardSlide.setDetune(newDetune);
+      const percentage = Math.min(impulse / maxImpulse, 1);
+      const volume = Math.max(Math.min(percentage, 1), 0.2);
+      this.snowboardSlide.setVolume(volume);
+    });
 
-    this.initBodyParts();
-    this.board = new Snowboard(this);
-    this.state = new State(this);
+    this.scene.observer.on('enter_in_air', () => {
+      this.scene.add.tween({
+        targets: this.snowboardSlide,
+        volume: 0.03,
+        ease: 'Linear',
+        duration: 250,
+        onComplete: () => this.snowboardSlide.setDetune(0)
+      });
+    });
+
     this.initKeyboardInputs();
   }
 
+  possessCharacter(character: Character) {
+    this.character = character;
+
+    const camera = this.scene.cameras.main;
+    this.resolutionMod = camera.width / DEFAULT_WIDTH;
+    camera.setDeadzone(0, 125);
+    camera.setBackgroundColor(0x3470c6);
+    camera.setZoom(DEFAULT_ZOOM * this.resolutionMod * 1.5);
+    camera.scrollX -= camera.width;
+    camera.scrollY -= camera.height;
+
+    const userdata = this.b2Physics.loader.bodyUserDataMap.get(this.character.body);
+    if (userdata?.image) camera.startFollow(userdata.image, false, 0.5, 0.5);
+
+    if (this.windNoise) this.windNoise.destroy();
+    if (this.snowboardSlide) this.snowboardSlide.destroy();
+    this.snowboardSlide = this.scene.sound.add('snowboard_slide_04', { loop: true, volume: 1, rate: 1, delay: 0, detune: 1000 });
+    this.snowboardSlide.play();
+    this.windNoise = this.scene.sound.add('wind', { loop: true, volume: 1, rate: 1, delay: 0, detune: 0 });
+    this.windNoise.play();
+  }
+
+  reset() {
+    this.snowboardSlide.destroy();
+    this.windNoise.destroy();
+    this.character.state.reset();
+  }
+
+  update() {
+    if (this.b2Physics.isPaused) return;
+
+    this.character.update(); // must come before inputs
+    if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.character.jumpCooldown) this.character.jump();
+    if (this.jumpKeyDown) this.character.leanUp();
+    if (this.keyArrowLeft.isDown || this.keyA.isDown) this.character.leanBackward();
+    if (this.keyArrowRight.isDown || this.keyD.isDown) this.character.leanForward();
+    if (this.keyArrowDown.isDown || this.keyS.isDown) this.character.leanCenter(); // needs to be last to override leanForward and leanBackward and speed up rotation  }
+
+    this.setZoomLevel();
+    this.setWindNoise();
+    this.setFollowOffset();
+  }
+
+  private setZoomLevel() {
+    const currentZoom = this.scene.cameras.main.zoom;
+    const speed = this.character.state.getCurrentSpeed();
+    const maxSpeed = 40; // replace with your game's max speed
+    const minZoom = 0.5; // zoomed out
+    const maxZoom = DEFAULT_ZOOM; // zoomed in
+    const normalizedSpeed = Math.min(Math.max(speed / maxSpeed, 0), 1);
+    const targetZoom = (maxZoom - normalizedSpeed * (maxZoom - minZoom)) * this.resolutionMod;
+    const lerpFactor = 0.02;
+    const newZoom = currentZoom + lerpFactor * (targetZoom - currentZoom);
+    this.scene.cameras.main.setZoom(newZoom);
+  }
+
+  private setWindNoise() {
+    const maxSpeed = 60;
+    const headSpeed = this.character.head.GetLinearVelocity().Length(); // TODO refactor properly
+    this.windNoise.setVolume(Math.min(Math.max((headSpeed / maxSpeed) * 0.3, 0.02), 0.5));
+    this.windNoise.setRate(Math.min(Math.max((headSpeed / maxSpeed) * 1.5, 0.5), 1.5));
+  }
+
+  private setFollowOffset() {
+    // slightly move camera towards the look at direction so player sees more of the upcoming terrain
+    const velocityX = this.character.body.GetLinearVelocity().x * 10;
+    const lerpFactor = 0.01;
+    const { followOffset } = this.scene.cameras.main;
+    this.scene.cameras.main.setFollowOffset(followOffset.x + lerpFactor * (-velocityX - followOffset.x), 0);
+  }
+
   private initKeyboardInputs() {
-    if (!this.scene.input.keyboard) throw new Error('Keyboard input not available. No touch input supported yet.');
-    this.keySpace = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    this.keyW = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.keyArrowUp = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-    this.keyArrowLeft = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    this.keyArrowRight = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-    this.keyArrowDown = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    const keyboard = this.scene.input.keyboard;
+    if (!keyboard) throw new Error('Keyboard input not available. No touch input supported yet.');
+    this.keySpace = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.keyW = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.keyA = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.keyS = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.keyD = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.keyArrowUp = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.keyArrowLeft = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.keyArrowRight = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.keyArrowDown = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
     this.keySpace.onDown = () => this.pauseGame();
     const onJump = () => {
       this.jumpKeyDown = true;
-      if (!this.state.isCrashed && !this.state.levelFinished && !this.b2Physics.isPaused && this.state.getState() === 'grounded') {
-        this.jumpKeyDownStartFrame = this.scene.game.getFrame();
-        this.scene.observer.emit('jump_start');
-      }
+      if (!this.character.board.isInAir() && !this.b2Physics.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
     };
     this.keyW.onDown = onJump;
     this.keyArrowUp.onDown = onJump;
-    this.keyW.onUp = () => this.jumpKeyDown = false; 
+    this.keyW.onUp = () => this.jumpKeyDown = false;
     this.keyArrowUp.onUp = () => this.jumpKeyDown = false;
-
   }
 
   private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
-    if (this.state.isCrashed || this.state.levelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
+    if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.b2Physics.isPaused = !this.b2Physics.isPaused;
-    this.state.updateComboLeeway(); // otherwise it continues during pause.
+    this.character.state.updateComboLeeway(); // otherwise it continues during pause.
     this.scene.observer.emit('toggle_pause', this.b2Physics.isPaused, activePanel);
   }
-
-  update() {
-    // TODO create a command data structure from which runs can be repeated instead of using the raw keyboard input states to determine when to do anything input related
-    //  This has the advantage that:
-    //  - we can test how deterministic the physics are
-    //  - we can replay runs IF they are deterministic (I think box2d isn't 100% deterministic across Operating systems due to floating point implementation differences)
-    //  - we can serialize and save the commands for each frame 
-    if (this.b2Physics.isPaused) return;
-    this.state.update();
-    if (this.board.getFramesInAir() > 6 && !this.jumpKeyDown) this.resetLegs();
-    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
-    if (this.state.isCrashed || this.state.levelFinished) return;
-    this.board.update();
-    this.applyInputs();
-    this.updateLookAtDirection();
-  }
-
-  private applyInputs() {
-    if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.jumpCooldown) this.jump();
-    if (this.jumpKeyDown) this.leanUp();
-    if (this.keyArrowLeft.isDown || this.keyA.isDown) this.leanBackward();
-    if (this.keyArrowRight.isDown || this.keyD.isDown) this.leanForward();
-    if (this.keyArrowDown.isDown || this.keyS.isDown) this.leanCenter(); // needs to be last to override leanForward and leanBackward and speed up rotation
-  }
-
-  private updateLookAtDirection() {
-    const userDataMap = this.b2Physics.loader.bodyUserDataMap;
-    const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.parts.body.GetLinearVelocity()));
-    const bodyXDirection = vec2Util.Normalize(this.parts.body.GetWorldVector(this.FORWARD));
-    // slow down change while in air to jitter while doing flips
-    const lerpFactor = this.state.getState() === 'grounded' ? 0.03 : 0.005;
-    const targetFlip = vec2Util.Dot(bodyXDirection, velocityDirection) < 0 ? -1 : 1;
-    this.currentBodyFlipDot = this.currentBodyFlipDot + lerpFactor * (targetFlip - this.currentBodyFlipDot);
-
-    if (this.currentBodyFlipDot < 0) {
-      this.parts.headImage.flipX = true;
-      this.parts.bodyImage.flipX = true;
-      this.parts.armUpperLeftImage.setDepth(this.parts.armUpperRightDepth);
-      this.parts.armUpperRightImage.setDepth(this.parts.armUpperLeftDepth);
-      this.parts.armLowerLeftImage.setDepth(this.parts.armLowerRightDepth);
-      this.parts.armLowerRightImage.setDepth(this.parts.armLowerLeftDepth);
-    } else {
-      this.parts.headImage.flipX = false;
-      this.parts.bodyImage.flipX = false;
-      this.parts.armUpperLeftImage.setDepth(this.parts.armUpperLeftDepth);
-      this.parts.armUpperRightImage.setDepth(this.parts.armUpperRightDepth);
-      this.parts.armLowerLeftImage.setDepth(this.parts.armLowerLeftDepth);
-      this.parts.armLowerRightImage.setDepth(this.parts.armLowerRightDepth);
-    }
-  }
-
-  private detachBoard() {
-    this.parts.bindingLeft && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.bindingLeft));
-    this.parts.bindingRight && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.bindingRight));
-    this.parts.distanceLegLeft && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.distanceLegLeft));
-    this.parts.distanceLegRight && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.distanceLegRight));
-    this.parts.weldCenter && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.weldCenter));
-    this.parts.prismatic && this.b2Physics.world.DestroyJoint(b2.getPointer(this.parts.prismatic));
-    this.alreadyDetached = true;
-  }
-
-  private jump() {
-    // prevents player from jumping too quickly after a landing
-    if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
-
-    const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
-    if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
-      // TODO these kind of values should come from the RUBE export.
-      //  That would make the game somewhat moddable once players can create and download custom levels and characters.
-      const jumpVector = isCenterGrounded
-        ? vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), new b2.b2Vec2(0, this.jumpForce * 1.2))
-        : vec2Util.Add(this.parts.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), new b2.b2Vec2(0, this.jumpForce * 0.8));
-
-      // const velocity = this.parts.body.GetLinearVelocity();
-      // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);
-      // const bodyUp = vec2Util.Clone(this.parts.body.GetWorldVector(this.UP));
-      // bodyUp.Normalize();
-      // perpendicular.Normalize();
-      // if (isCenterGrounded) {
-      //   vec2Util.Scale(perpendicular, this.jumpForce * 1.25);
-      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.3);
-      // } else {
-      //   vec2Util.Scale(perpendicular, this.jumpForce * 0.5);
-      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.85);
-      // }
-      // let jumpVector = vec2Util.Add(perpendicular, bodyUp);
-
-      this.parts.body.ApplyLinearImpulseToCenter(jumpVector, true);
-    }
-  }
-
-  private resetLegs() {
-    const { legLengthRelaxed } = this.parts;
-    this.parts.distanceLegLeft?.SetLength(legLengthRelaxed);
-    this.parts.distanceLegRight?.SetLength(legLengthRelaxed);
-  }
-
-  private leanBackward() {
-    const { legLengthBent, legLengthExtended } = this.parts;
-    this.parts.distanceLegLeft?.SetLength(legLengthBent);
-    this.parts.distanceLegRight?.SetLength(legLengthExtended);
-    this.parts.body.ApplyAngularImpulse(this.leanForce, true);
-  }
-
-  private leanForward() {
-    const { legLengthBent, legLengthExtended } = this.parts;
-    this.parts.distanceLegLeft?.SetLength(legLengthExtended);
-    this.parts.distanceLegRight?.SetLength(legLengthBent);
-    this.parts.body.ApplyAngularImpulse(-this.leanForce, true);
-  }
-
-  private leanCenter() {
-    const { legLengthBent } = this.parts;
-
-    this.parts.distanceLegLeft?.SetLength(legLengthBent);
-    this.parts.distanceLegRight?.SetLength(legLengthBent);
-  }
-
-  private leanUp() {
-    const { legLengthExtended } = this.parts;
-    this.parts.distanceLegLeft?.SetLength(legLengthExtended);
-    this.parts.distanceLegRight?.SetLength(legLengthExtended);
-  }
-
-  private initBodyParts() {
-    const propName = 'phaserPlayerCharacterPart';
-    const propSpringName = 'phaserPlayerCharacterSpring';
-    const propSegmentIndex = 'phaserBoardSegmentIndex';
-    const head = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.HEAD)[0];
-    const body = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.BODY)[0];
-    const armUpperLeft = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_LEFT)[0];
-    const armLowerLeft = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_LEFT)[0];
-    const armUpperRight = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_UPPER_RIGHT)[0];
-    const armLowerRight = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.ARM_LOWER_RIGHT)[0];
-
-    const headImage = this.b2Physics.loader.bodyUserDataMap.get(head)!.image;
-    const bodyImage = this.b2Physics.loader.bodyUserDataMap.get(body)!.image;
-    const armUpperLeftImage = this.b2Physics.loader.bodyUserDataMap.get(armUpperLeft)!.image;
-    const armLowerLeftImage = this.b2Physics.loader.bodyUserDataMap.get(armLowerLeft)!.image;
-    const armUpperRightImage = this.b2Physics.loader.bodyUserDataMap.get(armUpperRight)!.image;
-    const armLowerRightImage = this.b2Physics.loader.bodyUserDataMap.get(armLowerRight)!.image;
-
-    const legLengthExtended: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthExtended'] as number;
-    const legLengthRelaxed: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthRelaxed'] as number;
-    const legLengthBent: number = this.b2Physics.loader.customPropertiesMap.get(body)!['legLengthBent'] as number;
-
-    if (!head || !body || !armUpperLeft || !armLowerLeft || !armUpperRight || !armLowerRight) throw new Error('Player character b2Bodies not found');
-    if (!headImage || !bodyImage || !armUpperLeftImage || !armLowerLeftImage || !armUpperRightImage || !armLowerRightImage) throw new Error('Player character images not found');
-    if (!legLengthExtended || !legLengthRelaxed || !legLengthBent) throw new Error('Player character leg lengths not found. Need to be set on character torso body');
-
-    const segments = this.b2Physics.loader.getBodiesByCustomProperty(propName, CharacterPartId.BOARD_SEGMENT);
-    if (segments.length !== 7) throw new Error('Player character board segments missing');
-    segments.sort((a, b) => {
-      const aIndex = Number(this.b2Physics.loader.customPropertiesMap.get(a)![propSegmentIndex]);
-      const bIndex = Number(this.b2Physics.loader.customPropertiesMap.get(b)![propSegmentIndex]);
-      return aIndex - bIndex;
-    });
-
-    this.parts = {
-      head,
-      body,
-      armUpperLeft,
-      armLowerLeft,
-      armUpperRight,
-      armLowerRight,
-      headImage,
-      bodyImage,
-      armUpperLeftImage,
-      armLowerLeftImage,
-      armUpperRightImage,
-      armLowerRightImage,
-      armUpperLeftDepth: armUpperLeftImage.depth,
-      armLowerLeftDepth: armLowerLeftImage.depth,
-      armUpperRightDepth: armUpperRightImage.depth,
-      armLowerRightDepth: armLowerRightImage.depth,
-      boardSegments: segments,
-      bindingLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_LEFT)[0], b2.b2RevoluteJoint),
-      bindingRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.BINDING_RIGHT)[0], b2.b2RevoluteJoint),
-      distanceLegLeft: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_LEFT)[0], b2.b2DistanceJoint),
-      distanceLegRight: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.DISTANCE_LEG_RIGHT)[0], b2.b2DistanceJoint),
-      weldCenter: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.WELD_CENTER)[0], b2.b2WeldJoint),
-      prismatic: b2.castObject(this.b2Physics.loader.getJointsByCustomProperty(propSpringName, CharacterPartId.PRISMATIC)[0], b2.b2PrismaticJoint),
-      legLengthExtended,
-      legLengthRelaxed,
-      legLengthBent,
-    };
-  }
-}
-
-export interface IBodyParts {
-  head: Box2D.b2Body;
-  body: Box2D.b2Body;
-  armUpperLeft: Box2D.b2Body;
-  armLowerLeft: Box2D.b2Body;
-  armUpperRight: Box2D.b2Body;
-  armLowerRight: Box2D.b2Body;
-  boardSegments: (Box2D.b2Body)[];
-
-  headImage: Phaser.GameObjects.Image;
-  bodyImage: Phaser.GameObjects.Image;
-  armUpperLeftImage: Phaser.GameObjects.Image;
-  armLowerLeftImage: Phaser.GameObjects.Image;
-  armUpperRightImage: Phaser.GameObjects.Image;
-  armLowerRightImage: Phaser.GameObjects.Image;
-
-  armUpperLeftDepth: number;
-  armLowerLeftDepth: number;
-  armUpperRightDepth: number;
-  armLowerRightDepth: number;
-
-  bindingLeft: Box2D.b2RevoluteJoint | null;
-  bindingRight: Box2D.b2RevoluteJoint | null;
-  distanceLegLeft: Box2D.b2DistanceJoint | null;
-  distanceLegRight: Box2D.b2DistanceJoint | null;
-  weldCenter: Box2D.b2WeldJoint | null;
-  prismatic: Box2D.b2PrismaticJoint | null;
-
-  legLengthExtended: number;
-  legLengthRelaxed: number;
-  legLengthBent: number;
-}
-
-export const enum CharacterPartId {
-  HEAD = 'head',
-  BODY = 'body',
-  ARM_UPPER_LEFT = 'armUpperLeft',
-  ARM_LOWER_LEFT = 'armLowerLeft',
-  ARM_UPPER_RIGHT = 'armUpperRight',
-  ARM_LOWER_RIGHT = 'armLowerRight',
-  BOARD_SEGMENT = 'boardSegment',
-  BINDING_LEFT = 'bindingLeft',
-  BINDING_RIGHT = 'bindingRight',
-  DISTANCE_LEG_LEFT = 'distanceLegLeft',
-  DISTANCE_LEG_RIGHT = 'distanceLegRight',
-  WELD_CENTER = 'weldCenter',
-  PRISMATIC = 'prismatic',
 }

@@ -1,8 +1,9 @@
 import { IPostSolveEvent, Physics } from './Physics';
 import GameScene from '../scenes/GameScene';
-import { PlayerController } from './PlayerController';
+import { CharacterController } from './PlayerController';
 import { b2 } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
+import { Character } from './Character';
 
 interface IRayCastResult {
   hit: boolean;
@@ -24,17 +25,17 @@ export class Snowboard {
   isNoseGrounded: boolean;
   isCenterGrounded: boolean;
 
-  private readonly player: PlayerController;
+  private readonly character: Character;
   private readonly scene: GameScene;
   private readonly b2Physics: Physics;
   private readonly segments: ISegment[] = [];
   private readonly ZERO: Box2D.b2Vec2;
   private readonly particles: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  constructor(player: PlayerController) {
-    this.scene = player.scene;
-    this.b2Physics = player.b2Physics;
-    this.player = player;
+  constructor(character: Character) {
+    this.scene = character.scene;
+    this.b2Physics = character.b2Physics;
+    this.character = character;
     this.ZERO = new b2.b2Vec2(0, 0);
 
     this.initRays(this.b2Physics.worldScale / 4);
@@ -129,7 +130,7 @@ export class Snowboard {
 
   private initRays(rayLength: number) {
     const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.b2Physics.worldScale);
-    for (const body of this.player.parts.boardSegments) {
+    for (const body of this.character.boardSegments) {
       const groundRayResult: IRayCastResult = { hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1 };
 
       const groundRayCallback = new b2.JSRayCastCallback();

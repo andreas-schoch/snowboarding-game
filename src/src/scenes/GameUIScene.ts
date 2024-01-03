@@ -85,7 +85,6 @@ export default class GameUIScene extends Phaser.Scene {
     this.initDomUi();
 
     this.observer.on('toggle_pause', (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    // this.observer.on('jump_start', () => this.sfx_jump_start.play({delay: 0.15, detune: -200, rate: 1}));
     this.observer.on('pickup_present', total => {
       if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x';
       this.sfx_pickup_present.play();

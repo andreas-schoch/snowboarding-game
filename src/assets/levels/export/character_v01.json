@@ -434,6 +434,11 @@
 			[
 				
 				{
+					"int" : 15,
+					"name" : "jumpCooldown"
+				},
+				
+				{
 					"name" : "phaserPlayerCharacterPart",
 					"string" : "body"
 				},
@@ -441,6 +446,16 @@
 				{
 					"bool" : true,
 					"name" : "phaserCameraFollow"
+				},
+				
+				{
+					"float" : 13.0,
+					"name" : "jumpForce"
+				},
+				
+				{
+					"float" : 2.75,
+					"name" : "leanForce"
 				},
 				
 				{
@@ -1288,6 +1303,29 @@
 			[
 				
 				{
+					"circle" : 
+					{
+						"center" : 
+						{
+							"x" : -0.1618160009384155,
+							"y" : 0
+						},
+						"radius" : 0.07500000298023224
+					},
+					"customProperties" : 
+					[
+						
+						{
+							"bool" : true,
+							"name" : "phaserBoardEdge"
+						}
+					],
+					"density" : 1,
+					"friction" : 0.9,
+					"name" : "boardSegmentTailFriction"
+				},
+				
+				{
 					"density" : 30.0,
 					"name" : "boardSegmentTail",
 					"polygon" : 
@@ -1351,29 +1389,6 @@
 							]
 						}
 					}
-				},
-				
-				{
-					"circle" : 
-					{
-						"center" : 
-						{
-							"x" : -0.1618160009384155,
-							"y" : 0
-						},
-						"radius" : 0.07500000298023224
-					},
-					"customProperties" : 
-					[
-						
-						{
-							"bool" : true,
-							"name" : "phaserBoardEdge"
-						}
-					],
-					"density" : 1,
-					"friction" : 0.9,
-					"name" : "boardSegmentTailFriction"
 				}
 			],
 			"linearDamping" : 0.1,
@@ -1385,10 +1400,10 @@
 			"massData-I" : 0.02496598288416862,
 			"massData-center" : 
 			{
-				"x" : -0.001868345541879535,
+				"x" : -0.001868345658294857,
 				"y" : 6.085023596114070e-10
 			},
-			"massData-mass" : 1.530516028404236,
+			"massData-mass" : 1.530515909194946,
 			"name" : "boardSegmentTail",
 			"position" : 
 			{
@@ -2084,60 +2099,6 @@
 		
 		{
 			"aspectScale" : 1,
-			"body" : 12,
-			"center" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218181788921356,
-					0.2218181788921356,
-					0.2218181788921356,
-					-0.2218181788921356
-				],
-				"y" : 
-				[
-					-0.05818181857466698,
-					-0.05818181857466698,
-					0.05818181857466698,
-					0.05818181857466698
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_neutral"
-				}
-			],
-			"file" : "../img/character_v01_santa/boardSegmentTwoCap.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				-0.05818181857466698,
-				0.2218181788921356,
-				0.05818181857466698,
-				-0.2218181788921356,
-				0.05818181857466698
-			],
-			"name" : "boardSegment",
-			"opacity" : 1,
-			"renderOrder" : 4,
-			"scale" : 0.1163636371493340
-		},
-		
-		{
-			"aspectScale" : 1,
 			"body" : 11,
 			"center" : 
 			{
@@ -2246,6 +2207,60 @@
 		
 		{
 			"aspectScale" : 1,
+			"body" : 12,
+			"center" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218181788921356,
+					0.2218181788921356,
+					0.2218181788921356,
+					-0.2218181788921356
+				],
+				"y" : 
+				[
+					-0.05818181857466698,
+					-0.05818181857466698,
+					0.05818181857466698,
+					0.05818181857466698
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_v01_santa/boardSegmentTwoCap.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				-0.05818181857466698,
+				0.2218181788921356,
+				0.05818181857466698,
+				-0.2218181788921356,
+				0.05818181857466698
+			],
+			"name" : "boardSegment",
+			"opacity" : 1,
+			"renderOrder" : 4,
+			"scale" : 0.1163636371493340
+		},
+		
+		{
+			"aspectScale" : 1,
 			"body" : 17,
 			"center" : 
 			{
@@ -2296,6 +2311,116 @@
 			"opacity" : 1,
 			"renderOrder" : 4,
 			"scale" : 0.1163636371493340
+		},
+		
+		{
+			"angle" : 3.141592741012573,
+			"aspectScale" : 1,
+			"body" : 9,
+			"center" : 
+			{
+				"x" : -0.001304090023040771,
+				"y" : 0.0002272281999466941
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1282368302345276,
+					0.1256286799907684,
+					0.1256286501884460,
+					-0.128236860036850
+				],
+				"y" : 
+				[
+					-0.2148532867431641,
+					-0.2148532569408417,
+					0.2153077423572540,
+					0.2153077125549316
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_v01_santa/armLowerRight.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1282368302345276,
+				-0.2148532867431641,
+				0.1256286799907684,
+				-0.2148532569408417,
+				0.1256286501884460,
+				0.2153077423572540,
+				-0.128236860036850,
+				0.2153077125549316
+			],
+			"name" : "armLowerRight",
+			"opacity" : 1,
+			"renderOrder" : 5,
+			"scale" : -0.4301609992980957
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 15,
+			"center" : 
+			{
+				"x" : 0,
+				"y" : 0
+			},
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.2218188792467117,
+					0.2218188792467117,
+					0.2218188792467117,
+					-0.2218188792467117
+				],
+				"y" : 
+				[
+					-0.05818200111389160,
+					-0.05818200111389160,
+					0.05818200111389160,
+					0.05818200111389160
+				]
+			},
+			"customProperties" : 
+			[
+				
+				{
+					"name" : "phaserTexture",
+					"string" : "atlas_character_neutral"
+				}
+			],
+			"file" : "../img/character_v01_santa/boardSegmentOneCap.png",
+			"filter" : 1,
+			"flip" : true,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.2218188792467117,
+				-0.05818200111389160,
+				0.2218188792467117,
+				-0.05818200111389160,
+				0.2218188792467117,
+				0.05818200111389160,
+				-0.2218188792467117,
+				0.05818200111389160
+			],
+			"name" : "boardSegmentTail",
+			"opacity" : 1,
+			"renderOrder" : 5,
+			"scale" : 0.1163640022277832
 		},
 		
 		{
@@ -2458,116 +2583,6 @@
 			"opacity" : 1,
 			"renderOrder" : 5,
 			"scale" : 0.1163636371493340
-		},
-		
-		{
-			"angle" : 3.141592741012573,
-			"aspectScale" : 1,
-			"body" : 9,
-			"center" : 
-			{
-				"x" : -0.001304090023040771,
-				"y" : 0.0002272281999466941
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1282368302345276,
-					0.1256286799907684,
-					0.1256286501884460,
-					-0.128236860036850
-				],
-				"y" : 
-				[
-					-0.2148532867431641,
-					-0.2148532569408417,
-					0.2153077423572540,
-					0.2153077125549316
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_neutral"
-				}
-			],
-			"file" : "../img/character_v01_santa/armLowerRight.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1282368302345276,
-				-0.2148532867431641,
-				0.1256286799907684,
-				-0.2148532569408417,
-				0.1256286501884460,
-				0.2153077423572540,
-				-0.128236860036850,
-				0.2153077125549316
-			],
-			"name" : "armLowerRight",
-			"opacity" : 1,
-			"renderOrder" : 5,
-			"scale" : -0.4301609992980957
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 15,
-			"center" : 
-			{
-				"x" : 0,
-				"y" : 0
-			},
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.2218188792467117,
-					0.2218188792467117,
-					0.2218188792467117,
-					-0.2218188792467117
-				],
-				"y" : 
-				[
-					-0.05818200111389160,
-					-0.05818200111389160,
-					0.05818200111389160,
-					0.05818200111389160
-				]
-			},
-			"customProperties" : 
-			[
-				
-				{
-					"name" : "phaserTexture",
-					"string" : "atlas_character_neutral"
-				}
-			],
-			"file" : "../img/character_v01_santa/boardSegmentOneCap.png",
-			"filter" : 1,
-			"flip" : true,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 1, 0.0, 0.0, 0.0, 0.0, 1, 1, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.2218188792467117,
-				-0.05818200111389160,
-				0.2218188792467117,
-				-0.05818200111389160,
-				0.2218188792467117,
-				0.05818200111389160,
-				-0.2218188792467117,
-				0.05818200111389160
-			],
-			"name" : "boardSegmentTail",
-			"opacity" : 1,
-			"renderOrder" : 5,
-			"scale" : 0.1163640022277832
 		}
 	],
 	"joint" : 

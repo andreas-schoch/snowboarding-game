@@ -9,6 +9,6 @@ export const getSelectedCharacter = (): CharacterKeys => {
 
 export const getSelectedCharacterSkin = (): CharacterSkinKeys => {
   const characterFromStorage = localStorage.getItem(KEY_SELECTED_CHARACTER_SKIN) as CharacterSkinKeys | null;
-  if (!characterFromStorage || !CHARACTER_SKINS[characterFromStorage]) return CharacterSkinKeys.character_v02_neutral;
+  if (!characterFromStorage || !CHARACTER_SKINS[characterFromStorage]) return CharacterSkinKeys.character_v02_santa;
   return characterFromStorage;
 }

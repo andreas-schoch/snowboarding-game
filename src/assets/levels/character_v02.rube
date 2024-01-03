@@ -42,6 +42,91 @@
   [
     
     {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "legLengthBent",
+      "name" : "legLengthBent",
+      "type" : "float"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserTerrain",
+      "name" : "phaserTerrain",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "legLengthExtended",
+      "name" : "legLengthExtended",
+      "type" : "float"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
       "class" : "fixture",
       "comboboxEntries" : 
       [
@@ -61,6 +146,20 @@
       "displayName" : "phaserSensorType",
       "name" : "phaserSensorType",
       "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "leanForce",
+      "name" : "leanForce",
+      "type" : "float"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "jumpCooldown",
+      "name" : "jumpCooldown",
+      "type" : "int"
     },
     
     {
@@ -193,87 +292,9 @@
     
     {
       "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "0"
-        },
-        
-        {
-          "entry" : "1"
-        },
-        
-        {
-          "entry" : "2"
-        },
-        
-        {
-          "entry" : "3"
-        },
-        
-        {
-          "entry" : "4"
-        },
-        
-        {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
-        }
-      ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "legLengthBent",
-      "name" : "legLengthBent",
+      "displayName" : "jumpForce",
+      "name" : "jumpForce",
       "type" : "float"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserTerrain",
-      "name" : "phaserTerrain",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "legLengthExtended",
-      "name" : "legLengthExtended",
-      "type" : "float"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
     }
   ],
   "metaworld" : 
@@ -599,10 +620,10 @@
         "massData-I" : 0.02599081955850124,
         "massData-center" : 
         {
-          "x" : -0.005478516686707735,
-          "y" : 5.947679015960716e-10
+          "x" : -0.005478515289723873,
+          "y" : 5.947678460849204e-10
         },
-        "massData-mass" : 1.565858840942383,
+        "massData-mass" : 1.565858960151672,
         "name" : "boardSegmentTail",
         "position" : 
         {
@@ -810,13 +831,13 @@
         "id" : 5,
         "linearDamping" : 0.1,
         "linearVelocity" : 0,
-        "massData-I" : 0.02603938058018684,
+        "massData-I" : 0.02603937871754169,
         "massData-center" : 
         {
-          "x" : 0.005573508329689503,
-          "y" : 1.617768674577746e-07
+          "x" : 0.005573506932705641,
+          "y" : 1.620347234165820e-07
         },
-        "massData-mass" : 1.565858840942383,
+        "massData-mass" : 1.565858960151672,
         "name" : "boardSegmentNose",
         "position" : 
         {
@@ -1300,6 +1321,21 @@
         "awake" : true,
         "customProperties" : 
         [
+          
+          {
+            "int" : 15,
+            "name" : "jumpCooldown"
+          },
+          
+          {
+            "float" : 11.0,
+            "name" : "jumpForce"
+          },
+          
+          {
+            "float" : 2.5,
+            "name" : "leanForce"
+          },
           
           {
             "float" : 0.55,

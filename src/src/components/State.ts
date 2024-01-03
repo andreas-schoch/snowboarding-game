@@ -1,7 +1,7 @@
 import { IBeginContactEvent, IPostSolveEvent, Physics } from './Physics';
-import { IBodyParts, PlayerController } from './PlayerController';
 import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, LevelKeys, TRICK_POINTS_COMBO_FRACTION } from "..";
 import { getCurrentLevel } from '../util/getCurrentLevel';
+import { Character } from './Character';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';
@@ -42,14 +42,12 @@ export interface IScore {
 
 
 export class State {
-  levelFinished = false;
+  isLevelFinished = false;
   isCrashed = false;
   timeGrounded = 0;
 
   private readonly b2Physics: Physics;
-  private readonly parts: IBodyParts;
-  private readonly playerController: PlayerController;
-  private state: 'in_air' | 'grounded'; // handle this more consistent
+  private readonly character: Character;
 
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
@@ -68,19 +66,16 @@ export class State {
   private landedFrontFlips = 0;
   private landedBackFlips = 0;
   private lastDistance = 0;
+  lastIsInAir: boolean = false;
 
-  constructor(playerController: PlayerController) {
-    this.parts = playerController.parts;
-    this.playerController = playerController;
-    this.b2Physics = playerController.b2Physics;
-    this.state = playerController.board.isInAir() ? 'in_air' : 'grounded';
+  constructor(character: Character) {
+    this.character = character;
+    this.b2Physics = character.b2Physics;
     this.registerCollisionListeners(); // TODO fix
 
-    this.playerController.scene.observer.on('enter_in_air', () => this.state = 'in_air');
-
-    this.playerController.scene.observer.on('enter_grounded', () => {
-      this.state = 'grounded';
-      this.timeGrounded = this.playerController.scene.game.getFrame();
+    // this.character.scene.observer.on('enter_in_air', () => this.isGrounded = false);
+    this.character.scene.observer.on('enter_grounded', () => {
+      this.timeGrounded = this.character.scene.game.getFrame();
       this.landedFrontFlips += this.pendingFrontFlips;
       this.landedBackFlips += this.pendingBackFlips;
 
@@ -91,8 +86,8 @@ export class State {
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
         this.comboMultiplier++;
-        this.playerController.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
-        this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
+        this.character.scene.observer.emit('combo_change', this.comboAccumulatedScore, this.comboMultiplier);
+        this.character.scene.observer.emit('score_change', this.getCurrentScore());
 
         this.resetComboLeewayTween();
         this.comboLeeway = this.createComboLeewayTween(false);
@@ -107,16 +102,16 @@ export class State {
   }
 
   getCurrentSpeed(): number {
-    return this.parts.body.GetLinearVelocity().Length();
+    return this.character.body.GetLinearVelocity().Length();
   }
 
   createComboLeewayTween(paused: boolean = true): Phaser.Tweens.Tween {
-    return this.playerController.scene.tweens.addCounter({
+    return this.character.scene.tweens.addCounter({
       paused,
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 4000,
-      onUpdate: (tween) => this.playerController.scene.observer.emit('combo_leeway_update', tween.getValue()),
+      onUpdate: (tween) => this.character.scene.observer.emit('combo_leeway_update', tween.getValue()),
       onComplete: tween => this.handleComboComplete(),
     });
   }
@@ -131,7 +126,7 @@ export class State {
     this.totalCollectedPresents = 0;
     this.comboMultiplier = 0;
     this.comboAccumulatedScore = 0;
-    this.levelFinished = false;
+    this.isLevelFinished = false;
     this.isCrashed = false;
     this.seenSensors.clear();
     this.pickupsToProcess.clear();
@@ -151,24 +146,15 @@ export class State {
       distance: this.getTravelDistanceMeters(),
       coins: this.totalCollectedPresents,
       trickScore: this.totalTrickScore,
-      finishedLevel: this.levelFinished,
+      finishedLevel: this.isLevelFinished,
       crashed: this.isCrashed,
       trickScoreLog: this.trickScoreLog,
       level: getCurrentLevel()
     };
   }
 
-  getState(): 'grounded' | 'in_air' | 'crashed' {
-    return this.state;
-  }
-
   getTravelDistanceMeters(): number {
-    // Counting only horizontal distance for now.
-    // Not sure if distance will continue to be part of the score.
-    // It makes it harder for player to see what causes score changes when it
-    // changes every 5m. Would like to add little "toastr" notifications when player
-    // Lands tricks, combo gets applied and coins get collected at some point.
-    const distance = this.parts.body.GetPosition().x;
+    const distance = this.character.body.GetPosition().x;
     return Math.floor(distance / 5) * 5;
   }
 
@@ -180,7 +166,7 @@ export class State {
       if (bodyA === bodyB) return;
       let largestImpulse: number = -1;
       for (let i = 0; i < impulse.count; i++) largestImpulse = Math.max(largestImpulse, impulse.get_normalImpulses(i));
-      if ((bodyA === this.parts.head || bodyB === this.parts.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
+      if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
     const customProps = this.b2Physics.loader.customPropertiesMap;
@@ -192,27 +178,27 @@ export class State {
 
   private setCrashed() {
     this.isCrashed = true;
-    this.playerController.scene.observer.emit('enter_crashed', this.getCurrentScore());
+    this.character.scene.observer.emit('enter_crashed', this.getCurrentScore());
     this.resetComboLeewayTween();
   }
 
   // TODO only Physics class should use Pl or Box2D types directly to make rest of code box2d port agnostic
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
-    if (this.isCrashed || this.levelFinished) return;
+    if (this.isCrashed || this.isLevelFinished) return;
     switch (this.b2Physics.loader.customPropertiesMap.get(fixture)?.phaserSensorType) {
       case 'pickup_present': {
         this.pickupsToProcess.add(body);
         break;
       }
       case 'level_finish': {
-        this.playerController.scene.cameras.main.stopFollow();
+        this.character.scene.cameras.main.stopFollow();
         this.handleComboComplete();
-        this.levelFinished = true;
+        this.isLevelFinished = true;
         this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
-        this.playerController.scene.observer.emit('score_change', currentScore);
-        this.playerController.scene.observer.emit('level_finish', currentScore);
+        this.character.scene.observer.emit('score_change', currentScore);
+        this.character.scene.observer.emit('level_finish', currentScore);
         break;
       }
       case 'level_deathzone': {
@@ -224,12 +210,14 @@ export class State {
 
   update(): void {
     this.processPickups();
-    const isInAir = this.playerController.board.isInAir();
-    if (this.state === 'grounded' && isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter_in_air');
-    else if (this.state === 'in_air' && !isInAir && !this.isCrashed) this.playerController.scene.observer.emit('enter_grounded');
+    const isInAir = this.character.board.isInAir();
+    // TODO check is chrashed only once
+    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.character.scene.observer.emit('enter_in_air');
+    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.character.scene.observer.emit('enter_grounded');
     this.updateTrickCounter();
     this.updateComboLeeway();
     this.updateDistance();
+    this.lastIsInAir = isInAir;
   }
 
   private processPickups() {
@@ -243,16 +231,16 @@ export class State {
       this.b2Physics.loader.bodyUserDataMap.delete(body);
       this.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       this.totalCollectedPresents++;
-      this.playerController.scene.observer.emit('pickup_present', this.totalCollectedPresents);
-      this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
+      this.character.scene.observer.emit('pickup_present', this.totalCollectedPresents);
+      this.character.scene.observer.emit('score_change', this.getCurrentScore());
 
     }
     this.pickupsToProcess.clear();
   }
 
   private updateTrickCounter() {
-    if (this.state === 'in_air') {
-      const currentAngle = Phaser.Math.Angle.Normalize(this.parts.body.GetAngle());
+    if (this.character.board.isInAir()) {
+      const currentAngle = Phaser.Math.Angle.Normalize(this.character.body.GetAngle());
 
       const diff = this.calculateDifferenceBetweenAngles(this.anglePreviousUpdate, currentAngle);
       this.totalRotation += diff;
@@ -277,7 +265,7 @@ export class State {
     //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
     //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
-      if (this.state === 'in_air' || !this.playerController.board.isCenterGrounded || this.b2Physics.isPaused) {
+      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.b2Physics.isPaused) {
         this.comboLeeway.isPlaying() && this.comboLeeway.pause();
       } else {
         this.comboLeeway.isPaused() && this.comboLeeway.resume();
@@ -303,20 +291,20 @@ export class State {
 
   private updateDistance() {
     const distance = this.getTravelDistanceMeters();
-    if (distance !== this.lastDistance && !this.isCrashed && !this.levelFinished) {
-      this.playerController.scene.observer.emit('distance_change', distance);
-      this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
+    if (distance !== this.lastDistance && !this.isCrashed && !this.isLevelFinished) {
+      this.character.scene.observer.emit('distance_change', distance);
+      this.character.scene.observer.emit('score_change', this.getCurrentScore());
       this.lastDistance = distance;
     }
   }
 
   private handleComboComplete() {
-    if (this.levelFinished) return;
+    if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
     this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
-    this.playerController.scene.observer.emit('score_change', this.getCurrentScore());
-    this.playerController.scene.observer.emit('combo_change', 0, 0);
+    this.character.scene.observer.emit('score_change', this.getCurrentScore());
+    this.character.scene.observer.emit('combo_change', 0, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
   }
