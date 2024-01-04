@@ -2,7 +2,7 @@ import { IPostSolveEvent } from './Physics';
 import GameScene from '../scenes/GameScene';
 import { b2, recordLeak } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
-import { CharacterPartId } from './Character';
+import { Character, CharacterPartId } from './Character';
 import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
 
 interface IRayCastResult {
@@ -25,14 +25,16 @@ export class Snowboard {
   isNoseGrounded: boolean;
   isCenterGrounded: boolean;
 
+  private readonly scene: GameScene;
   private readonly segments: ISegment[] = [];
   private readonly ZERO: Box2D.b2Vec2;
   private readonly particles: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  constructor(private scene: GameScene, private sceneId: string) {
+  constructor(private character: Character) {
+    this.scene = character.scene;
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.initRays(this.scene.b2Physics.worldScale / 4, this.sceneId);
+    this.initRays(this.scene.b2Physics.worldScale / 4);
     this.particles = this.initParticles();
 
     const { worldScale, loader: { customProps: customPropertiesMapMap } } = this.scene.b2Physics;
@@ -53,7 +55,7 @@ export class Snowboard {
         if (normalImpulse < 4 || velocityLength < 0.5) continue;
         this.particles.emitParticleAt(point.x, point.y, Math.min(normalImpulse * 1.5, 25));
 
-        if (propsBA && propsBA['phaserPlayerCharacterPart'] === 'boardSegment' || propsBB && propsBB['phaserPlayerCharacterPart'] === 'boardSegment') {
+        if (this.character.isPartOfMe(bodyA) || this.character.isPartOfMe(bodyB)) {
           const centerGrounded = this.segments[3].groundRayResult.hit;
           this.scene.observer.emit(SURFACE_IMPACT, normalImpulse, 'snow', false, centerGrounded, false);
         }
@@ -90,9 +92,9 @@ export class Snowboard {
     this.isCenterGrounded = segments[3].groundRayResult.hit;
   }
 
-  private initRays(rayLength: number, sceneId: string) {
+  private initRays(rayLength: number) {
     const { loader } = this.scene.b2Physics;
-    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', CharacterPartId.BOARD_SEGMENT, sceneId);
+    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', CharacterPartId.BOARD_SEGMENT, this.character.id);
     if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
     segmentBodies.sort((a, b) => {
       const aIndex = Number(loader.customProps.get(a)!['phaserBoardSegmentIndex']);

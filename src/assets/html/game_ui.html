@@ -178,33 +178,16 @@
     cursor: pointer;
   }
 
-  /* #level_005 {
-    /* background-color: rgba(0, 0, 0, 0.7); */
-  /* cursor: not-allowed !important; */
-  }
-
-  #level_005::after {
-    content: "Upcoming";
-    color: white;
-    font-size: 18px;
-    font-weight: bolder;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    cursor: not-allowed !important;
-  }
-
-  */ #panel-select-level .level-number {
+  #panel-select-level .level-item-number {
     color: var(--grey-700);
   }
 
-  #panel-select-level .level-name {
+  #panel-select-level .level-item-name {
     font-size: 13px;
     line-height: 26px;
   }
 
-  #panel-select-level .level-thumbnail {
+  #panel-select-level .level-item-thumbnail {
     width: 100%;
     aspect-ratio: 16/9;
     background-image: url("assets/img/thumbnails/level_001_santas_backyard.png");
@@ -492,48 +475,17 @@
   <div class="panel hidden" id="panel-select-level">
     <div class="panel-title">Select Level</div>
 
-    <div class="select-level-scrollable scrollbar" id="select-level-item-container">
+    <div class="select-level-scrollable scrollbar" id="level-item-container">
 
-      <div class="level-item">
-        <span class="level-item-overlay" id="level_001"></span>
-        <div class="level-number">Level 001</div>
-        <div class="level-name">Santas Backyard</div>
-        <div class="level-thumbnail"
-          style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
-      </div>
-
-      <div class="level-item">
-        <span class="level-item-overlay" id="level_002"></span>
-        <div class="level-number">Level 002</div>
-        <div class="level-name">The Rollercoaster</div>
-        <div class="level-thumbnail"
-          style="background-image: url('assets/img/thumbnails/level_002_the_rollercoaster.png')"></div>
-      </div>
-
-      <div class="level-item">
-        <span class="level-item-overlay" id="level_003"></span>
-        <div class="level-number">Level 003</div>
-        <div class="level-name">Building Bridges</div>
-        <div class="level-thumbnail"
-          style="background-image: url('assets/img/thumbnails/level_003_building_bridges.png')"></div>
-      </div>
-
-      <div class="level-item">
-        <span class="level-item-overlay" id="level_004"></span>
-        <div class="level-number">Level 004</div>
-        <div class="level-name">Rocky Roads</div>
-        <div class="level-thumbnail" style="background-image: url('assets/img/thumbnails/level_004_rocky_roads.png')">
+      <template id="level-item-template">
+        <div class="level-item">
+          <span class="level-item-overlay" id="level_001"></span>
+          <div class="level-item-number">Level 001</div>
+          <div class="level-item-name">Santas Backyard</div>
+          <div class="level-item-thumbnail"
+            style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
         </div>
-      </div>
-
-      <div class="level-item">
-        <span class="level-item-overlay" id="level_005"></span>
-        <div class="level-number">Level 005</div>
-        <div class="level-name">Looking the other Way</div>
-        <div class="level-thumbnail"></div>
-      </div>
-
-      <!-- TODO in the future populate level selection programmatically using a template -->
+      </template>
 
     </div>
     <!-- BACK-->
@@ -638,16 +590,16 @@
       <span class="col col-3 bolder leaderboard flex-right">Score</span>
     </div>
 
-    <template id="leaderboard-item-template">
-      <div class="row leaderboard-item">
-        <span class="col col-2" id="leaderboard-item-rank">1</span>
-        <span class="col col-7" id="leaderboard-item-username">AndiOver9000</span>
-        <span class="col col-3 flex-right" id="leaderboard-item-score">9001</span>
-      </div>
-    </template>
-
     <!-- Will be filled in programmatically using the above template -->
-    <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container"></div>
+    <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container">
+      <template id="leaderboard-item-template">
+        <div class="row leaderboard-item">
+          <span class="col col-2" id="leaderboard-item-rank">1</span>
+          <span class="col col-7" id="leaderboard-item-username">AndiOver9000</span>
+          <span class="col col-3 flex-right" id="leaderboard-item-score">9001</span>
+        </div>
+      </template>
+    </div>
 
     <!-- BACK-->
     <div class="row last">

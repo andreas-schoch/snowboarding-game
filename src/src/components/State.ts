@@ -69,7 +69,6 @@ export class State {
   private scene: GameScene;
 
   constructor(private character: Character) {
-    this.character = character;
     this.scene = character.scene;
     this.registerListeners();
   }
@@ -134,6 +133,7 @@ export class State {
   private registerListeners() {
     const customProps = this.scene.b2Physics.loader.customProps;
     this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
+      if (!this.character.isPartOfMe(bodyA) && !this.character.isPartOfMe(bodyB)) return;
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
@@ -177,7 +177,7 @@ export class State {
 
   private setCrashed() {
     this.isCrashed = true;
-    this.scene.observer.emit(ENTER_CRASHED, this.getCurrentScore());
+    this.scene.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
     this.resetComboLeewayTween();
   }
 

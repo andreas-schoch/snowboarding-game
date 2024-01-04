@@ -48,7 +48,7 @@ export class Character {
     this.initBodyParts();
     this.id = rubeSceneId
     this.state = new State(this);
-    this.board = new Snowboard(scene, this.rubeSceneId);
+    this.board = new Snowboard(this);
     Character.instances.push(this);
   }
 
@@ -110,6 +110,10 @@ export class Character {
 
       this.body.ApplyLinearImpulseToCenter(jumpVector, true);
     }
+  }
+
+  isPartOfMe(body: Box2D.b2Body) {
+    return this.scene.b2Physics.loader.loadedScenes.get(this.id)?.bodies.some(b => b === body); // TODO optimize for performance as this will be called often
   }
 
   update() {

@@ -96,7 +96,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',
   type: Phaser.AUTO,
-  backgroundColor: '#ffffff',
+  backgroundColor: '0x3470c6',
   disableContextMenu: true,
   parent: 'phaser-wrapper',
   dom: {

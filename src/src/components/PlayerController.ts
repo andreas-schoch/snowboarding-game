@@ -3,6 +3,8 @@ import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
 import { DEFAULT_WIDTH, DEFAULT_ZOOM } from '..';
 import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from '../eventTypes';
+import { IScore } from './State';
+import { GameInfo } from './Info';
 
 export class CharacterController {
   character: Character | null = null;
@@ -25,14 +27,14 @@ export class CharacterController {
     this.scene.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
     this.scene.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
     this.scene.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
-    this.scene.observer.on(ENTER_CRASHED, () => this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)));
+    this.scene.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)) });
 
     this.initKeyboardInputs();
   }
 
   possessCharacter(character: Character) {
     this.character = character;
-
+    GameInfo.possessedCharacterId = character.id;
     const camera = this.scene.cameras.main;
     this.resolutionMod = camera.width / DEFAULT_WIDTH;
     camera.setDeadzone(0, 125);

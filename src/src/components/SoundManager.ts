@@ -1,6 +1,8 @@
 import { BackgroundMusicKeys, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX } from "..";
 import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME, ENTER_GROUNDED } from "../eventTypes";
 import GameScene from "../scenes/GameScene";
+import { GameInfo } from "./Info";
+import { IScore } from "./State";
 
 export class SoundManager {
   private music: Phaser.Sound.BaseSound;
@@ -34,7 +36,8 @@ export class SoundManager {
 
   private initListeners() {
     this.scene.observer.on(PICKUP_PRESENT, total => this.sfx_pickup_present.play());
-    this.scene.observer.on(ENTER_CRASHED, () => {
+    this.scene.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
+      if (id !== GameInfo.possessedCharacterId) return;
       this.sfx_death.play();
       this.sfx_grunt.play();
       this.sfx_game_over_demon.play();

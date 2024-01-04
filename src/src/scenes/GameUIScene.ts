@@ -4,6 +4,8 @@ import { pseudoRandomId } from '../util/pseudoRandomId';
 import { getCurrentLevel } from '../util/getCurrentLevel';
 import { DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
 import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
+import { levels } from '../levels';
+import { GameInfo } from '../components/Info';
 
 
 export enum PanelIds {
@@ -79,7 +81,8 @@ export default class GameUIScene extends Phaser.Scene {
         .fillPath();
     });
 
-    this.observer.on(ENTER_CRASHED, (score: IScore) => {
+    this.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
+      if (id !== GameInfo.possessedCharacterId) return;
       this.pendingScore = score;
       this.crashed = true;
       if (this.finished) return;
@@ -189,6 +192,7 @@ export default class GameUIScene extends Phaser.Scene {
         case 'btn-goto-select-level': {
           const backBtn = document.querySelector('#panel-select-level #btn-goto-pause-menu');
           backBtn && (this.crashed ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden'));
+          await this.updateLevelItems();
           this.setPanelVisibility(PanelIds.PANEL_SELECT_LEVEL);
           break;
         }
@@ -393,6 +397,26 @@ export default class GameUIScene extends Phaser.Scene {
         if (cloneElScore) cloneElScore.innerHTML = String(calculateTotalScore(score as IScore));
         if (cloneElUsername && localPlayerUsername && (leaderboardService.auth?.currentUser?.uid === score.userID || !leaderboardService.auth)) cloneElUsername.classList.add('your-own-score');
         leaderboardItemContainer.appendChild(clone);
+      }
+    }
+  }
+
+  private async updateLevelItems() {
+    const levelItemTemplate: HTMLTemplateElement | null = document.getElementById('level-item-template') as HTMLTemplateElement;
+    const levelItemContainer = document.getElementById('level-item-container');
+    if (this.panelSelectLevel && levelItemTemplate && levelItemContainer) {
+      levelItemContainer.innerText = '';
+      for (const level of levels) {
+        const clone: HTMLElement = levelItemTemplate.content.cloneNode(true) as HTMLElement;
+        const id = clone.querySelector('.level-item-overlay') as HTMLElement;
+        const number = clone.querySelector('.level-item-number') as HTMLElement;
+        const name = clone.querySelector('.level-item-name') as HTMLElement;
+        const thumbnail = clone.querySelector('.level-item-thumbnail') as HTMLElement;
+        if (id) id.id = level.id;
+        if (number) number.innerHTML = `Level ${String(level.number).padStart(3, '0')}`;
+        if (name) name.innerHTML = level.name;
+        if (thumbnail) thumbnail.style.backgroundImage = `url('${level.thumbnail}')`;
+        levelItemContainer.appendChild(clone);
       }
     }
   }
