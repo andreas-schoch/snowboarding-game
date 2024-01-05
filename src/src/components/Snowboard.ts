@@ -1,6 +1,6 @@
 import { IPostSolveEvent } from './Physics';
 import GameScene from '../scenes/GameScene';
-import { b2, recordLeak } from '../index';
+import { DARKMODE_ENABLED, b2 } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
 import { Character, CharacterPartId } from './Character';
 import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
@@ -126,11 +126,11 @@ export class Snowboard {
 
   private initParticles() {
     const graphics = this.scene.add.graphics().setDepth(10000000);
-    graphics.fillStyle(0xffffff, 1);
+    graphics.fillStyle(DARKMODE_ENABLED ? 0x010101 : 0xffffff, 1);
     graphics.fillCircle(8, 8, 8);
     graphics.generateTexture('circle_01', 16, 16);
     graphics.destroy();
-    return this.scene.add.particles(0, 0, 'circle_01', {
+    const particles = this.scene.add.particles(0, 0, 'circle_01', {
       active: true,
       visible: true,
       emitting: false,
@@ -148,7 +148,9 @@ export class Snowboard {
       quantity: { min: 2, max: 10 },
       scale: { ease: "Linear", min: 0.1, max: 0.25 },
       speed: { min: 25, max: 100 },
-      // tint: [0x8d8da6]
     }).setDepth(-10);
+
+    // if (DARKMODE_ENABLED) particles.setPipeline('Light2D');
+    return particles;
   }
 }

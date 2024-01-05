@@ -1,4 +1,4 @@
-import { b2, recordLeak } from '../index';
+import { DARKMODE_ENABLED, b2, recordLeak } from '../index';
 import GameScene from '../scenes/GameScene';
 
 
@@ -36,9 +36,8 @@ export default class Terrain {
     const minY = Math.min(...pointsWorld.map(point => point.y));
     const graphics = this.scene.add.graphics().setDepth(10);
     graphics.setPosition(minX, minY)
-    // TODO don't use b2Vec2 for non-box2d stuff!!
     const pointsLocal: XY[] = pointsWorld.map(point => ({ x: point.x - minX, y: point.y - minY }));
-    graphics.fillStyle(0xb3cef2, 1);
+    graphics.fillStyle(DARKMODE_ENABLED ? 0x030203 : 0xb3cef2, 1);
     graphics.fillPoints(pointsLocal, true, false);
     // The terrain within RUBE is represented as chunks of non-loopped edge fixtures
     // We remove these points as they are not part of the surface and therefore doesn't need contouring
@@ -51,5 +50,6 @@ export default class Terrain {
     pointsLocal.pop();
     graphics.lineStyle(2, 0x000000, 1);
     graphics.strokePoints(pointsLocal, false, false);
+    // if (DARKMODE_ENABLED) graphics.setPipeline('Light2D');
   }
 }

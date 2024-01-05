@@ -207,6 +207,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">lightbulb.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>36,128,72,256</rect>
+                <key>scale9Paddings</key>
+                <rect>36,128,72,256</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">obstacles/bridgeSegmentNoCap.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -346,6 +361,7 @@
                     <filename>obstacles/bridgeSegmentNoCap.png</filename>
                     <filename>obstacles/bridgeSegmentOneCap.png</filename>
                     <filename>obstacles/bridgeSegmentTwoCap.png</filename>
+                    <filename>lightbulb.png</filename>
                 </array>
             </struct>
         </map>

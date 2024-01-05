@@ -20,6 +20,7 @@ export const SETTINGS_KEY_DEBUG_ZOOM = 'snowboarding_game_debug_zoom';
 export const SETTINGS_KEY_RESOLUTION = 'snowboarding_game_resolution';
 export const SETTINGS_KEY_VOLUME_MUSIC = 'snowboarding_game_volume_music';
 export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
+export const SETTINGS_KEY_DARKMODE_ENABLED = 'snowboarding_game_darkmode_enabled';
 
 export const KEY_USER_NAME = 'snowboarding_game_user_name';
 export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
@@ -38,6 +39,7 @@ export const DEFAULT_HEIGHT = 720;
 
 export const RESOLUTION_SCALE: number = Number(localStorage.getItem(SETTINGS_KEY_RESOLUTION) || 1);
 export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 1);
+export const DARKMODE_ENABLED = localStorage.getItem(SETTINGS_KEY_DARKMODE_ENABLED) === 'true';
 export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 // This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
@@ -96,7 +98,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',
   type: Phaser.AUTO,
-  backgroundColor: '0x3470c6',
+  backgroundColor: DARKMODE_ENABLED ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
   parent: 'phaser-wrapper',
   dom: {

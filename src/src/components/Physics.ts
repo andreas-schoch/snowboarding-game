@@ -1,4 +1,4 @@
-import { CharacterKeys, LevelKeys, b2, recordLeak } from '../index';
+import { CharacterKeys, DARKMODE_ENABLED, LevelKeys, b2, recordLeak } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
@@ -106,6 +106,11 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.flipX = flip;
       img.setDepth(renderOrder);
       img.setDataEnabled();
+
+      if (DARKMODE_ENABLED) {
+        // img.setPipeline('Light2D');
+        img.setTintFill(isPlayerCharacterPart ? 0x000000 : 0x222222);
+      }
       // TODO not sure if this is the way to go. If I want to keep full compatibility with RUBE, I need to somehow keep the opengl specific data.
       //  I don't know yet if I can derive them fully from just the generated phaser image. Once I start with the level editor, I'll look into it.
       img.data.set('image-json', imageJson);

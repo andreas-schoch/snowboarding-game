@@ -1,7 +1,7 @@
 import GameScene from '../scenes/GameScene';
 import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
-import { DEFAULT_WIDTH, DEFAULT_ZOOM } from '..';
+import { DARKMODE_ENABLED, DEFAULT_WIDTH, DEFAULT_ZOOM, recordLeak } from '..';
 import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from '../eventTypes';
 import { IScore } from './State';
 import { GameInfo } from './Info';
@@ -42,15 +42,23 @@ export class CharacterController {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    const userdata = this.scene.b2Physics.loader.userData.get(this.character.body);
-    if (userdata?.image) camera.startFollow(userdata.image, false, 0.5, 0.5);
+    const image = this.scene.b2Physics.loader.userData.get(this.character.body)?.image;
+    if (!image) return;
+    camera.startFollow(image, false, 0.5, 0.5);
+
+    // if (DARKMODE_ENABLED) {
+    //   const glowingBodies = this.scene.b2Physics.loader.getBodiesByCustomProperty('light', true);
+    //   glowingBodies.forEach(body => {
+    //     const pos = recordLeak(body.GetPosition());
+    //     this.scene.lights.addLight(pos.x * 40, -pos.y * 40, 80, 0xffffff, 0.07);
+    //   });
+    // }
   }
 
   update() {
     if (this.scene.b2Physics.isPaused) return;
     if (!this.character) return;
 
-    // this.character.update(); // must come before inputs
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.character.jumpCooldown) this.character.jump();
     if (this.jumpKeyDown) this.character.leanUp();
     if (this.keyArrowLeft.isDown || this.keyA.isDown) this.character.leanBackward();

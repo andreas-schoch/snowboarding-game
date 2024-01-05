@@ -268,6 +268,13 @@
       "displayName" : "phaserPlayerBodyPart",
       "name" : "phaserPlayerCharacterPart",
       "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -957,6 +964,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1004,6 +1019,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1098,6 +1121,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1333,6 +1364,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1380,6 +1419,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1427,6 +1474,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1474,6 +1529,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -1521,6 +1584,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -2852,6 +2923,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -2899,6 +2978,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -2946,6 +3033,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -2993,6 +3088,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -3040,6 +3143,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -3087,6 +3198,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -3134,6 +3253,14 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "bool" : true,
+            "name" : "light"
+          }
+        ],
         "fixture" : 
         [
           
@@ -8141,83 +8268,6 @@
         {
           "x" : 1027.739135742188,
           "y" : -243.9933776855469
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : 4.396453380584717,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 177,
-            "name" : "fixture6",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -2.892469406127930,
-                -2.802880525588989,
-                -2.793719768524170,
-                -2.825189828872681,
-                -2.904949426651001,
-                -3.034210443496704,
-                -3.156069993972778,
-                -3.258910417556763,
-                -3.322350263595581,
-                -3.319919824600220,
-                -3.212689876556396,
-                -3.015990018844604,
-                3.190800666809082,
-                3.259440183639526,
-                3.315220832824707,
-                3.311629295349121,
-                3.271909952163696,
-                3.190799236297607
-              ],
-              "y" : 
-              [
-                -0.01320336014032364,
-                0.1193161830306053,
-                0.1964823901653290,
-                0.280246227979660,
-                0.3462722599506378,
-                0.3541760444641113,
-                0.3009693026542664,
-                0.2133242487907410,
-                0.07492389529943466,
-                -0.1002707853913307,
-                -0.2728326320648193,
-                -0.3582667112350464,
-                -0.3552001118659973,
-                -0.3193382918834686,
-                -0.2517301440238953,
-                -0.1250223070383072,
-                -0.05917581170797348,
-                -0.01102479267865419
-              ]
-            }
-          }
-        ],
-        "id" : 175,
-        "linearVelocity" : 0,
-        "name" : "body2",
-        "position" : 
-        {
-          "x" : -11.78859138488770,
-          "y" : 3.913610458374023
         },
         "type" : "static"
       },
@@ -15376,32 +15426,6 @@
         "name" : "image6",
         "opacity" : 1,
         "scale" : 1
-      },
-      
-      {
-        "angle" : 3.141592741012573,
-        "aspectScale" : 1,
-        "body" : 175,
-        "center" : 
-        {
-          "x" : -1.879315252679634e-13,
-          "y" : -9.536739753457368e-07
-        },
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
-        "filter" : 1,
-        "flip" : true,
-        "id" : 217,
-        "name" : "image10",
-        "opacity" : 1,
-        "scale" : -0.7061570286750793
       },
       
       {

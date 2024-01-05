@@ -2,7 +2,7 @@ import { IComboTrickScore, IScore } from '../components/State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
 import { getCurrentLevel } from '../util/getCurrentLevel';
-import { DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
+import { DARKMODE_ENABLED, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_DARKMODE_ENABLED, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
 import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
 import { levels } from '../levels';
 import { GameInfo } from '../components/Info';
@@ -119,14 +119,19 @@ export default class GameUIScene extends Phaser.Scene {
     const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
     const radios: HTMLInputElement[] = Array.from(document.querySelectorAll('#settings-form input[name="resolution"]'));
     for (const radio of radios) if (radio.value === val) radio.checked = true;
+    
     const valVolumeMusic = localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || '80';
     const inputVolumeMusic: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeMusic"]');
     if (inputVolumeMusic) inputVolumeMusic.value = valVolumeMusic;
+    
     const valVolumeSfx = localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || '80';
     const inputVolumeSfx: HTMLInputElement | null = document.querySelector('#settings-form input[name="volumeSfx"]');
     if (inputVolumeSfx) inputVolumeSfx.value = valVolumeSfx;
+    
+    const darkmodeToggle: HTMLInputElement | null = document.querySelector('#settings-form input[name="darkmodeEnabled"]');
+    if (darkmodeToggle) darkmodeToggle.checked = DARKMODE_ENABLED;
 
-    // The game may not run well on unverified browsers. For example it seems to run quite bad on firefox atm.
+    // The game may not run well on unverified browsers.
     // For now a text message is shown encouraging user to switch to a different browser if there are issues.
     // Older v0.5.0 prototype was running fairly well on lowest resolution on a raspberry pi. v1.0.0 can definitely be optimized better.
     const browser = this.sys.game.device.browser;
@@ -248,6 +253,7 @@ export default class GameUIScene extends Phaser.Scene {
             localStorage.setItem(SETTINGS_KEY_RESOLUTION, settingsForm.resolution.value || '1');
             localStorage.setItem(SETTINGS_KEY_VOLUME_MUSIC, settingsForm.volumeMusic.value);
             localStorage.setItem(SETTINGS_KEY_VOLUME_SFX, settingsForm.volumeSfx.value);
+            localStorage.setItem(SETTINGS_KEY_DARKMODE_ENABLED, settingsForm.darkmodeEnabled.checked);
             location.reload();
           }
           break;

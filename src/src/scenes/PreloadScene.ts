@@ -33,6 +33,7 @@ export default class PreloadScene extends Phaser.Scene {
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
     const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
+    this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
     CHARACTER_SKINS.forEach(skin => this.load.atlas(skin, `assets/img/packed/${skin}_${size}.png`, `assets/img/packed/${skin}_${size}.json`));
   }
 
