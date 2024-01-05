@@ -1,33 +1,33 @@
 {
 	"textures": [
 		{
-			"image": "character_santa_640x360.png",
+			"image": "character_v01_santa_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 127,
-				"h": 206
+				"w": 488,
+				"h": 174
 			},
-			"scale": 0.25,
+			"scale": 0.5,
 			"frames": [
 				{
 					"filename": "boardSegmentNoCap.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 31,
-						"h": 8
+						"w": 61,
+						"h": 16
 					},
 					"spriteSourceSize": {
-						"x": 3,
+						"x": 8,
 						"y": 0,
-						"w": 25,
-						"h": 8
+						"w": 45,
+						"h": 16
 					},
 					"frame": {
 						"x": 2,
 						"y": 2,
-						"w": 25,
-						"h": 8
+						"w": 45,
+						"h": 16
 					}
 				},
 				{
@@ -35,20 +35,20 @@
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 31,
-						"h": 8
+						"w": 61,
+						"h": 16
 					},
 					"spriteSourceSize": {
-						"x": 3,
+						"x": 8,
 						"y": 0,
-						"w": 28,
-						"h": 8
+						"w": 53,
+						"h": 16
 					},
 					"frame": {
-						"x": 29,
+						"x": 49,
 						"y": 2,
-						"w": 28,
-						"h": 8
+						"w": 53,
+						"h": 16
 					}
 				},
 				{
@@ -56,41 +56,62 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 31,
-						"h": 8
+						"w": 61,
+						"h": 16
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 31,
-						"h": 8
+						"w": 61,
+						"h": 16
 					},
 					"frame": {
-						"x": 59,
+						"x": 104,
 						"y": 2,
-						"w": 31,
-						"h": 8
+						"w": 61,
+						"h": 16
 					}
 				},
 				{
-					"filename": "crotch.png",
+					"filename": "legLowerLeft.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 25,
-						"h": 15
+						"w": 36,
+						"h": 58
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 3,
-						"w": 25,
-						"h": 11
+						"y": 0,
+						"w": 36,
+						"h": 58
 					},
 					"frame": {
-						"x": 92,
+						"x": 167,
 						"y": 2,
-						"w": 25,
-						"h": 11
+						"w": 36,
+						"h": 58
+					}
+				},
+				{
+					"filename": "legLowerRight.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 36,
+						"h": 58
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 58
+					},
+					"frame": {
+						"x": 205,
+						"y": 2,
+						"w": 36,
+						"h": 58
 					}
 				},
 				{
@@ -98,20 +119,20 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 18,
-						"h": 31
+						"w": 36,
+						"h": 61
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 18,
-						"h": 31
+						"w": 36,
+						"h": 61
 					},
 					"frame": {
-						"x": 2,
-						"y": 12,
-						"w": 18,
-						"h": 31
+						"x": 243,
+						"y": 2,
+						"w": 36,
+						"h": 61
 					}
 				},
 				{
@@ -119,20 +140,20 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 18,
-						"h": 31
+						"w": 36,
+						"h": 61
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 18,
-						"h": 31
+						"w": 36,
+						"h": 61
 					},
 					"frame": {
-						"x": 22,
-						"y": 12,
-						"w": 18,
-						"h": 31
+						"x": 281,
+						"y": 2,
+						"w": 36,
+						"h": 61
 					}
 				},
 				{
@@ -140,20 +161,20 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 14,
-						"h": 31
+						"w": 27,
+						"h": 63
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 14,
-						"h": 31
+						"w": 27,
+						"h": 63
 					},
 					"frame": {
-						"x": 42,
-						"y": 12,
-						"w": 14,
-						"h": 31
+						"x": 319,
+						"y": 2,
+						"w": 27,
+						"h": 63
 					}
 				},
 				{
@@ -161,146 +182,104 @@
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 14,
-						"h": 31
+						"w": 27,
+						"h": 63
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 14,
-						"h": 31
+						"w": 27,
+						"h": 63
 					},
 					"frame": {
-						"x": 42,
-						"y": 12,
-						"w": 14,
-						"h": 31
-					}
-				},
-				{
-					"filename": "legLowerLeft.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 33,
-						"h": 54
-					},
-					"spriteSourceSize": {
-						"x": 4,
-						"y": 11,
-						"w": 23,
-						"h": 37
-					},
-					"frame": {
-						"x": 58,
-						"y": 12,
-						"w": 23,
-						"h": 37
-					}
-				},
-				{
-					"filename": "legLowerRight.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 33,
-						"h": 54
-					},
-					"spriteSourceSize": {
-						"x": 6,
-						"y": 11,
-						"w": 23,
-						"h": 37
-					},
-					"frame": {
-						"x": 83,
-						"y": 15,
-						"w": 23,
-						"h": 37
+						"x": 319,
+						"y": 2,
+						"w": 27,
+						"h": 63
 					}
 				},
 				{
 					"filename": "legUpperLeft.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 30,
-						"h": 69
+						"w": 27,
+						"h": 63
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 6,
-						"w": 29,
-						"h": 54
+						"y": 0,
+						"w": 27,
+						"h": 63
 					},
 					"frame": {
-						"x": 2,
-						"y": 45,
-						"w": 29,
-						"h": 54
+						"x": 319,
+						"y": 2,
+						"w": 27,
+						"h": 63
 					}
 				},
 				{
 					"filename": "legUpperRight.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 30,
-						"h": 69
+						"w": 27,
+						"h": 63
 					},
 					"spriteSourceSize": {
-						"x": 1,
-						"y": 6,
-						"w": 29,
-						"h": 54
+						"x": 0,
+						"y": 0,
+						"w": 27,
+						"h": 63
 					},
 					"frame": {
-						"x": 33,
-						"y": 51,
-						"w": 29,
-						"h": 54
+						"x": 319,
+						"y": 2,
+						"w": 27,
+						"h": 63
 					}
 				},
 				{
 					"filename": "body.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 83,
-						"h": 83
+						"w": 138,
+						"h": 138
 					},
 					"spriteSourceSize": {
-						"x": 12,
-						"y": 5,
-						"w": 61,
-						"h": 71
+						"x": 0,
+						"y": 0,
+						"w": 138,
+						"h": 138
 					},
 					"frame": {
-						"x": 64,
-						"y": 54,
-						"w": 61,
-						"h": 71
+						"x": 348,
+						"y": 2,
+						"w": 138,
+						"h": 138
 					}
 				},
 				{
 					"filename": "head.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 85,
-						"h": 85
+						"w": 157,
+						"h": 152
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 8,
-						"w": 80,
-						"h": 77
+						"y": 0,
+						"w": 157,
+						"h": 152
 					},
 					"frame": {
 						"x": 2,
-						"y": 127,
-						"w": 80,
-						"h": 77
+						"y": 20,
+						"w": 157,
+						"h": 152
 					}
 				}
 			]
@@ -309,6 +288,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:10596d24685e74231332261a77836a06:991f7a74025b44f455a48a2cde27e186:be16ff2351b5d4651988a32aa9bdbe9d$"
+		"smartupdate": "$TexturePacker:SmartUpdate:5939367e8a35ad86e8b966b05bf4259f:2c4de985462d61a6eb2bf65c87381f95:b447787bd01d0a6d5a2b06f12bf85f4b$"
 	}
 }

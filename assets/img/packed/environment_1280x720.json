@@ -4,8 +4,8 @@
 			"image": "environment_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 511,
-				"h": 390
+				"w": 593,
+				"h": 354
 			},
 			"scale": 0.25,
 			"frames": [
@@ -24,31 +24,115 @@
 						"h": 288
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 3,
+						"y": 3,
 						"w": 275,
 						"h": 288
 					}
 				},
 				{
-					"filename": "santa-board.png",
+					"filename": "snowy_rock.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 313,
-						"h": 33
+						"w": 78,
+						"h": 56
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 313,
-						"h": 33
+						"w": 78,
+						"h": 56
 					},
 					"frame": {
+						"x": 3,
+						"y": 295,
+						"w": 78,
+						"h": 56
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
 						"x": 1,
-						"y": 291,
-						"w": 313,
-						"h": 33
+						"y": 0,
+						"w": 46,
+						"h": 50
+					},
+					"frame": {
+						"x": 85,
+						"y": 295,
+						"w": 46,
+						"h": 50
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 61,
+						"h": 16
+					},
+					"frame": {
+						"x": 135,
+						"y": 295,
+						"w": 61,
+						"h": 16
+					}
+				},
+				{
+					"filename": "bridgeSegmentOneCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 53,
+						"h": 16
+					},
+					"frame": {
+						"x": 135,
+						"y": 315,
+						"w": 53,
+						"h": 16
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 45,
+						"h": 16
+					},
+					"frame": {
+						"x": 135,
+						"y": 335,
+						"w": 45,
+						"h": 16
 					}
 				},
 				{
@@ -66,10 +150,31 @@
 						"h": 275
 					},
 					"frame": {
-						"x": 278,
-						"y": 1,
+						"x": 282,
+						"y": 3,
 						"w": 232,
 						"h": 275
+					}
+				},
+				{
+					"filename": "lightbulb.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 72,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 72,
+						"h": 256
+					},
+					"frame": {
+						"x": 518,
+						"y": 3,
+						"w": 72,
+						"h": 256
 					}
 				},
 				{
@@ -87,8 +192,8 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 316,
-						"y": 278,
+						"x": 282,
+						"y": 282,
 						"w": 69,
 						"h": 69
 					}
@@ -108,31 +213,10 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 387,
-						"y": 278,
+						"x": 355,
+						"y": 282,
 						"w": 69,
 						"h": 69
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 50,
-						"h": 50
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 46,
-						"h": 50
-					},
-					"frame": {
-						"x": 458,
-						"y": 278,
-						"w": 46,
-						"h": 50
 					}
 				},
 				{
@@ -150,31 +234,10 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 1,
-						"y": 326,
+						"x": 428,
+						"y": 282,
 						"w": 78,
 						"h": 63
-					}
-				},
-				{
-					"filename": "snowy_rock.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 78,
-						"h": 56
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 78,
-						"h": 56
-					},
-					"frame": {
-						"x": 81,
-						"y": 326,
-						"w": 78,
-						"h": 56
 					}
 				}
 			]
@@ -183,6 +246,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:022cb8e4aca79acf9e1139ba45f5c35b:2d1864997113ca0191628052ff9825a2:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:238658c9b466783d97b6af5e23eab03e:d55d57e8c17f89b79c9442aaaa1f52a9:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }
