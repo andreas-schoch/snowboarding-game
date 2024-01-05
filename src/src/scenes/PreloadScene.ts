@@ -12,7 +12,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.html('dom_game_ui', 'assets/html/game_ui.html');
   }
 
-  create() {
+  create() {    
     this.scene.start(SCENE_GAME);
   }
 

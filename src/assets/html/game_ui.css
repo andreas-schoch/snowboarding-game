@@ -1,11 +1,15 @@
 /* =============== */
 /* = Game UI HUD = */
 /* =============== */
-.game-ui {
+#game-ui {
   visibility: visible !important;
   color: white;
   font-size: 20px;
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .game-ui-item {

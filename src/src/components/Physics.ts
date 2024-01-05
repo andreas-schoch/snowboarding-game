@@ -109,7 +109,10 @@ export class Physics extends Phaser.Events.EventEmitter {
 
       if (DARKMODE_ENABLED) {
         // img.setPipeline('Light2D');
-        img.setTintFill(isPlayerCharacterPart ? 0x000000 : 0x222222);
+        const isLight = bodyProps?.['light'] === true || textureFrame === 'present_temp.png';
+        if (isPlayerCharacterPart) img.setTintFill(0x000000);
+        else if (isLight) img.setTintFill(0xbbbbbb);
+        else img.setTintFill(0x222222);
       }
       // TODO not sure if this is the way to go. If I want to keep full compatibility with RUBE, I need to somehow keep the opengl specific data.
       //  I don't know yet if I can derive them fully from just the generated phaser image. Once I start with the level editor, I'll look into it.

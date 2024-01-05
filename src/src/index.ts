@@ -97,20 +97,18 @@ export const CHARACTER_SKINS = [
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   backgroundColor: DARKMODE_ENABLED ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
   parent: 'phaser-wrapper',
-  dom: {
-    createContainer: true,
-  },
+  // dom: { createContainer: true }, // Not using inbuilt way to display UI as it sucks with dynamic scaling and resizing
   fps: {
     target: 60,
     min: 55,
-    smoothStep: true,
+    smoothStep: false,
   },
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: DEFAULT_WIDTH * RESOLUTION_SCALE,
     height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
@@ -126,7 +124,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
 export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
 export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
-window.addEventListener('load', () => {
+window.onload = () => {
   simd().then(simdSupported => {
     // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
     Box2DFactory({ locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm' }).then((_b2) => {
@@ -144,4 +142,6 @@ window.addEventListener('load', () => {
       }
     });
   });
-});
+};
+
+window.onresize
