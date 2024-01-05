@@ -110,9 +110,6 @@ export default class GameUIScene extends Phaser.Scene {
   }
 
   private initDomUi(): HTMLElement {
-    const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
-    const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-
     const uiWrapper = document.querySelector('#phaser-ui-wrapper');
     if (!uiWrapper) throw new Error('uiWrapper not found');
     uiWrapper.innerHTML = '';
@@ -121,6 +118,7 @@ export default class GameUIScene extends Phaser.Scene {
     uiWrapper.insertAdjacentHTML('beforeend', this.cache.html.get('dom_game_ui'));
     element = document.querySelector<HTMLElement>('#game-ui');
     if (!element) throw new Error('element not found');
+    document.body.classList.add(DARKMODE_ENABLED ? 'darkmode' : 'lightmode');
 
     const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
     const radios = Array.from(document.querySelectorAll<HTMLInputElement>('#settings-form input[name="resolution"]'));
