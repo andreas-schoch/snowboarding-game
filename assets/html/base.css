@@ -4,6 +4,7 @@
   --game-ui-padding: 0.5rem;
 
   --blue-400: #7893cc;
+  --blue-700: #2651ad;
   --blue-800: #123684;
   --blue-900: #01256E;
 
@@ -11,9 +12,19 @@
   --grey-500: #E8E8E8;
   --grey-600: #A8A8A8;
   --grey-700: #6A6A6A;
+  --grey-900: #252525;
 
   --green: var(--blue-900);
   --red: #D5365E;
+  
+  --btn-text-color: var(--grey-700);
+  --btn-hover-color: var(--grey-500);
+}
+
+body.darkmode {
+  --green: var(--blue-700);
+  --btn-text-color: var(--grey-400);
+  --btn-hover-color: var(--grey-700);
 }
 
 * {
@@ -548,12 +559,12 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
 .btn-default {
   background-color: transparent;
   border-color: var(--grey-600);
-  color: var(--grey-700);
+  color: var(--btn-text-color);
 }
 
 .btn-default:focus,
 .btn-default:hover {
-  background-color: var(--grey-500);
+  background-color: var(--btn-hover-color);
 }
 
 .btn-secondary {

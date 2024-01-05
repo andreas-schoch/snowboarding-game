@@ -2,7 +2,8 @@
     "name": "Snowboarding Game",
     "short_name": "Snowboarding",
     "start_url": "./index.html",
-    "display": "standalone",
+    "display":      "fullscreen",
+    "orientation":  "landscape",
     "description": "Physics based 2D snowboarding game.",
     "icons": [
         {
