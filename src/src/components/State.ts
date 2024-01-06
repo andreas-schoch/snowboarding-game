@@ -198,7 +198,7 @@ export class State {
         this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
         this.scene.observer.emit(SCORE_CHANGE, currentScore);
-        this.scene.observer.emit(LEVEL_FINISH, currentScore);
+        this.scene.observer.emit(LEVEL_FINISH, currentScore, this.isCrashed);
         break;
       }
       case 'level_deathzone': {

@@ -4,7 +4,7 @@ import { PanelIds } from '../scenes/GameUIScene';
 import { DARKMODE_ENABLED, DEFAULT_WIDTH, DEFAULT_ZOOM, recordLeak } from '..';
 import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from '../eventTypes';
 import { IScore } from './State';
-import { GameInfo } from './Info';
+import { GameInfo } from './GameInfo';
 
 export class CharacterController {
   character: Character | null = null;

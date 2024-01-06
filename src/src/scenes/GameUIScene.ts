@@ -5,7 +5,7 @@ import { getCurrentLevel } from '../util/getCurrentLevel';
 import { DARKMODE_ENABLED, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, LevelKeys, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_DARKMODE_ENABLED, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
 import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
 import { levels } from '../levels';
-import { GameInfo } from '../components/Info';
+import { GameInfo } from '../components/GameInfo';
 
 
 export enum PanelIds {
@@ -363,10 +363,11 @@ export default class GameUIScene extends Phaser.Scene {
       note && note.classList.add('hidden');
 
       if (!currentUser.displayName) {
+        // TODO disabled default username for now as too many just us the default name instead of overriding it.
         // First time player without a username. Score is submitted manually somewhere else after clicking a button.
-        elUsername.value = `Player_${pseudoRandomId()}`;
-        elUsername.setAttribute('value', elUsername.value); // to make floating label move up
-        localStorage.setItem(KEY_USER_NAME, elUsername.value);
+        // elUsername.value = `Player_${pseudoRandomId()}`;
+        // elUsername.setAttribute('value', elUsername.value); // to make floating label move up
+        // localStorage.setItem(KEY_USER_NAME, elUsername.value);
       } else {
         // Score is submitted automatically for users that submitted a score once before from this device and browser.
         elSubmitScoreForm?.classList.add('hidden');

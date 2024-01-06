@@ -605,6 +605,11 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   transition: all 0.1s;
 }
 
+.darkmode .form-text-input {
+  border: 1px solid var(--grey-600);
+  background-color: var(--grey-500);
+}
+
 .form-text-input:not(textarea) {
   text-overflow: ellipsis;
 }
@@ -644,8 +649,18 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   font-weight: 500;
 }
 
+.darkmode .form-text-input:focus + .floating-label,
+.darkmode .form-text-input:not([value=""]) + .floating-label {
+  background-color: var(--grey-700);
+  color: var(--grey-400);
+}
+
 .form-text-input:not([value=""]):hover + .floating-label {
   color: var(--grey-700);
+}
+
+.darkmode .form-text-input:not([value=""]):hover + .floating-label {
+  color: white;
 }
 
 /* Floating label not updating with autocomplete */
@@ -659,8 +674,16 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   transition: none;
 }
 
+.darkmode .form-text-input:-webkit-autofill + .floating-label {
+  color: var(--grey-700);
+}
+
 .form-text-input:focus + .floating-label {
   color: var(--blue-900) !important;
+}
+
+.darkmode .form-text-input:focus + .floating-label {
+  color: white !important;
 }
 
 .form-group .floating-label::after {

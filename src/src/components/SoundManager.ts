@@ -1,7 +1,7 @@
 import { BackgroundMusicKeys, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX } from "..";
-import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME, ENTER_GROUNDED } from "../eventTypes";
+import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME } from "../eventTypes";
 import GameScene from "../scenes/GameScene";
-import { GameInfo } from "./Info";
+import { GameInfo } from "./GameInfo";
 import { IScore } from "./State";
 
 export class SoundManager {
@@ -26,7 +26,7 @@ export class SoundManager {
     this.sfx_death = this.scene.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
     this.sfx_grunt = this.scene.sound.add('grunt', { detune: 400, rate: 1.25, volume: sfxVolume * 0.5 });
     this.sfx_applause = this.scene.sound.add('applause', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
-    this.sfx_game_over_demon = this.scene.sound.add('game_over_demon', { detune: 0, rate: 0.95, volume: sfxVolume * 0.6 });
+    this.sfx_game_over_demon = this.scene.sound.add('game_over_demon', { detune: 0, rate: 0.95, volume: 0.05 });
     this.sfx_snowboardSlide = this.scene.sound.add('snowboard_slide_04', { loop: true, volume: 0.03, rate: 1, delay: 0, detune: 1000 });
     this.sfx_windNoise = this.scene.sound.add('wind', { loop: true, volume: 0.02, rate: 1, delay: 0, detune: 0 });
     this.sfx_snowboardSlide.play();
@@ -50,8 +50,8 @@ export class SoundManager {
         onComplete: async () => this.music.stop(),
       });
     });
-    this.scene.observer.on(LEVEL_FINISH, () => {
-      // if (this.crashed) return;
+    this.scene.observer.on(LEVEL_FINISH, (score: IScore, isCrashed: boolean) => {
+      if (isCrashed) return;
       this.sfx_applause.play();
       this.scene.tweens.add({
         targets: this.music,
@@ -69,7 +69,8 @@ export class SoundManager {
       const currentDetune = this.sfx_snowboardSlide.detune;
       const newDetune = currentDetune + lerpFactor * (target - currentDetune);
       this.sfx_snowboardSlide.setDetune(newDetune);
-      const percentage = Math.min(impulse / maxImpulse, 1);
+      const sfxVolume = Number(localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || 80) / 100;
+      const percentage = Math.min(impulse / maxImpulse, 1) * sfxVolume * 0.5;
       const volume = Math.max(Math.min(percentage, 1), 0.2);
       this.sfx_snowboardSlide.setVolume(volume);
     });

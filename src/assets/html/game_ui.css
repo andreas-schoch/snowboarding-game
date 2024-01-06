@@ -7,6 +7,7 @@
   --level-item-background: #ffd6cc;
   --level-item-number-color: var(--grey-700);
   --level-item-name-color: black;
+  --form-text-input-background: var(--panel-background);
 }
 
 body.darkmode {
@@ -18,13 +19,22 @@ body.darkmode {
   --level-item-background: var(--grey-700);
   --level-item-number-color: var(--grey-600);
   --level-item-name-color: var(--grey-500);
+  --form-text-input-background: var(--panel-background);
+  --form-text-input-background-empty: var(--grey-500);
+  --form-text-input-color: var(--panel-background);
+
+}
+
+#phaser-ui-wrapper {
+  display: block !important;
 }
 
 /* =============== */
 /* = Game UI HUD = */
 /* =============== */
 #game-ui {
-  visibility: visible !important;
+  display: block !important;
+  /* visibility: visible !important; */
   color: white;
   font-size: 20px;
   position: absolute;
