@@ -1,4 +1,3 @@
-import { channel } from 'diagnostics_channel';
 import { b2, recordLeak } from '../..';
 import { CustomPropOwner, RubeLoader } from './RubeLoader';
 import { RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty } from './RubeLoaderInterfaces';
@@ -250,7 +249,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeDistanceJoint(joint: Box2D.b2Joint): RubeJoint {
     const distanceJoint = b2.castObject(joint, b2.b2DistanceJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointFrequencyAndDampingRatio(distanceJoint);
+    const { frequencyHertz, dampingRatio } = this.getJointLinearFrequencyAndDampingRatio(distanceJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'distance',
@@ -262,7 +261,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeWheelJoint(joint: Box2D.b2Joint): RubeJoint {
     const wheelJoint = b2.castObject(joint, b2.b2WheelJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointFrequencyAndDampingRatio(wheelJoint);
+    const { frequencyHertz, dampingRatio } = this.getJointLinearFrequencyAndDampingRatio(wheelJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'wheel',
@@ -277,7 +276,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeWeldJoint(joint: Box2D.b2Joint): RubeJoint {
     const weldJoint = b2.castObject(joint, b2.b2WeldJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointFrequencyAndDampingRatio(weldJoint);
+    const { frequencyHertz, dampingRatio } = this.getJointAngularFrequencyAndDampingRatio(weldJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'weld',
@@ -324,16 +323,40 @@ export class RubeSerializer<IMG = unknown> {
     if (vec.x === 0 && vec.y === 0) return 0;
     return { x: vec.x, y: vec.y };
   }
-
-  private getJointFrequencyAndDampingRatio(joint: Box2D.b2DistanceJoint | Box2D.b2WheelJoint | Box2D.b2WeldJoint) {
+  private getJointLinearFrequencyAndDampingRatio(joint: Box2D.b2DistanceJoint | Box2D.b2WheelJoint) {
     // Reverse b2LinearStiffness() formula. from https://github.com/erincatto/box2d/blob/main/src/dynamics/b2_joint.cpp#L40
     const stiffness = joint.GetStiffness();
     const damping = joint.GetDamping();
-    const mass = joint.GetBodyA().GetMass() + joint.GetBodyB().GetMass();
+    const massA = joint.GetBodyA().GetMass();
+    const massB = joint.GetBodyB().GetMass();
+    
+    let effectiveMass: number;
+    if (massA > 0 && massB > 0) effectiveMass = massA * massB / (massA + massB);
+    else if (massA > 0) effectiveMass = massA;
+    else effectiveMass = massB;
 
-    const omega = Math.sqrt(stiffness / mass); // natural frequency
-    const frequencyHertz = omega / (2.0 * Math.PI);
-    const dampingRatio = damping / (2.0 * mass * omega);
+    const omega = Math.sqrt(stiffness / effectiveMass); // natural frequency
+    const frequencyHertz = omega / (2 * Math.PI);
+    const dampingRatio = damping / (2 * effectiveMass * omega);
+
     return { frequencyHertz, dampingRatio };
   }
+
+  private getJointAngularFrequencyAndDampingRatio(joint: Box2D.b2WeldJoint): { frequencyHertz: number, dampingRatio: number } {
+    const stiffness = joint.GetStiffness();
+    const damping = joint.GetDamping();
+    const inertiaA = joint.GetBodyA().GetInertia();
+    const inertiaB = joint.GetBodyB().GetInertia();
+
+    let inertia: number;
+    if (inertiaA > 0 && inertiaB > 0) inertia = inertiaA * inertiaB / (inertiaA + inertiaB);
+    else inertia = inertiaA > 0 ? inertiaA : inertiaB;
+
+    const omega = Math.sqrt(stiffness / inertia);
+    const frequencyHertz = omega / (2 * Math.PI);
+    const dampingRatio = damping / (2 * inertia * omega);
+
+    return { frequencyHertz, dampingRatio };
+  }
+
 }
