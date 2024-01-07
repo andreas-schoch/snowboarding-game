@@ -30,7 +30,7 @@ export class Backdrop {
 
   update() {
     const { scrollX, scrollY, zoomX, zoomY } = this.scene.cameras.main;
-    if (Settings.darkmodeEnabled()) {
+    if (Settings.darkmodeEnabled() && this.bgSpaceMid && this.bgSpaceFront) {
       this.bgSpaceMid.setTilePosition(scrollX * 0.01 * 0.2, scrollY * 0.01 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
       this.bgSpaceFront.setTilePosition(scrollX * 0.025 * 0.2, scrollY * 0.025 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
     }
