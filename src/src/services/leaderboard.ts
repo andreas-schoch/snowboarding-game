@@ -7,8 +7,7 @@ import {calculateTotalScore} from '../util/calculateTotalScore';
 import {pseudoRandomId} from '../util/pseudoRandomId';
 import {IScore} from '../components/State';
 import { Settings } from '../components/Settings';
-import { LevelKeys } from '..';
-
+import { LevelKeys } from '../levels';
 
 export class LeaderboardService {
   rexLeaderboard: RexLeaderboard; // TODO get rid. It works well but not 100% suited for this games needs (score stored as list of actions instead of plain value)

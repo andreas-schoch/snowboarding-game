@@ -1,9 +1,9 @@
 import { IComboTrickScore, IScore } from '../components/State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
-import { DEFAULT_WIDTH, LEVEL_SUCCESS_BONUS_POINTS, LevelKeys, POINTS_PER_COIN, SCENE_GAME_UI, leaderboardService } from '..';
+import { DEFAULT_WIDTH, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, leaderboardService } from '..';
 import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
-import { levels } from '../levels';
+import { LevelKeys, levels } from '../levels';
 import { GameInfo } from '../components/GameInfo';
 import { Settings } from '../components/Settings';
 

@@ -25,58 +25,6 @@ export const HEAD_MAX_IMPULSE = 8;
 export const DEFAULT_WIDTH = 1280;
 export const DEFAULT_HEIGHT = 720;
 
-// This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
-// The majority of the levels is expected to be custom made by players and fetched from a server.
-export enum LevelKeys {
-  level_001 = 'level_001',
-  level_002 = 'level_002',
-  level_003 = 'level_003',
-  level_004 = 'level_004',
-  level_005 = 'level_005',
-}
-
-export const LEVELS = [
-  LevelKeys.level_001,
-  LevelKeys.level_002,
-  LevelKeys.level_003,
-  LevelKeys.level_004,
-  LevelKeys.level_005,
-];
-
-export const BackgroundMusicKeys = {
-  ContinueLife: 'KevinMacLeod/Continue Life',
-  Heartbreaking: 'KevinMacLeod/Heartbreaking',
-  RainsWillFall: 'KevinMacLeod/Rains Will Fall',
-  SadTrio: 'KevinMacLeod/Sad Trio',
-  StagesOfGrief: 'KevinMacLeod/Stages of Grief',
-};
-
-export const RUBE_SCENE_CHARACTER = 'character';
-
-export const enum CharacterKeys {
-  character_v01 = 'character_v01',
-  character_v02 = 'character_v02',
-}
-
-export const CHARACTERS = [
-  CharacterKeys.character_v01,
-  CharacterKeys.character_v02,
-];
-
-export const enum CharacterSkinKeys {
-  character_v01_neutral = 'character_v01_neutral',
-  character_v01_santa = 'character_v01_santa',
-  character_v02_neutral = 'character_v02_neutral',
-  character_v02_santa = 'character_v02_santa',
-}
-
-export const CHARACTER_SKINS = [
-  CharacterSkinKeys.character_v01_neutral,
-  CharacterSkinKeys.character_v01_santa,
-  CharacterSkinKeys.character_v02_neutral,
-  CharacterSkinKeys.character_v02_santa,
-];
-
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',

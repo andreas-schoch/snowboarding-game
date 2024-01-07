@@ -1,7 +1,10 @@
-import { CHARACTER_SKINS, CharacterKeys, CharacterSkinKeys, DEFAULT_HEIGHT, DEFAULT_WIDTH, LEVELS, LevelKeys } from "..";
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "..";
+import { LevelKeys } from "../levels";
 import { IScore } from "./State";
 
-type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';;
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';
+export type CharacterKeys = 'character_v01' | 'character_v02';
+export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
 export class Settings {
   static set(setting: SettingKeys, value: string) {
@@ -45,9 +48,7 @@ export class Settings {
   }
 
   static currentLevel(): LevelKeys {
-    const levelFromStorage = Settings.getRaw('levelCurrent') as LevelKeys | null;
-    if (!levelFromStorage || !LEVELS.includes(levelFromStorage)) return LevelKeys.level_001;
-    return levelFromStorage;
+    return Settings.getRaw('levelCurrent') as LevelKeys || 'level_001';
   }
 
   static localScores(): Record<keyof LevelKeys, IScore[]> {
@@ -55,15 +56,11 @@ export class Settings {
   }
 
   static selectedCharacter(): CharacterKeys {
-    const characterFromStorage = Settings.getRaw('selectedCharacter') as CharacterKeys | null;
-    if (!characterFromStorage || !CHARACTER_SKINS[characterFromStorage]) return CharacterKeys.character_v02;
-    return characterFromStorage;
+    return Settings.getRaw('selectedCharacter') as CharacterKeys || 'character_v02';
   }
 
   static selectedCharacterSkin(): CharacterSkinKeys {
-    const characterFromStorage = Settings.getRaw('selectedCharacterSkin') as CharacterSkinKeys | null;
-    if (!characterFromStorage || !CHARACTER_SKINS[characterFromStorage]) return CharacterSkinKeys.character_v02_santa;
-    return characterFromStorage;
+    return Settings.getRaw('selectedCharacterSkin') as CharacterSkinKeys || 'character_v02_santa';
   }
 
   private static getRaw(setting: SettingKeys): string | null {

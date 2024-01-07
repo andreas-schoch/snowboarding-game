@@ -1,4 +1,3 @@
-import { BackgroundMusicKeys } from "..";
 import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME } from "../eventTypes";
 import GameScene from "../scenes/GameScene";
 import { GameInfo } from "./GameInfo";
@@ -15,7 +14,6 @@ export class SoundManager {
 
   private sfx_windNoise: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   private sfx_snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
-
 
   constructor(private scene: GameScene) {
     const musicVolume = Settings.volumeMusic() / 100;
@@ -105,3 +103,11 @@ export class SoundManager {
     });
   }
 }
+
+export const BackgroundMusicKeys = {
+  ContinueLife: 'KevinMacLeod/Continue Life',
+  Heartbreaking: 'KevinMacLeod/Heartbreaking',
+  RainsWillFall: 'KevinMacLeod/Rains Will Fall',
+  SadTrio: 'KevinMacLeod/Sad Trio',
+  StagesOfGrief: 'KevinMacLeod/Stages of Grief',
+};

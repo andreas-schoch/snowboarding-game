@@ -13,10 +13,18 @@ export default class GameScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter;
   b2Physics: Physics;
   private playerController: CharacterController;
-  backdrop: Backdrop;
+  private backdrop: Backdrop;
 
   constructor() {
     super({ key: SCENE_GAME });
+  }
+
+  preload() {
+    // These may change during gameplay so cannot be loaded in PreloadScene (unless loading all)
+    const level = Settings.currentLevel();
+    const character = Settings.selectedCharacter();
+    this.load.json(level, `assets/levels/export/${level}.json`);
+    this.load.json(character, `assets/levels/export/${character}.json`);
   }
 
   private create() {

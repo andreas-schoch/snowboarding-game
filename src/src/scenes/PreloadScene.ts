@@ -1,5 +1,6 @@
 import { Settings } from '../components/Settings';
-import { BackgroundMusicKeys, CHARACTERS, CHARACTER_SKINS, LEVELS, SCENE_GAME, SCENE_PRELOAD } from '../index';
+import { BackgroundMusicKeys } from '../components/SoundManager';
+import { SCENE_GAME, SCENE_PRELOAD } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -9,11 +10,10 @@ export default class PreloadScene extends Phaser.Scene {
   preload() {
     this.loadAudio();
     this.loadImg();
-    this.loadLevels();
     this.load.html('dom_game_ui', 'assets/html/game_ui.html');
   }
 
-  create() {    
+  create() {
     this.scene.start(SCENE_GAME);
   }
 
@@ -35,13 +35,7 @@ export default class PreloadScene extends Phaser.Scene {
     const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
-    CHARACTER_SKINS.forEach(skin => this.load.atlas(skin, `assets/img/packed/${skin}_${size}.png`, `assets/img/packed/${skin}_${size}.json`));
-  }
-
-  private loadLevels() {
-    // Character itself is currently imported by levels themselves (as RUBE Object) but will be loaded separately once game allows character selection
-    // (e.g. Santa clause, Mrs. Clause, Snowman, Easter Bunny, The Hoff etc.)
-    LEVELS.forEach(level => this.load.json(level, `assets/levels/export/${level}.json`));
-    CHARACTERS.forEach(character => this.load.json(character, `assets/levels/export/${character}.json`));
+    const characterSkin = Settings.selectedCharacterSkin();
+    this.load.atlas(characterSkin, `assets/img/packed/${characterSkin}_${size}.png`, `assets/img/packed/${characterSkin}_${size}.json`);
   }
 }
