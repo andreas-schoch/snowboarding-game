@@ -1,5 +1,5 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "..";
-import { LevelKeys } from "../levels";
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from ".";
+import { LevelKeys } from "./levels";
 import { IScore } from "./State";
 
 export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';

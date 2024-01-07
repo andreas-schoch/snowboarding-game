@@ -1,10 +1,10 @@
 import { IBeginContactEvent, IPostSolveEvent } from './Physics';
-import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION } from "..";
+import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION } from ".";
 import { Character } from './Character';
-import GameScene from '../scenes/GameScene';
-import { B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from '../eventTypes';
+import GameScene from './scenes/GameScene';
+import { B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from './eventTypes';
 import { Settings } from './Settings';
-import { LevelKeys } from '../levels';
+import { LevelKeys } from './levels';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';

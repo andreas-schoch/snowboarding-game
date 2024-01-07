@@ -1,8 +1,8 @@
-import GameScene from '../scenes/GameScene';
+import GameScene from './scenes/GameScene';
 import { Character } from './Character';
-import { PanelIds } from '../scenes/GameUIScene';
-import { DEFAULT_WIDTH } from '..';
-import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from '../eventTypes';
+import { PanelIds } from './scenes/GameUIScene';
+import { DEFAULT_WIDTH } from '.';
+import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from './eventTypes';
 import { IScore } from './State';
 import { GameInfo } from './GameInfo';
 import { Settings } from './Settings';

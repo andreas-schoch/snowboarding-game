@@ -1,4 +1,4 @@
-import { b2 } from "..";
+import { b2 } from ".";
 
 const sizeOfB2Vec2 = Float32Array.BYTES_PER_ELEMENT * 2;
 

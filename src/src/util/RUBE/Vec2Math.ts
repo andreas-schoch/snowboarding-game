@@ -1,5 +1,5 @@
 import { b2 } from "../..";
-import { XY } from "../../components/Terrain";
+import { XY } from "../../Terrain";
 
 export class vec2Util {
 

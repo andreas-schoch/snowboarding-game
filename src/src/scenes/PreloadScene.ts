@@ -1,5 +1,5 @@
-import { Settings } from '../components/Settings';
-import { BackgroundMusicKeys } from '../components/SoundManager';
+import { Settings } from '../Settings';
+import { BackgroundMusicKeys } from '../SoundManager';
 import { SCENE_GAME, SCENE_PRELOAD } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {

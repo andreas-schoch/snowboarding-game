@@ -7,7 +7,7 @@ import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
 import GameUIScene from './scenes/GameUIScene';
 import { LeaderboardService } from './services/leaderboard';
-import { Settings } from './components/Settings';
+import { Settings } from './Settings';
 
 // Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();

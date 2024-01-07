@@ -1,13 +1,13 @@
-import Terrain from '../components/Terrain';
-import { Physics } from '../components/Physics';
+import Terrain from '../Terrain';
+import { Physics } from '../Physics';
 import { freeLeaked } from '../index';
 import { SCENE_GAME, SCENE_GAME_UI } from "..";
-import { CharacterController } from '../components/PlayerController';
-import { Character } from '../components/Character';
+import { CharacterController } from '../PlayerController';
+import { Character } from '../Character';
 import { RESTART_GAME } from '../eventTypes';
-import { SoundManager } from '../components/SoundManager';
-import { Backdrop } from '../components/Backdrop';
-import { Settings } from '../components/Settings';
+import { SoundManager } from '../SoundManager';
+import { Backdrop } from '../Backdrop';
+import { Settings } from '../Settings';
 
 export default class GameScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter;

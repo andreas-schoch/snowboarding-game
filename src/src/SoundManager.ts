@@ -1,5 +1,5 @@
-import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME } from "../eventTypes";
-import GameScene from "../scenes/GameScene";
+import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME } from "./eventTypes";
+import GameScene from "./scenes/GameScene";
 import { GameInfo } from "./GameInfo";
 import { Settings } from "./Settings";
 import { IScore } from "./State";

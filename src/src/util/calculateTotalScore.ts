@@ -1,4 +1,4 @@
-import {IScore} from '../components/State';
+import {IScore} from '../State';
 import { BASE_FLIP_POINTS, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN } from "..";
 
 export const calculateTotalScore = (score: IScore, useCachedTotal: boolean = true): number => {

@@ -1,5 +1,5 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '../index';
-import GameScene from '../scenes/GameScene';
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './index';
+import GameScene from './scenes/GameScene';
 import { Settings } from './Settings';
 
 

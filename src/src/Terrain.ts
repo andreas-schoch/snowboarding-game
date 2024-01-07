@@ -1,5 +1,5 @@
-import { b2, recordLeak } from '../index';
-import GameScene from '../scenes/GameScene';
+import { b2, recordLeak } from './index';
+import GameScene from './scenes/GameScene';
 import { Settings } from './Settings';
 
 

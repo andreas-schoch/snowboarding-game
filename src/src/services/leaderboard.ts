@@ -5,8 +5,8 @@ import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebas
 import {env} from '../environment';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 import {pseudoRandomId} from '../util/pseudoRandomId';
-import {IScore} from '../components/State';
-import { Settings } from '../components/Settings';
+import {IScore} from '../State';
+import { Settings } from '../Settings';
 import { LevelKeys } from '../levels';
 
 export class LeaderboardService {

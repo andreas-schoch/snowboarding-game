@@ -1,6 +1,6 @@
-import { b2 } from "..";
-import GameScene from "../scenes/GameScene";
-import { vec2Util } from "../util/RUBE/Vec2Math";
+import { b2 } from ".";
+import GameScene from "./scenes/GameScene";
+import { vec2Util } from "./util/RUBE/Vec2Math";
 import { Snowboard } from "./Snowboard";
 import { State } from "./State";
 

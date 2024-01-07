@@ -1,9 +1,9 @@
 import { IPostSolveEvent } from './Physics';
-import GameScene from '../scenes/GameScene';
-import { b2 } from '../index';
-import { vec2Util } from '../util/RUBE/Vec2Math';
+import GameScene from './scenes/GameScene';
+import { b2 } from './index';
+import { vec2Util } from './util/RUBE/Vec2Math';
 import { Character, CharacterPartId } from './Character';
-import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
+import { B2_POST_SOLVE, SURFACE_IMPACT } from './eventTypes';
 import { Settings } from './Settings';
 
 interface IRayCastResult {
