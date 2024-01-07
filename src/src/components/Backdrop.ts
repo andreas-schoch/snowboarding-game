@@ -5,26 +5,23 @@ import { Settings } from './Settings';
 
 export class Backdrop {
   private scene: GameScene;
-  // private bgSpaceBack: Phaser.GameObjects.TileSprite;
+  private bgSky: Phaser.GameObjects.TileSprite;
   private bgSpaceMid: Phaser.GameObjects.TileSprite;
   private bgSpaceFront: Phaser.GameObjects.TileSprite;
-  bgSky: Phaser.GameObjects.TileSprite;
-  resolutionMod: number;
+  private resolutionMod: number;
 
   constructor(scene: GameScene) {
     this.scene = scene;
     this.resolutionMod = this.scene.cameras.main.width / DEFAULT_WIDTH;
-
-    // this.bgSpaceBack = this.registerLayer('bg_space_pack', 'bg_space_back.png');
-
+    
     const g = this.scene.add.graphics();
     g.fillStyle(Settings.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
     g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.generateTexture('bg_sky', DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.destroy();
-
+    
     this.bgSky = this.registerLayer('bg_sky', '');
-
+    
     if (Settings.darkmodeEnabled()) {
       this.bgSpaceMid = this.registerLayer('bg_space_pack', 'bg_space_mid.png');
       this.bgSpaceFront = this.registerLayer('bg_space_pack', 'bg_space_front.png');
@@ -33,7 +30,6 @@ export class Backdrop {
 
   update() {
     const { scrollX, scrollY, zoomX, zoomY } = this.scene.cameras.main;
-    // this.bgSpaceBack.setTilePosition(scrollX * 0.005, scrollY * 0.000).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
     if (Settings.darkmodeEnabled()) {
       this.bgSpaceMid.setTilePosition(scrollX * 0.01 * 0.2, scrollY * 0.01 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
       this.bgSpaceFront.setTilePosition(scrollX * 0.025 * 0.2, scrollY * 0.025 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
@@ -48,7 +44,6 @@ export class Backdrop {
       .setScrollFactor(0, 0)
       .setScale(scaleX * (1 / zoomX), scaleY * (1 / zoomY))
       .setDepth(-200)
-
     // if (Settings.darkmodeEnabled()) tilesprite.setPipeline('Light2D');
     return tilesprite;
   }

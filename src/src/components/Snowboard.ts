@@ -95,7 +95,7 @@ export class Snowboard {
 
   private initRays(rayLength: number) {
     const { loader } = this.scene.b2Physics;
-    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', CharacterPartId.BOARD_SEGMENT, this.character.id);
+    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', 'boardSegment', this.character.id);
     if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
     segmentBodies.sort((a, b) => {
       const aIndex = Number(loader.customProps.get(a)!['phaserBoardSegmentIndex']);

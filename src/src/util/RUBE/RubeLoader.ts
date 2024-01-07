@@ -119,9 +119,9 @@ export class RubeLoader<IMG = unknown> {
     bd.set_bullet(Boolean(bodyJson.bullet || false));
 
     const massData = new b2.b2MassData();
-    massData.mass = bodyJson['massData-mass'] || 1;
-    massData.center = this.rubeToVec2(bodyJson['massData-center']);
-    massData.I = bodyJson['massData-I'] || 1;
+    massData.set_mass(bodyJson['massData-mass'] || 1);
+    massData.set_center(this.rubeToVec2(bodyJson['massData-center']));
+    massData.set_I(bodyJson['massData-I'] || 1);
 
     const body: Box2D.b2Body = this.world.CreateBody(bd);
     body.SetMassData(massData);
@@ -176,14 +176,14 @@ export class RubeLoader<IMG = unknown> {
       case 'revolute': {
         const jd = new b2.b2RevoluteJointDef();
         jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.referenceAngle = jointJson.refAngle || 0;
-        jd.enableLimit = Boolean(jointJson.enableLimit);
-        jd.lowerAngle = jointJson.lowerLimit || 0;
-        jd.upperAngle = jointJson.upperLimit || 0;
-        jd.enableMotor = Boolean(jointJson.enableMotor);
-        jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
-        jd.motorSpeed = jointJson.motorSpeed || 0;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_referenceAngle(jointJson.refAngle || 0);
+        jd.set_enableLimit(Boolean(jointJson.enableLimit));
+        jd.set_lowerAngle(jointJson.lowerLimit || 0);
+        jd.set_upperAngle(jointJson.upperLimit || 0);
+        jd.set_enableMotor(Boolean(jointJson.enableMotor));
+        jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
+        jd.set_motorSpeed(jointJson.motorSpeed || 0);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);
         break;
@@ -200,11 +200,10 @@ export class RubeLoader<IMG = unknown> {
           vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()),
           vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorB), bodyB.GetAngle()), bodyB.GetPosition()),
         );
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.length = jointJson.length || 0;
-        // Not sure what the proper way is, but without setting min and max length explicitly, it remains stiff.
-        jd.minLength = 0;
-        jd.maxLength = jd.length * 2;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_length(jointJson.length || 0);
+        jd.set_minLength(0);
+        jd.set_maxLength(jd.length * 2); // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
         this.setLinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);
@@ -213,14 +212,14 @@ export class RubeLoader<IMG = unknown> {
       case 'prismatic': {
         const jd = new b2.b2PrismaticJointDef();
         jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()), this.rubeToVec2(jointJson.localAxisA));
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.referenceAngle = jointJson.refAngle || 0;
-        jd.enableLimit = Boolean(jointJson.enableLimit);
-        jd.lowerTranslation = jointJson.lowerLimit || 0;
-        jd.upperTranslation = jointJson.upperLimit || 0;
-        jd.enableMotor = Boolean(jointJson.enableMotor);
-        jd.maxMotorForce = jointJson.maxMotorForce || 0;
-        jd.motorSpeed = jointJson.motorSpeed || 0;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_referenceAngle(jointJson.refAngle || 0);
+        jd.set_enableLimit(Boolean(jointJson.enableLimit));
+        jd.set_lowerTranslation(jointJson.lowerLimit || 0);
+        jd.set_upperTranslation(jointJson.upperLimit || 0);
+        jd.set_enableLimit(Boolean(jointJson.enableMotor));
+        jd.set_maxMotorForce(jointJson.maxMotorForce || 0);
+        jd.set_motorSpeed(jointJson.motorSpeed || 0);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);
         break;
@@ -229,10 +228,10 @@ export class RubeLoader<IMG = unknown> {
         const jd = new b2.b2WheelJointDef();
         // TODO anchorA is 0 and B is XY in world space, which should be used?
         jd.Initialize(bodyA, bodyB, this.rubeToVec2(jointJson.anchorB), this.rubeToVec2(jointJson.localAxisA));
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.enableMotor = Boolean(jointJson.enableMotor);
-        jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
-        jd.motorSpeed = jointJson.motorSpeed || 0;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_enableMotor(Boolean(jointJson.enableMotor));
+        jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
+        jd.set_motorSpeed(jointJson.motorSpeed || 0);
         this.setLinearStiffness(jd, jointJson.springFrequency || 0, jointJson.springDampingRatio || 0, jd.bodyA, jd.bodyB);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);
@@ -241,9 +240,9 @@ export class RubeLoader<IMG = unknown> {
       case 'friction': {
         const jd = new b2.b2FrictionJointDef();
         jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.maxForce = jointJson.maxForce || 0;
-        jd.maxTorque = jointJson.maxTorque || 0;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_maxForce(jointJson.maxForce || 0);
+        jd.set_maxTorque(jointJson.maxTorque || 0);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);
         break;
@@ -251,8 +250,8 @@ export class RubeLoader<IMG = unknown> {
       case 'weld': {
         const jd = new b2.b2WeldJointDef();
         jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.collideConnected = Boolean(jointJson.collideConnected);
-        jd.referenceAngle = jointJson.refAngle || 0;
+        jd.set_collideConnected(Boolean(jointJson.collideConnected));
+        jd.set_referenceAngle(jointJson.refAngle || 0);
         this.setAngularStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
         joint = this.world.CreateJoint(jd);
         b2.destroy(jd);

@@ -94,7 +94,6 @@ export class SoundManager {
       this.music.destroy();
       this.sfx_game_over_demon.destroy();
       this.sfx_applause.destroy();
-      this.sfx_snowboardSlide.stop();
       this.sfx_snowboardSlide.destroy();
       this.sfx_windNoise.destroy();
       this.sfx_pickup_present.destroy();
