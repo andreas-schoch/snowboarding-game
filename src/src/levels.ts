@@ -1,4 +1,3 @@
-
 // TODO will come from the backend once I switch to Pocketbase
 export const levels: ILevel[] = [{
     id: 'level_001',

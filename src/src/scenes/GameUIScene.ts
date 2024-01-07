@@ -1,11 +1,11 @@
 import { IComboTrickScore, IScore } from '../components/State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
-import { getCurrentLevel } from '../util/getCurrentLevel';
-import { DARKMODE_ENABLED, DEBUG, DEFAULT_WIDTH, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LEVEL_SUCCESS_BONUS_POINTS, LevelKeys, POINTS_PER_COIN, SCENE_GAME_UI, SETTINGS_KEY_DARKMODE_ENABLED, SETTINGS_KEY_RESOLUTION, SETTINGS_KEY_VOLUME_MUSIC, SETTINGS_KEY_VOLUME_SFX, leaderboardService } from '..';
+import { DEFAULT_WIDTH, LEVEL_SUCCESS_BONUS_POINTS, LevelKeys, POINTS_PER_COIN, SCENE_GAME_UI, leaderboardService } from '..';
 import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
 import { levels } from '../levels';
 import { GameInfo } from '../components/GameInfo';
+import { Settings } from '../components/Settings';
 
 
 export enum PanelIds {
@@ -64,7 +64,7 @@ export default class GameUIScene extends Phaser.Scene {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-    leaderboardService.setLevel(getCurrentLevel());
+    leaderboardService.setLevel(Settings.currentLevel());
     this.initDomUi();
 
     this.observer.on(TOGGLE_PAUSE, (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
@@ -117,23 +117,24 @@ export default class GameUIScene extends Phaser.Scene {
     let element = document.querySelector<HTMLElement>('#game-ui');
     uiWrapper.insertAdjacentHTML('beforeend', this.cache.html.get('dom_game_ui'));
     element = document.querySelector<HTMLElement>('#game-ui');
-    if (!element) throw new Error('element not found');
-    document.body.classList.add(DARKMODE_ENABLED ? 'darkmode' : 'lightmode');
+    if (!element) throw new Error('game ui not found');
+    document.body.classList.add(Settings.darkmodeEnabled() ? 'darkmode' : 'ligghtmode');
 
-    const val = localStorage.getItem(SETTINGS_KEY_RESOLUTION) || '1';
     const radios = Array.from(document.querySelectorAll<HTMLInputElement>('#settings-form input[name="resolution"]'));
-    for (const radio of radios) if (radio.value === val) radio.checked = true;
+    if (!radios.length) throw new Error('resolution radio inputs not found');
+    for (const radio of radios) if (Number(radio.value) === Settings.resolutionScale()) radio.checked = true;
 
-    const valVolumeMusic = localStorage.getItem(SETTINGS_KEY_VOLUME_MUSIC) || '80';
     const inputVolumeMusic = document.querySelector<HTMLInputElement>('#settings-form input[name="volumeMusic"]');
-    if (inputVolumeMusic) inputVolumeMusic.value = valVolumeMusic;
+    if (inputVolumeMusic) inputVolumeMusic.value = String(Settings.volumeMusic());
+    else throw new Error('inputVolumeMusic not found');
 
-    const valVolumeSfx = localStorage.getItem(SETTINGS_KEY_VOLUME_SFX) || '80';
     const inputVolumeSfx = document.querySelector<HTMLInputElement>('#settings-form input[name="volumeSfx"]');
-    if (inputVolumeSfx) inputVolumeSfx.value = valVolumeSfx;
+    if (inputVolumeSfx) inputVolumeSfx.value = String(Settings.volumeSfx());
+    else throw new Error('inputVolumeSfx not found');
 
     const darkmodeToggle = document.querySelector<HTMLInputElement>('#settings-form input[name="darkmodeEnabled"]');
-    if (darkmodeToggle) darkmodeToggle.checked = DARKMODE_ENABLED;
+    if (darkmodeToggle) darkmodeToggle.checked = Settings.darkmodeEnabled();
+    else throw new Error('darkmodeToggle not found');
 
     // The game may not run well on unverified browsers.
     // For now a text message is shown encouraging user to switch to a different browser if there are issues.
@@ -148,7 +149,9 @@ export default class GameUIScene extends Phaser.Scene {
 
     const elPauseIcon = document.getElementById('pause-game-icon');
     const elHowToPlayIcon = document.getElementById('how-to-play-icon');
-    if (elPauseIcon && elHowToPlayIcon) setTimeout(() => {
+    if (!elPauseIcon) throw new Error('pause-game-icon not found');
+    if (!elHowToPlayIcon) throw new Error('how-to-play-icon not found');
+    setTimeout(() => {
       elPauseIcon.classList.remove('hidden');
       elHowToPlayIcon.classList.remove('hidden');
     }, 250); // if not hidden at the start it may show the material icon text for a split second until loaded.
@@ -165,6 +168,7 @@ export default class GameUIScene extends Phaser.Scene {
     this.hudCombo = document.getElementById(HudIds.HUD_COMBO);
     this.hudScore = document.getElementById(HudIds.HUD_SCORE);
 
+    // TODO wrap in get element or error method
     if (!this.panelPauseMenu) throw new Error('panelPauseMenu not found');
     if (!this.panelSelectLevel) throw new Error('panelSelectLevel not found');
     if (!this.panelHowToPlay) throw new Error('panelHowToPlay not found');
@@ -245,7 +249,7 @@ export default class GameUIScene extends Phaser.Scene {
               leaderboardService.rexLeaderboard.setUser({ userID: leaderboardService.auth.currentUser.uid, userName: nameInput.value });
               await leaderboardService.auth.currentUser.updateProfile({ displayName: nameInput.value });
             }
-            localStorage.setItem(KEY_USER_NAME, nameInput.value);
+            Settings.set('userName', nameInput.value);
             await leaderboardService.submit(this.pendingScore); // TODO add loading indicator
             await this.updateYourScorePanelData(this.pendingScore);
             submitScoreForm.classList.add('hidden');
@@ -256,10 +260,10 @@ export default class GameUIScene extends Phaser.Scene {
           evt.preventDefault();
           const settingsForm = this.panelSettings?.querySelector('form');
           if (settingsForm) {
-            localStorage.setItem(SETTINGS_KEY_RESOLUTION, settingsForm.resolution.value || '1');
-            localStorage.setItem(SETTINGS_KEY_VOLUME_MUSIC, settingsForm.volumeMusic.value);
-            localStorage.setItem(SETTINGS_KEY_VOLUME_SFX, settingsForm.volumeSfx.value);
-            localStorage.setItem(SETTINGS_KEY_DARKMODE_ENABLED, settingsForm.darkmodeEnabled.checked);
+            Settings.set('resolution', settingsForm.resolution.value || '1');
+            Settings.set('volumeMusic', settingsForm.volumeMusic.value);
+            Settings.set('volumeSfx', settingsForm.volumeSfx.value);
+            Settings.set('darkmodeEnabled', String(settingsForm.darkmodeEnabled.checked));
             location.reload();
           }
           break;
@@ -274,14 +278,14 @@ export default class GameUIScene extends Phaser.Scene {
         case 'level_003':
         case 'level_004':
         case 'level_005': {
-          localStorage.setItem(KEY_LEVEL_CURRENT, target.id);
+          Settings.set('levelCurrent', target.id);
           leaderboardService.setLevel(target.id as LevelKeys);
           this.setPanelVisibility(PanelIds.NONE);
           this.playAgain();
           break;
         }
         default: {
-          DEBUG && console.log('non-interactable target id', target.id);
+          Settings.debug() && console.log('non-interactable target id', target.id);
         }
 
       }
@@ -346,10 +350,10 @@ export default class GameUIScene extends Phaser.Scene {
       const currentUser = leaderboardService.auth?.currentUser;
       if (!currentUser) {
         // When leaderboard is disabled; TODO refactor and clean the mess
-        if (!localStorage.getItem(KEY_USER_NAME)) {
+        if (!Settings.username()) {
           elUsername.value = `Player_${pseudoRandomId()}`;
           elUsername.setAttribute('value', elUsername.value); // to make floating label move up
-          localStorage.setItem(KEY_USER_NAME, elUsername.value);
+          Settings.set('userName', elUsername.value);
         } else {
           elSubmitScoreForm?.classList.add('hidden');
           await leaderboardService.submit(score);
@@ -393,11 +397,11 @@ export default class GameUIScene extends Phaser.Scene {
     // TODO replace firebase with pocketbase backend
     let fbScores = leaderboardService.auth
       ? await leaderboardService.rexLeaderboard.loadFirstPage()
-      : (JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}')[getCurrentLevel()] || []).map(s => ({ ...s, userName: localStorage.getItem(KEY_USER_NAME) }));
+      : Settings.localScores()[Settings.currentLevel()].map(s => ({ ...s, userName: Settings.username() }));
     const leaderboardItemTemplate: HTMLTemplateElement | null = document.getElementById('leaderboard-item-template') as HTMLTemplateElement;
     const leaderboardItemContainer = document.getElementById('leaderboard-item-container');
     if (this.panelLeaderboards && leaderboardItemTemplate && leaderboardItemContainer) {
-      const localPlayerUsername = leaderboardService.auth?.currentUser?.displayName || localStorage.getItem(KEY_USER_NAME) as string;
+      const localPlayerUsername = leaderboardService.auth?.currentUser?.displayName || Settings.username();
       const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
       leaderboardItemContainer.innerText = '';
       for (const [i, score] of scores.entries()) {

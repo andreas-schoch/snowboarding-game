@@ -1,4 +1,5 @@
-import { BackgroundMusicKeys, CHARACTERS, CHARACTER_SKINS, DEFAULT_HEIGHT, LEVELS, RESOLUTION_SCALE, SCENE_GAME, SCENE_PRELOAD } from '../index';
+import { Settings } from '../components/Settings';
+import { BackgroundMusicKeys, CHARACTERS, CHARACTER_SKINS, LEVELS, SCENE_GAME, SCENE_PRELOAD } from '../index';
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -29,7 +30,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   private loadImg() {
-    const height = DEFAULT_HEIGHT * RESOLUTION_SCALE;
+    const height = Settings.heightScaled();
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
     const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);

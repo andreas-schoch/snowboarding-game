@@ -1,11 +1,11 @@
-import { CharacterKeys, DARKMODE_ENABLED, LevelKeys, b2, recordLeak } from '../index';
+import { CharacterKeys, LevelKeys, b2, recordLeak } from '../index';
 import GameScene from '../scenes/GameScene';
 import { RubeImage, RubeScene } from '../util/RUBE/RubeLoaderInterfaces';
 import { RubeLoader } from '../util/RUBE/RubeLoader';
 import DebugDrawer from './DebugDraw';
 import { RubeSerializer } from '../util/RUBE/RubeSerializer';
-import { getSelectedCharacterSkin } from '../util/getCurrentCharacter';
 import { B2_BEGIN_CONTACT, B2_POST_SOLVE } from '../eventTypes';
+import { Settings } from './Settings';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -97,7 +97,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       if (!pos) return null;
 
       const textureFrame = (file || '').split('/').reverse()[0];
-      const textureAtlas = isPlayerCharacterPart ? getSelectedCharacterSkin() : customPropsMap['phaserTexture'] as string;
+      const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : customPropsMap['phaserTexture'] as string;
       const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, textureAtlas || textureFrame, textureFrame);
       img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
       img.scaleY = (this.worldScale / img.height) * scale;
@@ -107,7 +107,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.setDepth(renderOrder);
       img.setDataEnabled();
 
-      if (DARKMODE_ENABLED) {
+      if (Settings.darkmodeEnabled()) {
         // img.setPipeline('Light2D');
         const isLight = bodyProps?.['light'] === true || textureFrame === 'present_temp.png';
         if (isPlayerCharacterPart) img.setTintFill(0x000000);

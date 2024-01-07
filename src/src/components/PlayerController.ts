@@ -1,10 +1,11 @@
 import GameScene from '../scenes/GameScene';
 import { Character } from './Character';
 import { PanelIds } from '../scenes/GameUIScene';
-import { DARKMODE_ENABLED, DEFAULT_WIDTH, DEFAULT_ZOOM, recordLeak } from '..';
+import { DEFAULT_WIDTH } from '..';
 import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from '../eventTypes';
 import { IScore } from './State';
 import { GameInfo } from './GameInfo';
+import { Settings } from './Settings';
 
 export class CharacterController {
   character: Character | null = null;
@@ -38,7 +39,7 @@ export class CharacterController {
     const camera = this.scene.cameras.main;
     this.resolutionMod = camera.width / DEFAULT_WIDTH;
     camera.setDeadzone(0, 125);
-    camera.setZoom(DEFAULT_ZOOM * this.resolutionMod * 1.5);
+    camera.setZoom(Settings.defaultZoom() * this.resolutionMod * 1.5);
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
@@ -75,7 +76,7 @@ export class CharacterController {
     const speed = character.state.getCurrentSpeed();
     const maxSpeed = 40; // replace with your game's max speed
     const minZoom = 0.5; // zoomed out
-    const maxZoom = DEFAULT_ZOOM; // zoomed in
+    const maxZoom = Settings.defaultZoom(); // zoomed in
     const normalizedSpeed = Math.min(Math.max(speed / maxSpeed, 0), 1);
     const targetZoom = (maxZoom - normalizedSpeed * (maxZoom - minZoom)) * this.resolutionMod;
     const lerpFactor = 0.02;

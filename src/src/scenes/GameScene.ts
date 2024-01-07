@@ -1,14 +1,13 @@
 import Terrain from '../components/Terrain';
 import { Physics } from '../components/Physics';
-import { DARKMODE_ENABLED, freeLeaked } from '../index';
+import { freeLeaked } from '../index';
 import { SCENE_GAME, SCENE_GAME_UI } from "..";
 import { CharacterController } from '../components/PlayerController';
-import { getCurrentLevel } from '../util/getCurrentLevel';
-import { getSelectedCharacter } from '../util/getCurrentCharacter';
 import { Character } from '../components/Character';
 import { RESTART_GAME } from '../eventTypes';
 import { SoundManager } from '../components/SoundManager';
 import { Backdrop } from '../components/Backdrop';
+import { Settings } from '../components/Settings';
 
 export default class GameScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter;
@@ -21,7 +20,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   private create() {
-    if (DARKMODE_ENABLED) {
+    if (Settings.darkmodeEnabled()) {
       // this.lights.enable();
       // this.lights.setAmbientColor(0x555555);
     }
@@ -31,10 +30,10 @@ export default class GameScene extends Phaser.Scene {
     this.b2Physics = new Physics(this, { worldScale: 40, gravityX: 0, gravityY: -10 });
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
-    this.b2Physics.load(getCurrentLevel());
+    this.b2Physics.load(Settings.currentLevel());
     new Terrain(this).draw();
     this.playerController = new CharacterController(this);
-    const character = new Character(this, this.b2Physics.load(getSelectedCharacter(), 0, 0));
+    const character = new Character(this, this.b2Physics.load(Settings.selectedCharacter(), 0, 0));
     this.playerController.possessCharacter(character);
 
     this.observer.on(RESTART_GAME, () => {

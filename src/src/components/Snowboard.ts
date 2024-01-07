@@ -1,9 +1,10 @@
 import { IPostSolveEvent } from './Physics';
 import GameScene from '../scenes/GameScene';
-import { DARKMODE_ENABLED, b2 } from '../index';
+import { b2 } from '../index';
 import { vec2Util } from '../util/RUBE/Vec2Math';
 import { Character, CharacterPartId } from './Character';
 import { B2_POST_SOLVE, SURFACE_IMPACT } from '../eventTypes';
+import { Settings } from './Settings';
 
 interface IRayCastResult {
   hit: boolean;
@@ -126,7 +127,7 @@ export class Snowboard {
 
   private initParticles() {
     const graphics = this.scene.add.graphics().setDepth(10000000);
-    graphics.fillStyle(DARKMODE_ENABLED ? 0x010101 : 0xffffff, 1);
+    graphics.fillStyle(Settings.darkmodeEnabled() ? 0x010101 : 0xffffff, 1);
     graphics.fillCircle(8, 8, 8);
     graphics.generateTexture('circle_01', 16, 16);
     graphics.destroy();

@@ -7,6 +7,7 @@ import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
 import GameUIScene from './scenes/GameUIScene';
 import { LeaderboardService } from './services/leaderboard';
+import { Settings } from './components/Settings';
 
 // Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();
@@ -14,19 +15,6 @@ export const leaderboardService = new LeaderboardService();
 export const SCENE_PRELOAD = 'PreloadScene';
 export const SCENE_GAME = 'GameScene';
 export const SCENE_GAME_UI = 'GameUIScene';
-
-export const SETTINGS_KEY_DEBUG = 'snowboarding_game_debug';
-export const SETTINGS_KEY_DEBUG_ZOOM = 'snowboarding_game_debug_zoom';
-export const SETTINGS_KEY_RESOLUTION = 'snowboarding_game_resolution';
-export const SETTINGS_KEY_VOLUME_MUSIC = 'snowboarding_game_volume_music';
-export const SETTINGS_KEY_VOLUME_SFX = 'snowboarding_game_volume_sfx';
-export const SETTINGS_KEY_DARKMODE_ENABLED = 'snowboarding_game_darkmode_enabled';
-
-export const KEY_USER_NAME = 'snowboarding_game_user_name';
-export const KEY_USER_SCORES = 'snowboarding_game_user_scores_v3';
-export const KEY_LEVEL_CURRENT = 'snowboarding_game_level_current';
-export const KEY_SELECTED_CHARACTER = 'snowboarding_game_selected_character';
-export const KEY_SELECTED_CHARACTER_SKIN = 'snowboarding_game_selected_character_skin';
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
@@ -36,11 +24,6 @@ export const HEAD_MAX_IMPULSE = 8;
 
 export const DEFAULT_WIDTH = 1280;
 export const DEFAULT_HEIGHT = 720;
-
-export const RESOLUTION_SCALE: number = Number(localStorage.getItem(SETTINGS_KEY_RESOLUTION) || 1);
-export const DEFAULT_ZOOM: number = Number(localStorage.getItem(SETTINGS_KEY_DEBUG_ZOOM) || 1);
-export const DARKMODE_ENABLED = localStorage.getItem(SETTINGS_KEY_DARKMODE_ENABLED) === 'true';
-export const DEBUG: boolean = Boolean(localStorage.getItem(SETTINGS_KEY_DEBUG));
 
 // This is temporary. In the future, the game will provide some basic levels out of the box (so it can be played when running repo locally without a backend).
 // The majority of the levels is expected to be custom made by players and fetched from a server.
@@ -98,7 +81,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '1.1.1',
   type: Phaser.WEBGL,
-  backgroundColor: DARKMODE_ENABLED ? '0x666666' : '0x3470c6',
+  backgroundColor: Settings.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
   parent: 'phaser-wrapper',
   // dom: { createContainer: true }, // Not using inbuilt way to display UI as it sucks with dynamic scaling and resizing
@@ -110,8 +93,8 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: DEFAULT_WIDTH * RESOLUTION_SCALE,
-    height: DEFAULT_HEIGHT * RESOLUTION_SCALE,
+    width: Settings.widthScaled(),
+    height: Settings.heightScaled(),
   },
   scene: [PreloadScene, GameScene, GameUIScene],
   plugins: {
@@ -143,5 +126,3 @@ window.onload = () => {
     });
   });
 };
-
-window.onresize

@@ -3,11 +3,11 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
 import {env} from '../environment';
-import { DEBUG, KEY_LEVEL_CURRENT, KEY_USER_NAME, KEY_USER_SCORES, LevelKeys } from '..';
 import {calculateTotalScore} from '../util/calculateTotalScore';
 import {pseudoRandomId} from '../util/pseudoRandomId';
 import {IScore} from '../components/State';
-import {getCurrentLevel} from '../util/getCurrentLevel';
+import { Settings } from '../components/Settings';
+import { LevelKeys } from '..';
 
 
 export class LeaderboardService {
@@ -32,14 +32,14 @@ export class LeaderboardService {
       const app = firebase.initializeApp(firebaseConfig);
       this.auth = firebase.auth();
       this.auth.onAuthStateChanged(async user => {
-        DEBUG && console.log('onAuthStateChanged user', user);
+        Settings.debug() && console.log('onAuthStateChanged user', user);
         if (user) {
           // Signed in
-          if (user.displayName && user.displayName !== localStorage.getItem(KEY_USER_NAME)) localStorage.setItem(KEY_USER_NAME, user.displayName);
-          this.setLevel(getCurrentLevel());
+          if (user.displayName && user.displayName !== Settings.username()) Settings.set('userName', user.displayName);
+          this.setLevel(Settings.currentLevel());
         } else {
           // Try to sign in
-          DEBUG && console.log('try signInAnonymously');
+          Settings.debug() && console.log('try signInAnonymously');
           if (++this.numAuthAttempts >= 3) throw new Error('failed to authenticate multiple times.');
           this.auth.signInAnonymously().catch((error) => console.error('Failed to login anonymous user', error));
         }
@@ -50,7 +50,7 @@ export class LeaderboardService {
   setLevel(level: LevelKeys) {
     this.numAuthAttempts = 0;
     this.currentLevel = level;
-    localStorage.setItem(KEY_LEVEL_CURRENT, level);
+    Settings.set('levelCurrent', level);
     // TODO timeFilters don't work well with how I want scores to be stored (list of actions from which total is derived instead of plain numeric total)
     if (this.auth?.currentUser) {
       this.rexLeaderboard = new RexLeaderboard({
@@ -78,10 +78,10 @@ export class LeaderboardService {
   }
 
   private saveScoreLocally(score: IScore) {
-    const localScoresMap: Record<keyof LevelKeys, IScore[]> = JSON.parse(localStorage.getItem(KEY_USER_SCORES) || '{}');
+    const localScoresMap: Record<keyof LevelKeys, IScore[]> = Settings.localScores();
     const localScoresLevel = localScoresMap[score.level] || [];
     localScoresLevel.push(score);
     localScoresMap[score.level] = localScoresLevel;
-    localStorage.setItem(KEY_USER_SCORES, JSON.stringify(localScoresMap));
+    Settings.set('userScores', JSON.stringify(localScoresMap));
   }
 }

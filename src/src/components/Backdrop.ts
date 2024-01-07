@@ -1,5 +1,6 @@
-import { DARKMODE_ENABLED, DEFAULT_HEIGHT, DEFAULT_WIDTH } from '../index';
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '../index';
 import GameScene from '../scenes/GameScene';
+import { Settings } from './Settings';
 
 
 export class Backdrop {
@@ -17,14 +18,14 @@ export class Backdrop {
     // this.bgSpaceBack = this.registerLayer('bg_space_pack', 'bg_space_back.png');
 
     const g = this.scene.add.graphics();
-    g.fillStyle(DARKMODE_ENABLED ? 0x666666 : 0x3470c6, 1);
+    g.fillStyle(Settings.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
     g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.generateTexture('bg_sky', DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.destroy();
 
     this.bgSky = this.registerLayer('bg_sky', '');
 
-    if (DARKMODE_ENABLED) {
+    if (Settings.darkmodeEnabled()) {
       this.bgSpaceMid = this.registerLayer('bg_space_pack', 'bg_space_mid.png');
       this.bgSpaceFront = this.registerLayer('bg_space_pack', 'bg_space_front.png');
     }
@@ -33,7 +34,7 @@ export class Backdrop {
   update() {
     const { scrollX, scrollY, zoomX, zoomY } = this.scene.cameras.main;
     // this.bgSpaceBack.setTilePosition(scrollX * 0.005, scrollY * 0.000).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
-    if (DARKMODE_ENABLED) {
+    if (Settings.darkmodeEnabled()) {
       this.bgSpaceMid.setTilePosition(scrollX * 0.01 * 0.2, scrollY * 0.01 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
       this.bgSpaceFront.setTilePosition(scrollX * 0.025 * 0.2, scrollY * 0.025 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY))
     }
@@ -48,7 +49,7 @@ export class Backdrop {
       .setScale(scaleX * (1 / zoomX), scaleY * (1 / zoomY))
       .setDepth(-200)
 
-    // if (DARKMODE_ENABLED) tilesprite.setPipeline('Light2D');
+    // if (Settings.darkmodeEnabled()) tilesprite.setPipeline('Light2D');
     return tilesprite;
   }
 }
