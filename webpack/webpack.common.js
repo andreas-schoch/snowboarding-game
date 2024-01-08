@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: ['./src/src/index.ts'],
+  entry: ['./game/src/index.ts'],
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].bundle.js',
@@ -22,7 +22,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$|\.jsx?$/,
-        include: path.join(__dirname, '../src'),
+        include: path.join(__dirname, '../game'),
         loader: 'ts-loader',
       },
     ],
@@ -42,17 +42,17 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({ gameName: 'Snowboarding Game', template: 'src/index.html' }),
+    new HtmlWebpackPlugin({ gameName: 'Snowboarding Game', template: 'game/index.html' }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'src/assets/audio', to: 'assets/audio' },
-        { from: 'src/assets/img/packed', to: 'assets/img/packed' },
-        { from: 'src/assets/img/icons', to: 'assets/img/icons' },
-        { from: 'src/assets/img/controls', to: 'assets/img/controls' },
-        { from: 'src/assets/img/thumbnails', to: 'assets/img/thumbnails' },
-        { from: 'src/assets/html', to: 'assets/html' },
-        { from: 'src/assets/levels/export', to: 'assets/levels/export' },
-        { from: 'src/assets/manifest', to: '' },
+        { from: 'game/assets/audio', to: 'assets/audio' },
+        { from: 'game/assets/img/packed', to: 'assets/img/packed' },
+        { from: 'game/assets/img/icons', to: 'assets/img/icons' },
+        { from: 'game/assets/img/controls', to: 'assets/img/controls' },
+        { from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails' },
+        { from: 'game/assets/html', to: 'assets/html' },
+        { from: 'game/assets/levels/export', to: 'assets/levels/export' },
+        { from: 'game/assets/manifest', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: '' },
       ],

@@ -110,12 +110,12 @@ export default class GameUIScene extends Phaser.Scene {
   }
 
   private initDomUi(): HTMLElement {
-    const uiWrapper = document.querySelector('#phaser-ui-wrapper');
-    if (!uiWrapper) throw new Error('uiWrapper not found');
-    uiWrapper.innerHTML = '';
+    const rootUI = document.querySelector('#root-ui');
+    if (!rootUI) throw new Error('#root-ui not found');
+    rootUI.innerHTML = '';
 
     let element = document.querySelector<HTMLElement>('#game-ui');
-    uiWrapper.insertAdjacentHTML('beforeend', this.cache.html.get('dom_game_ui'));
+    rootUI.insertAdjacentHTML('beforeend', this.cache.html.get('dom_game_ui'));
     element = document.querySelector<HTMLElement>('#game-ui');
     if (!element) throw new Error('game ui not found');
     document.body.classList.add(Settings.darkmodeEnabled() ? 'darkmode' : 'ligghtmode');

@@ -1,7 +1,7 @@
 # Snowboarding Game
 
 <p align="center">
-<img src="./src/assets/img/thumbnails/intro.png" alt="screenshot of game" width="400" height="auto">
+<img src="./game/assets/img/thumbnails/intro.png" alt="screenshot of game" width="400" height="auto">
 </p>
 
 

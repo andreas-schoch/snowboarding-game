@@ -18,7 +18,7 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "game/**/*"
   ],
   "exclude": [
     "node_modules",

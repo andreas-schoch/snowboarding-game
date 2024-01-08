@@ -29,6 +29,6 @@ localhost.key
 dist
 .cache
 
-/src/assets/levels/*.rube-backups/
+/game/assets/levels/*.rube-backups/
 
 .env

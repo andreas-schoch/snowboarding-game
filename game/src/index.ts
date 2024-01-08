@@ -31,7 +31,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.WEBGL,
   backgroundColor: Settings.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
-  parent: 'phaser-wrapper',
+  parent: 'root-game',
   // dom: { createContainer: true }, // Not using inbuilt way to display UI as it sucks with dynamic scaling and resizing
   fps: {
     target: 60,
