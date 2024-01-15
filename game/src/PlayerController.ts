@@ -25,10 +25,10 @@ export class CharacterController {
 
   constructor(private scene: GameScene) {
 
-    this.scene.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
-    this.scene.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
-    this.scene.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
-    this.scene.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)) });
+    GameInfo.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
+    GameInfo.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
+    GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
+    GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)) });
 
     this.initKeyboardInputs();
   }
@@ -87,7 +87,7 @@ export class CharacterController {
   private setWindNoise(character: Character) {
     const maxSpeed = 60;
     const currentSpeed = character.head.GetLinearVelocity().Length();
-    this.scene.observer.emit(WIND_SPEED_CHANGE, currentSpeed / maxSpeed);
+    GameInfo.observer.emit(WIND_SPEED_CHANGE, currentSpeed / maxSpeed);
   }
 
   private setFollowOffset(character: Character) {
@@ -127,6 +127,6 @@ export class CharacterController {
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.scene.b2Physics.isPaused = !this.scene.b2Physics.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    this.scene.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.isPaused, activePanel);
+    GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.isPaused, activePanel);
   }
 }

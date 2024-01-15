@@ -8,9 +8,10 @@ import { RESTART_GAME } from '../eventTypes';
 import { SoundManager } from '../SoundManager';
 import { Backdrop } from '../Backdrop';
 import { Settings } from '../Settings';
+import { GameInfo } from '../GameInfo';
 
 export default class GameScene extends Phaser.Scene {
-  observer: Phaser.Events.EventEmitter;
+  // observer: Phaser.Events.EventEmitter;
   b2Physics: Physics;
   private playerController: CharacterController;
   private backdrop: Backdrop;
@@ -33,8 +34,8 @@ export default class GameScene extends Phaser.Scene {
       // this.lights.setAmbientColor(0x555555);
     }
 
-    if (this.observer) this.observer.destroy(); // clear previous runs
-    this.observer = new Phaser.Events.EventEmitter();
+    if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
+    GameInfo.observer = new Phaser.Events.EventEmitter();
     this.b2Physics = new Physics(this, { worldScale: 40, gravityX: 0, gravityY: -10 });
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
@@ -44,13 +45,13 @@ export default class GameScene extends Phaser.Scene {
     const character = new Character(this, this.b2Physics.load(Settings.selectedCharacter(), 0, 0));
     this.playerController.possessCharacter(character);
 
-    this.observer.on(RESTART_GAME, () => {
+    GameInfo.observer.on(RESTART_GAME, () => {
       this.b2Physics.loader.cleanup();
       freeLeaked();
       this.scene.restart();
     });
 
-    this.scene.launch(SCENE_GAME_UI, [this.observer]);
+    this.scene.launch(SCENE_GAME_UI, [GameInfo.observer]);
 
     // TODO remove. Temporary to serialize open level
     this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());

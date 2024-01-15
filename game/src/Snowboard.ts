@@ -5,6 +5,7 @@ import { vec2Util } from './util/RUBE/Vec2Math';
 import { Character, CharacterPartId } from './Character';
 import { B2_POST_SOLVE, SURFACE_IMPACT } from './eventTypes';
 import { Settings } from './Settings';
+import { GameInfo } from './GameInfo';
 
 interface IRayCastResult {
   hit: boolean;
@@ -58,7 +59,7 @@ export class Snowboard {
 
         if (this.character.isPartOfMe(bodyA) || this.character.isPartOfMe(bodyB)) {
           const centerGrounded = this.segments[3].groundRayResult.hit;
-          this.scene.observer.emit(SURFACE_IMPACT, normalImpulse, 'snow', false, centerGrounded, false);
+          GameInfo.observer.emit(SURFACE_IMPACT, normalImpulse, 'snow', false, centerGrounded, false);
         }
       }
       b2.destroy(manifold);

@@ -5,6 +5,7 @@ import GameScene from './scenes/GameScene';
 import { B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from './eventTypes';
 import { Settings } from './Settings';
 import { LevelKeys } from './levels';
+import { GameInfo } from './GameInfo';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';
@@ -96,7 +97,7 @@ export class State {
       from: Math.PI * -0.5,
       to: Math.PI * 1.5,
       duration: 4000,
-      onUpdate: (tween) => this.scene.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
+      onUpdate: (tween) => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
       onComplete: tween => this.handleComboComplete(),
     });
   }
@@ -149,8 +150,8 @@ export class State {
       if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
     });
 
-    // this.scene.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
-    this.scene.observer.on(ENTER_GROUNDED, () => {
+    // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
+    GameInfo.observer.on(ENTER_GROUNDED, () => {
       this.timeGrounded = this.scene.game.getFrame();
       this.landedFrontFlips += this.pendingFrontFlips;
       this.landedBackFlips += this.pendingBackFlips;
@@ -162,8 +163,8 @@ export class State {
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
         this.comboMultiplier++;
-        this.scene.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier);
-        this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+        GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier);
+        GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
         this.resetComboLeewayTween();
         this.comboLeeway = this.createComboLeewayTween(false);
@@ -178,7 +179,7 @@ export class State {
 
   private setCrashed() {
     this.isCrashed = true;
-    this.scene.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
+    GameInfo.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
     this.resetComboLeewayTween();
   }
 
@@ -198,8 +199,8 @@ export class State {
         this.isLevelFinished = true;
         this.resetComboLeewayTween();
         const currentScore = this.getCurrentScore();
-        this.scene.observer.emit(SCORE_CHANGE, currentScore);
-        this.scene.observer.emit(LEVEL_FINISH, currentScore, this.isCrashed);
+        GameInfo.observer.emit(SCORE_CHANGE, currentScore);
+        GameInfo.observer.emit(LEVEL_FINISH, currentScore, this.isCrashed);
         break;
       }
       case 'level_deathzone': {
@@ -213,8 +214,8 @@ export class State {
     this.processPickups();
     const isInAir = this.character.board.isInAir();
     // TODO check is chrashed only once
-    if (isInAir && !this.lastIsInAir && !this.isCrashed) this.scene.observer.emit(ENTER_IN_AIR);
-    else if (!isInAir && this.lastIsInAir && !this.isCrashed) this.scene.observer.emit(ENTER_GROUNDED);
+    if (isInAir && !this.lastIsInAir && !this.isCrashed) GameInfo.observer.emit(ENTER_IN_AIR);
+    else if (!isInAir && this.lastIsInAir && !this.isCrashed) GameInfo.observer.emit(ENTER_GROUNDED);
     this.updateTrickCounter();
     this.updateComboLeeway();
     this.updateDistance();
@@ -232,8 +233,8 @@ export class State {
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       this.totalCollectedPresents++;
-      this.scene.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
-      this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+      GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
+      GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
     }
     this.pickupsToProcess.clear();
@@ -293,8 +294,8 @@ export class State {
   private updateDistance() {
     const distance = this.getTravelDistanceMeters();
     if (distance !== this.lastDistance && !this.isCrashed && !this.isLevelFinished) {
-      this.scene.observer.emit(DISTANCE_CHANGE, distance);
-      this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+      GameInfo.observer.emit(DISTANCE_CHANGE, distance);
+      GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
       this.lastDistance = distance;
     }
   }
@@ -304,8 +305,8 @@ export class State {
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
     this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
-    this.scene.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-    this.scene.observer.emit(COMBO_CHANGE, 0, 0);
+    GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+    GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
   }

@@ -34,8 +34,8 @@ export class SoundManager {
   }
 
   private initListeners() {
-    this.scene.observer.on(PICKUP_PRESENT, total => this.sfx_pickup_present.play());
-    this.scene.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
+    GameInfo.observer.on(PICKUP_PRESENT, total => this.sfx_pickup_present.play());
+    GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
       if (id !== GameInfo.possessedCharacterId) return;
       this.sfx_death.play();
       this.sfx_grunt.play();
@@ -49,7 +49,7 @@ export class SoundManager {
         onComplete: async () => this.music.stop(),
       });
     });
-    this.scene.observer.on(LEVEL_FINISH, (score: IScore, isCrashed: boolean) => {
+    GameInfo.observer.on(LEVEL_FINISH, (score: IScore, isCrashed: boolean) => {
       if (isCrashed) return;
       this.sfx_applause.play();
       this.scene.tweens.add({
@@ -60,7 +60,7 @@ export class SoundManager {
       });
     });
 
-    this.scene.observer.on(SURFACE_IMPACT, (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
+    GameInfo.observer.on(SURFACE_IMPACT, (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
       // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
       const maxImpulse = 12;
       const target = center ? 0 : 1200;
@@ -75,7 +75,7 @@ export class SoundManager {
     });
 
 
-    this.scene.observer.on(ENTER_IN_AIR, () => {
+    GameInfo.observer.on(ENTER_IN_AIR, () => {
       this.scene.add.tween({
         targets: this.sfx_snowboardSlide,
         volume: 0.03,
@@ -85,12 +85,12 @@ export class SoundManager {
       });
     });
 
-    this.scene.observer.on(WIND_SPEED_CHANGE, (ratio: number) => {
+    GameInfo.observer.on(WIND_SPEED_CHANGE, (ratio: number) => {
       this.sfx_windNoise.setVolume(Math.min(Math.max(ratio * 0.3, 0.02), 0.5));
       this.sfx_windNoise.setRate(Math.min(Math.max(ratio * 1.5, 0.5), 1.5));
     });
 
-    this.scene.observer.on(RESTART_GAME, () => {
+    GameInfo.observer.on(RESTART_GAME, () => {
       this.music.destroy();
       this.sfx_game_over_demon.destroy();
       this.sfx_applause.destroy();
