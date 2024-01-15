@@ -1,0 +1,77 @@
+.summary>span:first-of-type {
+  color: var(--grey-600);
+  font-weight: normal;
+  font-size: 14px;
+  text-align: left;
+}
+
+.summary>span:last-of-type {
+  color: var(--grey-600);
+  font-weight: normal;
+  font-size: 14px;
+  text-align: right;
+}
+
+.summary-trick {
+  font-size: 14px;
+}
+
+.summary-trick-combo {
+  font-size: 10px;
+  color: var(--grey-600);
+}
+
+.summary.summary-total {
+  margin-top: 2rem;
+}
+
+.summary.summary-total>span {
+  color: var(--score-total-color);
+  font-size: 24px;
+  font-weight: bolder;
+}
+
+.summary-rank {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  line-height: 20px;
+}
+
+.summary-rank>span {
+  text-align: center !important;
+  color: var(--grey-600);
+}
+
+#your-score-rank-value {
+  color: black;
+  font-weight: bolder;
+}
+
+.summary-personal-best>span {
+  color: var(--grey-700);
+  font-size: 18px;
+}
+
+.submit-score button {
+  height: 40px;
+  font-size: 14px;
+}
+
+.play-again {
+  margin-bottom: 0;
+}
+
+.submit-score-info {
+  margin-top: 2rem;
+  font-size: 10px;
+  padding-top: 1.5rem;
+  color: var(--grey-600);
+  line-height: 1.5;
+  border-top: 2px solid var(--grey-500);
+}
+
+.submit-score-offline-info {
+  font-size: 10px;
+  color: var(--grey-700);
+  line-height: 1.5;
+}

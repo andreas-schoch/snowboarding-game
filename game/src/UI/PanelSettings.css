@@ -1,0 +1,9 @@
+#panel-settings {
+  width: 600px;
+  font-size: 10px;
+}
+
+.settings-resolution-radios {
+  display: flex;
+  justify-content: space-between;
+}

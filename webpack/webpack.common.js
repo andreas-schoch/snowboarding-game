@@ -35,6 +35,10 @@ module.exports = {
           }
         },
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   optimization: {
@@ -60,7 +64,6 @@ module.exports = {
         { from: 'game/assets/img/icons', to: 'assets/img/icons' },
         { from: 'game/assets/img/controls', to: 'assets/img/controls' },
         { from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails' },
-        { from: 'game/assets/html', to: 'assets/html' },
         { from: 'game/assets/levels/export', to: 'assets/levels/export' },
         { from: 'game/assets/manifest', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },

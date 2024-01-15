@@ -1,0 +1,76 @@
+#panel-select-level {
+  /* TODO temporary change back to 600px wide once it shows current rank and personal best */
+  width: 770px;
+  height: 600px;
+}
+
+#panel-select-level .select-level-note {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--grey-700);
+}
+
+#panel-select-level .select-level-scrollable {
+  max-height: 500px;
+}
+
+#panel-select-level .level-item {
+  position: relative;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: calc(49.2% - 0.5rem);
+  display: inline-block;
+  margin-right: 0.4rem;
+  margin-bottom: 0.8rem;
+  background-color: var(--level-item-background);
+  transform: scale(0.975);
+  transition: 0.2s;
+}
+
+#panel-select-level .level-item:hover {
+  transform: scale(1);
+}
+
+#panel-select-level .level-item-overlay {
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#panel-select-level .level-item-number {
+  color: var(--level-item-number-color);
+}
+
+#panel-select-level .level-item-name {
+  font-size: 13px;
+  line-height: 26px;
+  color: var(--level-item-name-color);
+}
+
+#panel-select-level .level-item-thumbnail {
+  width: 100%;
+  aspect-ratio: 16/9;
+  /* background-image: url("assets/img/thumbnails/level_001_santas_backyard.png"); */
+  background-size: cover;
+  border-radius: 5px;
+}
+
+#panel-select-level .level-your-high-score,
+#panel-select-level .level-your-rank {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.4rem 0;
+  color: var(--grey-700);
+  font-size: 10px;
+}
+
+#panel-select-level .level-your-high-score-value,
+#panel-select-level .level-your-rank-value {
+  color: black;
+  font-size: 13px;
+}

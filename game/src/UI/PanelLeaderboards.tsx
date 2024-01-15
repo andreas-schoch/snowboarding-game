@@ -1,3 +1,5 @@
+import './PanelLeaderboards.css';
+
 export const PanelLeaderboards = () => (
   <>
     <div class="panel hidden" id="panel-leaderboards">

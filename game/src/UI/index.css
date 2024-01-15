@@ -1,0 +1,89 @@
+:root {
+  --panel-background: white;
+  --panel-border-color: black;
+  --panel-text-color: var(--grey-900);
+  --title-color: black;
+  --score-total-color: black;
+  --level-item-background: #ffd6cc;
+  --level-item-number-color: var(--grey-700);
+  --level-item-name-color: black;
+  --form-text-input-background: var(--panel-background);
+}
+
+body.darkmode {
+  --panel-background: var(--grey-900);
+  --panel-border-color: var(--grey-700);
+  --panel-text-color: var(--grey-500);
+  --title-color: var(--grey-500);
+  --score-total-color: var(--grey-500);
+  --level-item-background: var(--grey-700);
+  --level-item-number-color: var(--grey-600);
+  --level-item-name-color: var(--grey-500);
+  --form-text-input-background: var(--panel-background);
+  --form-text-input-background-empty: var(--grey-500);
+  --form-text-input-color: var(--panel-background);
+}
+
+#root-ui {
+  display: block !important;
+}
+
+/* =============== */
+/* = Game UI HUD = */
+/* =============== */
+
+
+/* ========= */
+/* = Panel = */
+/* ========= */
+.panel {
+  background: var(--panel-background);
+  /*background: repeating-linear-gradient(45deg, #ffd6cc, #ffd6cc 10px, #ffffff 10px, #ffffff 20px);*/
+
+  border: 3px solid var(--panel-border-color);
+  border-radius: 6px;
+  width: 700px;
+  margin: 0;
+  padding: 3rem 1rem 1rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  color: var(--panel-text-color);
+  max-width: 100vw;
+}
+
+.hidden {
+  display: none;
+}
+
+.panel-title {
+  color: white;
+  font-size: 20px;
+  line-height: 24px;
+  padding: 4px 8px;
+  background-color: var(--blue-900);
+  /*background-color: var(--red);*/
+  /*background: repeating-linear-gradient(45deg, #ffd6cc, #ffd6cc 10px, #ffffff 10px, #ffffff 20px);*/
+
+  border: 3px solid black;
+  border-radius: 5px;
+  margin: 0 auto;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.panel-close {
+  border: 4px solid black;
+  border-radius: 50%;
+  position: absolute;
+  right: -16px;
+  top: -16px;
+  background: var(--red);
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}

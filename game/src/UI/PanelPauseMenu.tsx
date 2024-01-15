@@ -1,3 +1,5 @@
+import './PanelPauseMenu.css';
+
 export const PanelPauseMenu = () => (
   <>
     <i class="material-icons hidden" id="pause-game-icon">pause_circle_outline</i>

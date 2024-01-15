@@ -2,7 +2,7 @@ import { IComboTrickScore, IScore } from '../State';
 import { calculateTotalScore } from '../util/calculateTotalScore';
 import { pseudoRandomId } from '../util/pseudoRandomId';
 import { DEFAULT_WIDTH, LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, SCENE_GAME_UI, leaderboardService } from '..';
-import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, PICKUP_PRESENT, RESTART_GAME, RESUME_GAME, SCORE_CHANGE, TOGGLE_PAUSE } from '../eventTypes';
+import { COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, LEVEL_FINISH, PAUSE_GAME_ICON_PRESSED, RESTART_GAME, RESUME_GAME, TOGGLE_PAUSE } from '../eventTypes';
 import { LevelKeys, levels } from '../levels';
 import { GameInfo } from '../GameInfo';
 import { Settings } from '../Settings';
@@ -20,14 +20,6 @@ export enum PanelIds {
   NONE = 'none',
 }
 
-
-enum HudIds {
-  HUD_DISTANCE = 'hud-distance',
-  HUD_COMBO = 'hud-combo',
-  HUD_SCORE = 'hud-score',
-}
-
-
 export default class GameUIScene extends Phaser.Scene {
   private observer: Phaser.Events.EventEmitter;
 
@@ -43,14 +35,9 @@ export default class GameUIScene extends Phaser.Scene {
   private panelCredits: HTMLElement | null;
   private panelYourScore: HTMLElement | null;
 
-  private hudDistance: HTMLElement | null;
-  private hudCombo: HTMLElement | null;
-  private hudScore: HTMLElement | null;
-
   private pendingScore: IScore | null = null;
   private localScores: IScore[] = [];
   private crashed: boolean = false;
-  private finished: boolean = false;
 
   constructor() {
     super({ key: SCENE_GAME_UI });
@@ -69,9 +56,6 @@ export default class GameUIScene extends Phaser.Scene {
     this.initDomUi();
 
     this.observer.on(TOGGLE_PAUSE, (paused, activePanel) => this.setPanelVisibility(paused ? activePanel : PanelIds.NONE));
-    this.observer.on(PICKUP_PRESENT, total => { if (this.hudDistance) this.hudDistance.innerText = String(total) + 'x' });
-    this.observer.on(COMBO_CHANGE, (accumulated, multiplier) => { if (this.hudCombo) this.hudCombo.innerText = accumulated ? (accumulated + 'x' + multiplier) : '-' });
-    this.observer.on(SCORE_CHANGE, score => { if (this.hudScore) this.hudScore.innerText = String(calculateTotalScore(score)) });
 
     this.comboLeewayChart = this.add.graphics();
     this.observer.on(COMBO_LEEWAY_UPDATE, (value) => {
@@ -86,8 +70,8 @@ export default class GameUIScene extends Phaser.Scene {
       if (id !== GameInfo.possessedCharacterId) return;
       this.pendingScore = score;
       this.crashed = true;
-      if (this.finished) return;
-      if (this.hudCombo) this.hudCombo.innerText = '-';
+      if (score.finishedLevel) return;
+      // if (this.hudCombo) this.hudCombo.innerText = '-';
       this.comboLeewayChart.clear();
       setTimeout(async () => {
         await this.updateYourScorePanelData(score);
@@ -98,7 +82,6 @@ export default class GameUIScene extends Phaser.Scene {
     this.observer.on(LEVEL_FINISH, (score: IScore) => {
       if (this.crashed) return;
       this.pendingScore = score;
-      this.finished = true;
       this.comboLeewayChart.clear();
       setTimeout(async () => {
         await this.updateYourScorePanelData(score);
@@ -162,10 +145,6 @@ export default class GameUIScene extends Phaser.Scene {
     this.panelCredits = document.getElementById(PanelIds.PANEL_CREDITS);
     this.panelYourScore = document.getElementById(PanelIds.PANEL_YOUR_SCORE);
 
-    this.hudDistance = document.getElementById(HudIds.HUD_DISTANCE);
-    this.hudCombo = document.getElementById(HudIds.HUD_COMBO);
-    this.hudScore = document.getElementById(HudIds.HUD_SCORE);
-
     // TODO wrap in get element or error method
     if (!this.panelPauseMenu) throw new Error('panelPauseMenu not found');
     if (!this.panelSelectLevel) throw new Error('panelSelectLevel not found');
@@ -174,10 +153,6 @@ export default class GameUIScene extends Phaser.Scene {
     if (!this.panelSettings) throw new Error('panelSettings not found');
     if (!this.panelCredits) throw new Error('panelCredits not found');
     if (!this.panelYourScore) throw new Error('panelYourScore not found');
-
-    if (!this.hudDistance) throw new Error('hudDistance not found');
-    if (!this.hudCombo) throw new Error('hudCombo not found');
-    if (!this.hudScore) throw new Error('hudScore not found');
 
     this.panels = [
       this.panelPauseMenu,
@@ -294,7 +269,6 @@ export default class GameUIScene extends Phaser.Scene {
 
   private playAgain() {
     this.crashed = false;
-    this.finished = false;
     this.observer.emit(RESTART_GAME);
   }
 

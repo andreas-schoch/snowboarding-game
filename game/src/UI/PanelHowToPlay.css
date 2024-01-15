@@ -1,0 +1,44 @@
+#panel-how-to-play {
+  width: 600px;
+  font-size: 14px;
+  color: var(--grey-600);
+}
+
+#panel-how-to-play .scrollbar {
+  max-height: 500px;
+  padding: 1rem 0;
+}
+
+#panel-how-to-play .row {
+  margin-bottom: 0;
+}
+
+#panel-how-to-play .game-premise {
+  color: var(--grey-600);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#panel-how-to-play .row.how-to-play-title {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 18px;
+  color: var(--title-color);
+}
+
+#panel-how-to-play .control-text {
+  display: flex;
+  align-items: center;
+}
+
+#panel-how-to-play img {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+#panel-how-to-play img.combo-counter {
+  width: 100px;
+  height: auto;
+  margin-bottom: 2rem;
+  border-radius: 5px;
+}

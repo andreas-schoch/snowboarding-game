@@ -1,3 +1,5 @@
+import './PanelSettings.css';
+
 export const PanelSettings = () => (
   <>
     <div class="panel hidden" id="panel-settings">

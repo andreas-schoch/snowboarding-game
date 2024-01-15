@@ -1,3 +1,5 @@
+import './PanelYourScore.css';
+
 export const PanelYourScore = () => (
   <>
     <div class="panel hidden" id="panel-your-score">

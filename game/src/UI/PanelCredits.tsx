@@ -1,3 +1,5 @@
+import './PanelCredits.css';
+
 export const PanelCredits = () => (
   <>
     <div class="panel hidden" id="panel-credits">

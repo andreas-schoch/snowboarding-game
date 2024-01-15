@@ -1,0 +1,23 @@
+#panel-credits {
+  width: 600px;
+  line-height: 1.5;
+  color: var(--grey-700);
+}
+
+#panel-credits .credits-scrollable {
+  max-height: 400px;
+  padding: 1rem 0;
+  font-size: 12px;
+}
+
+#panel-credits .credits-title {
+  font-weight: bolder;
+  font-size: 16px;
+  color: var(--title-color);
+}
+
+#panel-credits .credits-name {}
+
+#panel-credits .credits-link {
+  font-size: 10px;
+}

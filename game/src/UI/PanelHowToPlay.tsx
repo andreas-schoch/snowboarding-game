@@ -1,3 +1,5 @@
+import './PanelHowToPlay.css';
+
 export const PanelHowToPlay = () => (
   <>
     <div class="panel hidden" id="panel-how-to-play">

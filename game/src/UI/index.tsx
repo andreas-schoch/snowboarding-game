@@ -1,3 +1,5 @@
+import './base.css';
+import './index.css';
 import { render } from 'solid-js/web';
 import { HUD } from './HUD';
 import { UnsupportedBrowserNotice } from './UnsupportedBrowserNotice';

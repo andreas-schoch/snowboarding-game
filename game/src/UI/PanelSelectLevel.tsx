@@ -1,3 +1,5 @@
+import './PanelSelectLevel.css';
+
 export const PanelSelectLevel = () => (
   <>
     <div class="panel hidden" id="panel-select-level">
