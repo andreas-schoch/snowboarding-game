@@ -21,9 +21,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$|\.jsx?$/,
+        test: /\.ts?$|\.js?$/,
         include: path.join(__dirname, '../game'),
         loader: 'ts-loader',
+      },
+      {
+        test: /\.tsx?$/,
+        include: path.join(__dirname, '../game/src/UI'),
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['solid']
+          }
+        },
       },
     ],
   },
@@ -42,7 +52,7 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({ gameName: 'Snowboarding Game', template: 'game/index.html' }),
+    new HtmlWebpackPlugin({ template: 'game/index.html' }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'game/assets/audio', to: 'assets/audio' },

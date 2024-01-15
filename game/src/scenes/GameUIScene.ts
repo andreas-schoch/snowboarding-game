@@ -6,6 +6,7 @@ import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, HOW_TO_PLAY_ICON_PRES
 import { LevelKeys, levels } from '../levels';
 import { GameInfo } from '../GameInfo';
 import { Settings } from '../Settings';
+import { initSolidUI } from '../UI';
 
 
 export enum PanelIds {
@@ -110,14 +111,11 @@ export default class GameUIScene extends Phaser.Scene {
   }
 
   private initDomUi(): HTMLElement {
-    const rootUI = document.querySelector('#root-ui');
-    if (!rootUI) throw new Error('#root-ui not found');
-    rootUI.innerHTML = '';
+    initSolidUI('root-ui');
 
-    let element = document.querySelector<HTMLElement>('#game-ui');
-    rootUI.insertAdjacentHTML('beforeend', this.cache.html.get('dom_game_ui'));
-    element = document.querySelector<HTMLElement>('#game-ui');
+    const element = document.querySelector<HTMLElement>('#game-ui');
     if (!element) throw new Error('game ui not found');
+
     document.body.classList.add(Settings.darkmodeEnabled() ? 'darkmode' : 'ligghtmode');
 
     const radios = Array.from(document.querySelectorAll<HTMLInputElement>('#settings-form input[name="resolution"]'));

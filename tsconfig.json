@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "target": "ES2015",
     "module": "ES2015",
     "strict": true,
