@@ -33,11 +33,20 @@ module.exports = {
           options: {
             presets: ['solid']
           }
-        },
+        }
       },
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.png$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {},
+          },
+        ],
       },
     ],
   },
