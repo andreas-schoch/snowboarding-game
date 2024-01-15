@@ -10,7 +10,7 @@
   color: var(--grey-700);
 }
 
-#panel-select-level .select-level-scrollable {
+#panel-select-level .scrollbar {
   max-height: 500px;
 }
 

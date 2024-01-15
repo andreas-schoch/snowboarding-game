@@ -1,7 +1,7 @@
 import Terrain from '../Terrain';
 import { Physics } from '../Physics';
-import { freeLeaked } from '../index';
-import { SCENE_GAME, SCENE_GAME_UI } from "..";
+import { freeLeaked, leaderboardService } from '../index';
+import { SCENE_GAME } from "..";
 import { CharacterController } from '../PlayerController';
 import { Character } from '../Character';
 import { RESTART_GAME } from '../eventTypes';
@@ -9,9 +9,9 @@ import { SoundManager } from '../SoundManager';
 import { Backdrop } from '../Backdrop';
 import { Settings } from '../Settings';
 import { GameInfo } from '../GameInfo';
+import { initSolidUI } from '../UI';
 
 export default class GameScene extends Phaser.Scene {
-  // observer: Phaser.Events.EventEmitter;
   b2Physics: Physics;
   private playerController: CharacterController;
   private backdrop: Backdrop;
@@ -20,7 +20,14 @@ export default class GameScene extends Phaser.Scene {
     super({ key: SCENE_GAME });
   }
 
-  preload() {
+  update() {
+    this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
+    Character.instances.forEach(character => character.update());
+    this.playerController.update();
+    this.backdrop.update();
+  }
+
+  private preload() {
     // These may change during gameplay so cannot be loaded in PreloadScene (unless loading all)
     const level = Settings.currentLevel();
     const character = Settings.selectedCharacter();
@@ -47,20 +54,17 @@ export default class GameScene extends Phaser.Scene {
 
     GameInfo.observer.on(RESTART_GAME, () => {
       this.b2Physics.loader.cleanup();
+      GameInfo.crashed = false;
+      GameInfo.possessedCharacterId = '';
+      GameInfo.score = { finishedLevel: false, level: Settings.currentLevel(), distance: 0, coins: 0, crashed: false, trickScore: 0, trickScoreLog: [] };
       freeLeaked();
       this.scene.restart();
     });
 
-    this.scene.launch(SCENE_GAME_UI, [GameInfo.observer]);
+    initSolidUI('root-ui');
+    leaderboardService.setLevel(Settings.currentLevel());
 
     // TODO remove. Temporary to serialize open level
     this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
-  }
-
-  update() {
-    this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
-    Character.instances.forEach(character => character.update());
-    this.playerController.update();
-    this.backdrop.update();
   }
 }

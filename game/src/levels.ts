@@ -1,5 +1,5 @@
 // TODO will come from the backend once I switch to Pocketbase
-export const levels: ILevel[] = [{
+export const localLevels: ILevel[] = [{
     id: 'level_001',
     name: 'Santas Backyard',
     thumbnail: 'assets/img/thumbnails/level_001_santas_backyard.png',

@@ -94,8 +94,8 @@ export class State {
   createComboLeewayTween(paused: boolean = true): Phaser.Tweens.Tween {
     return this.scene.tweens.addCounter({
       paused,
-      from: Math.PI * -0.5,
-      to: Math.PI * 1.5,
+      from: 0,
+      to: 360,
       duration: 4000,
       onUpdate: (tween) => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
       onComplete: tween => this.handleComboComplete(),
@@ -180,6 +180,8 @@ export class State {
   private setCrashed() {
     this.isCrashed = true;
     GameInfo.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
+    if (this.character.id === GameInfo.possessedCharacterId) GameInfo.crashed = true;
+
     this.resetComboLeewayTween();
   }
 
@@ -307,6 +309,7 @@ export class State {
     this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
     GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
+    GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
   }

@@ -32,17 +32,20 @@
   text-align: center;
 }
 
+.game-ui-item.combo .combo-leeway-circle {
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 1rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-image: conic-gradient(white 0deg, transparent 0deg);
+  background-size: 100% 100%;
+  background-position: center;
+}
+
 .game-ui-item.score {
   right: var(--game-ui-padding);
   top: var(--game-ui-padding);
   text-align: right;
-}
-
-#unsupported-browser-notice {
-  position: absolute;
-  bottom: var(--game-ui-padding);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  opacity: 0.5;
 }

@@ -1,41 +1,51 @@
 import './PanelLeaderboards.css';
+import { Component, For, Show, createSignal, onMount } from 'solid-js';
+import { BasePanel } from './BasePanel';
+import { leaderboardService } from '..';
+import { Settings } from '../Settings';
+import { IScore } from '../State';
+import { calculateTotalScore } from '../util/calculateTotalScore';
+import { PanelId } from '.';
 
-export const PanelLeaderboards = () => (
-  <>
-    <div class="panel hidden" id="panel-leaderboards">
-      <div class="panel-title">Leaderboards</div>
-      <div class="row">
-        <div class="col col-12 leaderboard-note">
-          Current version of the game doesn't have the online leaderboards enabled. You will only see your own past
-          high-scores below.
+export const PanelLeaderboards: Component<{ setPanel: (id: PanelId) => void }> = props => {
+  const [scores, setScores] = createSignal<IScore[]>([]);
+
+  onMount(async () => {
+    let fbScores: IScore[] = leaderboardService.auth
+      ? await leaderboardService.rexLeaderboard.loadFirstPage()
+      : Settings.localScores()[Settings.currentLevel()].map(s => ({ ...s, userName: Settings.username() }));
+    setScores(fbScores);
+  });
+
+  return (
+    <BasePanel id='panel-leaderboards' title='Leaderboards' scroll={false} backBtn={true} setPanel={props.setPanel} >
+
+      <Show when={!leaderboardService.auth?.currentUser}>
+        <div class="row">
+          <div class="col col-12 leaderboard-note">
+            Current version of the game doesn't have the online leaderboards enabled. You will only see your own past
+            high-scores below.
+          </div>
         </div>
-      </div>
+      </Show>
+
       <div class="row leaderboard-header">
         <span class="col col-2 bolder leaderboard">#</span>
         <span class="col col-7 bolder leaderboard">Name</span>
         <span class="col col-3 bolder leaderboard flex-right">Score</span>
       </div>
 
-      {/* <!-- Will be filled in programmatically using the above template --> */}
       <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container">
-        <template id="leaderboard-item-template">
-          <div class="row leaderboard-item">
-            <span class="col col-2" id="leaderboard-item-rank">1</span>
-            <span class="col col-7" id="leaderboard-item-username">AndiOver9000</span>
-            <span class="col col-3 flex-right" id="leaderboard-item-score">9001</span>
-          </div>
-        </template>
+        <For each={scores()} fallback={<div>Loading...</div>}>
+          {(item, index) => (
+            <div class="row leaderboard-item">
+              <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
+              <span class={leaderboardService.auth?.currentUser?.uid === item.userID ? 'col col-7 your-own-score' : 'col col-7'} id="leaderboard-item-username">{item.userName}</span>
+              <span class="col col-3 flex-right" id="leaderboard-item-score">{calculateTotalScore(item)}</span>
+            </div>
+          )}
+        </For>
       </div>
-
-      {/* <!-- BACK--> */}
-      <div class="row last">
-        <div class="col col-12 flex-center">
-          <button class="btn btn-secondary" id="btn-goto-pause-menu">
-            <i class="material-icons">chevron_left</i>
-            <span>Back to menu</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </>
-);
+    </BasePanel>
+  );
+};

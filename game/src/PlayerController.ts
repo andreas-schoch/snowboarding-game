@@ -1,11 +1,11 @@
 import GameScene from './scenes/GameScene';
 import { Character } from './Character';
-import { PanelIds } from './scenes/GameUIScene';
 import { DEFAULT_WIDTH } from '.';
 import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from './eventTypes';
 import { IScore } from './State';
 import { GameInfo } from './GameInfo';
 import { Settings } from './Settings';
+import { PanelId } from './UI';
 
 export class CharacterController {
   character: Character | null = null;
@@ -26,7 +26,7 @@ export class CharacterController {
   constructor(private scene: GameScene) {
 
     GameInfo.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
-    GameInfo.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame(PanelIds.PANEL_HOW_TO_PLAY));
+    GameInfo.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame('panel-how-to-play'));
     GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)) });
 
@@ -122,7 +122,7 @@ export class CharacterController {
     this.keyArrowUp.onUp = () => this.jumpKeyDown = false;
   }
 
-  private pauseGame(activePanel: PanelIds = PanelIds.PANEL_PAUSE_MENU) {
+  private pauseGame(activePanel: PanelId = 'panel-pause-menu') {
     if (!this.character) return;
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.scene.b2Physics.isPaused = !this.scene.b2Physics.isPaused;

@@ -1,32 +1,35 @@
 import './PanelSelectLevel.css';
+import { Component, For, createSignal } from 'solid-js';
+import { BasePanel } from './BasePanel';
+import { ILevel, LevelKeys, localLevels } from '../levels';
+import { Settings } from '../Settings';
+import { leaderboardService } from '..';
+import { GameInfo } from '../GameInfo';
+import { RESTART_GAME } from '../eventTypes';
+import { PanelId } from '.';
 
-export const PanelSelectLevel = () => (
-  <>
-    <div class="panel hidden" id="panel-select-level">
-      <div class="panel-title">Select Level</div>
+export const PanelSelectLevel: Component<{ setPanel: (id: PanelId) => void }> = props => {
+  const [levels, setLevels] = createSignal<ILevel[]>(localLevels);
 
-      <div class="select-level-scrollable scrollbar" id="level-item-container">
+  const handleSelectLevel = (id: LevelKeys) => {
+    Settings.set('levelCurrent', id);
+    leaderboardService.setLevel(id);
+    GameInfo.observer.emit(RESTART_GAME);
 
-        <template id="level-item-template">
-          <div class="level-item">
-            <span class="level-item-overlay" id="level_001"></span>
-            <div class="level-item-number">Level 001</div>
-            <div class="level-item-name">Santas Backyard</div>
-            <div class="level-item-thumbnail"
-              style="background-image: url('assets/img/thumbnails/level_001_santas_backyard.png')"></div>
+  };
+
+  return (
+    <BasePanel id='panel-select-level' title='Select Level' scroll={true} backBtn={!GameInfo.crashed} setPanel={props.setPanel} >
+      <For each={levels()} fallback={<div>Loading...</div>}>
+        {item => (
+          <div class="level-item" onclick={() => handleSelectLevel(item.id as LevelKeys)}>
+            <span class="level-item-overlay" id={item.id}></span>
+            <div class="level-item-number">{item.number}</div>
+            <div class="level-item-name">{item.name}</div>
+            <div class="level-item-thumbnail" style={`background-image: url("${item.thumbnail}")`}></div>
           </div>
-        </template>
-
-      </div>
-      {/* <!-- BACK--> */}
-      <div class="row last">
-        <div class="col col-12 flex-center">
-          <button class="btn btn-secondary" id="btn-goto-pause-menu">
-            <i class="material-icons">chevron_left</i>
-            <span>Back to menu</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </>
-);
+        )}
+      </For>
+    </BasePanel>
+  );
+};

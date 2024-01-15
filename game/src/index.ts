@@ -5,7 +5,6 @@ import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js'; // 
 
 import PreloadScene from './scenes/PreloadScene';
 import GameScene from './scenes/GameScene';
-import GameUIScene from './scenes/GameUIScene';
 import { LeaderboardService } from './services/leaderboard';
 import { Settings } from './Settings';
 
@@ -14,7 +13,6 @@ export const leaderboardService = new LeaderboardService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
 export const SCENE_GAME = 'GameScene';
-export const SCENE_GAME_UI = 'GameUIScene';
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
@@ -44,7 +42,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     width: Settings.widthScaled(),
     height: Settings.heightScaled(),
   },
-  scene: [PreloadScene, GameScene, GameUIScene],
+  scene: [PreloadScene, GameScene],
   plugins: {
     global: [
       { key: 'rexFirebase', plugin: FirebasePlugin, start: true }
@@ -52,6 +50,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   },
 };
 
+export let game: Phaser.Game;
 export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
 export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
@@ -63,7 +62,7 @@ window.onload = () => {
       const LeakMitigator = new b2.LeakMitigator();
       freeLeaked = LeakMitigator.freeLeaked;
       recordLeak = LeakMitigator.recordLeak;
-      new Phaser.Game(gameConfig);
+      game = new Phaser.Game(gameConfig);
 
       if (navigator.onLine) {
         // Display fps and memory usage

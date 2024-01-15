@@ -695,6 +695,7 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
 /* ========================= */
 .scrollbar {
   overflow-y: auto;
+  max-height: 700px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
