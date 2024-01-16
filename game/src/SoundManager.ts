@@ -49,7 +49,7 @@ export class SoundManager {
         onComplete: async () => this.music.stop(),
       });
     });
-    
+
     GameInfo.observer.on(LEVEL_FINISH, (score: IScore, isCrashed: boolean) => {
       if (isCrashed) return;
       this.sfx_applause.play();

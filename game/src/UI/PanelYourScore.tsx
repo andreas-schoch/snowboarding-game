@@ -10,7 +10,7 @@ import {pseudoRandomId} from '../util/pseudoRandomId';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score: IScore }> = props => {
+export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScore}> = props => {
   let submitScoreForm: HTMLElement;
   let usernameInput: HTMLInputElement;
   const [yourRank, setYourRank] = createSignal(-1);

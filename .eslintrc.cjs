@@ -1,9 +1,9 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'es2021': true
+  env: {
+    browser: true,
+    es2021: true
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:solid/typescript',
@@ -20,33 +20,45 @@ module.exports = {
       },
     },
   },
-  'overrides': [
+  overrides: [
     {
-      'env': {
-        'node': true
+      env: {
+        node: true
       },
-      'files': [
+      files: [
         '.eslintrc.{js,cjs}'
       ],
-      'parserOptions': {
-        'sourceType': 'script'
+      parserOptions: {
+        sourceType: 'script'
       }
     }
   ],
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaVersion': 'latest',
-    'sourceType': 'module'
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
-  'plugins': [
+  plugins: [
     '@typescript-eslint',
     'solid',
-    'import'
+    'import',
+    '@stylistic',
   ],
-  'rules': {
-    'object-curly-spacing': ['error', 'never'],
+  rules: {
+    '@stylistic/quote-props': ['error', 'as-needed'],
+    '@stylistic/nonblock-statement-body-position': ['error', 'beside'],
+    '@stylistic/no-trailing-spaces': ['error', {ignoreComments: true}],
+    '@stylistic/no-tabs': ['error', {allowIndentationTabs: false}],
+    '@stylistic/no-multiple-empty-lines': ['error', {max: 1, maxEOF: 0}],
+    '@stylistic/no-floating-decimal': 'error',
+    '@stylistic/no-whitespace-before-property': 'error',
+    '@stylistic/no-multi-spaces': 'error',
+    '@stylistic/eol-last': ['error', 'always'],
+    '@stylistic/object-curly-spacing': ['error', 'never'],
+    '@stylistic/type-annotation-spacing': 'error',
+    '@stylistic/template-curly-spacing': 'error',
     'no-prototype-builtins': 'off',
-    'indent': [
+    indent: [
       'error',
       2
     ],
@@ -55,20 +67,20 @@ module.exports = {
     //     'windows',
     //     'unix'
     // ],
-    'quotes': [
+    quotes: [
       'error',
       'single'
     ],
-    'semi': [
+    semi: [
       'error',
       'always'
     ],
-    'import/newline-after-import': ['error', { 'count': 1, 'considerComments': true }],
-    'import/no-duplicates': ['error', {'considerQueryString': true}],
+    'import/newline-after-import': ['error', {count: 1, considerComments: true}],
+    'import/no-duplicates': ['error', {considerQueryString: true}],
     'import/no-default-export': 'error',
     'import/order': ['error', {
       'newlines-between': 'never',
-      'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+      groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
       alphabetize: {
         order: 'asc',
         orderImportKind: 'asc'

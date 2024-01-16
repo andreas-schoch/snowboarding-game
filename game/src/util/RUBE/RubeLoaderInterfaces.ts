@@ -8,7 +8,7 @@ export interface RubeScene {
   warmStarting: boolean;
   continuousPhysics: boolean;
   subStepping: boolean,
-  collisionbitplanes?: { names: string[] };
+  collisionbitplanes?: {names: string[]};
   customProperties?: RubeCustomProperty[];
 
   body?: RubeBody[];
@@ -68,7 +68,7 @@ export interface RubeCustomProperty {
 }
 
 // zero needs to be turned into { x: 0, y: 0 }
-export type RubeVector = { x: number, y: number } | 0;
+export type RubeVector = {x: number, y: number} | 0;
 
 // Not sure why RUBE json export represents lists of vectors like this. Maybe an openGL thing?
 export interface RubeVectorArray {

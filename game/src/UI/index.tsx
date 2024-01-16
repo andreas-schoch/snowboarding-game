@@ -30,7 +30,7 @@ const SolidUI = () => {
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
 
   return (
-    <div id="game-ui" style={{'display':'none'}}>
+    <div id="game-ui" style={{display:'none'}}>
       <HUD />
 
       <Switch fallback={<HUD />}>

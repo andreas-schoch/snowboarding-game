@@ -138,7 +138,6 @@ export class RubeSerializer<IMG = unknown> {
     return {vertices};
   }
 
-
   private serializeChainShape(shape: Box2D.b2Shape): RubeFixtureShapeChain {
     const chainShape = b2.castObject(shape, b2.b2ChainShape);
     const b2Verts = b2.reifyArray(b2.getPointer(chainShape.m_vertices), chainShape.m_count, 8, b2.b2Vec2);
@@ -329,7 +328,7 @@ export class RubeSerializer<IMG = unknown> {
     const damping = joint.GetDamping();
     const massA = joint.GetBodyA().GetMass();
     const massB = joint.GetBodyB().GetMass();
-    
+
     let effectiveMass: number;
     if (massA > 0 && massB > 0) effectiveMass = massA * massB / (massA + massB);
     else if (massA > 0) effectiveMass = massA;
@@ -342,7 +341,7 @@ export class RubeSerializer<IMG = unknown> {
     return {frequencyHertz, dampingRatio};
   }
 
-  private getJointAngularFrequencyAndDampingRatio(joint: Box2D.b2WeldJoint): { frequencyHertz: number, dampingRatio: number } {
+  private getJointAngularFrequencyAndDampingRatio(joint: Box2D.b2WeldJoint): {frequencyHertz: number, dampingRatio: number} {
     const stiffness = joint.GetStiffness();
     const damping = joint.GetDamping();
     const inertiaA = joint.GetBodyA().GetInertia();

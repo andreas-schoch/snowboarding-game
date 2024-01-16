@@ -2,7 +2,6 @@ import {Settings} from './Settings';
 import {GameScene} from './scenes/GameScene';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from './index';
 
-
 export class Backdrop {
   private scene: GameScene;
   private bgSky: Phaser.GameObjects.TileSprite;
@@ -13,15 +12,15 @@ export class Backdrop {
   constructor(scene: GameScene) {
     this.scene = scene;
     this.resolutionMod = this.scene.cameras.main.width / DEFAULT_WIDTH;
-    
+
     const g = this.scene.add.graphics();
     g.fillStyle(Settings.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
     g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.generateTexture('bg_sky', DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.destroy();
-    
+
     this.bgSky = this.registerLayer('bg_sky', '');
-    
+
     if (Settings.darkmodeEnabled()) {
       this.bgSpaceMid = this.registerLayer('bg_space_pack', 'bg_space_mid.png');
       this.bgSpaceFront = this.registerLayer('bg_space_pack', 'bg_space_front.png');

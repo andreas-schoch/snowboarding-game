@@ -52,5 +52,4 @@ export interface ILevel {
     revision?: number;
 }
 
-
-export type  LevelKeys = 'level_001' | 'level_002' | 'level_003' | 'level_004' | 'level_005';
+export type LevelKeys = 'level_001' | 'level_002' | 'level_003' | 'level_004' | 'level_005';

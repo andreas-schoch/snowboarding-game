@@ -12,22 +12,18 @@ export interface IBaseTrickScore {
   timestamp: number;
 }
 
-
 export interface IComboTrickScore extends IBaseTrickScore {
   type: 'combo';
   accumulator: number;
   multiplier: number;
 }
 
-
 export interface IFlipTrickScore extends IBaseTrickScore {
   type: 'flip';
   flips: number;
 }
 
-
 export type TrickScore = IComboTrickScore | IFlipTrickScore;
-
 
 export interface IScore {
   id?: string;
@@ -43,7 +39,6 @@ export interface IScore {
   crashed: boolean;
   level: LevelKeys;
 }
-
 
 export class State {
   isLevelFinished = false;

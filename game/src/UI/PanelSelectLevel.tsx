@@ -8,7 +8,7 @@ import {ILevel, LevelKeys, localLevels} from '../levels';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelSelectLevel: Component<{ setPanel: (id: PanelId) => void }> = props => {
+export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = props => {
   const [levels] = createSignal<ILevel[]>(localLevels);
 
   const handleSelectLevel = (id: LevelKeys) => {

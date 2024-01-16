@@ -2,7 +2,7 @@ import './BasePanel.css';
 import {ParentComponent, Show} from 'solid-js';
 import {PanelId} from '.';
 
-export const BasePanel: ParentComponent<{ id: string, title: string, scroll: boolean, backBtn: boolean, setPanel: (id: PanelId) => void}> = props => (
+export const BasePanel: ParentComponent<{id: string, title: string, scroll: boolean, backBtn: boolean, setPanel: (id: PanelId) => void}> = props => (
   <div class="panel" id={ props.id}>
     <div class="panel-title">{props.title}</div>
 

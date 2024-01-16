@@ -35,7 +35,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
 
-  constructor(private scene: GameScene, private config: { worldScale: number, gravityX: number, gravityY: number }) {
+  constructor(private scene: GameScene, private config: {worldScale: number, gravityX: number, gravityY: number}) {
     super();
     this.worldScale = config.worldScale;
     this.debugDrawer = new DebugDrawer(this.scene.add.graphics().setDepth(5000), this.config.worldScale);
@@ -87,7 +87,7 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   private initLoader() {
     const loader = new RubeLoader<Phaser.GameObjects.Image>(this.world);
-    loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => {
+    loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => {
       const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 

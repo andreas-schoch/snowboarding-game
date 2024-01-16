@@ -5,7 +5,7 @@ import {RESUME_GAME} from '../eventTypes';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelPauseMenu: Component<{ setPanel: (id: PanelId) => void }> = props => {
+export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = props => {
   const handleResumeGame = () => {
     props.setPanel('none');
     GameInfo.observer.emit(RESUME_GAME);

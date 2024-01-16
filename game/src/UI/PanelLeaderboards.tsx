@@ -7,7 +7,7 @@ import {calculateTotalScore} from '../util/calculateTotalScore';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelLeaderboards: Component<{ setPanel: (id: PanelId) => void }> = props => {
+export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = props => {
   const [scores, setScores] = createSignal<IScore[]>([]);
 
   onMount(async () => {

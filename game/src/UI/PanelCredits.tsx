@@ -83,9 +83,8 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
       <a class="col col-3 credits-link" rel="noopener" href="https://www.iforce2d.net/rube/"
         target="_blank">Website</a>
     </span>
-    <span class="row"><span class="col col-12" style={{'color':'var(--grey-600)'}}>For the awesome R.U.B.E Editor which
+    <span class="row"><span class="col col-12" style={{color:'var(--grey-600)'}}>For the awesome R.U.B.E Editor which
       made it so much easier to create box2d levels.</span></span>
-
 
     <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
     <span class="row">

@@ -19,9 +19,9 @@ export interface LoadedScene<IMG = unknown> {
 }
 
 export class RubeLoader<IMG = unknown> {
-  handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => IMG | null = () => null;
-  readonly userData: Map<Box2D.b2Body, { name: string, image: IMG | null }> = new Map();
-  readonly customProps: Map<CustomPropOwner | IMG, { [key: string]: unknown }> = new Map();
+  handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => IMG | null = () => null;
+  readonly userData: Map<Box2D.b2Body, {name: string, image: IMG | null}> = new Map();
+  readonly customProps: Map<CustomPropOwner | IMG, {[key: string]: unknown}> = new Map();
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene<IMG>> = new Map();
 
   private loadingBodies: LoadedScene['bodies'] = [];
@@ -264,7 +264,7 @@ export class RubeLoader<IMG = unknown> {
     return joint;
   }
 
-  private setLinearStiffness(jd: { stiffness: number, damping: number }, frequency: number, dampingRatio: number, bodyA: Box2D.b2Body, bodyB: Box2D.b2Body) {
+  private setLinearStiffness(jd: {stiffness: number, damping: number}, frequency: number, dampingRatio: number, bodyA: Box2D.b2Body, bodyB: Box2D.b2Body) {
     // See comment for b2LinearStiffness to see why this is done in such a way
     const output_p = b2._malloc(Float32Array.BYTES_PER_ELEMENT * 2);
     b2.b2LinearStiffness(output_p, output_p + Float32Array.BYTES_PER_ELEMENT, frequency || 0, dampingRatio || 0, bodyA, bodyB);
@@ -274,7 +274,7 @@ export class RubeLoader<IMG = unknown> {
     jd.damping = damping;
   }
 
-  private setAngularStiffness(jd: { stiffness: number, damping: number }, frequency: number, dampingRatio: number, bodyA: Box2D.b2Body, bodyB: Box2D.b2Body) {
+  private setAngularStiffness(jd: {stiffness: number, damping: number}, frequency: number, dampingRatio: number, bodyA: Box2D.b2Body, bodyB: Box2D.b2Body) {
     // See comment for b2AngularStiffness to see why this is done in such a way
     const output_p = b2._malloc(Float32Array.BYTES_PER_ELEMENT * 2);
     b2.b2AngularStiffness(output_p, output_p + Float32Array.BYTES_PER_ELEMENT, frequency || 0, dampingRatio || 0, bodyA, bodyB);
@@ -370,11 +370,10 @@ export class RubeLoader<IMG = unknown> {
     return shape;
   }
 
-  private pointsFromSeparatedVertices(vertices: { x: number[], y: number[] }) {
+  private pointsFromSeparatedVertices(vertices: {x: number[], y: number[]}) {
     const verts: Box2D.b2Vec2[] = [];
-    for (let v = 0; v < vertices.x.length; v++)
-      // In RUBE Editor the Y coordinates are upside down when compared to Phaser3
-      verts.push(new b2.b2Vec2(vertices.x[v], vertices.y[v]));
+    // In RUBE Editor the Y coordinates are upside down when compared to Phaser3
+    for (let v = 0; v < vertices.x.length; v++) verts.push(new b2.b2Vec2(vertices.x[v], vertices.y[v]));
     return verts;
   }
 

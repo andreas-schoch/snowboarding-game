@@ -4,7 +4,7 @@ import {Settings} from '../Settings';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelSettings: Component<{ setPanel: (id: PanelId) => void }> = props => {
+export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props => {
   let submitForm: HTMLFormElement;
 
   onMount(() => {

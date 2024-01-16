@@ -3,7 +3,6 @@
 // import {b2BodyType} from '@box2d/core';
 // import GameScene from '../scenes/GameScene';
 
-
 // export class DebugMouseJoint {
 //   private mouseJoint: Pl.b2MouseJoint | null;
 

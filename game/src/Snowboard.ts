@@ -83,7 +83,7 @@ export class Snowboard {
       segment.groundRayResult.hit = false;
       segment.groundRayResult.point.SetZero();
       segment.groundRayResult.normal.SetZero();
-      segment.groundRayResult.fraction = -1;      // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
+      segment.groundRayResult.fraction = -1; // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
       const pointStart = vec2Util.Clone(segment.body.GetWorldPoint(this.ZERO));
       const pointEnd = vec2Util.Clone(segment.body.GetWorldPoint(segment.groundRayDirection));
       this.scene.b2Physics.world.RayCast(segment.groundRayCallback, pointStart, pointEnd);

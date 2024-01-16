@@ -2,8 +2,7 @@ import {Settings} from './Settings';
 import {GameScene} from './scenes/GameScene';
 import {b2, recordLeak} from './index';
 
-
-export type XY = { x: number, y: number };
+export type XY = {x: number, y: number};
 
 export class Terrain {
 
