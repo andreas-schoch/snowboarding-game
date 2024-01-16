@@ -1,7 +1,7 @@
 # Snowboarding Game
 
 <p align="center">
-<img src="./intro.png" alt="screenshot of game" width="400" height="auto">
+<img src="./docs/img/intro.png" alt="screenshot of game" width="400" height="auto">
 </p>
 
 
@@ -42,8 +42,13 @@ I would really like for the physics to be fully deterministic so I can store inp
  npm i
  npm run start
 ```
+[How to create levels](./docs/how-to-create-levels.md)
+
+[How to create Characters](./docs/how-to-create-characters.md)
+
+
 ## Enable your own Leaderboards
-<img src="./leaderboards.png" alt="Snowboarding Game Leaderboards" width="400" height="auto"> <img src="./highscore.png" alt="Snowboarding Game Highscore" width="400" height="auto">
+<img src="./docs/img/leaderboards.png" alt="Snowboarding Game Leaderboards" width="400" height="auto"> <img src="./docs/img/highscore.png" alt="Snowboarding Game Highscore" width="400" height="auto">
 
 When you clone the game, you will only see your own highscores in the leaderboard but with a few steps (~5-10mins of work) you can enable global leaderboards if you want to host this game on your own.
 
