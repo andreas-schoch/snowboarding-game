@@ -14,6 +14,8 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
     const fbScores: IScore[] = leaderboardService.auth
       ? await leaderboardService.rexLeaderboard.loadFirstPage()
       : Settings.localScores()[Settings.currentLevel()].map(s => ({...s, userName: Settings.username()}));
+
+    fbScores.sort((a, b) => calculateTotalScore(b) - calculateTotalScore(a));
     setScores(fbScores);
   });
 
@@ -40,7 +42,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
           {(item, index) => (
             <div class="row text-sm pr-2">
               <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
-              <span class={leaderboardService.auth?.currentUser?.uid === item.userID ? 'col col-7 overflow-hidden text-ellipsis' : 'col col-7'}>{item.userName}</span>
+              <span class={(leaderboardService.auth?.currentUser?.uid === item.userID ? 'your-own-score ' : '') + 'col col-7 overflow-hidden text-ellipsis'}>{item.userName}</span>
               <span class="col col-3 flex-right" id="leaderboard-item-score">{calculateTotalScore(item)}</span>
             </div>
           )}

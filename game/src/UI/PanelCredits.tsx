@@ -50,7 +50,7 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
 );
 
 const CreditsTitle: ParentComponent = props => (
-  <span class="row font-[bolder] text-base text-[color:var(--title-color)"><span class="col col-12 flex-center">{props.children}</span></span>
+  <span class="row font-[bolder] text-base text-[color:var(--title-color)]"><span class="col col-12 flex-center">{props.children}</span></span>
 );
 
 const CreditsEntry: Component<{name: string, source?: string, website?: string}> = props => (

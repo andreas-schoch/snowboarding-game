@@ -30,7 +30,7 @@ const SolidUI = () => {
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
 
   return (
-    <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0" id="game-ui">
+    <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0">
       <Switch fallback={<HUD setPanel={setPanel} />}>
         <Match when={panel() === 'panel-pause-menu'}><PanelPauseMenu setPanel={setPanel} /></Match>
         <Match when={panel() === 'panel-select-level'}><PanelSelectLevel setPanel={setPanel} /></Match>

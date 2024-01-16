@@ -59,5 +59,5 @@ export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = prop
 );
 
 const HowToPlayTitle: ParentComponent = props => (
-  <span class="row text-lg text-[color:var(--title-color)] my-8;"><span class="col col-12">{props.children}</span></span>
+  <span class="row text-lg !my-8 text-[color:var(--title-color)]"><span class="col col-12">{props.children}</span></span>
 );
