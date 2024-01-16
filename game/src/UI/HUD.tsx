@@ -13,7 +13,10 @@ export const HUD = () => {
 
   GameInfo.observer.on(PICKUP_PRESENT, total => setPresents(total));
   GameInfo.observer.on(COMBO_CHANGE, (accumulated, multiplier) => setCombo(accumulated ? (accumulated + 'x' + multiplier) : '-'));
-  GameInfo.observer.on(SCORE_CHANGE, (score: IScore) => setScore(calculateTotalScore(score)));
+  GameInfo.observer.on(SCORE_CHANGE, (score: IScore) => {
+    setScore(calculateTotalScore(score));
+    GameInfo.score = score;
+  });
   GameInfo.observer.on(COMBO_LEEWAY_UPDATE, (value) => updateCircleLoader(value));
   GameInfo.observer.on(LEVEL_FINISH, (score: IScore) => !score.crashed && updateCircleLoader(0));
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => id === GameInfo.possessedCharacterId && !score.finishedLevel && updateCircleLoader(0));

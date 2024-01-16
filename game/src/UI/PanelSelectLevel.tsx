@@ -7,6 +7,7 @@ import { leaderboardService } from '..';
 import { GameInfo } from '../GameInfo';
 import { RESTART_GAME } from '../eventTypes';
 import { PanelId } from '.';
+import { Game } from 'phaser';
 
 export const PanelSelectLevel: Component<{ setPanel: (id: PanelId) => void }> = props => {
   const [levels, setLevels] = createSignal<ILevel[]>(localLevels);
@@ -19,7 +20,7 @@ export const PanelSelectLevel: Component<{ setPanel: (id: PanelId) => void }> = 
   };
 
   return (
-    <BasePanel id='panel-select-level' title='Select Level' scroll={true} backBtn={!GameInfo.crashed} setPanel={props.setPanel} >
+    <BasePanel id='panel-select-level' title='Select Level' scroll={true} backBtn={!GameInfo.crashed && !GameInfo.score.finishedLevel} setPanel={props.setPanel} >
       <For each={levels()} fallback={<div>Loading...</div>}>
         {item => (
           <div class="level-item" onclick={() => handleSelectLevel(item.id as LevelKeys)}>

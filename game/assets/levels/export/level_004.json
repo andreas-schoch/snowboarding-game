@@ -22120,7 +22120,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -22247,7 +22247,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -24216,7 +24216,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -24269,7 +24269,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -24586,7 +24586,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"flip" : true,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
@@ -25441,7 +25441,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -26166,7 +26166,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -26320,7 +26320,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -26669,7 +26669,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -26937,7 +26937,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -27084,7 +27084,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -27373,7 +27373,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -29353,7 +29353,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -29642,7 +29642,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -29695,7 +29695,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -30421,7 +30421,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -32717,7 +32717,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -34231,7 +34231,7 @@
 					"string" : "atlas_environment"
 				}
 			],
-			"file" : "../../img/santa_parts_v01/santa-board.png",
+			"file" : "../../img/cane.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],

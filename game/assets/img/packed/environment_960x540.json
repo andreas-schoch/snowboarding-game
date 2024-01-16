@@ -4,8 +4,8 @@
 			"image": "environment_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 252,
-				"h": 494
+				"w": 510,
+				"h": 251
 			},
 			"scale": 0.1875,
 			"frames": [
@@ -31,6 +31,27 @@
 					}
 				},
 				{
+					"filename": "cane.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 234,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 234,
+						"h": 25
+					},
+					"frame": {
+						"x": 3,
+						"y": 223,
+						"w": 234,
+						"h": 25
+					}
+				},
+				{
 					"filename": "tree_01.png",
 					"rotated": false,
 					"trimmed": false,
@@ -45,157 +66,10 @@
 						"h": 206
 					},
 					"frame": {
-						"x": 3,
-						"y": 223,
-						"w": 174,
-						"h": 206
-					}
-				},
-				{
-					"filename": "lightbulb.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 54,
-						"h": 192
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 54,
-						"h": 192
-					},
-					"frame": {
-						"x": 181,
-						"y": 223,
-						"w": 54,
-						"h": 192
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 38,
-						"h": 38
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 36,
-						"h": 38
-					},
-					"frame": {
 						"x": 213,
 						"y": 3,
-						"w": 36,
-						"h": 38
-					}
-				},
-				{
-					"filename": "ice_spikes.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 58,
-						"h": 47
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 58,
-						"h": 47
-					},
-					"frame": {
-						"x": 3,
-						"y": 433,
-						"w": 58,
-						"h": 47
-					}
-				},
-				{
-					"filename": "snowy_rock.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 58,
-						"h": 42
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 58,
-						"h": 42
-					},
-					"frame": {
-						"x": 65,
-						"y": 433,
-						"w": 58,
-						"h": 42
-					}
-				},
-				{
-					"filename": "ice_block.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 52,
-						"h": 52
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 52,
-						"h": 52
-					},
-					"frame": {
-						"x": 127,
-						"y": 433,
-						"w": 52,
-						"h": 52
-					}
-				},
-				{
-					"filename": "wooden_crate.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 52,
-						"h": 52
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 52,
-						"h": 52
-					},
-					"frame": {
-						"x": 183,
-						"y": 419,
-						"w": 52,
-						"h": 52
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 46,
-						"h": 12
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 0,
-						"w": 36,
-						"h": 12
-					},
-					"frame": {
-						"x": 213,
-						"y": 45,
-						"w": 36,
-						"h": 12
+						"w": 174,
+						"h": 206
 					}
 				},
 				{
@@ -213,8 +87,8 @@
 						"h": 12
 					},
 					"frame": {
-						"x": 183,
-						"y": 475,
+						"x": 241,
+						"y": 213,
 						"w": 46,
 						"h": 12
 					}
@@ -234,10 +108,157 @@
 						"h": 12
 					},
 					"frame": {
-						"x": 65,
-						"y": 479,
+						"x": 241,
+						"y": 229,
 						"w": 41,
 						"h": 12
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 36,
+						"h": 12
+					},
+					"frame": {
+						"x": 286,
+						"y": 229,
+						"w": 36,
+						"h": 12
+					}
+				},
+				{
+					"filename": "lightbulb.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 54,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 54,
+						"h": 192
+					},
+					"frame": {
+						"x": 391,
+						"y": 3,
+						"w": 54,
+						"h": 192
+					}
+				},
+				{
+					"filename": "ice_spikes.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 58,
+						"h": 47
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 58,
+						"h": 47
+					},
+					"frame": {
+						"x": 449,
+						"y": 3,
+						"w": 58,
+						"h": 47
+					}
+				},
+				{
+					"filename": "snowy_rock.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 58,
+						"h": 42
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 58,
+						"h": 42
+					},
+					"frame": {
+						"x": 449,
+						"y": 54,
+						"w": 58,
+						"h": 42
+					}
+				},
+				{
+					"filename": "ice_block.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 52
+					},
+					"frame": {
+						"x": 449,
+						"y": 100,
+						"w": 52,
+						"h": 52
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 52
+					},
+					"frame": {
+						"x": 449,
+						"y": 156,
+						"w": 52,
+						"h": 52
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 38,
+						"h": 38
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 38
+					},
+					"frame": {
+						"x": 391,
+						"y": 199,
+						"w": 36,
+						"h": 38
 					}
 				}
 			]
@@ -246,6 +267,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:238658c9b466783d97b6af5e23eab03e:d55d57e8c17f89b79c9442aaaa1f52a9:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:926bb5addb5da5b45bf89caa366b1ff0:2e344c3a931c0a07db93cd232dd09749:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

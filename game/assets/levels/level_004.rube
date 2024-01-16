@@ -22305,7 +22305,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 1,
@@ -23375,7 +23375,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 50,
@@ -23475,7 +23475,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 54,
@@ -23500,7 +23500,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 55,
@@ -24150,7 +24150,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 81,
@@ -24250,7 +24250,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 85,
@@ -24424,7 +24424,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 92,
@@ -24499,7 +24499,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 95,
@@ -24599,7 +24599,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 99,
@@ -24624,7 +24624,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 100,
@@ -24899,7 +24899,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 111,
@@ -24924,7 +24924,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 112,
@@ -26725,7 +26725,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 186,
@@ -26750,7 +26750,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 187,
@@ -26993,7 +26993,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 197,
@@ -27018,7 +27018,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 198,
@@ -27308,7 +27308,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : true,
         "id" : 217,
@@ -31806,7 +31806,7 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../img/santa_parts_v01/santa-board.png",
+        "file" : "../img/cane.png",
         "filter" : 1,
         "flip" : false,
         "id" : 460,
