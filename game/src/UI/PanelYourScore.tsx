@@ -1,5 +1,5 @@
 import './PanelYourScore.css';
-import { Component, onMount } from 'solid-js';
+import { Component, createSignal, onMount } from 'solid-js';
 import { IComboTrickScore, IScore } from '../State';
 import { LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService } from '..';
 import { calculateTotalScore } from '../util/calculateTotalScore';
@@ -13,14 +13,22 @@ import { PanelId } from '.';
 export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score: IScore }> = props => {
   let submitScoreForm: HTMLElement;
   let usernameInput: HTMLInputElement;
+  const [yourRank, setYourRank] = createSignal(-1);
+  const [totalRanks, setTotalRanks] = createSignal(-1);
   const bestCombo = () => Math.max(...(props.score.trickScoreLog.filter(s => s.type === 'combo') as IComboTrickScore[]).map(s => s.accumulator * s.multiplier));
   const totalScore = () => calculateTotalScore(props.score);
+
+  const rankText = () => {
+    const rank = yourRank();
+    if (rank > 0) return `You are ranked ${rank}/${totalRanks()} on this level!`;
+    else return 'You do not have a rank yet. Please submit a score first.';
+  };
 
   onMount(async () => {
     const currentUser = leaderboardService.auth?.currentUser;
 
     if (!currentUser) {
-      // When leaderboard is disabled; TODO refactor and clean the mess
+      // When leaderboard is disabled;
       if (!Settings.username()) {
         usernameInput.value = `Player_${pseudoRandomId()}`;
         usernameInput.setAttribute('value', usernameInput.value); // to make floating label move up
@@ -33,30 +41,42 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
     }
 
     // Everything below is expected to work only when leaderboards are enabled
-    if (!usernameInput) throw new Error('username input field not found');
     const note: HTMLElement | null = document.querySelector('.submit-score-offline-info');
     note && note.classList.add('hidden');
-
-    if (!currentUser.displayName) {
-      // TODO disabled default username for now as too many just us the default name instead of overriding it.
-      // First time player without a username. Score is submitted manually somewhere else after clicking a button.
-      // elUsername.value = `Player_${pseudoRandomId()}`;
-      // elUsername.setAttribute('value', elUsername.value); // to make floating label move up
-      // localStorage.setItem(KEY_USER_NAME, elUsername.value);
-    } else {
+    if (currentUser.displayName) {
       // Score is submitted automatically for users that submitted a score once before from this device and browser.
       submitScoreForm?.classList.add('hidden');
       leaderboardService.rexLeaderboard.setUser({ userID: currentUser.uid, userName: currentUser.displayName });
       await leaderboardService.submit(props.score);
-      const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
-      // Cannot trust plain value total on firebase nor the rank nor the order atm
-      // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
-      const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
-      const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
-      const elYourRank = document.getElementById('your-score-rank-value');
-      if (elYourRank && yourRank !== -1 && scores?.length) elYourRank.innerText = `${yourRank + 1}/${scores.length}`;
+      refreshRank();
     }
   });
+
+  const refreshRank = async () => {
+    const currentUser = leaderboardService.auth?.currentUser;
+    if (!currentUser) return;
+    const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
+    // Cannot trust plain value total on firebase nor the rank nor the order atm
+    // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
+    const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
+    const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
+    setYourRank(yourRank + 1);
+    setTotalRanks(scores.length);
+  };
+
+  const handleInitialSubmit = async () => {
+    const name = usernameInput?.value;
+    if (name && props.score && submitScoreForm) {
+      if (leaderboardService.auth?.currentUser) {
+        leaderboardService.rexLeaderboard.setUser({ userID: leaderboardService.auth.currentUser.uid, userName: usernameInput.value });
+        await leaderboardService.auth.currentUser.updateProfile({ displayName: usernameInput.value });
+      }
+      Settings.set('userName', usernameInput.value);
+      await leaderboardService.submit(props.score);
+      submitScoreForm.classList.add('hidden');
+      refreshRank();
+    }
+  };
 
   return (
     <BasePanel id='panel-your-score' title='Your Score' scroll={false} backBtn={false} setPanel={props.setPanel}>
@@ -87,15 +107,14 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
       </div>
 
       <div class="row summary summary-rank">
-        <span class="col col-12">You are ranked <span id="your-score-rank-value">-/-</span> in the leaderboards on this
-          level!</span>
+        <span class="col col-12">{rankText()}</span>
       </div>
 
       {/* <!--  SUBMIT SCORE --> */}
       <div class="submit-score" ref={el => submitScoreForm = el}>
-        <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score to the leaderboards yet.
+        <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score yet.
           Please choose your name.
-          The next time you finish a level, your score will be submitted automatically.</span></div>
+          The next time you finish a level, this will happen automatically.</span></div>
         <div class="row submit-score-offline-info"><span class="col col-12">This version of the game has online
           leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div>
         <div class="row" id="your-score-name-form">
@@ -107,7 +126,7 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
               <label for="username" class="floating-label">Your name</label>
             </div>
           </div>
-          <button class="col col-4 btn btn-primary" id="btn-score-submit" onclick={() => leaderboardService.submit(props.score)}>Submit Score</button>
+          <button class="col col-4 btn btn-primary" id="btn-score-submit" onclick={() => handleInitialSubmit()}>Submit Score</button>
         </div>
       </div>
       {/* <!-- BACK / REPLAY --> */}

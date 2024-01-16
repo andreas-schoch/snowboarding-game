@@ -78,6 +78,7 @@ module.exports = {
         // The idea was to use file-loader for anything where we only have one version of something
         // Some of these things below will be fetched from the server in future versions so it wouldn't make sense to hardcode them
         { from: 'game/assets/img/packed', to: 'assets/img/packed' },
+        { from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails' },
         { from: 'game/assets/audio/music', to: 'assets/audio/music' },
         { from: 'game/assets/levels/export', to: 'assets/levels/export' },
       ],
