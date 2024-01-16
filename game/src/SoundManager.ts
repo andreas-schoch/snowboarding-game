@@ -49,6 +49,7 @@ export class SoundManager {
         onComplete: async () => this.music.stop(),
       });
     });
+    
     GameInfo.observer.on(LEVEL_FINISH, (score: IScore, isCrashed: boolean) => {
       if (isCrashed) return;
       this.sfx_applause.play();
@@ -73,7 +74,6 @@ export class SoundManager {
       const volume = Math.max(Math.min(percentage, 1), 0.2);
       this.sfx_snowboardSlide.setVolume(volume);
     });
-
 
     GameInfo.observer.on(ENTER_IN_AIR, () => {
       this.scene.add.tween({

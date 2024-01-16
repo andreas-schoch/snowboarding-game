@@ -37,14 +37,17 @@ module.exports = {
       },
       {
         test: /\.css$/i,
+        include: path.join(__dirname, '../game/src/UI'),
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.png$/,
+        test: /\.(png|wav|mp3)$/,
         use: [
           {
             loader: 'file-loader',
-            options: {},
+            options: {
+              outputPath: 'assets',
+            },
           },
         ],
       },
@@ -68,15 +71,15 @@ module.exports = {
     new HtmlWebpackPlugin({ template: 'game/index.html' }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'game/assets/audio', to: 'assets/audio' },
-        { from: 'game/assets/img/packed', to: 'assets/img/packed' },
-        { from: 'game/assets/img/icons', to: 'assets/img/icons' },
-        { from: 'game/assets/img/controls', to: 'assets/img/controls' },
-        { from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails' },
-        { from: 'game/assets/levels/export', to: 'assets/levels/export' },
-        { from: 'game/assets/manifest', to: '' },
+        { from: 'manifest', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },
         { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: '' },
+        // There is a bit of a mix between making files available via file-loader and copy-webpack-plugin
+        // The idea was to use file-loader for anything where we only have one version of something
+        // Some of these things below will be fetched from the server in future versions so it wouldn't make sense to hardcode them
+        { from: 'game/assets/img/packed', to: 'assets/img/packed' },
+        { from: 'game/assets/audio/music', to: 'assets/audio/music' },
+        { from: 'game/assets/levels/export', to: 'assets/levels/export' },
       ],
     }),
   ],

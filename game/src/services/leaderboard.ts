@@ -1,11 +1,11 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
-import {env} from '../environment';
-import {calculateTotalScore} from '../util/calculateTotalScore';
-import {pseudoRandomId} from '../util/pseudoRandomId';
-import {IScore} from '../State';
+import { LeaderBoard as RexLeaderboard } from 'phaser3-rex-plugins/plugins/firebase-components';
+import { env } from '../environment';
+import { calculateTotalScore } from '../util/calculateTotalScore';
+import { pseudoRandomId } from '../util/pseudoRandomId';
+import { IScore } from '../State';
 import { Settings } from '../Settings';
 import { LevelKeys } from '../levels';
 
