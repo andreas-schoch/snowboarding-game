@@ -1,19 +1,19 @@
-declare module "*.png" {
-  const value: any;
+declare module '*.png' {
+  const value: string;
   export = value;
 }
 
-declare module "*.json" {
-  const value: any;
+declare module '*.json' {
+  const value: string;
   export = value;
 }
 
-declare module "*.wav" {
-  const value: any;
+declare module '*.wav' {
+  const value: string;
   export = value;
 }
 
-declare module "*.mp3" {
-  const value: any;
+declare module '*.mp3' {
+  const value: string;
   export = value;
 }

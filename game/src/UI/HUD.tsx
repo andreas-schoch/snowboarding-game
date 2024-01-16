@@ -1,9 +1,9 @@
 import './HUD.css';
-import { createSignal } from 'solid-js';
-import { GameInfo } from '../GameInfo';
-import { COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from '../eventTypes';
-import { calculateTotalScore } from '../util/calculateTotalScore';
-import { IScore } from '../State';
+import {createSignal} from 'solid-js';
+import {GameInfo} from '../GameInfo';
+import {IScore} from '../State';
+import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
+import {calculateTotalScore} from '../util/calculateTotalScore';
 
 export const HUD = () => {
   let comboLeewayCircle: HTMLElement;
@@ -35,7 +35,7 @@ export const HUD = () => {
       <div class="game-ui-item combo">
         <div class="label">Combo</div>
         <div class="value" id="hud-combo">{combo()}</div>
-        <div class="game-ui-item combo-leeway-circle" ref={el => comboLeewayCircle = el}></div>
+        <div class="game-ui-item combo-leeway-circle" ref={el => comboLeewayCircle = el} />
       </div>
       <div class="game-ui-item score">
         <div class="label">Score</div>

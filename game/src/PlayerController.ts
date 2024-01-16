@@ -1,11 +1,11 @@
-import GameScene from './scenes/GameScene';
-import { Character } from './Character';
-import { DEFAULT_WIDTH } from '.';
-import { ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE } from './eventTypes';
-import { IScore } from './State';
-import { GameInfo } from './GameInfo';
-import { Settings } from './Settings';
-import { PanelId } from './UI';
+import {Character} from './Character';
+import {GameInfo} from './GameInfo';
+import {Settings} from './Settings';
+import {IScore} from './State';
+import {PanelId} from './UI';
+import {ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from './eventTypes';
+import {GameScene} from './scenes/GameScene';
+import {DEFAULT_WIDTH} from '.';
 
 export class CharacterController {
   character: Character | null = null;
@@ -28,7 +28,7 @@ export class CharacterController {
     GameInfo.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
     GameInfo.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame('panel-how-to-play'));
     GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
-    GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)) });
+    GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)); });
 
     this.initKeyboardInputs();
   }
@@ -94,7 +94,7 @@ export class CharacterController {
     // slightly move camera towards the look at direction so player sees more of the upcoming terrain
     const velocityX = character.body.GetLinearVelocity().x * 10;
     const lerpFactor = 0.01;
-    const { followOffset } = this.scene.cameras.main;
+    const {followOffset} = this.scene.cameras.main;
     this.scene.cameras.main.setFollowOffset(followOffset.x + lerpFactor * (-velocityX - followOffset.x), 0);
   }
 

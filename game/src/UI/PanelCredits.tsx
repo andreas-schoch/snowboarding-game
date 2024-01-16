@@ -1,7 +1,7 @@
 import './PanelCredits.css';
-import { Component } from 'solid-js';
-import { BasePanel } from './BasePanel';
-import { PanelId } from '.';
+import {Component} from 'solid-js';
+import {BasePanel} from './BasePanel';
+import {PanelId} from '.';
 
 export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props => (
   <BasePanel id='panel-credits' title='Credits' scroll={true} backBtn={true} setPanel={props.setPanel} >
@@ -27,13 +27,13 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
       <span class="col col-6 credits-name">independent.nu</span>
       <a class="col col-3 credits-link" rel="noopener"
         href="https://opengameart.org/content/8-wet-squish-slurp-impacts" target="_blank">Source</a>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
     </span>
     <span class="row">
       <span class="col col-6 credits-name">Blender Foundation</span>
       <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/applause"
         target="_blank">Source</a>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
     </span>
 
     <span class="row credits-title"><span class="col col-12 flex-center">Texture Assets by</span></span>
@@ -48,42 +48,42 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
       <span class="col col-6">Lukas Mrazik</span>
       <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/space-background-7"
         target="_blank">Source</a>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
     </span>
 
     <span class="row">
       <span class="col col-6">pzUH</span>
       <a class="col col-3 credits-link" rel="noopener"
         href="https://opengameart.org/content/winter-platformer-game-tileset" target="_blank">Source</a>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
     </span>
 
     <span class="row">
       <span class="col col-6">Svgsilh</span>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
       <a class="col col-3 credits-link" rel="noopener" href="https://svgsilh.com" target="_blank">Website</a>
     </span>
     <span class="row">
       <span class="col col-6">Nicolae (Xelu) Berbece</span>
       <a class="col col-3 credits-link" rel="noopener"
         href="https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack" target="_blank">Source</a>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
     </span>
 
     <span class="row">
       <span class="col col-6">Andreas Schoch</span>
-      <span class="col col-3"></span>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
+      <span class="col col-3" />
     </span>
 
     <span class="row credits-title"><span class="col col-12 flex-center">Special Thanks to</span></span>
-    <span class="row" style="margin-top: 2rem">
+    <span class="row" style={{'margin-top':'2rem'}}>
       <span class="col col-6">Chris Campbell</span>
-      <span class="col col-3"></span>
+      <span class="col col-3" />
       <a class="col col-3 credits-link" rel="noopener" href="https://www.iforce2d.net/rube/"
         target="_blank">Website</a>
     </span>
-    <span class="row"><span class="col col-12" style="color: var(--grey-600)">For the awesome R.U.B.E Editor which
+    <span class="row"><span class="col col-12" style={{'color':'var(--grey-600)'}}>For the awesome R.U.B.E Editor which
       made it so much easier to create box2d levels.</span></span>
 
 

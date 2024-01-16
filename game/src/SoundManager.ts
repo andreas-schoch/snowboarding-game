@@ -1,8 +1,8 @@
-import { ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME } from "./eventTypes";
-import GameScene from "./scenes/GameScene";
-import { GameInfo } from "./GameInfo";
-import { Settings } from "./Settings";
-import { IScore } from "./State";
+import {GameInfo} from './GameInfo';
+import {Settings} from './Settings';
+import {IScore} from './State';
+import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME} from './eventTypes';
+import {GameScene} from './scenes/GameScene';
 
 export class SoundManager {
   private music: Phaser.Sound.BaseSound;
@@ -18,23 +18,23 @@ export class SoundManager {
   constructor(private scene: GameScene) {
     const musicVolume = Settings.volumeMusic() / 100;
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
-    this.music = this.scene.sound.add(randomMusicKey, { loop: true, volume: musicVolume * 0.5, rate: 1, delay: 1, detune: 0 });
+    this.music = this.scene.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 0.5, rate: 1, delay: 1, detune: 0});
     this.music.play();
     const sfxVolume = Settings.volumeSfx() / 100;
-    this.sfx_pickup_present = this.scene.sound.add('pickup_present', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
-    this.sfx_death = this.scene.sound.add('death', { detune: 700, rate: 1.25, volume: sfxVolume * 0.8 });
-    this.sfx_grunt = this.scene.sound.add('grunt', { detune: 400, rate: 1.25, volume: sfxVolume * 0.5 });
-    this.sfx_applause = this.scene.sound.add('applause', { detune: 0, rate: 1, volume: sfxVolume * 0.6 });
-    this.sfx_game_over_demon = this.scene.sound.add('game_over_demon', { detune: 0, rate: 0.95, volume: 0.05 });
-    this.sfx_snowboardSlide = this.scene.sound.add('snowboard_slide_04', { loop: true, volume: 0.03, rate: 1, delay: 0, detune: 1000 });
-    this.sfx_windNoise = this.scene.sound.add('wind', { loop: true, volume: 0.02, rate: 1, delay: 0, detune: 0 });
+    this.sfx_pickup_present = this.scene.sound.add('pickup_present', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
+    this.sfx_death = this.scene.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume * 0.8});
+    this.sfx_grunt = this.scene.sound.add('grunt', {detune: 400, rate: 1.25, volume: sfxVolume * 0.5});
+    this.sfx_applause = this.scene.sound.add('applause', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
+    this.sfx_game_over_demon = this.scene.sound.add('game_over_demon', {detune: 0, rate: 0.95, volume: 0.05});
+    this.sfx_snowboardSlide = this.scene.sound.add('snowboard_slide_04', {loop: true, volume: 0.03, rate: 1, delay: 0, detune: 1000});
+    this.sfx_windNoise = this.scene.sound.add('wind', {loop: true, volume: 0.02, rate: 1, delay: 0, detune: 0});
     this.sfx_snowboardSlide.play();
     this.sfx_windNoise.play();
     this.initListeners();
   }
 
   private initListeners() {
-    GameInfo.observer.on(PICKUP_PRESENT, total => this.sfx_pickup_present.play());
+    GameInfo.observer.on(PICKUP_PRESENT, () => this.sfx_pickup_present.play());
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
       if (id !== GameInfo.possessedCharacterId) return;
       this.sfx_death.play();
@@ -61,7 +61,7 @@ export class SoundManager {
       });
     });
 
-    GameInfo.observer.on(SURFACE_IMPACT, (impulse: number, type: string, tailOrNose: boolean, center: boolean, body: boolean) => {
+    GameInfo.observer.on(SURFACE_IMPACT, (impulse: number, type: string, tailOrNose: boolean, center: boolean) => {
       // TODO improve. Needs sound for other surface types (e.g. ice, snow, rock, etc.)
       const maxImpulse = 12;
       const target = center ? 0 : 1200;

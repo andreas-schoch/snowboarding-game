@@ -1,20 +1,20 @@
 import './base.css';
 import './index.css';
-import { Match, Switch, render } from 'solid-js/web';
-import { HUD } from './HUD';
-import { UnsupportedBrowserNotice } from './UnsupportedBrowserNotice';
-import { PanelPauseMenu } from './PanelPauseMenu';
-import { PanelSelectLevel } from './PanelSelectLevel';
-import { PanelLeaderboards } from './PanelLeaderboards';
-import { PanelHowToPlay } from './PanelHowToPlay';
-import { PanelSettings } from './PanelSettings';
-import { PanelCredits } from './PanelCredits';
-import { PanelYourScore } from './PanelYourScore';
-import { createSignal } from 'solid-js';
-import { GameInfo } from '../GameInfo';
-import { ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE } from '../eventTypes';
-import { IScore } from '../State';
-import { Settings } from '../Settings';
+import {createSignal, Match, Switch} from 'solid-js';
+import {render} from 'solid-js/web';
+import {GameInfo} from '../GameInfo';
+import {Settings} from '../Settings';
+import {IScore} from '../State';
+import {ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE} from '../eventTypes';
+import {HUD} from './HUD';
+import {PanelCredits} from './PanelCredits';
+import {PanelHowToPlay} from './PanelHowToPlay';
+import {PanelLeaderboards} from './PanelLeaderboards';
+import {PanelPauseMenu} from './PanelPauseMenu';
+import {PanelSelectLevel} from './PanelSelectLevel';
+import {PanelSettings} from './PanelSettings';
+import {PanelYourScore} from './PanelYourScore';
+import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 
 const SolidUI = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
@@ -30,7 +30,7 @@ const SolidUI = () => {
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
 
   return (
-    <div id="game-ui" style="display: none;">
+    <div id="game-ui" style={{'display':'none'}}>
       <HUD />
 
       <Switch fallback={<HUD />}>

@@ -1,13 +1,13 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { LeaderBoard as RexLeaderboard } from 'phaser3-rex-plugins/plugins/firebase-components';
-import { env } from '../environment';
-import { calculateTotalScore } from '../util/calculateTotalScore';
-import { pseudoRandomId } from '../util/pseudoRandomId';
-import { IScore } from '../State';
-import { Settings } from '../Settings';
-import { LevelKeys } from '../levels';
+import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
+import {Settings} from '../Settings';
+import {IScore} from '../State';
+import {env} from '../environment';
+import {LevelKeys} from '../levels';
+import {calculateTotalScore} from '../util/calculateTotalScore';
+import {pseudoRandomId} from '../util/pseudoRandomId';
 
 export class LeaderboardService {
   rexLeaderboard: RexLeaderboard; // TODO get rid. It works well but not 100% suited for this games needs (score stored as list of actions instead of plain value)
@@ -17,7 +17,7 @@ export class LeaderboardService {
 
   constructor() {
     if (env.FIREBASE_LEADERBOARD_ENABLED) {
-      // @ts-ignore workaround to support rex firebase plugin which seems to expect firebase to be loaded via script tag and be globally available
+      // @ts-expect-error workaround to support rex firebase plugin which seems to expect firebase to be loaded via script tag and be globally available
       window.firebase = firebase;
       const firebaseConfig = {
         apiKey: env.FIREBASE_API_KEY,
@@ -28,7 +28,9 @@ export class LeaderboardService {
         appId: env.FIREBASE_APP_ID,
         measurementId: env.FIREBASE_MESSAGING_SENDER_ID,
       };
-      const app = firebase.initializeApp(firebaseConfig);
+      // eslint-disable-next-line import/no-named-as-default-member
+      firebase.initializeApp(firebaseConfig);
+      // eslint-disable-next-line import/no-named-as-default-member
       this.auth = firebase.auth();
       this.auth.onAuthStateChanged(async user => {
         Settings.debug() && console.log('onAuthStateChanged user', user);

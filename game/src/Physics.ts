@@ -1,12 +1,12 @@
-import { b2, recordLeak } from './index';
-import GameScene from './scenes/GameScene';
-import { RubeImage, RubeScene } from './util/RUBE/RubeLoaderInterfaces';
-import { RubeLoader } from './util/RUBE/RubeLoader';
-import DebugDrawer from './DebugDraw';
-import { RubeSerializer } from './util/RUBE/RubeSerializer';
-import { B2_BEGIN_CONTACT, B2_POST_SOLVE } from './eventTypes';
-import { CharacterKeys, Settings } from './Settings';
-import { LevelKeys } from './levels';
+import {DebugDrawer} from './DebugDraw';
+import {CharacterKeys, Settings} from './Settings';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from './eventTypes';
+import {LevelKeys} from './levels';
+import {GameScene} from './scenes/GameScene';
+import {RubeLoader} from './util/RUBE/RubeLoader';
+import {RubeImage, RubeScene} from './util/RUBE/RubeLoaderInterfaces';
+import {RubeSerializer} from './util/RUBE/RubeSerializer';
+import {b2, recordLeak} from './index';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -33,7 +33,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   isPaused: boolean = false;
   private readonly debugDrawer: DebugDrawer;
   private readonly stepDeltaTime = 1 / 60;
-  private readonly stepConfig = { positionIterations: 12, velocityIterations: 12 };
+  private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
 
   constructor(private scene: GameScene, private config: { worldScale: number, gravityX: number, gravityY: number }) {
     super();
@@ -64,9 +64,9 @@ export class Physics extends Phaser.Events.EventEmitter {
       const image = userdata?.image;
       if (!image) continue;
       if (body.IsEnabled()) {
-        let pos = body.GetPosition();
+        const pos = body.GetPosition();
         image.setVisible(true);
-        image.x = pos.x * worldScale
+        image.x = pos.x * worldScale;
         image.y = -pos.y * worldScale;
         image.rotation = -body.GetAngle() + (image.data.get('angle_offset') || 0); // in radians;
       } else {
@@ -88,7 +88,7 @@ export class Physics extends Phaser.Events.EventEmitter {
   private initLoader() {
     const loader = new RubeLoader<Phaser.GameObjects.Image>(this.world);
     loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: { [key: string]: unknown }) => {
-      const { file, center, angle, aspectScale, scale, flip, renderOrder } = imageJson;
+      const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
       const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
 
       // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
@@ -120,7 +120,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       img.data.set('image-json', imageJson);
       img.data.set('angle_offset', -(angle || 0)); // need to preserve original angle it was expeorted with
       return img;
-    }
+    };
     return loader;
   }
 
@@ -138,7 +138,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const fixtureB: Box2D.b2Fixture = contact.GetFixtureB();
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
-      const data: IBeginContactEvent = { contact, fixtureA, fixtureB, bodyA, bodyB };
+      const data: IBeginContactEvent = {contact, fixtureA, fixtureB, bodyA, bodyB};
       this.emit(B2_BEGIN_CONTACT, data);
     };
     listeners.EndContact = () => null;
@@ -146,13 +146,13 @@ export class Physics extends Phaser.Events.EventEmitter {
     listeners.PostSolve = (contactPtr: number, impulsePtr: number) => {
       const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
       const impulse = b2.wrapPointer(impulsePtr, b2.b2ContactImpulse);
-      const fixtureA = contact.GetFixtureA()
-      const fixtureB = contact.GetFixtureB()
+      const fixtureA = contact.GetFixtureA();
+      const fixtureB = contact.GetFixtureB();
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
-      const data: IPostSolveEvent = { contact, impulse, fixtureA, fixtureB, bodyA, bodyB };
+      const data: IPostSolveEvent = {contact, impulse, fixtureA, fixtureB, bodyA, bodyB};
       this.emit(B2_POST_SOLVE, data);
-    }
+    };
     this.world.SetContactListener(listeners);
     // b2.destroy(listeners); // error when we destroy this so don't do it
   }

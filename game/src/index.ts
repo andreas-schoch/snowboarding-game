@@ -1,12 +1,11 @@
-import 'phaser'; // needs to be imported at least once
+import 'phaser';
 import Box2DFactory from 'box2d-wasm';
-import { simd } from "wasm-feature-detect";
-import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js'; // TODO get rid of this. Consider using firebase without plugin or switch to Couchbase as a backend
-
-import PreloadScene from './scenes/PreloadScene';
-import GameScene from './scenes/GameScene';
-import { LeaderboardService } from './services/leaderboard';
-import { Settings } from './Settings';
+import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
+import {simd} from 'wasm-feature-detect';
+import {Settings} from './Settings';
+import {GameScene} from './scenes/GameScene';
+import {PreloadScene} from './scenes/PreloadScene';
+import {LeaderboardService} from './services/leaderboard';
 
 // Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();
@@ -45,7 +44,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   scene: [PreloadScene, GameScene],
   plugins: {
     global: [
-      { key: 'rexFirebase', plugin: FirebasePlugin, start: true }
+      {key: 'rexFirebase', plugin: FirebasePlugin, start: true}
     ],
   },
 };
@@ -57,7 +56,7 @@ export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance
 window.onload = () => {
   simd().then(simdSupported => {
     // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
-    Box2DFactory({ locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm' }).then((_b2) => {
+    Box2DFactory({locateFile: () => simdSupported ? 'Box2D.simd.wasm' : 'Box2D.wasm'}).then((_b2) => {
       b2 = _b2;
       const LeakMitigator = new b2.LeakMitigator();
       freeLeaked = LeakMitigator.freeLeaked;

@@ -1,6 +1,6 @@
 import './UnsupportedBrowserNotice.css';
-import { Show } from "solid-js";
-import { game } from "..";
+import {Show} from 'solid-js';
+import {game} from '..';
 
 export const UnsupportedBrowserNotice = () => {
   const browser = game.device.browser;

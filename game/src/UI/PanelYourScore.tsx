@@ -1,14 +1,14 @@
 import './PanelYourScore.css';
-import { Component, createSignal, onMount } from 'solid-js';
-import { IScore } from '../State';
-import { LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService } from '..';
-import { calculateBestCombo, calculateTotalScore, calculateTrickScore } from '../util/calculateTotalScore';
-import { Settings } from '../Settings';
-import { pseudoRandomId } from '../util/pseudoRandomId';
-import { BasePanel } from './BasePanel';
-import { GameInfo } from '../GameInfo';
-import { RESTART_GAME } from '../eventTypes';
-import { PanelId } from '.';
+import {Component, createSignal, onMount} from 'solid-js';
+import {LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService} from '..';
+import {GameInfo} from '../GameInfo';
+import {Settings} from '../Settings';
+import {IScore} from '../State';
+import {RESTART_GAME} from '../eventTypes';
+import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../util/calculateTotalScore';
+import {pseudoRandomId} from '../util/pseudoRandomId';
+import {BasePanel} from './BasePanel';
+import {PanelId} from '.';
 
 export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score: IScore }> = props => {
   let submitScoreForm: HTMLElement;
@@ -47,7 +47,7 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
     if (currentUser.displayName) {
       // Score is submitted automatically for users that submitted a score once before from this device and browser.
       submitScoreForm?.classList.add('hidden');
-      leaderboardService.rexLeaderboard.setUser({ userID: currentUser.uid, userName: currentUser.displayName });
+      leaderboardService.rexLeaderboard.setUser({userID: currentUser.uid, userName: currentUser.displayName});
       await leaderboardService.submit(props.score);
       refreshRank();
     }
@@ -59,7 +59,7 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
     const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
     // Cannot trust plain value total on firebase nor the rank nor the order atm
     // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
-    const scores: IScore[] = fbScores.map(s => ({ ...s, total: calculateTotalScore(s as IScore, false) } as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
+    const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
     const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);
@@ -69,8 +69,8 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
     const name = usernameInput?.value;
     if (name && props.score && submitScoreForm) {
       if (leaderboardService.auth?.currentUser) {
-        leaderboardService.rexLeaderboard.setUser({ userID: leaderboardService.auth.currentUser.uid, userName: usernameInput.value });
-        await leaderboardService.auth.currentUser.updateProfile({ displayName: usernameInput.value });
+        leaderboardService.rexLeaderboard.setUser({userID: leaderboardService.auth.currentUser.uid, userName: usernameInput.value});
+        await leaderboardService.auth.currentUser.updateProfile({displayName: usernameInput.value});
       }
       Settings.set('userName', usernameInput.value);
       await leaderboardService.submit(props.score);
@@ -122,12 +122,13 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
           <div class="col col-8">
             <div class="form-group">
               <input id="username" class="form-text-input" name="username" value="" type="text" autofocus
-                // @ts-ignore
+                // @ts-expect-error oldschool hack for floating label
+                // eslint-disable-next-line solid/event-handlers
                 autocomplete="off" onkeyup="this.setAttribute('value', this.value)" ref={el => usernameInput = el} />
               <label for="username" class="floating-label">Your name</label>
             </div>
           </div>
-          <button class="col col-4 btn btn-primary" id="btn-score-submit" onclick={() => handleInitialSubmit()}>Submit Score</button>
+          <button class="col col-4 btn btn-primary" id="btn-score-submit" onClick={() => handleInitialSubmit()}>Submit Score</button>
         </div>
       </div>
       {/* <!-- BACK / REPLAY --> */}

@@ -1,19 +1,19 @@
 import './PanelLeaderboards.css';
-import { Component, For, Show, createSignal, onMount } from 'solid-js';
-import { BasePanel } from './BasePanel';
-import { leaderboardService } from '..';
-import { Settings } from '../Settings';
-import { IScore } from '../State';
-import { calculateTotalScore } from '../util/calculateTotalScore';
-import { PanelId } from '.';
+import {Component, For, Show, createSignal, onMount} from 'solid-js';
+import {leaderboardService} from '..';
+import {Settings} from '../Settings';
+import {IScore} from '../State';
+import {calculateTotalScore} from '../util/calculateTotalScore';
+import {BasePanel} from './BasePanel';
+import {PanelId} from '.';
 
 export const PanelLeaderboards: Component<{ setPanel: (id: PanelId) => void }> = props => {
   const [scores, setScores] = createSignal<IScore[]>([]);
 
   onMount(async () => {
-    let fbScores: IScore[] = leaderboardService.auth
+    const fbScores: IScore[] = leaderboardService.auth
       ? await leaderboardService.rexLeaderboard.loadFirstPage()
-      : Settings.localScores()[Settings.currentLevel()].map(s => ({ ...s, userName: Settings.username() }));
+      : Settings.localScores()[Settings.currentLevel()].map(s => ({...s, userName: Settings.username()}));
     setScores(fbScores);
   });
 

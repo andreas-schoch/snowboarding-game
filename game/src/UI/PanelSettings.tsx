@@ -1,8 +1,8 @@
 import './PanelSettings.css';
-import { Component, onMount } from 'solid-js';
-import { BasePanel } from './BasePanel';
-import { Settings } from '../Settings';
-import { PanelId } from '.';
+import {Component, onMount} from 'solid-js';
+import {Settings} from '../Settings';
+import {BasePanel} from './BasePanel';
+import {PanelId} from '.';
 
 export const PanelSettings: Component<{ setPanel: (id: PanelId) => void }> = props => {
   let submitForm: HTMLFormElement;
@@ -68,7 +68,7 @@ export const PanelSettings: Component<{ setPanel: (id: PanelId) => void }> = pro
             <div class="switch">
               <label>
                 <input type="checkbox" name="darkmodeEnabled" aria-label="darkmode toggle" checked={Settings.darkmodeEnabled()} />
-                <span class="lever"></span>
+                <span class="lever" />
               </label>
             </div>
           </span>

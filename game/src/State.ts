@@ -1,11 +1,11 @@
-import { IBeginContactEvent, IPostSolveEvent } from './Physics';
-import { BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION } from ".";
-import { Character } from './Character';
-import GameScene from './scenes/GameScene';
-import { B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE } from './eventTypes';
-import { Settings } from './Settings';
-import { LevelKeys } from './levels';
-import { GameInfo } from './GameInfo';
+import {Character} from './Character';
+import {GameInfo} from './GameInfo';
+import {IBeginContactEvent, IPostSolveEvent} from './Physics';
+import {Settings} from './Settings';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from './eventTypes';
+import {LevelKeys} from './levels';
+import {GameScene} from './scenes/GameScene';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION} from '.';
 
 export interface IBaseTrickScore {
   type: 'flip' | 'combo';
@@ -97,8 +97,8 @@ export class State {
       from: 0,
       to: 360,
       duration: 4000,
-      onUpdate: (tween) => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
-      onComplete: tween => this.handleComboComplete(),
+      onUpdate: tween => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
+      onComplete: () => this.handleComboComplete(),
     });
   }
 
@@ -134,13 +134,13 @@ export class State {
 
   private registerListeners() {
     const customProps = this.scene.b2Physics.loader.customProps;
-    this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({ bodyA, bodyB, fixtureA, fixtureB }: IBeginContactEvent) => {
+    this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
       if (!this.character.isPartOfMe(bodyA) && !this.character.isPartOfMe(bodyB)) return;
       if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
       else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
 
-    this.scene.b2Physics.on(B2_POST_SOLVE, ({ fixtureA, fixtureB, impulse }: IPostSolveEvent) => {
+    this.scene.b2Physics.on(B2_POST_SOLVE, ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
@@ -158,7 +158,7 @@ export class State {
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
-        this.trickScoreLog.push({ type: 'flip', flips: numFlips, timestamp: Date.now() });
+        this.trickScoreLog.push({type: 'flip', flips: numFlips, timestamp: Date.now()});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
@@ -191,24 +191,24 @@ export class State {
     if (this.isCrashed || this.isLevelFinished) return;
     const sensorType = this.scene.b2Physics.loader.customProps.get(fixture)?.phaserSensorType;
     switch (sensorType) {
-      case 'pickup_present': {
-        this.pickupsToProcess.add(body);
-        break;
-      }
-      case 'level_finish': {
-        this.scene.cameras.main.stopFollow();
-        this.handleComboComplete();
-        this.isLevelFinished = true;
-        this.resetComboLeewayTween();
-        const currentScore = this.getCurrentScore();
-        GameInfo.observer.emit(SCORE_CHANGE, currentScore);
-        GameInfo.observer.emit(LEVEL_FINISH, currentScore, this.isCrashed);
-        break;
-      }
-      case 'level_deathzone': {
-        this.setCrashed();
-        break;
-      }
+    case 'pickup_present': {
+      this.pickupsToProcess.add(body);
+      break;
+    }
+    case 'level_finish': {
+      this.scene.cameras.main.stopFollow();
+      this.handleComboComplete();
+      this.isLevelFinished = true;
+      this.resetComboLeewayTween();
+      const currentScore = this.getCurrentScore();
+      GameInfo.observer.emit(SCORE_CHANGE, currentScore);
+      GameInfo.observer.emit(LEVEL_FINISH, currentScore, this.isCrashed);
+      break;
+    }
+    case 'level_deathzone': {
+      this.setCrashed();
+      break;
+    }
     }
   }
 
@@ -306,7 +306,7 @@ export class State {
     if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({ type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now() });
+    this.trickScoreLog.push({type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now()});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
     GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);

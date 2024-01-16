@@ -1,14 +1,14 @@
 import './PanelHowToPlay.css';
-import ArrowUpKeyLight from '../../assets/img/controls/Arrow_Up_Key_Light.png';
+import {Component} from 'solid-js';
+import ArrowDownKeyLight from '../../assets/img/controls/Arrow_Down_Key_Light.png';
 import ArrowLeftKeyLight from '../../assets/img/controls/Arrow_Left_Key_Light.png';
 import ArrowRightKeyLight from '../../assets/img/controls/Arrow_Right_Key_Light.png';
-import ArrowDownKeyLight from '../../assets/img/controls/Arrow_Down_Key_Light.png';
-import SpaceKeyLight from '../../assets/img/controls/Space_Key_Light.png';
+import ArrowUpKeyLight from '../../assets/img/controls/Arrow_Up_Key_Light.png';
 import EscKeyLight from '../../assets/img/controls/Esc_Key_Light.png';
+import SpaceKeyLight from '../../assets/img/controls/Space_Key_Light.png';
 import ComboCounter from '../../assets/img/controls/combo_counter.png';
-import { BasePanel } from './BasePanel';
-import { Component } from 'solid-js';
-import { PanelId } from '.';
+import {BasePanel} from './BasePanel';
+import {PanelId} from '.';
 
 export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = props => (
   <BasePanel id='panel-how-to-play' title='How To Play' scroll={true} backBtn={true} setPanel={props.setPanel} >

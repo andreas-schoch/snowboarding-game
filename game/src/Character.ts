@@ -1,8 +1,8 @@
-import { b2 } from ".";
-import GameScene from "./scenes/GameScene";
-import { vec2Util } from "./util/RUBE/Vec2Math";
-import { Snowboard } from "./Snowboard";
-import { State } from "./State";
+import {Snowboard} from './Snowboard';
+import {State} from './State';
+import {GameScene} from './scenes/GameScene';
+import {vec2Util} from './util/RUBE/Vec2Math';
+import {b2} from '.';
 
 export class Character {
   static instances: Character[] = [];
@@ -31,7 +31,7 @@ export class Character {
   legLengthExtended: number;
   legLengthRelaxed: number;
   legLengthBent: number;
-  jumpCooldown: number // in num frames. Prevents player from jumping too quickly after a landing
+  jumpCooldown: number; // in num frames. Prevents player from jumping too quickly after a landing
   jumpForce: number;
   leanForce: number;
 
@@ -51,33 +51,33 @@ export class Character {
   }
 
   private resetLegs() {
-    const { legLengthRelaxed } = this;
+    const {legLengthRelaxed} = this;
     this.distanceLegLeft?.SetLength(legLengthRelaxed);
     this.distanceLegRight?.SetLength(legLengthRelaxed);
   }
 
   leanBackward() {
-    const { legLengthBent, legLengthExtended, leanForce } = this;
+    const {legLengthBent, legLengthExtended, leanForce} = this;
     this.distanceLegLeft?.SetLength(legLengthBent);
     this.distanceLegRight?.SetLength(legLengthExtended);
     this.body.ApplyAngularImpulse(leanForce, true);
   }
 
   leanForward() {
-    const { legLengthBent, legLengthExtended, leanForce } = this;
+    const {legLengthBent, legLengthExtended, leanForce} = this;
     this.distanceLegLeft?.SetLength(legLengthExtended);
     this.distanceLegRight?.SetLength(legLengthBent);
     this.body.ApplyAngularImpulse(-leanForce, true);
   }
 
   leanCenter() {
-    const { legLengthBent } = this;
+    const {legLengthBent} = this;
     this.distanceLegLeft?.SetLength(legLengthBent);
     this.distanceLegRight?.SetLength(legLengthBent);
   }
 
   leanUp() {
-    const { legLengthExtended } = this;
+    const {legLengthExtended} = this;
     this.distanceLegLeft?.SetLength(legLengthExtended);
     this.distanceLegRight?.SetLength(legLengthExtended);
   }
@@ -86,11 +86,11 @@ export class Character {
     // prevents player from jumping too quickly after a landing
     if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
 
-    const { isTailGrounded, isCenterGrounded, isNoseGrounded } = this.board;
+    const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
       const jumpVector = isCenterGrounded
-        ? vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), { x: 0, y: this.jumpForce * 1.2 })
-        : vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), { x: 0, y: this.jumpForce * 0.8 });
+        ? vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), {x: 0, y: this.jumpForce * 1.2})
+        : vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), {x: 0, y: this.jumpForce * 0.8});
 
       // const velocity = this.body.GetLinearVelocity();
       // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);
@@ -126,7 +126,6 @@ export class Character {
   }
 
   private updateLookAtDirection() {
-    const userDataMap = this.scene.b2Physics.loader.userData;
     const velocityDirection = vec2Util.Normalize(vec2Util.Clone(this.body.GetLinearVelocity()));
     const bodyXDirection = vec2Util.Normalize(this.body.GetWorldVector(this.FORWARD));
     // slow down change while in air to jitter while doing flips
@@ -168,25 +167,26 @@ export class Character {
       const body = this.scene.b2Physics.loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', partId, this.id)[0];
       if (!body) throw new Error(`Player character body not found: ${partId}`);
       return body;
-    }
+    };
 
-    const getJointByProp = (partId: CharacterPartId, type: any) => {
+    const getJointByProp = (partId: CharacterPartId, type: unknown) => {
       const joint = this.scene.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', partId, this.id)[0];
       if (!joint) throw new Error(`Player character joint not found: ${partId}`);
+      // @ts-expect-error type is unknown gives lint error but it's fine here
       return b2.castObject(joint, type);
-    }
+    };
 
     const getBodyImage = (body: Box2D.b2Body) => {
       const image = this.scene.b2Physics.loader.userData.get(body)!.image;
       if (!image) throw new Error(`Player character image not found: ${body}`);
       return image;
-    }
+    };
 
     const getBodyCustomProp = (body: Box2D.b2Body, prop: BodyCustomProps) => {
       const customProp = this.scene.b2Physics.loader.customProps.get(body)![prop];
       if (!customProp) throw new Error(`Player character custom prop not found: ${body}`);
       return customProp;
-    }
+    };
 
     // Bodies
     this.head = getBodyByProp('head');

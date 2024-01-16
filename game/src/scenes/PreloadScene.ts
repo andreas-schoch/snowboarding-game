@@ -1,17 +1,17 @@
-import { Settings } from '../Settings';
-import { BackgroundMusicKeys } from '../SoundManager';
-import { SCENE_GAME, SCENE_PRELOAD } from '../index';
-import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
+import sfxApplause from '../../assets/audio/sfx/applause/applause.mp3';
 import sfxDeath from '../../assets/audio/sfx/crash/death.mp3';
 import sfxGrunt from '../../assets/audio/sfx/crash_grunt/grunt.mp3';
-import sfxApplause from '../../assets/audio/sfx/applause/applause.mp3';
 import sfxGameOverDemon from '../../assets/audio/sfx/game_over_demon/game_over_demon.mp3';
 import sfxSnowboardSlide04 from '../../assets/audio/sfx/nox_sound/snowboard_slide_loop_04.mp3';
+import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
 import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
+import {Settings} from '../Settings';
+import {BackgroundMusicKeys} from '../SoundManager';
+import {SCENE_GAME, SCENE_PRELOAD} from '../index';
 
-export default class PreloadScene extends Phaser.Scene {
+export class PreloadScene extends Phaser.Scene {
   constructor() {
-    super({ key: SCENE_PRELOAD });
+    super({key: SCENE_PRELOAD});
   }
 
   preload() {
@@ -37,7 +37,7 @@ export default class PreloadScene extends Phaser.Scene {
   private loadImg() {
     const height = Settings.heightScaled();
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
-    const size = { 360: '640x360', 540: '960x540', 720: '1280x720' }[closestSize];
+    const size = {360: '640x360', 540: '960x540', 720: '1280x720'}[closestSize];
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
     const characterSkin = Settings.selectedCharacterSkin();

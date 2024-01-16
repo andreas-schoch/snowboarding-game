@@ -115,7 +115,7 @@ export const enum RubeJointType {
   e_frictionJoint,
   e_ropeJoint,
   e_motorJoint
-};
+}
 
 export const enumTypeToRubeJointType = {
   // [RubeJointType.e_unknownJoint]: 'unknown' as const,

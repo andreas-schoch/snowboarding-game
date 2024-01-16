@@ -1,8 +1,8 @@
-import { b2 } from ".";
+import {b2} from '.';
 
 const sizeOfB2Vec2 = Float32Array.BYTES_PER_ELEMENT * 2;
 
-export default class DebugDrawer {
+export class DebugDrawer {
   instance: Box2D.JSDraw = new b2.JSDraw();
 
   constructor(private graphics: Phaser.GameObjects.Graphics, private pixelsPerMeter: number, private lineWidth: number = 2) {
@@ -48,7 +48,7 @@ export default class DebugDrawer {
     
     this.instance.DrawSolidPolygon = (vertices_p: number, vertexCount: number, color_p: number) => this.instance.DrawPolygon(vertices_p, vertexCount, color_p);
     this.instance.DrawSolidCircle = (center_p: number, radius: number, axis_p: number, color_p: number) => this.instance.DrawCircle(center_p, radius, color_p);
-    this.instance.DrawTransform = (transform_p: number) => { };
+    this.instance.DrawTransform = () => { };
   }
 
 

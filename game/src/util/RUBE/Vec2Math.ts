@@ -1,5 +1,5 @@
-import { b2 } from "../..";
-import { XY } from "../../Terrain";
+import {b2} from '../..';
+import {XY} from '../../Terrain';
 
 export class vec2Util {
 

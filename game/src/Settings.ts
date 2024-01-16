@@ -1,6 +1,6 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from ".";
-import { LevelKeys } from "./levels";
-import { IScore } from "./State";
+import {IScore} from './State';
+import {LevelKeys} from './levels';
+import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
 export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';
 export type CharacterKeys = 'character_v01' | 'character_v02';

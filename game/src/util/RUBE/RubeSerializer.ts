@@ -1,10 +1,10 @@
-import { b2, recordLeak } from '../..';
-import { CustomPropOwner, RubeLoader } from './RubeLoader';
-import { RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty } from './RubeLoaderInterfaces';
-import { vec2Util } from './Vec2Math';
+import {b2, recordLeak} from '../..';
+import {CustomPropOwner, RubeLoader} from './RubeLoader';
+import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty} from './RubeLoaderInterfaces';
+import {vec2Util} from './Vec2Math';
 
 export class RubeSerializer<IMG = unknown> {
-  handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented') };
+  handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented'); };
 
   private indexByBody: Map<Box2D.b2Body, number> = new Map();
 
@@ -30,9 +30,9 @@ export class RubeSerializer<IMG = unknown> {
     };
 
     const jsonStr = JSON.stringify(scene);
-    const blob = new Blob([jsonStr], { type: "application/json" });
+    const blob = new Blob([jsonStr], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = 'rube scene test.json';
     a.click();
@@ -76,11 +76,11 @@ export class RubeSerializer<IMG = unknown> {
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
     for (const [name, value] of Object.entries(props)) {
-      if (typeof value === 'number' && Number.isInteger(value)) serialized.push({ name, int: value });
-      else if (typeof value === 'number') serialized.push({ name, float: value });
-      else if (typeof value === 'string') serialized.push({ name, string: value });
-      else if (typeof value === 'boolean') serialized.push({ name, bool: value });
-      else if (value instanceof b2.b2Vec2) serialized.push({ name, vec2: this.serializeVector(value) });
+      if (typeof value === 'number' && Number.isInteger(value)) serialized.push({name, int: value});
+      else if (typeof value === 'number') serialized.push({name, float: value});
+      else if (typeof value === 'string') serialized.push({name, string: value});
+      else if (typeof value === 'boolean') serialized.push({name, bool: value});
+      else if (value instanceof b2.b2Vec2) serialized.push({name, vec2: this.serializeVector(value)});
       else throw new Error('Custom property type not supported');
     }
     return serialized;
@@ -95,7 +95,7 @@ export class RubeSerializer<IMG = unknown> {
   }
 
   private serializeFixture(fixture: Box2D.b2Fixture): RubeFixture {
-    const { categoryBits, maskBits, groupIndex } = fixture.GetFilterData();
+    const {categoryBits, maskBits, groupIndex} = fixture.GetFilterData();
 
     const shape = fixture.GetShape();
     const shapeType = shape.GetType();
@@ -116,7 +116,7 @@ export class RubeSerializer<IMG = unknown> {
     if (shapeType === b2.b2Shape.e_polygon) serialized.polygon = this.serializePolygonShape(shape);
     if (shapeType === b2.b2Shape.e_chain) serialized.chain = this.serializeChainShape(shape);
 
-    return serialized
+    return serialized;
   }
 
   private serializeCircleShape(shape: Box2D.b2Shape): RubeFixtureShapeCircle {
@@ -130,20 +130,20 @@ export class RubeSerializer<IMG = unknown> {
   private serializePolygonShape(shape: Box2D.b2Shape): RubeFixtureShapePolygon {
     const polygonShape = b2.castObject(shape, b2.b2PolygonShape);
     const b2Verts = b2.reifyArray(b2.getPointer(polygonShape.m_vertices), polygonShape.m_count, 8, b2.b2Vec2);
-    const vertices: RubeVectorArray = { x: [], y: [] };
-    for (const { x, y } of b2Verts) {
+    const vertices: RubeVectorArray = {x: [], y: []};
+    for (const {x, y} of b2Verts) {
       vertices.x.push(x);
       vertices.y.push(y);
     }
-    return { vertices };
+    return {vertices};
   }
 
 
   private serializeChainShape(shape: Box2D.b2Shape): RubeFixtureShapeChain {
     const chainShape = b2.castObject(shape, b2.b2ChainShape);
     const b2Verts = b2.reifyArray(b2.getPointer(chainShape.m_vertices), chainShape.m_count, 8, b2.b2Vec2);
-    const vertices: RubeVectorArray = { x: [], y: [] };
-    for (const { x, y } of b2Verts.reverse()) {
+    const vertices: RubeVectorArray = {x: [], y: []};
+    for (const {x, y} of b2Verts.reverse()) {
       vertices.x.push(x);
       vertices.y.push(y);
     }
@@ -173,22 +173,22 @@ export class RubeSerializer<IMG = unknown> {
     if (stringType === undefined) throw new Error(`Unknown joint type: ${intType}`);
 
     switch (stringType) {
-      case 'revolute':
-        return this.serializeRevoluteJoint(joint);
-      case 'prismatic':
-        return this.serializePrismaticJoint(joint);
-      case 'distance':
-        return this.serializeDistanceJoint(joint);
-      case 'wheel':
-        return this.serializeWheelJoint(joint);
-      case 'weld':
-        return this.serializeWeldJoint(joint);
-      case 'friction':
-        return this.serializeFrictionJoint(joint);
-      case 'rope':
-        throw new Error('Rope joint serialization not implemented');
-      case 'motor':
-        return this.serializeMotorJoint(joint);
+    case 'revolute':
+      return this.serializeRevoluteJoint(joint);
+    case 'prismatic':
+      return this.serializePrismaticJoint(joint);
+    case 'distance':
+      return this.serializeDistanceJoint(joint);
+    case 'wheel':
+      return this.serializeWheelJoint(joint);
+    case 'weld':
+      return this.serializeWeldJoint(joint);
+    case 'friction':
+      return this.serializeFrictionJoint(joint);
+    case 'rope':
+      throw new Error('Rope joint serialization not implemented');
+    case 'motor':
+      return this.serializeMotorJoint(joint);
     }
   }
 
@@ -249,7 +249,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeDistanceJoint(joint: Box2D.b2Joint): RubeJoint {
     const distanceJoint = b2.castObject(joint, b2.b2DistanceJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointLinearFrequencyAndDampingRatio(distanceJoint);
+    const {frequencyHertz, dampingRatio} = this.getJointLinearFrequencyAndDampingRatio(distanceJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'distance',
@@ -261,7 +261,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeWheelJoint(joint: Box2D.b2Joint): RubeJoint {
     const wheelJoint = b2.castObject(joint, b2.b2WheelJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointLinearFrequencyAndDampingRatio(wheelJoint);
+    const {frequencyHertz, dampingRatio} = this.getJointLinearFrequencyAndDampingRatio(wheelJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'wheel',
@@ -276,7 +276,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeWeldJoint(joint: Box2D.b2Joint): RubeJoint {
     const weldJoint = b2.castObject(joint, b2.b2WeldJoint);
-    const { frequencyHertz, dampingRatio } = this.getJointAngularFrequencyAndDampingRatio(weldJoint);
+    const {frequencyHertz, dampingRatio} = this.getJointAngularFrequencyAndDampingRatio(weldJoint);
     return {
       ...this.serializeJointBase(joint),
       type: 'weld',
@@ -321,7 +321,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeVector(vec: Box2D.b2Vec2): RubeVector {
     if (vec.x === 0 && vec.y === 0) return 0;
-    return { x: vec.x, y: vec.y };
+    return {x: vec.x, y: vec.y};
   }
   private getJointLinearFrequencyAndDampingRatio(joint: Box2D.b2DistanceJoint | Box2D.b2WheelJoint) {
     // Reverse b2LinearStiffness() formula. from https://github.com/erincatto/box2d/blob/main/src/dynamics/b2_joint.cpp#L40
@@ -339,7 +339,7 @@ export class RubeSerializer<IMG = unknown> {
     const frequencyHertz = omega / (2 * Math.PI);
     const dampingRatio = damping / (2 * effectiveMass * omega);
 
-    return { frequencyHertz, dampingRatio };
+    return {frequencyHertz, dampingRatio};
   }
 
   private getJointAngularFrequencyAndDampingRatio(joint: Box2D.b2WeldJoint): { frequencyHertz: number, dampingRatio: number } {
@@ -356,7 +356,7 @@ export class RubeSerializer<IMG = unknown> {
     const frequencyHertz = omega / (2 * Math.PI);
     const dampingRatio = damping / (2 * inertia * omega);
 
-    return { frequencyHertz, dampingRatio };
+    return {frequencyHertz, dampingRatio};
   }
 
 }

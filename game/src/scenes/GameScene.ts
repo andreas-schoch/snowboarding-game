@@ -1,23 +1,22 @@
-import Terrain from '../Terrain';
-import { Physics } from '../Physics';
-import { freeLeaked, leaderboardService } from '../index';
-import { SCENE_GAME } from "..";
-import { CharacterController } from '../PlayerController';
-import { Character } from '../Character';
-import { RESTART_GAME } from '../eventTypes';
-import { SoundManager } from '../SoundManager';
-import { Backdrop } from '../Backdrop';
-import { Settings } from '../Settings';
-import { GameInfo } from '../GameInfo';
-import { initSolidUI } from '../UI';
+import {SCENE_GAME , freeLeaked, leaderboardService} from '..';
+import {Backdrop} from '../Backdrop';
+import {Character} from '../Character';
+import {GameInfo} from '../GameInfo';
+import {Physics} from '../Physics';
+import {CharacterController} from '../PlayerController';
+import {Settings} from '../Settings';
+import {SoundManager} from '../SoundManager';
+import {Terrain} from '../Terrain';
+import {initSolidUI} from '../UI';
+import {RESTART_GAME} from '../eventTypes';
 
-export default class GameScene extends Phaser.Scene {
+export class GameScene extends Phaser.Scene {
   b2Physics: Physics;
   private playerController: CharacterController;
   private backdrop: Backdrop;
 
   constructor() {
-    super({ key: SCENE_GAME });
+    super({key: SCENE_GAME});
   }
 
   update() {
@@ -43,7 +42,7 @@ export default class GameScene extends Phaser.Scene {
 
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
-    this.b2Physics = new Physics(this, { worldScale: 40, gravityX: 0, gravityY: -10 });
+    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10});
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
     this.b2Physics.load(Settings.currentLevel());
@@ -56,7 +55,7 @@ export default class GameScene extends Phaser.Scene {
       this.b2Physics.loader.cleanup();
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';
-      GameInfo.score = { finishedLevel: false, level: Settings.currentLevel(), distance: 0, coins: 0, crashed: false, trickScore: 0, trickScoreLog: [] };
+      GameInfo.score = {finishedLevel: false, level: Settings.currentLevel(), distance: 0, coins: 0, crashed: false, trickScore: 0, trickScoreLog: []};
       freeLeaked();
       this.scene.restart();
     });

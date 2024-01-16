@@ -4,6 +4,8 @@
   "description": "A physics based snowboarding game.",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint game",
+    "lint-fix": "eslint --fix game",
     "start": "webpack serve --config webpack/webpack.dev.js",
     "build": "rimraf dist && webpack --config webpack/webpack.prod.js",
     "bundle": "npm run build",
@@ -35,6 +37,8 @@
     "css-loader": "^6.9.0",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.56.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "npm:eslint-plugin-i@^2.29.1",
     "eslint-plugin-solid": "^0.13.1",
     "file-loader": "^6.2.0",
     "gh-pages": "^6.1.0",

@@ -1,11 +1,11 @@
-import { b2, recordLeak } from './index';
-import GameScene from './scenes/GameScene';
-import { Settings } from './Settings';
+import {Settings} from './Settings';
+import {GameScene} from './scenes/GameScene';
+import {b2, recordLeak} from './index';
 
 
 export type XY = { x: number, y: number };
 
-export default class Terrain {
+export class Terrain {
 
   constructor(private scene: GameScene) { }
 
@@ -17,14 +17,14 @@ export default class Terrain {
     for (const body of terrainBodies) {
       const bodyPos = body.GetPosition();
       // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
-      let edgeShape = new b2.b2EdgeShape();
+      const edgeShape = new b2.b2EdgeShape();
       for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
         const shape = b2.castObject(fixture.GetShape(), b2.b2ChainShape);
         const chunkPoints: XY[] = [];
         for (let i = 0; i < shape.get_m_count() - 1; i++) {
           shape.GetChildEdge(edgeShape, i);
-          const vert1 = { x: (edgeShape.m_vertex1.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex1.y + bodyPos.y) * scale };
-          const vert2 = { x: (edgeShape.m_vertex2.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex2.y + bodyPos.y) * scale };
+          const vert1 = {x: (edgeShape.m_vertex1.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex1.y + bodyPos.y) * scale};
+          const vert2 = {x: (edgeShape.m_vertex2.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex2.y + bodyPos.y) * scale};
           chunkPoints.push(vert1, vert2);
         }
         this.drawChunk(chunkPoints);
@@ -36,8 +36,8 @@ export default class Terrain {
     const minX = Math.min(...pointsWorld.map(point => point.x));
     const minY = Math.min(...pointsWorld.map(point => point.y));
     const graphics = this.scene.add.graphics().setDepth(10);
-    graphics.setPosition(minX, minY)
-    const pointsLocal: XY[] = pointsWorld.map(point => ({ x: point.x - minX, y: point.y - minY }));
+    graphics.setPosition(minX, minY);
+    const pointsLocal: XY[] = pointsWorld.map(point => ({x: point.x - minX, y: point.y - minY}));
     graphics.fillStyle(Settings.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);
     graphics.fillPoints(pointsLocal, true, false);
     // The terrain within RUBE is represented as chunks of non-loopped edge fixtures

@@ -1,11 +1,11 @@
-import { IPostSolveEvent } from './Physics';
-import GameScene from './scenes/GameScene';
-import { b2 } from './index';
-import { vec2Util } from './util/RUBE/Vec2Math';
-import { Character, CharacterPartId } from './Character';
-import { B2_POST_SOLVE, SURFACE_IMPACT } from './eventTypes';
-import { Settings } from './Settings';
-import { GameInfo } from './GameInfo';
+import {Character} from './Character';
+import {GameInfo} from './GameInfo';
+import {IPostSolveEvent} from './Physics';
+import {Settings} from './Settings';
+import {B2_POST_SOLVE, SURFACE_IMPACT} from './eventTypes';
+import {GameScene} from './scenes/GameScene';
+import {vec2Util} from './util/RUBE/Vec2Math';
+import {b2} from './index';
 
 interface IRayCastResult {
   hit: boolean;
@@ -39,8 +39,8 @@ export class Snowboard {
     this.initRays(this.scene.b2Physics.worldScale / 4);
     this.particles = this.initParticles();
 
-    const { worldScale, loader: { customProps: customPropertiesMapMap } } = this.scene.b2Physics;
-    this.scene.b2Physics.on(B2_POST_SOLVE, ({ contact, impulse, bodyA, bodyB }: IPostSolveEvent) => {
+    const {worldScale, loader: {customProps: customPropertiesMapMap}} = this.scene.b2Physics;
+    this.scene.b2Physics.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
       const propsBA = customPropertiesMapMap.get(bodyA);
       const propsBB = customPropertiesMapMap.get(bodyB);
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
@@ -95,7 +95,7 @@ export class Snowboard {
   }
 
   private initRays(rayLength: number) {
-    const { loader } = this.scene.b2Physics;
+    const {loader} = this.scene.b2Physics;
     const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', 'boardSegment', this.character.id);
     if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
     segmentBodies.sort((a, b) => {
@@ -106,14 +106,14 @@ export class Snowboard {
 
     const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.scene.b2Physics.worldScale);
     for (const body of segmentBodies) {
-      const groundRayResult: IRayCastResult = { hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1 };
+      const groundRayResult: IRayCastResult = {hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1};
 
       const groundRayCallback = new b2.JSRayCastCallback();
       groundRayCallback.ReportFixture = (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number) => {
         const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
         if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
-        const { x: pointX, y: pointY } = b2.wrapPointer(pointPtr, b2.b2Vec2);
-        const { x: normalX, y: normalY } = b2.wrapPointer(normalPtr, b2.b2Vec2);
+        const {x: pointX, y: pointY} = b2.wrapPointer(pointPtr, b2.b2Vec2);
+        const {x: normalX, y: normalY} = b2.wrapPointer(normalPtr, b2.b2Vec2);
         groundRayResult.hit = true;
         groundRayResult.point.Set(pointX, pointY);
         groundRayResult.normal.Set(normalX, normalY);
@@ -122,7 +122,7 @@ export class Snowboard {
         return fraction;
       };
 
-      this.segments.push({ body, groundRayDirection, groundRayResult, groundRayCallback });
+      this.segments.push({body, groundRayDirection, groundRayResult, groundRayCallback});
     }
   }
 
@@ -145,11 +145,11 @@ export class Snowboard {
       maxParticles: 0,
       timeScale: 1,
       alpha: 1,
-      angle: { min: 0, max: 360 },
-      lifespan: { min: 600, max: 1250 },
-      quantity: { min: 2, max: 10 },
-      scale: { ease: "Linear", min: 0.1, max: 0.25 },
-      speed: { min: 25, max: 100 },
+      angle: {min: 0, max: 360},
+      lifespan: {min: 600, max: 1250},
+      quantity: {min: 2, max: 10},
+      scale: {ease: 'Linear', min: 0.1, max: 0.25},
+      speed: {min: 25, max: 100},
     }).setDepth(-10);
 
     // if (DARKMODE_ENABLED) particles.setPipeline('Light2D');

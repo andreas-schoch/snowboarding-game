@@ -4,10 +4,10 @@
 * Based on example loader by Chris Campbell (creator of RUBE editor): https://github.com/iforce2d/b2dJson/blob/master/js/loadrube.js
 */
 
-import { b2, recordLeak } from '../..';
-import { pseudoRandomId } from '../pseudoRandomId';
-import { RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty } from './RubeLoaderInterfaces';
-import { vec2Util } from './Vec2Math';
+import {b2, recordLeak} from '../..';
+import {pseudoRandomId} from '../pseudoRandomId';
+import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
+import {vec2Util} from './Vec2Math';
 
 export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
 
@@ -37,10 +37,10 @@ export class RubeLoader<IMG = unknown> {
     this.loadingImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
 
     const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
-    if (success) console.log(`R.U.B.E. scene loaded successfully`, this.loadingBodies, this.loadingJoints, this.loadingImages);
-    else console.error(`R.U.B.E. scene failed to load fully`, this.loadingBodies, this.loadingJoints, this.loadingImages);
+    if (success) console.log('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
+    else console.error('R.U.B.E. scene failed to load fully', this.loadingBodies, this.loadingJoints, this.loadingImages);
     const id = pseudoRandomId();
-    this.loadedScenes.set(id, { bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id });
+    this.loadedScenes.set(id, {bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id});
     this.loadingBodies = [];
     this.loadingJoints = [];
     this.loadingImages = [];
@@ -75,7 +75,6 @@ export class RubeLoader<IMG = unknown> {
 
   getJointsByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Joint[] {
     const joints: Box2D.b2Joint[] = [];
-    type j = Box2D.b2Joint | null;
     for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.joints.includes(joint)) continue; // TODO turn into set
       const props = this.customProps.get(joint);
@@ -128,7 +127,7 @@ export class RubeLoader<IMG = unknown> {
     b2.destroy(massData);
     b2.destroy(bd);
 
-    this.userData.set(body, { name: bodyJson.name || '', image: null });
+    this.userData.set(body, {name: bodyJson.name || '', image: null});
     this.customProps.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
     (bodyJson.fixture || []).forEach(fixtureJson => this.loadFixture(body, fixtureJson));
     return body;
@@ -173,92 +172,92 @@ export class RubeLoader<IMG = unknown> {
 
     let joint: Box2D.b2Joint;
     switch (jointJson.type) {
-      case 'revolute': {
-        const jd = new b2.b2RevoluteJointDef();
-        jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_referenceAngle(jointJson.refAngle || 0);
-        jd.set_enableLimit(Boolean(jointJson.enableLimit));
-        jd.set_lowerAngle(jointJson.lowerLimit || 0);
-        jd.set_upperAngle(jointJson.upperLimit || 0);
-        jd.set_enableMotor(Boolean(jointJson.enableMotor));
-        jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
-        jd.set_motorSpeed(jointJson.motorSpeed || 0);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      // case 'rope': {
-      //   // throw new Error('Rope joint not implemented');
-      // }
-      case 'distance': {
-        const jd = new b2.b2DistanceJointDef();
-        jd.length = (jointJson.length || 0);
-        jd.Initialize(
-          bodyA,
-          bodyB,
-          vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()),
-          vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorB), bodyB.GetAngle()), bodyB.GetPosition()),
-        );
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_length(jointJson.length || 0);
-        jd.set_minLength(0);
-        jd.set_maxLength(jd.length * 2); // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
-        this.setLinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      case 'prismatic': {
-        const jd = new b2.b2PrismaticJointDef();
-        jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()), this.rubeToVec2(jointJson.localAxisA));
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_referenceAngle(jointJson.refAngle || 0);
-        jd.set_enableLimit(Boolean(jointJson.enableLimit));
-        jd.set_lowerTranslation(jointJson.lowerLimit || 0);
-        jd.set_upperTranslation(jointJson.upperLimit || 0);
-        jd.set_enableLimit(Boolean(jointJson.enableMotor));
-        jd.set_maxMotorForce(jointJson.maxMotorForce || 0);
-        jd.set_motorSpeed(jointJson.motorSpeed || 0);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      case 'wheel': {
-        const jd = new b2.b2WheelJointDef();
-        // TODO anchorA is 0 and B is XY in world space, which should be used?
-        jd.Initialize(bodyA, bodyB, this.rubeToVec2(jointJson.anchorB), this.rubeToVec2(jointJson.localAxisA));
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_enableMotor(Boolean(jointJson.enableMotor));
-        jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
-        jd.set_motorSpeed(jointJson.motorSpeed || 0);
-        this.setLinearStiffness(jd, jointJson.springFrequency || 0, jointJson.springDampingRatio || 0, jd.bodyA, jd.bodyB);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      case 'friction': {
-        const jd = new b2.b2FrictionJointDef();
-        jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_maxForce(jointJson.maxForce || 0);
-        jd.set_maxTorque(jointJson.maxTorque || 0);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      case 'weld': {
-        const jd = new b2.b2WeldJointDef();
-        jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-        jd.set_collideConnected(Boolean(jointJson.collideConnected));
-        jd.set_referenceAngle(jointJson.refAngle || 0);
-        this.setAngularStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
-        joint = this.world.CreateJoint(jd);
-        b2.destroy(jd);
-        break;
-      }
-      default:
-        throw new Error('Unsupported joint type: ' + jointJson.type);
+    case 'revolute': {
+      const jd = new b2.b2RevoluteJointDef();
+      jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_referenceAngle(jointJson.refAngle || 0);
+      jd.set_enableLimit(Boolean(jointJson.enableLimit));
+      jd.set_lowerAngle(jointJson.lowerLimit || 0);
+      jd.set_upperAngle(jointJson.upperLimit || 0);
+      jd.set_enableMotor(Boolean(jointJson.enableMotor));
+      jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
+      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    // case 'rope': {
+    //   // throw new Error('Rope joint not implemented');
+    // }
+    case 'distance': {
+      const jd = new b2.b2DistanceJointDef();
+      jd.length = (jointJson.length || 0);
+      jd.Initialize(
+        bodyA,
+        bodyB,
+        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()),
+        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorB), bodyB.GetAngle()), bodyB.GetPosition()),
+      );
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_length(jointJson.length || 0);
+      jd.set_minLength(0);
+      jd.set_maxLength(jd.length * 2); // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
+      this.setLinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    case 'prismatic': {
+      const jd = new b2.b2PrismaticJointDef();
+      jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()), this.rubeToVec2(jointJson.localAxisA));
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_referenceAngle(jointJson.refAngle || 0);
+      jd.set_enableLimit(Boolean(jointJson.enableLimit));
+      jd.set_lowerTranslation(jointJson.lowerLimit || 0);
+      jd.set_upperTranslation(jointJson.upperLimit || 0);
+      jd.set_enableLimit(Boolean(jointJson.enableMotor));
+      jd.set_maxMotorForce(jointJson.maxMotorForce || 0);
+      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    case 'wheel': {
+      const jd = new b2.b2WheelJointDef();
+      // TODO anchorA is 0 and B is XY in world space, which should be used?
+      jd.Initialize(bodyA, bodyB, this.rubeToVec2(jointJson.anchorB), this.rubeToVec2(jointJson.localAxisA));
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_enableMotor(Boolean(jointJson.enableMotor));
+      jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
+      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      this.setLinearStiffness(jd, jointJson.springFrequency || 0, jointJson.springDampingRatio || 0, jd.bodyA, jd.bodyB);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    case 'friction': {
+      const jd = new b2.b2FrictionJointDef();
+      jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_maxForce(jointJson.maxForce || 0);
+      jd.set_maxTorque(jointJson.maxTorque || 0);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    case 'weld': {
+      const jd = new b2.b2WeldJointDef();
+      jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
+      jd.set_collideConnected(Boolean(jointJson.collideConnected));
+      jd.set_referenceAngle(jointJson.refAngle || 0);
+      this.setAngularStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
+      joint = this.world.CreateJoint(jd);
+      b2.destroy(jd);
+      break;
+    }
+    default:
+      throw new Error('Unsupported joint type: ' + jointJson.type);
     }
 
     this.customProps.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
@@ -286,7 +285,7 @@ export class RubeLoader<IMG = unknown> {
   }
 
   private loadImage(imageJson: RubeImage): IMG | null {
-    const { body, customProperties } = imageJson;
+    const {body, customProperties} = imageJson;
     const bodyObj = this.loadingBodies[body];
     const customProps = this.customPropertiesArrayToMap(customProperties || []);
     const img = this.handleLoadImage(imageJson, bodyObj, customProps);
@@ -335,7 +334,7 @@ export class RubeLoader<IMG = unknown> {
     if (!polygon) throw new Error('fixtureJson.polygon is missing');
     const vertices = this.pointsFromSeparatedVertices(polygon.vertices).reverse();
 
-    const { _malloc, b2Vec2, b2PolygonShape, HEAPF32, wrapPointer } = b2;
+    const {_malloc, b2Vec2, b2PolygonShape, HEAPF32, wrapPointer} = b2;
     const shape = new b2PolygonShape();
     const buffer = _malloc(vertices.length * 8);
     let offset = 0;
@@ -356,7 +355,7 @@ export class RubeLoader<IMG = unknown> {
     const vertices = this.pointsFromSeparatedVertices(chain.vertices).reverse();
     const closedLoop = Boolean(chain.hasNextVertex && chain.hasPrevVertex && chain.nextVertex && chain.prevVertex);
 
-    const { _malloc, b2Vec2, b2ChainShape, HEAPF32, wrapPointer } = b2;
+    const {_malloc, b2Vec2, b2ChainShape, HEAPF32, wrapPointer} = b2;
     const shape = new b2ChainShape();
     const buffer = _malloc(vertices.length * 8);
     let offset = 0;
