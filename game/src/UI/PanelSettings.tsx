@@ -22,13 +22,13 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
   };
 
   return (
-    <BasePanel id='panel-settings' title='Settings' scroll={false} backBtn={true} setPanel={props.setPanel} ref={el => submitForm = el}>
+    <BasePanel id='panel-settings' title='Settings' scroll={false} backBtn={true} setPanel={props.setPanel}>
 
       <form name="settings-form" id="settings-form" ref={el => submitForm = el}>
         {/* <!-- RESOLUTION --> */}
         <div class="row">
           <span class="col col-3 settings-name">Resolution</span>
-          <span class="col col-9 settings-resolution-radios">
+          <span class="col col-9 flex justify-between">
             <label>
               <input class="with-gap" name="resolution" type="radio" value="0.5" />
               <span>640x360</span>

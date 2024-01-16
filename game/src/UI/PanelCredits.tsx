@@ -1,92 +1,34 @@
 import './PanelCredits.css';
-import {Component} from 'solid-js';
+import {Component, ParentComponent} from 'solid-js';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
 export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props => (
   <BasePanel id='panel-credits' title='Credits' scroll={true} backBtn={true} setPanel={props.setPanel} >
-    <span class="row credits-title"><span class="col col-12 flex-center">Developed by</span></span>
-    <span class="row">
-      <span class="col col-6 credits-name">Andreas Schoch</span>
-      <a class="col col-3 credits-link" rel="noopener" href="https://github.com/andreas-schoch"
-        target="_blank">Github</a>
-      <a class="col col-3 credits-link" rel="noopener" href="https://www.linkedin.com/in/andreas-schoch/"
-        target="_blank">Linkedin</a>
-    </span>
+    <CreditsTitle>Developed by</CreditsTitle>
+    <CreditsEntry name='Andreas Schoch' source='https://github.com/andreas-schoch/snowboarding-game' website='https://www.linkedin.com/in/andreas-schoch/' />
 
-    <span class="row credits-title"><span class="col col-12 flex-center">Music by</span></span>
-    <span class="row">
-      <span class="col col-6 credits-name">Kevin MacLeod</span>
-      <a class="col col-3 credits-link" rel="noopener" href="https://incompetech.com/music/royalty-free/music.html"
-        target="_blank">Source</a>
-      <a class="col col-3 credits-link" rel="noopener" href="https://incompetech.com" target="_blank">Website</a>
-    </span>
+    <CreditsTitle>Music by</CreditsTitle>
+    <CreditsEntry name='Kevin MacLeod' source='https://incompetech.com/music/royalty-free/music.html' website='https://incompetech.com' />
 
-    <span class="row credits-title"><span class="col col-12 flex-center">Soundeffects by</span></span>
-    <span class="row">
-      <span class="col col-6 credits-name">independent.nu</span>
-      <a class="col col-3 credits-link" rel="noopener"
-        href="https://opengameart.org/content/8-wet-squish-slurp-impacts" target="_blank">Source</a>
-      <span class="col col-3" />
-    </span>
-    <span class="row">
-      <span class="col col-6 credits-name">Blender Foundation</span>
-      <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/applause"
-        target="_blank">Source</a>
-      <span class="col col-3" />
-    </span>
+    <CreditsTitle>Soundeffects by</CreditsTitle>
+    <CreditsEntry name='independent.nu' source='https://opengameart.org/content/8-wet-squish-slurp-impacts' />
+    <CreditsEntry name='Blender Foundation' source='https://opengameart.org/content/applause' />
 
-    <span class="row credits-title"><span class="col col-12 flex-center">Texture Assets by</span></span>
-    <span class="row">
-      <span class="col col-6">Tokegameart</span>
-      <a class="col col-3 credits-link" rel="noopener" href="https://tokegameart.net/item/santa-claus/"
-        target="_blank">Source</a>
-      <a class="col col-3 credits-link" rel="noopener" href="https://tokegameart.net" target="_blank">Website</a>
-    </span>
+    <CreditsTitle>Texture Assets by</CreditsTitle>
+    <CreditsEntry name='Tokegameart' source='https://tokegameart.net/item/santa-claus/' website='https://tokegameart.net' />
+    <CreditsEntry name='Lukas Mrazik' source='https://opengameart.org/content/space-background-7' />
+    <CreditsEntry name='pzUH' source='https://opengameart.org/content/winter-platformer-game-tileset' />
+    <CreditsEntry name='Svgsilh' website='https://svgsilh.com' />
+    <CreditsEntry name='Nicolae (Xelu) Berbece' source='https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack' />
+    <CreditsEntry name='Andreas Schoch' />
 
-    <span class="row">
-      <span class="col col-6">Lukas Mrazik</span>
-      <a class="col col-3 credits-link" rel="noopener" href="https://opengameart.org/content/space-background-7"
-        target="_blank">Source</a>
-      <span class="col col-3" />
-    </span>
-
-    <span class="row">
-      <span class="col col-6">pzUH</span>
-      <a class="col col-3 credits-link" rel="noopener"
-        href="https://opengameart.org/content/winter-platformer-game-tileset" target="_blank">Source</a>
-      <span class="col col-3" />
-    </span>
-
-    <span class="row">
-      <span class="col col-6">Svgsilh</span>
-      <span class="col col-3" />
-      <a class="col col-3 credits-link" rel="noopener" href="https://svgsilh.com" target="_blank">Website</a>
-    </span>
-    <span class="row">
-      <span class="col col-6">Nicolae (Xelu) Berbece</span>
-      <a class="col col-3 credits-link" rel="noopener"
-        href="https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack" target="_blank">Source</a>
-      <span class="col col-3" />
-    </span>
-
-    <span class="row">
-      <span class="col col-6">Andreas Schoch</span>
-      <span class="col col-3" />
-      <span class="col col-3" />
-    </span>
-
-    <span class="row credits-title"><span class="col col-12 flex-center">Special Thanks to</span></span>
-    <span class="row" style={{'margin-top':'2rem'}}>
-      <span class="col col-6">Chris Campbell</span>
-      <span class="col col-3" />
-      <a class="col col-3 credits-link" rel="noopener" href="https://www.iforce2d.net/rube/"
-        target="_blank">Website</a>
-    </span>
+    <CreditsTitle>Special Thanks to</CreditsTitle>
+    <CreditsEntry name='Chris Campbell' website='https://www.iforce2d.net/rube/' />
     <span class="row"><span class="col col-12" style={{color:'var(--grey-600)'}}>For the awesome R.U.B.E Editor which
       made it so much easier to create box2d levels.</span></span>
 
-    <span class="row credits-title"><span class="col col-12 flex-center">About the game</span></span>
+    <CreditsTitle>About the game</CreditsTitle>
     <span class="row">
       <span class="col col-12">
         <span>The game is released under the open-source GPL-3.0 license (initially MIT): </span>
@@ -105,4 +47,16 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
     <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a
       href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
   </BasePanel>
+);
+
+const CreditsTitle: ParentComponent = props => (
+  <span class="row font-[bolder] text-base text-[color:var(--title-color)"><span class="col col-12 flex-center">{props.children}</span></span>
+);
+
+const CreditsEntry: Component<{name: string, source?: string, website?: string}> = props => (
+  <span class="row">
+    <span class="col col-6 credits-name">{props.name}</span>
+    {props.source ? <a class="col col-3 text-[10px]" rel="noopener" href={props.source} target="_blank">Source</a> : <span class="col col-3" />}
+    {props.website ? <a class="col col-3 text-[10px]" rel="noopener" href={props.website} target="_blank">Website</a> : <span class="col col-3" />}
+  </span>
 );

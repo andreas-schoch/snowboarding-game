@@ -1,8 +1,0 @@
-#unsupported-browser-notice {
-  position: absolute;
-  bottom: var(--game-ui-padding);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  opacity: 0.5;
-}

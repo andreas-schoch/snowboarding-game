@@ -15,7 +15,6 @@ export const SURFACE_IMPACT = 'surface_impact';
 export const WIND_SPEED_CHANGE = 'speed_change';
 
 export const TOGGLE_PAUSE = 'toggle_pause';
-export const PAUSE_GAME_ICON_PRESSED = 'pause_game_icon_pressed';
-export const HOW_TO_PLAY_ICON_PRESSED = 'how_to_play_icon_pressed';
+export const PAUSE_GAME = 'pause_game_icon_pressed';
 export const RESUME_GAME = 'resume_game';
 export const RESTART_GAME = 'restart_game';

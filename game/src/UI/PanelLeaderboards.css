@@ -1,39 +1,9 @@
 #panel-leaderboards {
-  width: 600px;
+  @apply w-[600px];
 }
-
-#panel-leaderboards .leaderboard-note {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--grey-700);
-}
-
-.leaderboard-header {
-  font-size: 14px;
-}
-
 .leaderboard-scrollable {
-  max-height: 350px;
+  @apply max-h-[350px];
 }
-
-.leaderboard-item {
-  font-size: 14px;
-  /* FIXME temporary until figuring out what is wrong with grid */
-  padding-right: 0.5rem;
-}
-
-.leaderboard-item #leaderboard-item-username {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* margin-right: 1.25rem; */
-}
-
 .your-own-score::after {
-  content: 'You';
-  color: white;
-  background-color: var(--blue-800);
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  margin-left: 0.4rem;
-  font-size: 12px;
+  @apply content-['You'] text-[white] bg-[color:var(--blue-800)] text-xs ml-[0.4rem] px-[0.4rem] py-[0.2rem] rounded-[3px];
 }

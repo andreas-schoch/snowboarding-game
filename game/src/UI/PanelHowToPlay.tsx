@@ -1,5 +1,5 @@
 import './PanelHowToPlay.css';
-import {Component} from 'solid-js';
+import {Component, ParentComponent} from 'solid-js';
 import ArrowDownKeyLight from '../../assets/img/controls/Arrow_Down_Key_Light.png';
 import ArrowLeftKeyLight from '../../assets/img/controls/Arrow_Left_Key_Light.png';
 import ArrowRightKeyLight from '../../assets/img/controls/Arrow_Right_Key_Light.png';
@@ -13,7 +13,7 @@ import {PanelId} from '.';
 export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = props => (
   <BasePanel id='panel-how-to-play' title='How To Play' scroll={true} backBtn={true} setPanel={props.setPanel} >
 
-    <span class="row how-to-play-title"><span class="col col-12">Keyboard controls</span></span>
+    <HowToPlayTitle>Keyboard Controls</HowToPlayTitle>
     <span class="row">
       <span class="col col-4 flex-center control-img">
         <img class="img-center" src={ArrowUpKeyLight} alt="keyboard arrow up key" />
@@ -40,10 +40,10 @@ export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = prop
       </span>
       <span class="col col-8 control-text">toggle pause</span>
     </span>
-    <span class="row how-to-play-title"><span class="col col-12">Touchscreen controls</span></span>
+    <HowToPlayTitle>Touch Controls</HowToPlayTitle>
     <span class="row"><span class="col col-12">(work-in-progress)</span></span>
-    <span class="row how-to-play-title"><span class="col col-12">Combo System</span></span>
 
+    <HowToPlayTitle>Combo System</HowToPlayTitle>
     <span class="col col-4 flex-center control-img">
       <img class="combo-counter" src={ComboCounter} alt="Combo counter UI" />
     </span>
@@ -56,4 +56,8 @@ export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = prop
       Keeping the combo counter up is the key to high scores!
     </span></span>
   </BasePanel>
+);
+
+const HowToPlayTitle: ParentComponent = props => (
+  <span class="row text-lg text-[color:var(--title-color)] my-8;"><span class="col col-12">{props.children}</span></span>
 );

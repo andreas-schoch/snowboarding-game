@@ -13,9 +13,6 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
 
   return (
     <>
-      <i class="material-icons hidden" id="pause-game-icon">pause_circle_outline</i>
-      <i class="material-icons hidden" id="how-to-play-icon">help_outline</i>
-
       <BasePanel id='panel-pause-menu' title='Pause Menu' scroll={false} backBtn={false} setPanel={props.setPanel}>
 
         <div class="row">

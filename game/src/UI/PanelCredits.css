@@ -1,21 +1,6 @@
 #panel-credits {
-  width: 600px;
-  line-height: 1.5;
-  color: var(--grey-700);
+  @apply w-[600px] leading-normal text-[color:var(--grey-700)];
 }
-
 #panel-credits .scrollbar {
-  max-height: 400px;
-  padding: 1rem 0;
-  font-size: 12px;
-}
-
-#panel-credits .credits-title {
-  font-weight: bolder;
-  font-size: 16px;
-  color: var(--title-color);
-}
-
-#panel-credits .credits-link {
-  font-size: 10px;
+  @apply max-h-[400px] text-xs px-0 py-4;
 }

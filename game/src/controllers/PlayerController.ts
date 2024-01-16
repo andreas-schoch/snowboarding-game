@@ -4,7 +4,7 @@ import {Settings} from '../Settings';
 import {PanelId} from '../UI';
 import {Character} from '../character/Character';
 import {IScore} from '../character/State';
-import {ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
+import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
 import {GameScene} from '../scenes/GameScene';
 
 export class CharacterController {
@@ -25,8 +25,7 @@ export class CharacterController {
 
   constructor(private scene: GameScene) {
 
-    GameInfo.observer.on(PAUSE_GAME_ICON_PRESSED, () => this.pauseGame());
-    GameInfo.observer.on(HOW_TO_PLAY_ICON_PRESSED, () => this.pauseGame('panel-how-to-play'));
+    GameInfo.observer.on(PAUSE_GAME, () => this.pauseGame());
     GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)); });
 
