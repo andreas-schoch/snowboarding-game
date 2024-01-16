@@ -1,8 +1,8 @@
 import './PanelYourScore.css';
 import { Component, createSignal, onMount } from 'solid-js';
-import { IComboTrickScore, IScore } from '../State';
+import { IScore } from '../State';
 import { LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService } from '..';
-import { calculateTotalScore } from '../util/calculateTotalScore';
+import { calculateBestCombo, calculateTotalScore, calculateTrickScore } from '../util/calculateTotalScore';
 import { Settings } from '../Settings';
 import { pseudoRandomId } from '../util/pseudoRandomId';
 import { BasePanel } from './BasePanel';
@@ -15,7 +15,8 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
   let usernameInput: HTMLInputElement;
   const [yourRank, setYourRank] = createSignal(-1);
   const [totalRanks, setTotalRanks] = createSignal(-1);
-  const bestCombo = () => Math.max(...(props.score.trickScoreLog.filter(s => s.type === 'combo') as IComboTrickScore[]).map(s => s.accumulator * s.multiplier));
+  const bestCombo = () => calculateBestCombo(props.score);
+  const trickScore = () => calculateTrickScore(props.score);
   const totalScore = () => calculateTotalScore(props.score);
 
   const rankText = () => {
@@ -95,7 +96,7 @@ export const PanelYourScore: Component<{ setPanel: (id: PanelId) => void, score:
           <span>Trick score</span>
           <span class="summary-trick-combo">(Best Combo: <span id="your-score-best-combo">{bestCombo()}</span>)</span>
         </span>
-        <span class="col col-4" id="your-score-trick-score">{props.score.trickScore}</span>
+        <span class="col col-4" id="your-score-trick-score">{trickScore()}</span>
       </div>
       <div class="row summary summary-bonus">
         <span class="col col-8">Bonus points</span>
