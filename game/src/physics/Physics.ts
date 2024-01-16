@@ -1,12 +1,12 @@
+import {CharacterKeys, Settings} from '../Settings';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
+import {b2, recordLeak} from '../index';
+import {LevelKeys} from '../levels';
+import {GameScene} from '../scenes/GameScene';
 import {DebugDrawer} from './DebugDraw';
-import {CharacterKeys, Settings} from './Settings';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from './eventTypes';
-import {LevelKeys} from './levels';
-import {GameScene} from './scenes/GameScene';
-import {RubeLoader} from './util/RUBE/RubeLoader';
-import {RubeImage, RubeScene} from './util/RUBE/RubeLoaderInterfaces';
-import {RubeSerializer} from './util/RUBE/RubeSerializer';
-import {b2, recordLeak} from './index';
+import {RubeLoader} from './RUBE/RubeLoader';
+import {RubeImage, RubeScene} from './RUBE/RubeLoaderInterfaces';
+import {RubeSerializer} from './RUBE/RubeSerializer';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;

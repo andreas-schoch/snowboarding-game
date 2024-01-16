@@ -3,11 +3,11 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
 import {Settings} from '../Settings';
-import {IScore} from '../State';
+import {IScore} from '../character/State';
 import {env} from '../environment';
+import {calculateTotalScore} from '../helpers/calculateTotalScore';
+import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {LevelKeys} from '../levels';
-import {calculateTotalScore} from '../util/calculateTotalScore';
-import {pseudoRandomId} from '../util/pseudoRandomId';
 
 export class LeaderboardService {
   rexLeaderboard: RexLeaderboard; // TODO get rid. It works well but not 100% suited for this games needs (score stored as list of actions instead of plain value)

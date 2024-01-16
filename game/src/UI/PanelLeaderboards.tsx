@@ -2,8 +2,8 @@ import './PanelLeaderboards.css';
 import {Component, For, Show, createSignal, onMount} from 'solid-js';
 import {leaderboardService} from '..';
 import {Settings} from '../Settings';
-import {IScore} from '../State';
-import {calculateTotalScore} from '../util/calculateTotalScore';
+import {IScore} from '../character/State';
+import {calculateTotalScore} from '../helpers/calculateTotalScore';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 

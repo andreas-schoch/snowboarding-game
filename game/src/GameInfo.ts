@@ -1,4 +1,4 @@
-import {IScore} from './State';
+import {IScore} from './character/State';
 
 export class GameInfo {
   static observer: Phaser.Events.EventEmitter;

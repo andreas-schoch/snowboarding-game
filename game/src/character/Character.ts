@@ -1,8 +1,8 @@
+import {b2} from '..';
+import {vec2Util} from '../physics/RUBE/Vec2Math';
+import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
-import {GameScene} from './scenes/GameScene';
-import {vec2Util} from './util/RUBE/Vec2Math';
-import {b2} from '.';
 
 export class Character {
   static instances: Character[] = [];

@@ -1,11 +1,11 @@
+import {GameInfo} from '../GameInfo';
+import {Settings} from '../Settings';
+import {B2_POST_SOLVE, SURFACE_IMPACT} from '../eventTypes';
+import {b2} from '../index';
+import {IPostSolveEvent} from '../physics/Physics';
+import {vec2Util} from '../physics/RUBE/Vec2Math';
+import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
-import {GameInfo} from './GameInfo';
-import {IPostSolveEvent} from './Physics';
-import {Settings} from './Settings';
-import {B2_POST_SOLVE, SURFACE_IMPACT} from './eventTypes';
-import {GameScene} from './scenes/GameScene';
-import {vec2Util} from './util/RUBE/Vec2Math';
-import {b2} from './index';
 
 interface IRayCastResult {
   hit: boolean;

@@ -4,7 +4,7 @@ import {createSignal, Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {IScore} from '../State';
+import {IScore} from '../character/State';
 import {ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE} from '../eventTypes';
 import {HUD} from './HUD';
 import {PanelCredits} from './PanelCredits';

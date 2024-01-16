@@ -1,4 +1,4 @@
-import {IScore} from './State';
+import {IScore} from './character/State';
 import {LevelKeys} from './levels';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 

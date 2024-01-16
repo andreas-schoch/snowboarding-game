@@ -5,7 +5,7 @@
 */
 
 import {b2, recordLeak} from '../..';
-import {pseudoRandomId} from '../pseudoRandomId';
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
 import {vec2Util} from './Vec2Math';
 

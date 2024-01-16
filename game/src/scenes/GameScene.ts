@@ -1,14 +1,14 @@
 import {SCENE_GAME , freeLeaked, leaderboardService} from '..';
 import {Backdrop} from '../Backdrop';
-import {Character} from '../Character';
 import {GameInfo} from '../GameInfo';
-import {Physics} from '../Physics';
-import {CharacterController} from '../PlayerController';
 import {Settings} from '../Settings';
 import {SoundManager} from '../SoundManager';
 import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
+import {Character} from '../character/Character';
+import {CharacterController} from '../controllers/PlayerController';
 import {RESTART_GAME} from '../eventTypes';
+import {Physics} from '../physics/Physics';
 
 export class GameScene extends Phaser.Scene {
   b2Physics: Physics;

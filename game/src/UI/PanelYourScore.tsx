@@ -3,10 +3,10 @@ import {Component, createSignal, onMount} from 'solid-js';
 import {LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {IScore} from '../State';
+import {IScore} from '../character/State';
 import {RESTART_GAME} from '../eventTypes';
-import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../util/calculateTotalScore';
-import {pseudoRandomId} from '../util/pseudoRandomId';
+import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../helpers/calculateTotalScore';
+import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 

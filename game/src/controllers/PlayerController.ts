@@ -1,11 +1,11 @@
-import {Character} from './Character';
-import {GameInfo} from './GameInfo';
-import {Settings} from './Settings';
-import {IScore} from './State';
-import {PanelId} from './UI';
-import {ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from './eventTypes';
-import {GameScene} from './scenes/GameScene';
-import {DEFAULT_WIDTH} from '.';
+import {DEFAULT_WIDTH} from '..';
+import {GameInfo} from '../GameInfo';
+import {Settings} from '../Settings';
+import {PanelId} from '../UI';
+import {Character} from '../character/Character';
+import {IScore} from '../character/State';
+import {ENTER_CRASHED, HOW_TO_PLAY_ICON_PRESSED, PAUSE_GAME_ICON_PRESSED, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
+import {GameScene} from '../scenes/GameScene';
 
 export class CharacterController {
   character: Character | null = null;
