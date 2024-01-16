@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
@@ -38,7 +40,7 @@ module.exports = {
       {
         test: /\.css$/i,
         include: path.join(__dirname, '../game/src/UI'),
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|wav|mp3)$/,
@@ -68,19 +70,19 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({ template: 'game/index.html' }),
+    new HtmlWebpackPlugin({template: 'game/index.html'}),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'manifest', to: '' },
-        { from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: '' },
-        { from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: '' },
+        {from: 'manifest', to: ''},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.wasm', to: ''},
+        {from: 'node_modules/box2d-wasm/dist/es/Box2D.simd.wasm', to: ''},
         // There is a bit of a mix between making files available via file-loader and copy-webpack-plugin
         // The idea was to use file-loader for anything where we only have one version of something
         // Some of these things below will be fetched from the server in future versions so it wouldn't make sense to hardcode them
-        { from: 'game/assets/img/packed', to: 'assets/img/packed' },
-        { from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails' },
-        { from: 'game/assets/audio/music', to: 'assets/audio/music' },
-        { from: 'game/assets/levels/export', to: 'assets/levels/export' },
+        {from: 'game/assets/img/packed', to: 'assets/img/packed'},
+        {from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails'},
+        {from: 'game/assets/audio/music', to: 'assets/audio/music'},
+        {from: 'game/assets/levels/export', to: 'assets/levels/export'},
       ],
     }),
   ],
