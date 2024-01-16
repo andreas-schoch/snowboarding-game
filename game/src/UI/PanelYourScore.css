@@ -1,3 +1,7 @@
+.summary {
+  line-height: 1.15;
+}
+
 .summary>span:first-of-type {
   color: var(--grey-600);
   font-weight: normal;
