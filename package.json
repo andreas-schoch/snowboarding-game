@@ -8,6 +8,7 @@
     "lint-fix": "eslint --fix game",
     "start": "webpack serve --config webpack/webpack.dev.js",
     "build": "rimraf dist && webpack --config webpack/webpack.prod.js",
+    "build-ci": "webpack --config webpack/webpack.prod.js",
     "bundle": "npm run build",
     "serve": "serve dist",
     "pages-predeploy": "npm run build",

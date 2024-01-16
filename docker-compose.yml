@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    restart: always
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./test:/etc/nginx/ssl
+      - ./dist:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_ENVSUBST_TEMPLATE_SUFFIX=.conf # to retain syntax highlighting
+      - NGINX_SERVER_NAME=localhost
+      - NGINX_SSL_CERT=/etc/nginx/ssl/localhost.crt
+      - NGINX_SSL_KEY=/etc/nginx/ssl/localhost.key
+  pocketbase:
+    container_name: pocketbase
+    build:
+      context: .
+      dockerfile: ./pocketbase/Dockerfile
+    image: pocketbase:latest
+    volumes:
+      - pocketbase-volume:/app/data
+    ports:
+      - "8090:8090"
+
+volumes:
+  pocketbase-volume:
+    name: pocketbase-volume
