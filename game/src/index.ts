@@ -1,13 +1,11 @@
 import 'phaser';
 import Box2DFactory from 'box2d-wasm';
-import FirebasePlugin from 'phaser3-rex-plugins/plugins/firebase-plugin.js';
 import {simd} from 'wasm-feature-detect';
 import {Settings} from './Settings';
 import {GameScene} from './scenes/GameScene';
 import {PreloadScene} from './scenes/PreloadScene';
 import {LeaderboardService} from './services/leaderboard';
 
-// Since there is no dependency injection system (yet) and we don't want to always re-init firebase, this service is made available like this to whoever needs it.
 export const leaderboardService = new LeaderboardService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
@@ -43,9 +41,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   },
   scene: [PreloadScene, GameScene],
   plugins: {
-    global: [
-      {key: 'rexFirebase', plugin: FirebasePlugin, start: true}
-    ],
+    global: []
   },
 };
 

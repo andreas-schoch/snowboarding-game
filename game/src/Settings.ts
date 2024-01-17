@@ -1,14 +1,18 @@
 import {IScore} from './character/State';
-import {LevelKeys} from './levels';
+import {LevelKeys, localLevels} from './levels';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
-export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';
 export type CharacterKeys = 'character_v01' | 'character_v02';
 export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
 export class Settings {
   static set(setting: SettingKeys, value: string) {
     localStorage.setItem('snowboarding_game_' + setting, value);
+  }
+
+  static anonymousUID(): string | null{
+    return Settings.getRaw('anonymous_uid');
   }
 
   static resolutionScale(): number {
@@ -48,7 +52,7 @@ export class Settings {
   }
 
   static currentLevel(): LevelKeys {
-    return Settings.getRaw('levelCurrent') as LevelKeys || 'level_001';
+    return Settings.getRaw('levelCurrent') as LevelKeys || localLevels[0].id;
   }
 
   static localScores(): Record<keyof LevelKeys, IScore[]> {

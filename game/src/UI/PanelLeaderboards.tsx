@@ -11,8 +11,8 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   const [scores, setScores] = createSignal<IScore[]>([]);
 
   onMount(async () => {
-    const fbScores: IScore[] = leaderboardService.auth
-      ? await leaderboardService.rexLeaderboard.loadFirstPage()
+    const fbScores: IScore[] = leaderboardService.currentUser
+      ? await leaderboardService.scores(Settings.currentLevel(), 1, 200)
       : Settings.localScores()[Settings.currentLevel()].map(s => ({...s, userName: Settings.username()}));
 
     fbScores.sort((a, b) => calculateTotalScore(b) - calculateTotalScore(a));
@@ -22,7 +22,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   return (
     <BasePanel id='panel-leaderboards' title='Leaderboards' scroll={false} backBtn={true} setPanel={props.setPanel} >
 
-      <Show when={!leaderboardService.auth?.currentUser}>
+      <Show when={!leaderboardService.currentUser}>
         <div class="row">
           <div class="col col-12 text-sm leading-normal text-[color:var(--grey-700)]">
             Current version of the game doesn't have the online leaderboards enabled. You will only see your own past
@@ -42,7 +42,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
           {(item, index) => (
             <div class="row text-sm pr-2">
               <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
-              <span class={(leaderboardService.auth?.currentUser?.uid === item.userID ? 'your-own-score ' : '') + 'col col-7 overflow-hidden text-ellipsis'}>{item.userName}</span>
+              <span class={(leaderboardService.currentUser?.id === item.user ? 'your-own-score ' : '') + 'col col-7 overflow-hidden text-ellipsis'}>{item.user}</span>
               <span class="col col-3 flex-right" id="leaderboard-item-score">{calculateTotalScore(item)}</span>
             </div>
           )}

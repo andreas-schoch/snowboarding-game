@@ -1,4 +1,4 @@
-import {SCENE_GAME , freeLeaked, leaderboardService} from '..';
+import {SCENE_GAME , freeLeaked} from '..';
 import {Backdrop} from '../Backdrop';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
@@ -8,6 +8,7 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {RESTART_GAME} from '../eventTypes';
+import {localLevels} from '../levels';
 import {Physics} from '../physics/Physics';
 
 export class GameScene extends Phaser.Scene {
@@ -28,9 +29,13 @@ export class GameScene extends Phaser.Scene {
 
   private preload() {
     // These may change during gameplay so cannot be loaded in PreloadScene (unless loading all)
-    const level = Settings.currentLevel();
+    const levelId = Settings.currentLevel();
+    const localLevelId = localLevels.find(l => l.id === levelId)?.localId;
+    console.log('preload level', localLevelId);
+    if (localLevelId) this.load.json(localLevelId, `assets/levels/export/${localLevelId}.json`);
+    else throw new Error('Level not found: ' + levelId);
+
     const character = Settings.selectedCharacter();
-    this.load.json(level, `assets/levels/export/${level}.json`);
     this.load.json(character, `assets/levels/export/${character}.json`);
   }
 
@@ -45,7 +50,8 @@ export class GameScene extends Phaser.Scene {
     this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10});
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
-    this.b2Physics.load(Settings.currentLevel());
+    const localLevelId = localLevels.find(l => l.id === Settings.currentLevel())?.localId;
+    this.b2Physics.load(localLevelId!);
     new Terrain(this).draw();
     this.playerController = new CharacterController(this);
     const character = new Character(this, this.b2Physics.load(Settings.selectedCharacter(), 0, 0));
@@ -61,7 +67,6 @@ export class GameScene extends Phaser.Scene {
     });
 
     initSolidUI('root-ui');
-    leaderboardService.setLevel(Settings.currentLevel());
 
     // TODO remove. Temporary to serialize open level
     this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());

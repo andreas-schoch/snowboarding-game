@@ -2,7 +2,6 @@ import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION} from '.
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
-import {LevelKeys} from '../levels';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
@@ -27,9 +26,7 @@ export type TrickScore = IComboTrickScore | IFlipTrickScore;
 
 export interface IScore {
   id?: string;
-  timestamp?: number;
-  userName?: string;
-  userID?: string;
+  user?: string; // one-to-one relation to user collection
   total?: number; // derived from others
   distance: number;
   coins: number;
@@ -37,7 +34,7 @@ export interface IScore {
   trickScoreLog: TrickScore[];
   finishedLevel: boolean;
   crashed: boolean;
-  level: LevelKeys;
+  level: string;
 }
 
 export class State {

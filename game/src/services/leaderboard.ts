@@ -1,7 +1,5 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import {LeaderBoard as RexLeaderboard} from 'phaser3-rex-plugins/plugins/firebase-components';
+
+import PocketBase, {RecordModel} from 'pocketbase';
 import {Settings} from '../Settings';
 import {IScore} from '../character/State';
 import {env} from '../environment';
@@ -9,73 +7,89 @@ import {calculateTotalScore} from '../helpers/calculateTotalScore';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {LevelKeys} from '../levels';
 
+export interface IUser extends RecordModel {
+  id: string;
+  username: string;
+  usernameChanged: boolean;
+  created: string;
+  updated: string;
+}
+
 export class LeaderboardService {
-  rexLeaderboard: RexLeaderboard; // TODO get rid. It works well but not 100% suited for this games needs (score stored as list of actions instead of plain value)
-  auth: firebase.auth.Auth;
-  currentLevel: LevelKeys;
-  private numAuthAttempts = 0;
+  currentUser: IUser | null = null;
+  private pb: PocketBase;
 
   constructor() {
-    if (env.FIREBASE_LEADERBOARD_ENABLED) {
-      // @ts-expect-error workaround to support rex firebase plugin which seems to expect firebase to be loaded via script tag and be globally available
-      window.firebase = firebase;
-      const firebaseConfig = {
-        apiKey: env.FIREBASE_API_KEY,
-        authDomain: env.FIREBASE_AUTH_DOMAIN,
-        projectId: env.FIREBASE_PROJECT_ID,
-        storageBucket: env.FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
-        appId: env.FIREBASE_APP_ID,
-        measurementId: env.FIREBASE_MESSAGING_SENDER_ID,
-      };
-      // eslint-disable-next-line import/no-named-as-default-member
-      firebase.initializeApp(firebaseConfig);
-      // eslint-disable-next-line import/no-named-as-default-member
-      this.auth = firebase.auth();
-      this.auth.onAuthStateChanged(async user => {
-        Settings.debug() && console.log('onAuthStateChanged user', user);
-        if (user) {
-          // Signed in
-          if (user.displayName && user.displayName !== Settings.username()) Settings.set('userName', user.displayName);
-          this.setLevel(Settings.currentLevel());
-        } else {
-          // Try to sign in
-          Settings.debug() && console.log('try signInAnonymously');
-          if (++this.numAuthAttempts >= 3) throw new Error('failed to authenticate multiple times.');
-          this.auth.signInAnonymously().catch((error) => console.error('Failed to login anonymous user', error));
-        }
-      });
-    }
+    if (!env.POCKETBASE_ENABLED) throw new Error('PocketbaseLeaderboardService not yet implemented');
+    this.pb = new PocketBase(env.POCKETBASE_API);
+    this.login().then(() => console.log('logged in'));
   }
 
-  setLevel(level: LevelKeys) {
-    this.numAuthAttempts = 0;
-    this.currentLevel = level;
-    Settings.set('levelCurrent', level);
-    // TODO timeFilters don't work well with how I want scores to be stored (list of actions from which total is derived instead of plain numeric total)
-    if (this.auth?.currentUser) {
-      this.rexLeaderboard = new RexLeaderboard({
-        root: `leaderboard_${level}`,
-        pageItemCount: 200,
-      });
-    }
+  async scores(level: LevelKeys, page = 1, perPage = 100): Promise<IScore[]> {
+    const resultList = await this.pb.collection<IScore>('Score').getList(page, perPage, {
+      // filter: 'created >= "2022-01-01 00:00:00" && someField1 != someField2',
+      filter: `level = "${level}"`,
+      sort: '-total',
+    });
+
+    return resultList.items;
   }
 
-  async submit(score: IScore): Promise<boolean> {
-    score.id = pseudoRandomId();
-    score.timestamp = Date.now();
+  async submit(score: IScore): Promise<IScore> {
+    if (!this.currentUser) throw new Error('Not logged in');
+    score.user = this.currentUser.id;
+    score.level = Settings.currentLevel();
+    score.total = calculateTotalScore(score);
     this.saveScoreLocally(score);
 
-    if (env.FIREBASE_LEADERBOARD_ENABLED && this.auth?.currentUser) {
-      const highest = await this.rexLeaderboard.getScore(this.auth.currentUser.uid);
+    const existingScore = await this.pb.collection('Score').getFirstListItem<IScore>(`user="${score.user}" && level="${score.level}"`).catch(() => null);
 
-      if (!highest || calculateTotalScore(highest as IScore) < calculateTotalScore(score)) {
-        await this.rexLeaderboard.post(calculateTotalScore(score), score, score.timestamp);
-        return true;
-      }
+    if (!existingScore) {
+      console.log('No scores for this level. Submitting new score', score);
+      return await this.pb.collection('Score').create<IScore>({...score, trickScoreLog: JSON.stringify(score.trickScoreLog || [])});
     }
 
-    return false;
+    if (calculateTotalScore(score) > calculateTotalScore(existingScore)) {
+      console.log('New highscore. Update existing score', score);
+      return await this.pb.collection('Score').update<IScore>(existingScore.id!, {...score, trickScoreLog: JSON.stringify(score.trickScoreLog || [])});
+    }
+
+    console.log('Score not higher than existing score. Not submitting');
+    return score;
+  }
+
+  async updateUsername(username: string): Promise<IUser> {
+    if (!this.currentUser) throw new Error('Not logged in');
+    const record = await this.pb.collection('users').update<IUser>(this.currentUser.id, {username, usernameChanged: true});
+    this.currentUser = record;
+    return record;
+  }
+
+  private async login() {
+    let username = Settings.username();
+    let uid = Settings.anonymousUID();
+
+    if (!username || !uid) [username, uid] = await this.registerAnonymousUser();
+    if (!username || !uid) throw new Error('Failed to register anonymous user');
+
+    const authResponse = await this.pb.collection('users').authWithPassword<IUser>(username, uid);
+    this.currentUser = authResponse.record;
+  }
+
+  private async registerAnonymousUser() {
+    const username = pseudoRandomId();
+    const uid = pseudoRandomId();
+
+    const newUser = await this.pb.collection('users').create<IUser>({
+      username: username,
+      password: uid,
+      passwordConfirm: uid,
+      usernameChanged: false,
+    });
+
+    Settings.set('userName', newUser.username);
+    Settings.set('anonymous_uid', uid);
+    return [username, uid];
   }
 
   private saveScoreLocally(score: IScore) {

@@ -26,7 +26,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   };
 
   onMount(async () => {
-    const currentUser = leaderboardService.auth?.currentUser;
+    const currentUser = leaderboardService.currentUser;
 
     if (!currentUser) {
       // When leaderboard is disabled;
@@ -44,39 +44,38 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     // Everything below is expected to work only when leaderboards are enabled
     const note: HTMLElement | null = document.querySelector('.submit-score-offline-info');
     note && note.classList.add('hidden');
-    if (currentUser.displayName) {
+    if (currentUser.username && currentUser.usernameChanged) {
       // Score is submitted automatically for users that submitted a score once before from this device and browser.
       submitScoreForm?.classList.add('hidden');
-      leaderboardService.rexLeaderboard.setUser({userID: currentUser.uid, userName: currentUser.displayName});
       await leaderboardService.submit(props.score);
       refreshRank();
     }
   });
 
   const refreshRank = async () => {
-    const currentUser = leaderboardService.auth?.currentUser;
+    // FIXME I need a better way to figure out the rank of the current user. It is not sustainable to potentially load all scores just to find it.
+    const currentUser = leaderboardService.currentUser;
     if (!currentUser) return;
-    const fbScores = await leaderboardService.rexLeaderboard.loadFirstPage();
-    // Cannot trust plain value total on firebase nor the rank nor the order atm
-    // const yourRank = await leaderboardService.rexLeaderboard.getRank(currentUser.uid);
+    const fbScores = await leaderboardService.scores(Settings.currentLevel(), 1, 200);
     const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
-    const yourRank = scores.findIndex(s => s.userID === currentUser.uid);
+    const yourRank = scores.findIndex(s => s.user === currentUser.id);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);
   };
 
   const handleInitialSubmit = async () => {
     const name = usernameInput?.value;
-    if (name && props.score && submitScoreForm) {
-      if (leaderboardService.auth?.currentUser) {
-        leaderboardService.rexLeaderboard.setUser({userID: leaderboardService.auth.currentUser.uid, userName: usernameInput.value});
-        await leaderboardService.auth.currentUser.updateProfile({displayName: usernameInput.value});
-      }
-      Settings.set('userName', usernameInput.value);
-      await leaderboardService.submit(props.score);
-      submitScoreForm.classList.add('hidden');
-      refreshRank();
+    if (!name || !props.score || !submitScoreForm) return;
+
+    if (leaderboardService.currentUser) {
+      console.log('updating default username');
+      await leaderboardService.updateUsername(name);
     }
+
+    Settings.set('userName', usernameInput.value);
+    await leaderboardService.submit(props.score);
+    submitScoreForm.classList.add('hidden');
+    refreshRank();
   };
 
   return (
