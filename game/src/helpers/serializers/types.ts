@@ -16,7 +16,7 @@ export interface IScoreProto {
 export interface IBaseTrickScoreProto { // IBaseTrickScore
   t: TrickScoreType;
   fr: IBaseTrickScore['frame'];
-  d: IBaseTrickScore['distance'];
+  // d: IBaseTrickScore['distance'];
 }
 
 export interface IComboTrickScoreProto extends IBaseTrickScoreProto { // IComboTrickScore

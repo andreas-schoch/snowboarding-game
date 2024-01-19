@@ -17,7 +17,7 @@ export const enum TrickScoreType {
 export interface IBaseTrickScore {
   type: TrickScoreType;
   frame: number;
-  distance: number;
+  // distance: number;
 }
 
 export interface IComboTrickScore extends IBaseTrickScore {

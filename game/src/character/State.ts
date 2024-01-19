@@ -21,6 +21,7 @@ export class State {
   private totalTrickScore = 0;
   private totalCollectedPresents = 0;
   private trickScoreLog: TrickScore[] = [];
+  private bodyPositionLog: number[] = [];
 
   private anglePreviousUpdate = 0;
   private totalRotation = 0; // total rotation while in air without touching the ground
@@ -42,6 +43,11 @@ export class State {
   }
 
   getCurrentScore(): IScore {
+    const encodedB64 = trickScoreSerializer.encode(this.trickScoreLog);
+    // const encodedCustom = customTrickScoreSerializer.encode(this.trickScoreLog);
+
+    console.log('encodedB64', encodedB64.length, encodedB64);
+    // console.log('encodedCustom', encodedCustom.length, encodedCustom, customTrickScoreSerializer.decode(encodedCustom));
     return {
       distance: this.distanceMeters,
       coins: this.totalCollectedPresents,
@@ -71,6 +77,7 @@ export class State {
   reset() {
     this.totalTrickScore = 0;
     this.trickScoreLog = [];
+    this.bodyPositionLog = [];
     if (this.comboLeeway) {
       this.comboLeeway.stop();
       this.comboLeeway = null;
@@ -124,7 +131,7 @@ export class State {
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
-        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
+        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.scene.game.getFrame()});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
@@ -200,7 +207,7 @@ export class State {
       }
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
-      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
+      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.scene.game.getFrame()});
       this.totalCollectedPresents++;
       GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
@@ -282,7 +289,7 @@ export class State {
     if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
+    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.scene.game.getFrame()});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
     GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);

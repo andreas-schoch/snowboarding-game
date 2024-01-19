@@ -6,12 +6,17 @@ export async function ProtobufSerializer<T extends {[k: string]: any}>(schema: s
   const TrickScoreLog = root.lookupType(type);
 
   function encode(data: T): string {
+    console.log('ProtobufSerializer', schema, type, data);
     console.time('encode');
     const errMsg = TrickScoreLog.verify(data);
+    console.log('ProtobufSerializer error', errMsg);
     if (errMsg) throw Error(errMsg);
     const message = TrickScoreLog.create(data);
     const encoded = TrickScoreLog.encode(message).finish();
-    const binaryString = String.fromCharCode.apply(null, Array.from(encoded));
+
+    let binaryString = '';
+    for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
+    // const binaryString = String.fromCharCode.apply(null, Array.from(encoded));
     console.timeEnd('encode');
     return binaryString;
   }

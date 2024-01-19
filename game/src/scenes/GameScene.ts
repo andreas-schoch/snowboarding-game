@@ -48,7 +48,11 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(Settings.currentLevel()).then(level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
-      // console.log('------------------- rube scene protobuf encoded', rubeSceneSerializer.encode(level.scene));
+      // const encoded = rubeSceneSerializer.encode(level.scene);
+      // const decoded = rubeSceneSerializer.decode(encoded);
+      // console.log('rubeScene', JSON.stringify(level.scene).length, level.scene);
+      // console.log('encoded', encoded.length, encoded);
+      // console.log('decoded', JSON.stringify(decoded).length, decoded);
       this.b2Physics.load(level.scene);
       new Terrain(this).draw();
       this.playerController = new CharacterController(this);
