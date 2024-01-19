@@ -86,9 +86,11 @@ export class RubeLoader<IMG = unknown> {
   }
 
   rubeToVec2(val?: RubeVector, offsetX = 0, offsetY = 0): Box2D.b2Vec2 {
-    // TODO rethink wheather good idea to make impure
-    const vec = new b2.b2Vec2(0, 0);
+    const vec = recordLeak(new b2.b2Vec2(0, 0)); // TODO ensure this doesn't cause errors as recordLeak did when I tried wrapping everything in it
     if (this.isXY(val)) vec.Set(val.x + offsetX, val.y + offsetY);
+    // Non-compacted scenes seem to be around 5-10% larger in character size but it's negligible for the moment.
+    // While the app can handle compact zero vectors, protobuf does not seem to support conditional types like that.
+    else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
     return vec;
   }
 
