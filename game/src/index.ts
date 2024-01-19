@@ -2,8 +2,10 @@ import 'phaser';
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {Settings} from './Settings';
+import {Base64Serializer, fromTSLProto, fromWrapperTSLProto, toTSLProto, toWrapperTSLProto} from './helpers/serializers/base64Serializer';
 import {ScoreLogSerializer} from './helpers/serializers/customSerializer';
 import {ProtobufSerializer} from './helpers/serializers/protobufSerializer';
+import {TrickScoreProto} from './helpers/serializers/types';
 import {RubeScene} from './physics/RUBE/RubeLoaderInterfaces';
 import {PocketbaseService} from './pocketbaseService/pocketbase';
 import {TrickScore} from './pocketbaseService/types';
@@ -53,9 +55,11 @@ export let game: Phaser.Game;
 export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
 export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
-export let trickScoreSerializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
 export let rubeSceneSerializer: {encode: (rubeScene: RubeScene) => string, decode: (base64: string) => RubeScene};
-// export let customTrickScoreSerializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
+
+export let trickScoreB64Serializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
+export let trickScoreProtoSerializer: {encode: (wrapper: {wrapper: TrickScore[]}) => string, decode: (base64: string) => {wrapper: TrickScore[]}};
+export let trickScoreSerializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
 
 window.onload = async () => {
   // WASM with SIMD may be more performant but haven't benchmarked it yet. Either way, probably neglible for this type of game.
@@ -65,9 +69,10 @@ window.onload = async () => {
   freeLeaked = LeakMitigator.freeLeaked;
   recordLeak = LeakMitigator.recordLeak;
 
-  // trickScoreSerializer = await Base64Serializer<TrickScore[], TrickScoreProto[]>({default: [], to: toTSLProto, from: fromTSLProto});
-  rubeSceneSerializer = await ProtobufSerializer<RubeScene>('assets/proto/RubeScene.proto', 'Scene');
-  trickScoreSerializer = await ScoreLogSerializer(); // TODO make generalPurpose by defining a encoding schema
+  rubeSceneSerializer = await ProtobufSerializer<RubeScene, RubeScene>({schema: 'assets/proto/RubeScene.proto', type: 'Scene'});
+  trickScoreB64Serializer = await Base64Serializer<TrickScore[], TrickScoreProto[]>({default: [], to: toTSLProto, from: fromTSLProto});
+  trickScoreProtoSerializer = await ProtobufSerializer<{wrapper: TrickScore[]}, {wrapper: TrickScoreProto[]}>({schema: 'assets/proto/TSL.proto', type: 'TSL', default: {wrapper: []}, to: toWrapperTSLProto, from: fromWrapperTSLProto});
+  trickScoreSerializer = await ScoreLogSerializer();
 
   game = new Phaser.Game(gameConfig);
 

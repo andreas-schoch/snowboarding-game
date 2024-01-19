@@ -1,4 +1,4 @@
-export const DISTANCE_CHANGE = 'distance_change';
+// export const DISTANCE_CHANGE = 'distance_change';
 export const SCORE_CHANGE = 'score_change';
 export const COMBO_CHANGE = 'combo_change';
 export const PICKUP_PRESENT = 'pickup_present';

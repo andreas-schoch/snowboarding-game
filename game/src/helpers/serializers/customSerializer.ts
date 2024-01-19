@@ -1,5 +1,8 @@
 import {ICoinTrickScore, IComboTrickScore, IFlipTrickScore, TrickScore, TrickScoreType} from '../../pocketbaseService/types';
 
+// 5 times smaller than base64 and about 40-50% smaller than protobuf
+// Issue is that everything is hardcoded and specific for TrickScore[] type
+// Also probably not super future proof if things need changing
 export async function ScoreLogSerializer() {
 
   const encodeComboScore = ({type, frame, accumulator, multiplier}: IComboTrickScore): ArrayBuffer => {
@@ -37,6 +40,7 @@ export async function ScoreLogSerializer() {
 
   function encode(data: TrickScore[]): string {
     const buffers: ArrayBuffer[] = [];
+    console.time('ScoreLogSerializer.encode');
 
     for (const score of data) {
       switch (score.type) {
@@ -65,6 +69,8 @@ export async function ScoreLogSerializer() {
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
+
+    console.timeEnd('ScoreLogSerializer.encode');
     return binaryString;
   }
 
@@ -76,9 +82,6 @@ export async function ScoreLogSerializer() {
     let offset = 0;
     while (offset < uint8array.byteLength) {
       const type = uint8array[offset];
-
-      // console.log(`Decoding type at offset ${offset}: ${type}`);
-
       const frame = new DataView(uint8array.buffer, offset + 1, 4).getUint32(0, true);
       switch (type) {
       case TrickScoreType.combo: {

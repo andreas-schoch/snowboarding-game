@@ -10,13 +10,5 @@ message TS {
 }
 
 message TSL {
-  string u = 1;
-  uint32 ts = 2;
-  uint32 td = 3;
-  uint32 tp = 4;
-  uint32 tts = 5;
-  uint32 fl = 6;
-  uint32 c = 7;
-  string l = 8;
-  repeated TS tsl = 9;
+  repeated TS wrapper = 1;
 }

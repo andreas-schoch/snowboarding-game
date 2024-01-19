@@ -19,14 +19,14 @@ export async function Base64Serializer<T, O>(options: Base64SerializerOptions<T,
   }
 
   function decode(base64: string): T {
-    console.time('Base64Serializer.decode');
+    // console.time('Base64Serializer.decode');
     try {
       const data = JSON.parse(atob(base64)) as O;
       const transformed = options.from ? options.from(data) : data as unknown as T;
       console.timeEnd('decode');
       return transformed;
     } catch (e) {
-      console.timeEnd('Base64Serializer.decode');
+      // console.timeEnd('Base64Serializer.decode');
       if (options.default)return options.default;
       else throw e;
     }
@@ -63,4 +63,12 @@ export const fromTSLProto = (tsl: TrickScoreProto[]): TrickScore[] => {
       throw Error('Unknown trick score type');
     }
   });
+};
+
+export const toWrapperTSLProto = (data: {wrapper: TrickScore[]}): {wrapper: TrickScoreProto[]} => {
+  return {wrapper: toTSLProto(data.wrapper)};
+};
+
+export const fromWrapperTSLProto = (tslp: {wrapper: TrickScoreProto[]}): {wrapper: TrickScore[]} => {
+  return {wrapper: fromTSLProto(tslp.wrapper)};
 };

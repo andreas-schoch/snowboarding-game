@@ -1,7 +1,7 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, trickScoreSerializer} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, trickScoreB64Serializer, trickScoreProtoSerializer, trickScoreSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
 import {TrickScore, IScore, TrickScoreType} from '../pocketbaseService/types';
 import {GameScene} from '../scenes/GameScene';
@@ -21,7 +21,6 @@ export class State {
   private totalTrickScore = 0;
   private totalCollectedPresents = 0;
   private trickScoreLog: TrickScore[] = [];
-  private bodyPositionLog: number[] = [];
 
   private anglePreviousUpdate = 0;
   private totalRotation = 0; // total rotation while in air without touching the ground
@@ -43,18 +42,21 @@ export class State {
   }
 
   getCurrentScore(): IScore {
-    const encodedB64 = trickScoreSerializer.encode(this.trickScoreLog);
-    // const encodedCustom = customTrickScoreSerializer.encode(this.trickScoreLog);
+    const encodedB64 = trickScoreB64Serializer.encode(this.trickScoreLog);
+    const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
+    const encodedProto = trickScoreProtoSerializer.encode({wrapper: this.trickScoreLog});
 
-    console.log('encodedB64', encodedB64.length, encodedB64);
-    // console.log('encodedCustom', encodedCustom.length, encodedCustom, customTrickScoreSerializer.decode(encodedCustom));
+    console.log('---------------------------------');
+    console.log('encodedB64', encodedB64.length);
+    console.log('encodedProto', encodedProto.length);
+    console.log('encodedCustom', encodedCustom.length);
     return {
       distance: this.distanceMeters,
       coins: this.totalCollectedPresents,
       trickScore: this.totalTrickScore,
       finishedLevel: this.isLevelFinished,
       crashed: this.isCrashed,
-      tsl: trickScoreSerializer.encode(this.trickScoreLog),
+      tsl: encodedCustom,
       level: Settings.currentLevel()
     };
   }
@@ -77,7 +79,6 @@ export class State {
   reset() {
     this.totalTrickScore = 0;
     this.trickScoreLog = [];
-    this.bodyPositionLog = [];
     if (this.comboLeeway) {
       this.comboLeeway.stop();
       this.comboLeeway = null;
@@ -279,8 +280,7 @@ export class State {
     this.lastPosY = y;
 
     if (this.distanceMeters !== this.lastDistanceMeters && !this.isCrashed && !this.isLevelFinished) {
-      GameInfo.observer.emit(DISTANCE_CHANGE, Math.floor(this.distancePixels));
-      GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
+      // GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
       this.lastDistanceMeters = this.distanceMeters;
     }
   }

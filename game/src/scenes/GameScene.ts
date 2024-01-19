@@ -1,4 +1,4 @@
-import {SCENE_GAME , freeLeaked, pb} from '..';
+import {SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
@@ -48,11 +48,11 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(Settings.currentLevel()).then(level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
-      // const encoded = rubeSceneSerializer.encode(level.scene);
-      // const decoded = rubeSceneSerializer.decode(encoded);
-      // console.log('rubeScene', JSON.stringify(level.scene).length, level.scene);
-      // console.log('encoded', encoded.length, encoded);
-      // console.log('decoded', JSON.stringify(decoded).length, decoded);
+      const encoded = rubeSceneSerializer.encode(level.scene);
+      const decoded = rubeSceneSerializer.decode(encoded);
+      console.log('rubeScene', JSON.stringify(level.scene).length);
+      console.log('encoded', encoded.length);
+      console.log('decoded', JSON.stringify(decoded).length, decoded);
       this.b2Physics.load(level.scene);
       new Terrain(this).draw();
       this.playerController = new CharacterController(this);
