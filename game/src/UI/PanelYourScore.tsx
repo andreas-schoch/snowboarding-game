@@ -1,12 +1,12 @@
 import './PanelYourScore.css';
 import {Component, createSignal, onMount} from 'solid-js';
-import {LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, leaderboardService} from '..';
+import {LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, pb} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {IScore} from '../character/State';
 import {RESTART_GAME} from '../eventTypes';
 import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../helpers/calculateTotalScore';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
+import {IScore} from '../pocketbaseService/types';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
@@ -26,17 +26,17 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   };
 
   onMount(async () => {
-    const currentUser = leaderboardService.currentUser;
+    const loggedInUser = pb.auth.loggedInUser();
 
-    if (!currentUser) {
+    if (!loggedInUser) {
       // When leaderboard is disabled;
       if (!Settings.username()) {
         usernameInput.value = `Player_${pseudoRandomId()}`;
         usernameInput.setAttribute('value', usernameInput.value); // to make floating label move up
-        Settings.set('userName', usernameInput.value);
+        // Settings.set('userName', usernameInput.value);
       } else {
         submitScoreForm?.classList.add('hidden');
-        await leaderboardService.submit(props.score);
+        await pb.leaderboard.submit(props.score);
       }
       return;
     }
@@ -44,21 +44,21 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     // Everything below is expected to work only when leaderboards are enabled
     const note: HTMLElement | null = document.querySelector('.submit-score-offline-info');
     note && note.classList.add('hidden');
-    if (currentUser.username && currentUser.usernameChanged) {
+    if (loggedInUser.username && loggedInUser.usernameChanged) {
       // Score is submitted automatically for users that submitted a score once before from this device and browser.
       submitScoreForm?.classList.add('hidden');
-      await leaderboardService.submit(props.score);
+      await pb.leaderboard.submit(props.score);
       refreshRank();
     }
   });
 
   const refreshRank = async () => {
     // FIXME I need a better way to figure out the rank of the current user. It is not sustainable to potentially load all scores just to find it.
-    const currentUser = leaderboardService.currentUser;
-    if (!currentUser) return;
-    const fbScores = await leaderboardService.scores(Settings.currentLevel(), 1, 200);
-    const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s as IScore, false)} as IScore)).sort((a, b) => Number(b.total) - Number(a.total));
-    const yourRank = scores.findIndex(s => s.user === currentUser.id);
+    const loggedInUser = pb.auth.loggedInUser();
+    if (!loggedInUser) return;
+    const fbScores = await pb.leaderboard.scores(Settings.currentLevel(), 1, 200);
+    const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s)})).sort((a, b) => Number(b.total) - Number(a.total));
+    const yourRank = scores.findIndex(s => s.user === loggedInUser.id);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);
   };
@@ -67,13 +67,13 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     const name = usernameInput?.value;
     if (!name || !props.score || !submitScoreForm) return;
 
-    if (leaderboardService.currentUser) {
+    if (pb.auth.loggedInUser()) {
       console.log('updating default username');
-      await leaderboardService.updateUsername(name);
+      await pb.user.updateUsername(name);
     }
 
-    Settings.set('userName', usernameInput.value);
-    await leaderboardService.submit(props.score);
+    // Settings.set('userName', usernameInput.value);
+    await pb.leaderboard.submit(props.score);
     submitScoreForm.classList.add('hidden');
     refreshRank();
   };

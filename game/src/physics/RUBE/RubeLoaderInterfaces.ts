@@ -54,8 +54,6 @@ export interface RubeFixture {
   chain?: RubeFixtureShapeChain;
 }
 
-export type RubeCustomPropertyTypes = 'int' | 'float' | 'string' | 'color' | 'bool' | 'vec2';
-
 // These will have a "name" property, and ONLY one other property depending on desired type as the value.
 export interface RubeCustomProperty {
   name: string;
@@ -151,10 +149,10 @@ export interface RubeJointRevolute extends RubeJointBase {
   enableMotor?: boolean;
   jointSpeed?: number;
   lowerLimit?: number;
+  upperLimit?: number;
   maxMotorTorque?: number;
   motorSpeed?: number;
   refAngle?: number;
-  upperLimit?: number;
 }
 
 export interface RubeJointDistance extends RubeJointBase {
@@ -170,10 +168,10 @@ export interface RubeJointPrismatic extends RubeJointBase {
   enableMotor?: boolean;
   localAxisA?: RubeVector;
   lowerLimit?: number;
+  upperLimit?: number;
   maxMotorForce?: number;
   motorSpeed?: number;
   refAngle?: number;
-  upperLimit?: number;
 }
 
 export interface RubeJointWheel extends RubeJointBase {

@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package rube;
+
+message Vector {
+  double x = 1;
+  double y = 2;
+}
+
+message VectorArray {
+  repeated double x = 1;
+  repeated double y = 2;
+}
+
+message CustomProperty {
+  string name = 1;
+  int32 int = 2;
+  float float = 3;
+  string string = 4;
+  string color = 5; 
+  bool bool = 6;
+  Vector vec2 = 7;
+}
+
+message CollisionBitPlanes {
+  repeated string names = 1;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+message FixtureShapeCircle {
+  Vector center = 1;
+  double radius = 2;
+}
+
+message FixtureShapePolygon {
+  VectorArray vertices = 1;
+}
+
+message FixtureShapeChain {
+  VectorArray vertices = 1;
+  bool hasNextVertex = 2;
+  bool hasPrevVertex = 3;
+  Vector nextVertex = 4;
+  Vector prevVertex = 5;
+}
+
+message Fixture {
+  string name = 1;
+  double density = 2;
+  uint32 filterCategoryBits = 3; // TODO
+  uint32 filterMaskBits = 4; // TODO
+  int32 filterGroupIndex = 5; // TODO
+  double friction = 6;
+  double restitution = 7;
+  bool sensor = 8;
+  repeated CustomProperty customProperties = 9;
+
+  FixtureShapeCircle circle = 10;
+  FixtureShapePolygon polygon = 11;
+  FixtureShapeChain chain = 12;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+message Body {
+  string name = 1;
+  bool active = 2;
+  bool awake = 3;
+  bool bullet = 4;
+  bool fixedRotation = 5;
+  uint32 type = 6;
+  Vector position = 7;
+  double angle = 8;
+  double angularDamping = 9;
+  double angularVelocity = 10;
+  double linearDamping = 11;
+  Vector linearVelocity = 12;
+  double massDataMass = 13; // TODO convert from 'massData-mass' to 'massDataMass' in ts
+  Vector massDataCenter = 14; // TODO convert from 'massData-center' to 'massDataCenter' in ts
+  double massDataI = 15; // TODO convert from 'massData-I' to 'massDataI' in ts
+  repeated CustomProperty customProperties = 16;
+  repeated Fixture fixture = 17;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+message Joint {
+  // Common fields for all joints
+  string type = 1; 
+  string name = 2;
+  Vector anchorA = 3;
+  Vector anchorB = 4;
+  int32 bodyA = 5;
+  int32 bodyB = 6;
+  bool collideConnected = 7;
+  repeated CustomProperty customProperties = 8;
+
+  // Fields common to multiple joint types (listed only once)
+  bool enableLimit = 9;
+  bool enableMotor = 10;
+  double jointSpeed = 11;
+  double lowerLimit = 12;
+  double upperLimit = 13;
+  double maxMotorTorque = 14;
+  double motorSpeed = 15;
+  double refAngle = 16;
+  double dampingRatio = 17;  // Common to Distance and Weld
+  double frequency = 18;     // Common to Distance and Weld
+  double length = 19;        // Specific to Distance
+  Vector localAxisA = 20;    // Common to Prismatic and Wheel
+  double maxMotorForce = 21; // Specific to Prismatic
+  double springDampingRatio = 22; // Specific to Wheel
+  double springFrequency = 23;    // Specific to Wheel
+  double maxLength = 24;          // Specific to Rope
+  double maxForce = 25;           // Common to Motor and Friction
+  double maxTorque = 26;          // Common to Motor and Friction
+  double correctionFactor = 27;   // Specific to Motor
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+message Image {
+  string name = 1;
+  double opacity = 2;
+  int32 renderOrder = 3;
+  double scale = 4;
+  double aspectScale = 5;
+  double angle = 6;
+  int32 body = 7;
+  Vector center = 8;
+  VectorArray corners = 9;
+  string file = 10;
+  uint32 filter = 11;
+  bool flip = 12;
+  repeated int32 colorTint = 13; 
+  repeated int32 glDrawElements = 14;
+  repeated double glTexCoordPointer = 15;
+  repeated double glVertexPointer = 16;
+  repeated CustomProperty customProperties = 17;
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+message Scene {
+  Vector gravity = 1;
+  bool allowSleep = 2;
+  bool autoClearForces = 3;
+  int32 positionIterations = 4;
+  int32 velocityIterations = 5;
+  int32 stepsPerSecond = 6;
+  bool warmStarting = 7;
+  bool continuousPhysics = 8;
+  bool subStepping = 9;
+  CollisionBitPlanes collisionBitPlanes = 10;
+  repeated CustomProperty customProperties = 11;
+
+  repeated Body body = 12;
+  repeated Joint joint = 13;
+  repeated Image image = 14;
+}

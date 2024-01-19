@@ -3,8 +3,8 @@ import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {PanelId} from '../UI';
 import {Character} from '../character/Character';
-import {IScore} from '../character/State';
 import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
+import {IScore} from '../pocketbaseService/types';
 import {GameScene} from '../scenes/GameScene';
 
 export class CharacterController {

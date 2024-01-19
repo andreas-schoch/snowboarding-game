@@ -66,6 +66,7 @@
     "box2d-wasm": "^7.0.0",
     "phaser": "^3.70.0",
     "pocketbase": "^0.20.3",
+    "protobufjs": "^7.2.6",
     "solid-js": "^1.8.11",
     "wasm-feature-detect": "^1.6.1"
   }

@@ -1,5 +1,5 @@
-import {IScore} from './character/State';
-import {LevelKeys, localLevels} from './levels';
+import {LocalLevelKeys} from './levels';
+import {IScore} from './pocketbaseService/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
 export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';
@@ -51,11 +51,11 @@ export class Settings {
     return Settings.getRaw('userName');
   }
 
-  static currentLevel(): LevelKeys {
-    return Settings.getRaw('levelCurrent') as LevelKeys || localLevels[0].id;
+  static currentLevel(): string {
+    return Settings.getRaw('levelCurrent') || 'qj2fzvw7dfz9y1s';
   }
 
-  static localScores(): Record<keyof LevelKeys, IScore[]> {
+  static localScores(): Record<keyof LocalLevelKeys, IScore[]> {
     return JSON.parse(Settings.getRaw('userScores') || '{}');
   }
 

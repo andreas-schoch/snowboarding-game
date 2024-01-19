@@ -1,7 +1,6 @@
-import {CharacterKeys, Settings} from '../Settings';
+import {Settings} from '../Settings';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {b2, recordLeak} from '../index';
-import {LevelKeys} from '../levels';
 import {GameScene} from '../scenes/GameScene';
 import {DebugDrawer} from './DebugDraw';
 import {RubeLoader} from './RUBE/RubeLoader';
@@ -45,9 +44,9 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.initContactListeners();
   }
 
-  load(rubeScene: CharacterKeys | LevelKeys, offsetX: number = 0, offsetY: number = 0) {
-    const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
-    const [success, id] = this.loader.load(sceneJson, offsetX, offsetY);
+  load(rubeScene: RubeScene, offsetX: number = 0, offsetY: number = 0) {
+    // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
+    const [success, id] = this.loader.load(rubeScene, offsetX, offsetY);
     if (!success) throw new Error('Failed to load RUBE scene');
     // this.world.DebugDraw();
     return id;

@@ -1,43 +1,14 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, trickScoreSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, DISTANCE_CHANGE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
+import {TrickScore, IScore, TrickScoreType} from '../pocketbaseService/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
-export interface IBaseTrickScore {
-  type: 'flip' | 'combo';
-  timestamp: number;
-}
-
-export interface IComboTrickScore extends IBaseTrickScore {
-  type: 'combo';
-  accumulator: number;
-  multiplier: number;
-}
-
-export interface IFlipTrickScore extends IBaseTrickScore {
-  type: 'flip';
-  flips: number;
-}
-
-export type TrickScore = IComboTrickScore | IFlipTrickScore;
-
-export interface IScore {
-  id?: string;
-  user?: string; // one-to-one relation to user collection
-  total?: number; // derived from others
-  distance: number;
-  coins: number;
-  trickScore: number;
-  trickScoreLog: TrickScore[];
-  finishedLevel: boolean;
-  crashed: boolean;
-  level: string;
-}
-
 export class State {
+  distanceMeters = 0;
   isLevelFinished = false;
   isCrashed = false;
   timeGrounded = 0;
@@ -58,9 +29,12 @@ export class State {
   private pendingBackFlips = 0;
   private landedFrontFlips = 0;
   private landedBackFlips = 0;
-  private lastDistance = 0;
-  private lastIsInAir: boolean = false;
+  private lastIsInAir = false;
   private scene: GameScene;
+  private distancePixels = 0;
+  private lastPosX = 0;
+  private lastPosY = 0;
+  lastDistanceMeters = 0;
 
   constructor(private character: Character) {
     this.scene = character.scene;
@@ -69,12 +43,12 @@ export class State {
 
   getCurrentScore(): IScore {
     return {
-      distance: this.getTravelDistanceMeters(),
+      distance: this.distanceMeters,
       coins: this.totalCollectedPresents,
       trickScore: this.totalTrickScore,
       finishedLevel: this.isLevelFinished,
       crashed: this.isCrashed,
-      trickScoreLog: this.trickScoreLog,
+      tsl: trickScoreSerializer.encode(this.trickScoreLog),
       level: Settings.currentLevel()
     };
   }
@@ -114,14 +88,14 @@ export class State {
     this.landedFrontFlips = 0;
     this.currentFlipRotation = 0;
     this.anglePreviousUpdate = 0;
-    this.lastDistance = 0;
+    this.lastIsInAir = false;
+    this.lastDistanceMeters = 0;
+    this.distanceMeters = 0;
+    this.distancePixels = 0;
+    this.lastPosX = 0;
+    this.lastPosY = 0;
     this.timeGrounded = 0;
     this.totalRotation = 0;
-  }
-
-  getTravelDistanceMeters(): number {
-    const distance = this.character.body.GetPosition().x;
-    return Math.floor(distance / 5) * 5;
   }
 
   private registerListeners() {
@@ -150,7 +124,7 @@ export class State {
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
-        this.trickScoreLog.push({type: 'flip', flips: numFlips, timestamp: Date.now()});
+        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
@@ -226,6 +200,7 @@ export class State {
       }
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
+      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
       this.totalCollectedPresents++;
       GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
@@ -286,11 +261,20 @@ export class State {
   }
 
   private updateDistance() {
-    const distance = this.getTravelDistanceMeters();
-    if (distance !== this.lastDistance && !this.isCrashed && !this.isLevelFinished) {
-      GameInfo.observer.emit(DISTANCE_CHANGE, distance);
+    if (this.isLevelFinished || this.isCrashed) return;
+    const {x, y} = this.character.bodyImage;
+    const delta = {x: x - this.lastPosX, y: y - this.lastPosY};
+    const length = delta.x * delta.x + delta.y * delta.y;
+    // console.log('updateDistance', this.distanceMeters, length / 40);
+    this.distancePixels += length;
+    this.distanceMeters = Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
+    this.lastPosX = x;
+    this.lastPosY = y;
+
+    if (this.distanceMeters !== this.lastDistanceMeters && !this.isCrashed && !this.isLevelFinished) {
+      GameInfo.observer.emit(DISTANCE_CHANGE, Math.floor(this.distancePixels));
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-      this.lastDistance = distance;
+      this.lastDistanceMeters = this.distanceMeters;
     }
   }
 
@@ -298,7 +282,7 @@ export class State {
     if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({type: 'combo', multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, timestamp: Date.now()});
+    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.scene.game.getFrame(), distance: this.distanceMeters});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
     GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);
