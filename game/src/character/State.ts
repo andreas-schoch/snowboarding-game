@@ -43,8 +43,8 @@ export class State {
 
   getCurrentScore(): IScore {
     const encodedB64 = trickScoreB64Serializer.encode(this.trickScoreLog);
-    const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
     const encodedProto = trickScoreProtoSerializer.encode({wrapper: this.trickScoreLog});
+    const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
 
     console.log('---------------------------------');
     console.log('encodedB64', encodedB64.length);

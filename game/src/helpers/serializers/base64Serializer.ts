@@ -1,3 +1,4 @@
+import {deflateSync, inflateSync, strToU8, strFromU8} from 'fflate';
 import {TrickScore, TrickScoreType} from '../../pocketbaseService/types';
 import {TrickScoreProto} from './types';
 
@@ -12,24 +13,22 @@ export async function Base64Serializer<T, O>(options: Base64SerializerOptions<T,
     console.time('Base64Serializer.encode');
     const transformed = options.to ? options.to(data) : data;
     const b64 = btoa(JSON.stringify(transformed));
-    // const b64 = Buffer.from(JSON.stringify(data), 'base64');
-    // return b64.toString('base64');
+    const binary = strToU8(b64);
+    const encoded = deflateSync(binary, {level: 9});
+    let binaryString = '';
+    for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
     console.timeEnd('Base64Serializer.encode');
-    return b64;
+    return binaryString;
   }
 
   function decode(base64: string): T {
-    // console.time('Base64Serializer.decode');
-    try {
-      const data = JSON.parse(atob(base64)) as O;
-      const transformed = options.from ? options.from(data) : data as unknown as T;
-      console.timeEnd('decode');
-      return transformed;
-    } catch (e) {
-      // console.timeEnd('Base64Serializer.decode');
-      if (options.default)return options.default;
-      else throw e;
-    }
+    let binary = new Uint8Array(base64.length);
+    for (let i = 0; i < base64.length; i++) binary[i] = base64.charCodeAt(i);
+    binary = inflateSync(binary);
+    const b64 = strFromU8(binary);
+    const data = JSON.parse(atob(b64)) as O;
+    const transformed = options.from ? options.from(data) : data as unknown as T;
+    return transformed;
   }
 
   return {encode, decode};

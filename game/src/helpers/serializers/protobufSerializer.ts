@@ -1,3 +1,4 @@
+import {deflateSync, inflateSync} from 'fflate';
 import {load} from 'protobufjs';
 
 type ProtobufSerializerOptions<T, O> = {
@@ -20,7 +21,8 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
     if (errMsg) console.log('ProtobufSerializer error', errMsg);
     if (errMsg) throw Error(errMsg);
     const message = TrickScoreLog.create(transformed);
-    const encoded = TrickScoreLog.encode(message).finish();
+    let encoded = TrickScoreLog.encode(message).finish();
+    encoded = deflateSync(encoded, {level: 9});
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
@@ -30,8 +32,9 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
   }
 
   function decode(binaryString: string): T {
-    const binary = new Uint8Array(binaryString.length);
+    let binary = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) binary[i] = binaryString.charCodeAt(i);
+    binary = inflateSync(binary);
     const message = TrickScoreLog.decode(binary);
     const data = TrickScoreLog.toObject(message, {defaults: true}) as O;
     const transformed = options.from ? options.from(data) : data as unknown as T;

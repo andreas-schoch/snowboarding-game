@@ -1,3 +1,4 @@
+import {deflateSync, inflateSync} from 'fflate';
 import {ICoinTrickScore, IComboTrickScore, IFlipTrickScore, TrickScore, TrickScoreType} from '../../pocketbaseService/types';
 
 // 5 times smaller than base64 and about 40-50% smaller than protobuf
@@ -58,14 +59,14 @@ export async function ScoreLogSerializer() {
       }
     }
 
-    const encoded = new Uint8Array(buffers.reduce((acc, cur) => acc + cur.byteLength, 0));
+    let encoded = new Uint8Array(buffers.reduce((acc, cur) => acc + cur.byteLength, 0));
     let offset = 0;
     for (const buffer of buffers) {
       encoded.set(new Uint8Array(buffer), offset);
       offset += buffer.byteLength;
     }
 
-    // return uint8array.toString();
+    encoded = deflateSync(encoded, {level: 9});
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
@@ -75,8 +76,10 @@ export async function ScoreLogSerializer() {
   }
 
   function decode(binaryString: string): TrickScore[] {
-    const uint8array = new Uint8Array(binaryString.length);
+    let uint8array = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) uint8array[i] = binaryString.charCodeAt(i);
+
+    uint8array = inflateSync(uint8array);
 
     const trickScores: TrickScore[] = [];
     let offset = 0;

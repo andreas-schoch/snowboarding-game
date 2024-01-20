@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "box2d-wasm": "^7.0.0",
+    "fflate": "^0.8.1",
     "phaser": "^3.70.0",
     "pocketbase": "^0.20.3",
     "protobufjs": "^7.2.6",
