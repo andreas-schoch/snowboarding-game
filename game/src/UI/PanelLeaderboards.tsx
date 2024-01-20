@@ -3,7 +3,7 @@ import {Component, For, Show, createSignal, onMount} from 'solid-js';
 import {pb} from '..';
 import {Settings} from '../Settings';
 import {calculateTotalScore} from '../helpers/calculateTotalScore';
-import {IScore} from '../pocketbaseService/types';
+import {IScore} from '../pocketbase/types';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 

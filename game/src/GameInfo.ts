@@ -1,4 +1,4 @@
-import {IScore} from './pocketbaseService/types';
+import {IScore} from './pocketbase/types';
 
 export class GameInfo {
   static observer: Phaser.Events.EventEmitter;

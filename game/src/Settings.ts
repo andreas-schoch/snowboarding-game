@@ -1,5 +1,5 @@
 import {LocalLevelKeys} from './levels';
-import {IScore} from './pocketbaseService/types';
+import {IScore} from './pocketbase/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
 export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin';

@@ -2,15 +2,15 @@ import 'phaser';
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {Settings} from './Settings';
-import {Base64Serializer, fromTSLProto, fromWrapperTSLProto, toTSLProto, toWrapperTSLProto} from './helpers/serializers/base64Serializer';
-import {ScoreLogSerializer} from './helpers/serializers/customSerializer';
-import {ProtobufSerializer} from './helpers/serializers/protobufSerializer';
-import {TrickScoreProto} from './helpers/serializers/types';
 import {RubeScene} from './physics/RUBE/RubeLoaderInterfaces';
-import {PocketbaseService} from './pocketbaseService/pocketbase';
-import {TrickScore} from './pocketbaseService/types';
+import {PocketbaseService} from './pocketbase/pocketbase';
+import {TrickScore} from './pocketbase/types';
 import {GameScene} from './scenes/GameScene';
 import {PreloadScene} from './scenes/PreloadScene';
+import {Base64Serializer} from './serializers/base64Serializer';
+import {ScoreLogSerializer} from './serializers/customSerializer';
+import {fromTSLProto, fromWrapperTSLProto, toTSLProto, toWrapperTSLProto,TrickScoreProto} from './serializers/proto';
+import {ProtobufSerializer} from './serializers/protobufSerializer';
 
 export const pb = new PocketbaseService();
 

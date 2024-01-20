@@ -4,7 +4,7 @@ import {Settings} from '../Settings';
 import {PanelId} from '../UI';
 import {Character} from '../character/Character';
 import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
-import {IScore} from '../pocketbaseService/types';
+import {IScore} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 
 export class CharacterController {

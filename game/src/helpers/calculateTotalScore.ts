@@ -1,5 +1,5 @@
 import {BASE_FLIP_POINTS, POINTS_PER_COIN, trickScoreSerializer} from '..';
-import {IComboTrickScore, IScore, TrickScoreType} from '../pocketbaseService/types';
+import {IComboTrickScore, IScore, TrickScoreType} from '../pocketbase/types';
 
 export const calculateTotalScore = (score: IScore): number => {
   const log = trickScoreSerializer.decode(score.tsl);

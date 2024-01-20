@@ -6,7 +6,7 @@ import {Settings} from '../Settings';
 import {RESTART_GAME} from '../eventTypes';
 import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../helpers/calculateTotalScore';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
-import {IScore} from '../pocketbaseService/types';
+import {IScore} from '../pocketbase/types';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 

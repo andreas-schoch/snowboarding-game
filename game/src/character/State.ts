@@ -3,7 +3,7 @@ import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {TrickScore, IScore, TrickScoreType} from '../pocketbaseService/types';
+import {TrickScore, IScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 

@@ -2,7 +2,7 @@ import {Component, createSignal} from 'solid-js';
 import {GameInfo} from '../GameInfo';
 import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PAUSE_GAME, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
 import {calculateTotalScore} from '../helpers/calculateTotalScore';
-import {IScore} from '../pocketbaseService/types';
+import {IScore} from '../pocketbase/types';
 import {PanelId} from '.';
 
 export const HUD: Component<{setPanel: (id: PanelId) => void}> = props => {
