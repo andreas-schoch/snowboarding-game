@@ -26,7 +26,6 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
-    // const binaryString = String.fromCharCode.apply(null, Array.from(encoded));
     console.timeEnd('ProtobufSerializer.encode');
     return binaryString;
   }

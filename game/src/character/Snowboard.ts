@@ -110,7 +110,7 @@ export class Snowboard {
 
       const groundRayCallback = new b2.JSRayCastCallback();
       groundRayCallback.ReportFixture = (fixturePtr: number, pointPtr: number, normalPtr: number, fraction: number) => {
-        const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture); // TODO Is this correct?
+        const fixture = b2.wrapPointer(fixturePtr, b2.b2Fixture);
         if (fixture.IsSensor()) return -1; // coins and other sensors can mess with raycast leading to wrong trick score and rotation computation
         const {x: pointX, y: pointY} = b2.wrapPointer(pointPtr, b2.b2Vec2);
         const {x: normalX, y: normalY} = b2.wrapPointer(normalPtr, b2.b2Vec2);

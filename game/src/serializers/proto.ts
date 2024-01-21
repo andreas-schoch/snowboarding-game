@@ -1,6 +1,8 @@
 import {IBaseTrickScore, IComboTrickScore, IFlipTrickScore, IScore, TrickScore, TrickScoreType} from '../pocketbase/types';
 
-export type TrickScoreProto = IComboTrickScoreProto | IFlipTrickScoreProto | ICoinTrickScoreProto;export const toTSLProto = (tsl: TrickScore[]): TrickScoreProto[] => {
+export type TrickScoreProto = IComboTrickScoreProto | IFlipTrickScoreProto | ICoinTrickScoreProto;
+
+export const toTSLProto = (tsl: TrickScore[]): TrickScoreProto[] => {
   return tsl.map(ts => {
     switch (ts.type) {
     case TrickScoreType.combo:
@@ -30,11 +32,11 @@ export const fromTSLProto = (tsl: TrickScoreProto[]): TrickScore[] => {
   });
 };
 
-export const toWrapperTSLProto = (data: {wrapper: TrickScore[];}): {wrapper: TrickScoreProto[];} => {
+export const toWrapperTSLProto = (data: {wrapper: TrickScore[]}): {wrapper: TrickScoreProto[]} => {
   return {wrapper: toTSLProto(data.wrapper)};
 };
 
-export const fromWrapperTSLProto = (tslp: {wrapper: TrickScoreProto[];}): {wrapper: TrickScore[];} => {
+export const fromWrapperTSLProto = (tslp: {wrapper: TrickScoreProto[]}): {wrapper: TrickScore[]} => {
   return {wrapper: fromTSLProto(tslp.wrapper)};
 };
 
@@ -51,23 +53,22 @@ export interface IScoreProto {
   tsl: TrickScoreProto[];
 }
 
-export interface IBaseTrickScoreProto { // IBaseTrickScore
+export interface IBaseTrickScoreProto {
   t: TrickScoreType;
   fr: IBaseTrickScore['frame'];
-  // d: IBaseTrickScore['distance'];
 }
 
-export interface IComboTrickScoreProto extends IBaseTrickScoreProto { // IComboTrickScore
+export interface IComboTrickScoreProto extends IBaseTrickScoreProto {
   t: TrickScoreType.combo;
   a: IComboTrickScore['accumulator'];
   m: IComboTrickScore['multiplier'];
 }
 
-export interface IFlipTrickScoreProto extends IBaseTrickScoreProto { // IFlipTrickScore
+export interface IFlipTrickScoreProto extends IBaseTrickScoreProto {
   t: TrickScoreType.flip;
-  fl: IFlipTrickScore['flips']; // flips
+  fl: IFlipTrickScore['flips'];
 }
 
-export interface ICoinTrickScoreProto extends IBaseTrickScoreProto { // ICoinTrickScore
+export interface ICoinTrickScoreProto extends IBaseTrickScoreProto {
   t: TrickScoreType.present;
 }

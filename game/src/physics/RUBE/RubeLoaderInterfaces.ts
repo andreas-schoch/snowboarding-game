@@ -182,7 +182,6 @@ export interface RubeJointWheel extends RubeJointBase {
   motorSpeed?: number;
   springDampingRatio?: number;
   springFrequency?: number;
-  // dampingRatio?: number; // TODO verify if available or if it is the springDampingRatio and springFrequency
 }
 
 export interface RubeJointRope extends RubeJointBase {

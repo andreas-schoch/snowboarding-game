@@ -26,7 +26,7 @@ export class Leaderboard {
 
   async submit(score: IScore): Promise<IScore> {
     const loggedInUser = this.auth.loggedInUser();
-    if (!loggedInUser) throw new Error('Not logged in'); // TODO refresh
+    if (!loggedInUser) throw new Error('Not logged in');
     score.user = loggedInUser.id;
     score.level = Settings.currentLevel();
     score.total = calculateTotalScore(score);

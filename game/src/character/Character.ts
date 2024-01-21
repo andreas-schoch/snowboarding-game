@@ -84,7 +84,7 @@ export class Character {
 
   jump() {
     // prevents player from jumping too quickly after a landing
-    if (this.scene.game.getFrame() - this.state.timeGrounded < 6) return; // TODO change to numStepsGrounded
+    if (this.scene.game.getFrame() - this.state.numFramesGrounded < 6) return;
 
     const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {

@@ -11,7 +11,7 @@ export class State {
   distanceMeters = 0;
   isLevelFinished = false;
   isCrashed = false;
-  timeGrounded = 0;
+  numFramesGrounded = 0;
 
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
@@ -39,6 +39,19 @@ export class State {
   constructor(private character: Character) {
     this.scene = character.scene;
     this.registerListeners();
+  }
+
+  update(): void {
+    this.processPickups();
+    if (this.isCrashed || this.isLevelFinished) return;
+
+    const isBoardInAir = this.character.board.isInAir();
+    if (isBoardInAir && !this.lastIsInAir) GameInfo.observer.emit(ENTER_IN_AIR);
+    else if (!isBoardInAir && this.lastIsInAir) GameInfo.observer.emit(ENTER_GROUNDED);
+    this.updateTrickCounter();
+    this.updateComboLeeway();
+    this.updateDistance();
+    this.lastIsInAir = isBoardInAir;
   }
 
   getCurrentScore(): IScore {
@@ -102,7 +115,7 @@ export class State {
     this.distancePixels = 0;
     this.lastPosX = 0;
     this.lastPosY = 0;
-    this.timeGrounded = 0;
+    this.numFramesGrounded = 0;
     this.totalRotation = 0;
   }
 
@@ -126,7 +139,7 @@ export class State {
 
     // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
     GameInfo.observer.on(ENTER_GROUNDED, () => {
-      this.timeGrounded = this.scene.game.getFrame();
+      this.numFramesGrounded = this.scene.game.getFrame();
       this.landedFrontFlips += this.pendingFrontFlips;
       this.landedBackFlips += this.pendingBackFlips;
 
@@ -184,18 +197,6 @@ export class State {
       break;
     }
     }
-  }
-
-  update(): void {
-    this.processPickups();
-    const isInAir = this.character.board.isInAir();
-    // TODO check is chrashed only once
-    if (isInAir && !this.lastIsInAir && !this.isCrashed) GameInfo.observer.emit(ENTER_IN_AIR);
-    else if (!isInAir && this.lastIsInAir && !this.isCrashed) GameInfo.observer.emit(ENTER_GROUNDED);
-    this.updateTrickCounter();
-    this.updateComboLeeway();
-    this.updateDistance();
-    this.lastIsInAir = isInAir;
   }
 
   private processPickups() {
@@ -269,7 +270,6 @@ export class State {
   }
 
   private updateDistance() {
-    if (this.isLevelFinished || this.isCrashed) return;
     const {x, y} = this.character.bodyImage;
     const delta = {x: x - this.lastPosX, y: y - this.lastPosY};
     const length = delta.x * delta.x + delta.y * delta.y;
