@@ -1,6 +1,7 @@
 // export const DISTANCE_CHANGE = 'distance_change';
 export const SCORE_CHANGE = 'score_change';
 export const COMBO_CHANGE = 'combo_change';
+export const TIME_CHANGE = 'time_change';
 export const PICKUP_PRESENT = 'pickup_present';
 export const COMBO_LEEWAY_UPDATE = 'combo_leeway_update';
 export const LEVEL_FINISH = 'level_finish';

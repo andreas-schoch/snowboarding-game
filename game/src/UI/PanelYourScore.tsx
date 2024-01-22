@@ -1,10 +1,9 @@
 import './PanelYourScore.css';
 import {Component, createSignal, onMount} from 'solid-js';
-import {LEVEL_SUCCESS_BONUS_POINTS, POINTS_PER_COIN, pb} from '..';
+import {pb} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {RESTART_GAME} from '../eventTypes';
-import {calculateBestCombo, calculateTotalScore, calculateTrickScore} from '../helpers/calculateTotalScore';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {IScore} from '../pocketbase/types';
 import {BasePanel} from './BasePanel';
@@ -15,9 +14,6 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   let usernameInput: HTMLInputElement;
   const [yourRank, setYourRank] = createSignal(-1);
   const [totalRanks, setTotalRanks] = createSignal(-1);
-  const bestCombo = () => calculateBestCombo(props.score);
-  const trickScore = () => calculateTrickScore(props.score);
-  const totalScore = () => calculateTotalScore(props.score);
 
   const rankText = () => {
     const rank = yourRank();
@@ -33,7 +29,6 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
       if (!Settings.username()) {
         usernameInput.value = `Player_${pseudoRandomId()}`;
         usernameInput.setAttribute('value', usernameInput.value); // to make floating label move up
-        // Settings.set('userName', usernameInput.value);
       } else {
         submitScoreForm?.classList.add('hidden');
         await pb.leaderboard.submit(props.score);
@@ -54,10 +49,10 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
 
   const refreshRank = async () => {
     // FIXME I need a better way to figure out the rank of the current user. It is not sustainable to potentially load all scores just to find it.
+    // Unless we limit the scores per level to less than e.g. 200 and if it is lower than lowest, player remains unranked
     const loggedInUser = pb.auth.loggedInUser();
     if (!loggedInUser) return;
-    const fbScores = await pb.leaderboard.scores(Settings.currentLevel(), 1, 200);
-    const scores: IScore[] = fbScores.map(s => ({...s, total: calculateTotalScore(s)})).sort((a, b) => Number(b.total) - Number(a.total));
+    const scores = await pb.leaderboard.scores(Settings.currentLevel(), 1, 200);
     const yourRank = scores.findIndex(s => s.user === loggedInUser.id);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);
@@ -81,30 +76,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   return (
     <BasePanel id='panel-your-score' title='Your Score' scroll={false} backBtn={false} setPanel={props.setPanel}>
 
-      {/* <!--SCORE SUMMARY--> */}
-      <div class="row summary summary-distance">
-        <span class="col col-8">Distance travelled</span>
-        <span class="col col-4" id="your-score-distance">{props.score.distance}</span>
-      </div>
-      <div class="row summary summary-presents">
-        <span class="col col-8">Presents collected</span>
-        <span class="col col-4" id="your-score-coins">{props.score.coins}x{POINTS_PER_COIN}</span>
-      </div>
-      <div class="row summary summary-trick">
-        <span class="col col-8">
-          <span>Trick score</span>
-          <span class="summary-trick-combo">(Best Combo: <span id="your-score-best-combo">{bestCombo()}</span>)</span>
-        </span>
-        <span class="col col-4" id="your-score-trick-score">{trickScore()}</span>
-      </div>
-      <div class="row summary summary-bonus">
-        <span class="col col-8">Bonus points</span>
-        <span class="col col-4" id="your-score-bonus">{props.score.finishedLevel ? LEVEL_SUCCESS_BONUS_POINTS : 0}</span>
-      </div>
-      <div class="row summary summary-total">
-        <span class="col col-8">Total</span>
-        <span class="col col-4" id="your-score-total">{totalScore()}</span>
-      </div>
+      <TrickScoreSummary score={props.score} />
 
       <div class="row summary summary-rank">
         <span class="col col-12">{rankText()}</span>
@@ -146,3 +118,62 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     </BasePanel>
   );
 };
+
+function TrickScoreSummary(props: {score: IScore}) {
+
+  return <>
+    <div class="row summary summary-presents">
+      <span class="col col-8">Collectibles</span>
+      <span class="col col-4" id="your-score-coins">{props.score.pointsCoin}</span>
+    </div>
+
+    <div class="row summary summary-trick">
+      <span class="col col-8">Tricks</span>
+      <span class="col col-4" id="your-score-trick-score">{props.score.pointsTrick}</span>
+    </div>
+
+    <div class="row summary summary-trick">
+      <span class="col col-8">
+        <span>Combos</span>
+        <span class="summary-trick-combo"> (Best Combo: <span id="your-score-best-combo">{props.score.pointsComboBest}</span>)</span>
+      </span>
+      <span class="col col-4" id="your-score-trick-score">{props.score.pointsCombo}</span>
+    </div>
+
+    <div class="row summary summary-total">
+      <span class="col col-8">Total</span>
+      <span class="col col-4" id="your-score-total">{props.score.pointsTotal}</span>
+    </div>
+  </>;
+}
+
+// function RaceScoreSummary(props: {score: IScore}) {
+//   const raceSummary = createMemo(() => getRaceScoreSummary(props.score));
+//   const distance = () => raceSummary().distance.toFixed(1) + ' m';
+//   const avgSpeed = () => raceSummary().avgSpeed.toFixed(1) + ' km/h';
+//   const time = () => formatTime(raceSummary().time);
+
+//   return (
+//     <>
+//       <div class="row summary summary-distance">
+//         <span class="col col-6">Distance</span>
+//         <span class="col col-6" id="your-score-distance">{distance()}</span>
+//       </div>
+
+//       <div class="row summary summary-avg-speed">
+//         <span class="col col-6">Average Speed</span>
+//         <span class="col col-6" id="your-score-avg-speed">{avgSpeed()}</span>
+//       </div>
+
+//       <div class="row summary summary-time summary-total">
+//         <span class="col col-6">Time</span>
+//         <span class="col col-6" id="your-score-time">{time()}</span>
+//       </div>
+
+//       <div class="row summary summary-avg-speed">
+//         {/* <span class="col col-6">Average Speed</span> */}
+//         <span class="col col-12" id="your-score-avg-speed">{avgSpeed()}</span>
+//       </div>
+//     </>
+//   );
+// }

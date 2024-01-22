@@ -69,9 +69,9 @@ window.onload = async () => {
   freeLeaked = LeakMitigator.freeLeaked;
   recordLeak = LeakMitigator.recordLeak;
 
-  rubeSceneSerializer = await ProtobufSerializer<RubeScene, RubeScene>({schema: 'assets/proto/RubeScene.proto', type: 'Scene'});
+  rubeSceneSerializer = await ProtobufSerializer<RubeScene, RubeScene>({schema: 'assets/protobuf/RubeScene.proto', type: 'Scene'});
   trickScoreB64Serializer = await Base64Serializer<TrickScore[], TrickScoreProto[]>({default: [], to: toTSLProto, from: fromTSLProto});
-  trickScoreProtoSerializer = await ProtobufSerializer<{wrapper: TrickScore[]}, {wrapper: TrickScoreProto[]}>({schema: 'assets/proto/TSL.proto', type: 'TSL', default: {wrapper: []}, to: toWrapperTSLProto, from: fromWrapperTSLProto});
+  trickScoreProtoSerializer = await ProtobufSerializer<{wrapper: TrickScore[]}, {wrapper: TrickScoreProto[]}>({schema: 'assets/protobuf/TSL.proto', type: 'TSL', default: {wrapper: []}, to: toWrapperTSLProto, from: fromWrapperTSLProto});
   trickScoreSerializer = await ScoreLogSerializer();
 
   game = new Phaser.Game(gameConfig);

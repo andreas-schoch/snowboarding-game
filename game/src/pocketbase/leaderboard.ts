@@ -1,7 +1,6 @@
 
 import PocketBase, {RecordModel} from 'pocketbase';
 import {Settings} from '../Settings';
-import {calculateTotalScore} from '../helpers/calculateTotalScore';
 import {ILevel, LocalLevelKeys} from '../levels';
 import {Auth} from './auth';
 import {IScore} from './types';
@@ -19,7 +18,7 @@ export class Leaderboard {
   constructor(private pb: PocketBase, private auth: Auth) { }
 
   async scores(level: ILevel['id'], page = 1, perPage = 100): Promise<IScore[]> {
-    const options = {filter: `level = "${level}"`, sort: '-total'};
+    const options = {filter: `level = "${level}"`, sort: '-pointsTotal'};
     const resultList = await this.pb.collection<IScore>('Score').getList(page, perPage, options);
     return resultList.items;
   }
@@ -29,7 +28,6 @@ export class Leaderboard {
     if (!loggedInUser) throw new Error('Not logged in');
     score.user = loggedInUser.id;
     score.level = Settings.currentLevel();
-    score.total = calculateTotalScore(score);
 
     this.saveScoreLocally(score);
 
@@ -40,7 +38,7 @@ export class Leaderboard {
       return await this.pb.collection('Score').create<IScore>(score);
     }
 
-    if (calculateTotalScore(score) > calculateTotalScore(existingScore)) {
+    if (score.pointsTotal >existingScore.pointsTotal) {
       console.log('New highscore. Update existing score', score);
       return await this.pb.collection('Score').update<IScore>(existingScore.id!, score);
     }

@@ -1,7 +1,9 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, trickScoreB64Serializer, trickScoreProtoSerializer, trickScoreSerializer} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb, trickScoreSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE} from '../eventTypes';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
+import {framesToTime} from '../helpers/framesToTime';
+import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
 import {TrickScore, IScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
@@ -9,6 +11,7 @@ import {Character} from './Character';
 
 export class State {
   distanceMeters = 0;
+  levelUnpausedFrames = 0;
   isLevelFinished = false;
   isCrashed = false;
   numFramesGrounded = 0;
@@ -42,9 +45,12 @@ export class State {
   }
 
   update(): void {
-    this.processPickups();
-    if (this.isCrashed || this.isLevelFinished) return;
+    if (this.isCrashed || this.isLevelFinished || this.scene.b2Physics.isPaused) return;
 
+    this.levelUnpausedFrames++; // TODO switch from leeway tween to a frame deterministic one based on levelUnpausedFrames
+    GameInfo.observer.emit(TIME_CHANGE, framesToTime(this.levelUnpausedFrames));
+
+    this.processPickups();
     const isBoardInAir = this.character.board.isInAir();
     if (isBoardInAir && !this.lastIsInAir) GameInfo.observer.emit(ENTER_IN_AIR);
     else if (!isBoardInAir && this.lastIsInAir) GameInfo.observer.emit(ENTER_GROUNDED);
@@ -55,23 +61,26 @@ export class State {
   }
 
   getCurrentScore(): IScore {
-    const encodedB64 = trickScoreB64Serializer.encode(this.trickScoreLog);
-    const encodedProto = trickScoreProtoSerializer.encode({wrapper: this.trickScoreLog});
     const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
-
-    console.log('---------------------------------');
-    console.log('encodedB64', encodedB64.length);
-    console.log('encodedProto', encodedProto.length);
-    console.log('encodedCustom', encodedCustom.length);
-    return {
-      distance: this.distanceMeters,
-      coins: this.totalCollectedPresents,
-      trickScore: this.totalTrickScore,
-      finishedLevel: this.isLevelFinished,
+    const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(encodedCustom);
+    const score: IScore = {
+      user: pb.auth.loggedInUser()?.id,
+      level: Settings.currentLevel(),
       crashed: this.isCrashed,
+      finishedLevel: this.isLevelFinished,
       tsl: encodedCustom,
-      level: Settings.currentLevel()
+      pointsCoin: fromCoins,
+      pointsTrick: fromTricks,
+      pointsCombo: fromCombos,
+      pointsComboBest: bestCombo,
+      pointsTotal: total,
+      distance: this.distanceMeters,
+      time: Math.floor((this.levelUnpausedFrames / 60) * 1000), // in ms
     };
+
+    GameInfo.score = score;
+    return score;
+
   }
 
   getCurrentSpeed(): number {
@@ -145,7 +154,7 @@ export class State {
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
-        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.scene.game.getFrame()});
+        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.levelUnpausedFrames});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
@@ -209,7 +218,7 @@ export class State {
       }
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
-      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.scene.game.getFrame()});
+      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedPresents++;
       GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
@@ -272,15 +281,13 @@ export class State {
   private updateDistance() {
     const {x, y} = this.character.bodyImage;
     const delta = {x: x - this.lastPosX, y: y - this.lastPosY};
-    const length = delta.x * delta.x + delta.y * delta.y;
-    // console.log('updateDistance', this.distanceMeters, length / 40);
+    const length = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
     this.distancePixels += length;
     this.distanceMeters = Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
     this.lastPosX = x;
     this.lastPosY = y;
 
     if (this.distanceMeters !== this.lastDistanceMeters && !this.isCrashed && !this.isLevelFinished) {
-      // GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
       this.lastDistanceMeters = this.distanceMeters;
     }
   }
@@ -289,7 +296,7 @@ export class State {
     if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.scene.game.getFrame()});
+    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.levelUnpausedFrames});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
     GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);

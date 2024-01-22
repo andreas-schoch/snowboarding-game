@@ -40,12 +40,17 @@ export type TrickScore = IComboTrickScore | IFlipTrickScore | ICoinTrickScore;
 export interface IScore {
   id?: string;
   user?: string; // one-to-one relation to user collection
-  total?: number; // derived from others
-  distance: number;
-  coins: number;
-  trickScore: number;
+  level: string; // one-to-one relation to level collection
   finishedLevel: boolean;
   crashed: boolean;
-  level: string;
   tsl: string;
+  // TRICK MODE
+  pointsCoin: number;
+  pointsTrick: number;
+  pointsCombo: number;
+  pointsComboBest: number;
+  pointsTotal: number; // derived from others
+  // RACE MODE
+  distance: number;
+  time: number;
 }

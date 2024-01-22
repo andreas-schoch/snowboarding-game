@@ -10,6 +10,7 @@ import {CharacterController} from '../controllers/PlayerController';
 import {RESTART_GAME} from '../eventTypes';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
+import {IScore} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -66,7 +67,7 @@ export class GameScene extends Phaser.Scene {
       this.b2Physics.loader.cleanup();
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';
-      GameInfo.score = {finishedLevel: false, level: Settings.currentLevel(), distance: 0, coins: 0, crashed: false, trickScore: 0, tsl: '[]'};
+      GameInfo.score = dummyScore;
       freeLeaked();
       this.scene.restart();
     });
@@ -77,3 +78,18 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
   }
 }
+
+const dummyScore: IScore = {
+  user: undefined,
+  level: Settings.currentLevel(),
+  crashed: false,
+  finishedLevel: false,
+  tsl: '',
+  pointsCoin: 0,
+  pointsCombo: 0,
+  pointsComboBest: 0,
+  pointsTotal: 0,
+  pointsTrick: 0,
+  distance: 0,
+  time: 0,
+};
