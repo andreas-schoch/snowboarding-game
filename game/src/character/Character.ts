@@ -12,22 +12,26 @@ export class Character {
   armLowerLeft: Box2D.b2Body;
   armUpperRight: Box2D.b2Body;
   armLowerRight: Box2D.b2Body;
+
   bindingLeft: Box2D.b2RevoluteJoint | null;
   bindingRight: Box2D.b2RevoluteJoint | null;
   distanceLegLeft: Box2D.b2DistanceJoint | null;
   distanceLegRight: Box2D.b2DistanceJoint | null;
   weldCenter: Box2D.b2WeldJoint | null;
   prismatic: Box2D.b2PrismaticJoint | null;
+
   headImage: Phaser.GameObjects.Image;
   bodyImage: Phaser.GameObjects.Image;
   armUpperLeftImage: Phaser.GameObjects.Image;
   armLowerLeftImage: Phaser.GameObjects.Image;
   armUpperRightImage: Phaser.GameObjects.Image;
   armLowerRightImage: Phaser.GameObjects.Image;
+
   armUpperLeftDepth: number;
   armLowerLeftDepth: number;
   armUpperRightDepth: number;
   armLowerRightDepth: number;
+
   legLengthExtended: number;
   legLengthRelaxed: number;
   legLengthBent: number;

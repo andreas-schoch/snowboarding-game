@@ -185,7 +185,7 @@ export class RubeSerializer<IMG = unknown> {
     case 'friction':
       return this.serializeFrictionJoint(joint);
     case 'rope':
-      throw new Error('Rope joint serialization not implemented');
+      throw new Error('Rope joint serialization not supported by box2d-wasm');
     case 'motor':
       return this.serializeMotorJoint(joint);
     }

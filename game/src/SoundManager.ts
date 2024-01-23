@@ -1,6 +1,6 @@
 import {GameInfo} from './GameInfo';
 import {Settings} from './Settings';
-import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME} from './eventTypes';
+import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME} from './eventTypes';
 import {IScore} from './pocketbase/types';
 import {GameScene} from './scenes/GameScene';
 
@@ -34,7 +34,7 @@ export class SoundManager {
   }
 
   private initListeners() {
-    GameInfo.observer.on(PICKUP_PRESENT, () => this.sfx_pickup_present.play());
+    GameInfo.observer.on(COLLECT_COIN, () => this.sfx_pickup_present.play());
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
       if (id !== GameInfo.possessedCharacterId) return;
       this.sfx_death.play();

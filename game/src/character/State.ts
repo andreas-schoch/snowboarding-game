@@ -2,7 +2,7 @@ import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb} fro
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {ComboState} from '../UI/HUD';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
 import {framesToTime} from '../helpers/framesToTime';
 import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
@@ -11,7 +11,6 @@ import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
 export class State {
-  distanceMeters = 0;
   levelUnpausedFrames = 0;
   isLevelFinished = false;
   isCrashed = false;
@@ -19,24 +18,19 @@ export class State {
 
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
+  private scene: GameScene;
   private comboLeeway: Phaser.Tweens.Tween | null = null;
-  private comboAccumulatedScore = 0;
+  private comboAccumulator = 0;
   private comboMultiplier = 0;
-  private totalTrickScore = 0;
-  private totalCollectedPresents = 0;
-  private anglePreviousUpdate = 0;
-  private totalRotation = 0; // total rotation while in air without touching the ground
+  private totalCollectedCoins = 0;
+  private lastAngleRad = 0;
   private currentFlipRotation = 0; // set to 0 after each flip
   private pendingFrontFlips = 0;
   private pendingBackFlips = 0;
-  private landedFrontFlips = 0;
-  private landedBackFlips = 0;
-  private lastIsInAir = false;
-  private scene: GameScene;
   private distancePixels = 0;
+  private lastIsInAir = false;
   private lastPosX = 0;
   private lastPosY = 0;
-  lastDistanceMeters = 0;
 
   constructor(private character: Character) {
     this.scene = character.scene;
@@ -73,7 +67,7 @@ export class State {
       pointsCombo: fromCombos,
       pointsComboBest: bestCombo,
       pointsTotal: total,
-      distance: this.distanceMeters,
+      distance: Math.floor(this.distancePixels / this.scene.b2Physics.worldScale),
       time: Math.floor((this.levelUnpausedFrames / 60) * 1000), // in ms
     };
 
@@ -98,36 +92,6 @@ export class State {
     });
   }
 
-  reset() {
-    this.totalTrickScore = 0;
-    // this.trickScoreLog = [];
-    if (this.comboLeeway) {
-      this.comboLeeway.stop();
-      this.comboLeeway = null;
-    }
-    this.totalCollectedPresents = 0;
-    this.comboMultiplier = 0;
-    this.comboAccumulatedScore = 0;
-    this.isLevelFinished = false;
-    this.isCrashed = false;
-    this.seenSensors.clear();
-    this.pickupsToProcess.clear();
-    this.pendingFrontFlips = 0;
-    this.pendingBackFlips = 0;
-    this.landedBackFlips = 0;
-    this.landedFrontFlips = 0;
-    this.currentFlipRotation = 0;
-    this.anglePreviousUpdate = 0;
-    this.lastIsInAir = false;
-    this.lastDistanceMeters = 0;
-    this.distanceMeters = 0;
-    this.distancePixels = 0;
-    this.lastPosX = 0;
-    this.lastPosY = 0;
-    this.numFramesGrounded = 0;
-    this.totalRotation = 0;
-  }
-
   private registerListeners() {
     const customProps = this.scene.b2Physics.loader.customProps;
     this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
@@ -149,24 +113,20 @@ export class State {
     // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
     GameInfo.observer.on(ENTER_GROUNDED, () => {
       this.numFramesGrounded = this.scene.game.getFrame();
-      this.landedFrontFlips += this.pendingFrontFlips;
-      this.landedBackFlips += this.pendingBackFlips;
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
         GameInfo.tsl.push({type: TrickScoreType.flip, flips: numFlips, frame: this.levelUnpausedFrames});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
-        this.totalTrickScore += trickScore;
-        this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
+        this.comboAccumulator += trickScore * TRICK_POINTS_COMBO_FRACTION;
         this.comboMultiplier++;
-        GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, this.isCrashed ? ComboState.Fail : ComboState.Change);
+        GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulator, this.comboMultiplier, this.isCrashed ? ComboState.Fail : ComboState.Change);
         GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
         this.resetComboLeewayTween();
         this.comboLeeway = this.createComboLeewayTween(false);
       }
 
-      this.totalRotation = 0;
       this.currentFlipRotation = 0;
       this.pendingBackFlips = 0;
       this.pendingFrontFlips = 0;
@@ -178,7 +138,7 @@ export class State {
     GameInfo.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
     if (this.character.id === GameInfo.possessedCharacterId) GameInfo.crashed = true;
 
-    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, ComboState.Fail);
+    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulator, this.comboMultiplier, ComboState.Fail);
     this.resetComboLeewayTween();
   }
 
@@ -220,8 +180,8 @@ export class State {
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
-      this.totalCollectedPresents++;
-      GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
+      this.totalCollectedCoins++;
+      GameInfo.observer.emit(COLLECT_COIN, this.totalCollectedCoins);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
     }
@@ -230,12 +190,11 @@ export class State {
 
   private updateTrickCounter() {
     if (this.character.board.isInAir()) {
-      const currentAngle = Phaser.Math.Angle.Normalize(this.character.body.GetAngle());
+      const currentAngleRad = Phaser.Math.Angle.Normalize(this.character.body.GetAngle());
 
-      const diff = this.calculateDifferenceBetweenAngles(this.anglePreviousUpdate, currentAngle);
-      this.totalRotation += diff;
+      const diff = this.calculateDifferenceBetweenAngles(this.lastAngleRad, currentAngleRad);
       this.currentFlipRotation += diff;
-      this.anglePreviousUpdate = currentAngle;
+      this.lastAngleRad = currentAngleRad;
 
       if (this.currentFlipRotation >= Math.PI * (this.pendingBackFlips === 0 ? 1.25 : 2)) {
         this.pendingBackFlips++;
@@ -272,8 +231,8 @@ export class State {
 
   // based on: https://www.construct.net/en/forum/construct-2/how-do-i-18/count-rotations-46674
   // http://blog.lexique-du-net.com/index.php?post/Calculate-the-real-difference-between-two-angles-keeping-the-sign
-  private calculateDifferenceBetweenAngles(firstAngle: number, secondAngle: number): number {
-    let difference = secondAngle - firstAngle;
+  private calculateDifferenceBetweenAngles(angleRadA: number, angleRadB: number): number {
+    let difference = angleRadB - angleRadA;
     if (difference < -Math.PI) difference += Math.PI * 2;
     else if (difference > Math.PI) difference -= Math.PI * 2;
     return difference;
@@ -281,28 +240,21 @@ export class State {
 
   private updateDistance() {
     const {x, y} = this.character.bodyImage;
-    const delta = {x: x - this.lastPosX, y: y - this.lastPosY};
-    const length = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
+    const deltaX = x - this.lastPosX;
+    const deltaY = y - this.lastPosY;
+    const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     this.distancePixels += length;
-    this.distanceMeters = Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
     this.lastPosX = x;
     this.lastPosY = y;
-
-    if (this.distanceMeters !== this.lastDistanceMeters && !this.isCrashed && !this.isLevelFinished) {
-      this.lastDistanceMeters = this.distanceMeters;
-    }
   }
 
   private handleComboComplete() {
-    if (this.isLevelFinished) return;
-    const combo = this.comboAccumulatedScore * this.comboMultiplier;
-    this.totalTrickScore += combo;
-    GameInfo.tsl.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.levelUnpausedFrames});
+    if (this.isLevelFinished || this.isCrashed) return;
+    GameInfo.tsl.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulator, frame: this.levelUnpausedFrames});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, ComboState.Success);
-    // GameInfo.observer.emit(COMBO_END, 0, 0, this.isCrashed ? ComboState.Fail : ComboState.Success);
+    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulator, this.comboMultiplier, ComboState.Success);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);
-    this.comboAccumulatedScore = 0;
+    this.comboAccumulator = 0;
     this.comboMultiplier = 0;
   }
 }
