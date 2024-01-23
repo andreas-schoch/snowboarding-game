@@ -84,7 +84,7 @@ export class Character {
 
   jump() {
     // prevents player from jumping too quickly after a landing
-    if (this.scene.game.getFrame() - this.state.numFramesGrounded < 6) return;
+    if (this.scene.game.getFrame() - this.state.numFramesGrounded < 12) return;
 
     const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
@@ -209,6 +209,11 @@ export class Character {
     this.armLowerLeftImage = getBodyImage(this.armLowerLeft);
     this.armUpperRightImage = getBodyImage(this.armUpperRight);
     this.armLowerRightImage = getBodyImage(this.armLowerRight);
+    // IMAGE DEPTH
+    this.armUpperLeftDepth = this.armUpperLeftImage.depth;
+    this.armLowerLeftDepth = this.armLowerLeftImage.depth;
+    this.armUpperRightDepth = this.armUpperRightImage.depth;
+    this.armLowerRightDepth = this.armLowerRightImage.depth;
     // Custom Props
     this.legLengthExtended = getBodyCustomProp(this.body, 'legLengthExtended') as number;
     this.legLengthRelaxed = getBodyCustomProp(this.body, 'legLengthRelaxed') as number;
