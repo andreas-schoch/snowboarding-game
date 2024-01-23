@@ -6,20 +6,31 @@ import {formatTime} from '../helpers/formatTime';
 import {IScore} from '../pocketbase/types';
 import {PanelId} from '.';
 
+export const enum ComboState {
+  Change,
+  Success,
+  Fail
+}
+
 export const HUD: Component<{setPanel: (id: PanelId) => void}> = props => {
-  let comboLeewayCircle: HTMLElement;
-  let scoreRef: HTMLElement;
+  let comboWrapperRef: HTMLElement;
+  let comboLeewayRef: HTMLElement;
+  let comboTextRef: HTMLElement;
+  let comboMoveTextRef: HTMLElement;
+
+  let scoreTextRef: HTMLElement;
+
+  const [comboEnd, setComboEnd] = createSignal<{accumulated: number, multiplier: number, success: boolean}>({accumulated: 0, multiplier: 0, success: false});
   const [combo, setCombo] = createSignal('');
   const [score, setScore] = createSignal(0);
   const [time, setTime] = createSignal('0:00:00');
 
+  const comboTotal = () => comboEnd().accumulated * comboEnd().multiplier;
+
   GameInfo.observer.on(TIME_CHANGE, (time: number) => setTime(formatTime(time)));
-  GameInfo.observer.on(COMBO_CHANGE, (accumulated, multiplier) => setCombo(accumulated ? (multiplier + 'x' + accumulated) : ''));
-  GameInfo.observer.on(SCORE_CHANGE, (score: IScore) => {
-    setScore(score.pointsTotal);
-    animateScore();
-  });
-  GameInfo.observer.on(COMBO_LEEWAY_UPDATE, (value) => updateCircleLoader(value));
+  GameInfo.observer.on(COMBO_LEEWAY_UPDATE, (value: number) => updateCircleLoader(value));
+  GameInfo.observer.on(COMBO_CHANGE, (accumulated: number, multiplier: number, state: ComboState) => animateCombo(accumulated, multiplier, state));
+  GameInfo.observer.on(SCORE_CHANGE, (score: IScore) => animateScoreChange(score));
   GameInfo.observer.on(LEVEL_FINISH, (score: IScore) => !score.crashed && updateCircleLoader(0));
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => id === GameInfo.possessedCharacterId && !score.finishedLevel && updateCircleLoader(0));
 
@@ -30,50 +41,93 @@ export const HUD: Component<{setPanel: (id: PanelId) => void}> = props => {
 
   function updateCircleLoader(value: number) {
     if (value === 0) setCombo('');
-    comboLeewayCircle.style.backgroundImage = `conic-gradient(red ${value}deg, transparent 0deg)`;
+    if (comboLeewayRef) comboLeewayRef.style.backgroundImage = `conic-gradient(red ${value}deg, transparent 0deg)`;
   }
 
-  function animateScore() {
-    const name = 'score-change';
-    scoreRef.style.scale = '1';
-    scoreRef.style.color = '';
-    scoreRef.classList.remove(name);
-    scoreRef.onanimationend = null;
+  function animateCombo(accumulated: number, multiplier: number, state: ComboState) {
+    if (state === ComboState.Success) animateComboSuccess(accumulated, multiplier);
+    else if (state === ComboState.Fail) animateComboFail(accumulated, multiplier);
+    else if (state === ComboState.Change) animateComboChange(accumulated, multiplier);
+  }
 
-    const style = getComputedStyle(scoreRef);
-    const animationRunning = style.animationName !== 'none' && style.animationPlayState === 'running';
+  function animateComboSuccess(accumulated: number, multiplier: number) {
+    if (accumulated === 0) return;
+    setComboEnd({accumulated, multiplier, success: true});
+    const {x, y} = comboTextRef.getBoundingClientRect();
+    comboMoveTextRef.style.transition = 'none';
+    comboMoveTextRef.style.left = x + 'px';
+    comboMoveTextRef.style.top = y + 'px';
+    comboMoveTextRef.style.opacity = '1';
+    setCombo('');
+    comboWrapperRef.style.visibility = 'hidden';
+    setTimeout(() => {
+      const {x, y} = scoreTextRef.getBoundingClientRect();
+      comboMoveTextRef.style.transition = 'all 1s linear'; // Adjust duration as needed
+      comboMoveTextRef.style.left = x + 'px';
+      comboMoveTextRef.style.top = y + 'px';
+      comboMoveTextRef.style.opacity = '0';
+    }, 0);
+  }
+
+  function animateComboFail(accumulated: number, multiplier: number) {
+    if (accumulated === 0) return;
+    setComboEnd({accumulated, multiplier, success: false});
+    const {x, y} = comboTextRef.getBoundingClientRect();
+    comboMoveTextRef.style.transition = 'none';
+    comboMoveTextRef.style.left = x + 'px';
+    comboMoveTextRef.style.top = y + 'px';
+    comboMoveTextRef.style.opacity = '1';
+    setCombo('');
+    comboWrapperRef.style.visibility = 'hidden';
+    setTimeout(() => {
+      comboMoveTextRef.style.transition = 'all 1250ms linear'; // Adjust duration as needed
+      comboMoveTextRef.style.top = (y + 500) + 'px';
+      comboMoveTextRef.style.opacity = '0';
+    }, 0);
+  }
+
+  function animateComboChange(accumulated: number, multiplier: number) {
+    comboWrapperRef.style.visibility = 'visible';
+    setCombo(accumulated + 'x' + multiplier);
+  }
+
+  function animateScoreChange(score: IScore) {
+    setScore(score.pointsTotal);
+    const name = 'score-change';
+    scoreTextRef.style.scale = '1';
+    scoreTextRef.style.color = '';
+    scoreTextRef.classList.remove(name);
+    scoreTextRef.onanimationend = null;
+
+    const {animationName, animationPlayState} = getComputedStyle(scoreTextRef);
+    const animationRunning = animationName !== 'none' && animationPlayState === 'running';
 
     if (!animationRunning) {
-      scoreRef.style.color = '#36de36';
-      scoreRef.classList.add(name);
+      scoreTextRef.style.color = '#36de36';
+      scoreTextRef.classList.add(name);
 
-      scoreRef.onanimationend = () => {
-        scoreRef.classList.remove(name);
-        scoreRef.style.color = '';
+      scoreTextRef.onanimationend = () => {
+        scoreTextRef.classList.remove(name);
+        scoreTextRef.style.color = '';
       };
     }
   }
 
   return <>
-    {/* <div class="absolute top-2 left-2">
-        <div class="mb-1 text-sm text-[var(--grey-600)]">Presents</div>
-        <div id="hud-distance">{presents()} x</div>s
-      </div> */}
-
     <div class="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
       <div>{time()}</div>
     </div>
 
-    <Show when={combo() !== ''}>
-      <div class="absolute top-20 left-1/2 transform -translate-x-1/2 text-center">
-        <div class="flex">
-          <div ref={el => comboLeewayCircle = el} class="w-5 h-5 rounded-full m-1 mr-4 bg-white border-white border-2"/>
-          <div class="text-xl">{combo()}</div>
-        </div>
+    <div class="absolute top-20 left-1/2 transform -translate-x-1/2 text-center invisible" ref={el => comboWrapperRef = el}>
+      <div class="flex">
+        <div ref={el => comboLeewayRef = el} class="w-5 h-5 rounded-full m-1 mr-4 bg-white border-white border-2"/>
+        <div ref={el => comboTextRef = el} class="text-xl">{combo()}</div>
       </div>
-    </Show>
+    </div>
 
-    <div class="absolute top-4 right-4 text-right" ref={el => scoreRef = el}>
+    <span ref={el => comboMoveTextRef = el} class="relative opacity-0">{comboTotal()}</span>
+
+    <div class="absolute top-4 right-4 text-right text-2xl" ref={el => scoreTextRef = el}>
       <div>{score()}</div>
     </div>
 

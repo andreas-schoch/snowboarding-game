@@ -11,5 +11,6 @@
 }
 
 .score-change {
-  animation: ScoreChange 200ms ease-out;
+  animation: ScoreChange 250ms ease-out;
+  animation-delay: 25ms;
 }

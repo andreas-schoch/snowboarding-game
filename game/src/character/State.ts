@@ -1,6 +1,7 @@
 import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb, trickScoreSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
+import {ComboState} from '../UI/HUD';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, PICKUP_PRESENT, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
 import {framesToTime} from '../helpers/framesToTime';
 import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
@@ -92,9 +93,10 @@ export class State {
       paused,
       from: 0,
       to: 360,
-      duration: 4000,
+      duration: 3000,
       onUpdate: tween => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
       onComplete: () => this.handleComboComplete(),
+      // onStop: () => this.handleComboComplete(),
     });
   }
 
@@ -159,7 +161,7 @@ export class State {
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
         this.comboMultiplier++;
-        GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier);
+        GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, this.isCrashed ? ComboState.Fail : ComboState.Change);
         GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
 
         this.resetComboLeewayTween();
@@ -178,6 +180,7 @@ export class State {
     GameInfo.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
     if (this.character.id === GameInfo.possessedCharacterId) GameInfo.crashed = true;
 
+    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, ComboState.Fail);
     this.resetComboLeewayTween();
   }
 
@@ -298,7 +301,9 @@ export class State {
     this.totalTrickScore += combo;
     this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.levelUnpausedFrames});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-    GameInfo.observer.emit(COMBO_CHANGE, 0, 0);
+    console.log('Combo complete----------------------- handleComboComplete called');
+    GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, ComboState.Success);
+    // GameInfo.observer.emit(COMBO_END, 0, 0, this.isCrashed ? ComboState.Fail : ComboState.Success);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);
     this.comboAccumulatedScore = 0;
     this.comboMultiplier = 0;
