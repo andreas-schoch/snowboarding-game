@@ -5,8 +5,8 @@ type ProtobufSerializerOptions<T, O> = {
   schema: string;
   type: string;
   default?: T;
-  from?: (o: O) => T;
-  to?: (o: T) => O;
+  from?: (o: O) => T; // a way to modify the decoded data before it is returned
+  to?: (o: T) => O; // a way to modify the data before it is encoded
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

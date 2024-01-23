@@ -1,7 +1,7 @@
 import {deflateSync, inflateSync} from 'fflate';
 import {ICoinTrickScore, IComboTrickScore, IFlipTrickScore, TrickScore, TrickScoreType} from '../pocketbase/types';
 
-// 5 times smaller than base64 and about 40-50% smaller than protobuf
+// 5 times smaller than base64 and about 40-50% smaller than protobuf (without deflate, otherwise still significant but not as much)
 // Issue is that everything is hardcoded and specific for TrickScore[] type
 // Also probably not super future proof if things need changing
 export async function ScoreLogSerializer() {

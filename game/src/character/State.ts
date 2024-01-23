@@ -54,7 +54,6 @@ export class State {
   }
 
   getCurrentScore(): IScore {
-    // const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
     const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(GameInfo.tsl);
     const score: IScore = {
       user: pb.auth.loggedInUser()?.id,
