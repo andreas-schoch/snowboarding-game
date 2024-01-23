@@ -50,36 +50,37 @@ export class Character {
     Character.instances.push(this);
   }
 
-  private resetLegs() {
-    const {legLengthRelaxed} = this;
-    this.distanceLegLeft?.SetLength(legLengthRelaxed);
-    this.distanceLegRight?.SetLength(legLengthRelaxed);
+  update() {
+    this.state.update();
+    if (this.board.getFramesInAir() > 6) this.resetLegs();
+    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
+    if (this.state.isCrashed || this.state.isLevelFinished) return;
+    this.board.update();
+
+    this.updateLookAtDirection();
+    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
   }
 
   leanBackward() {
     const {legLengthBent, legLengthExtended, leanForce} = this;
-    this.distanceLegLeft?.SetLength(legLengthBent);
-    this.distanceLegRight?.SetLength(legLengthExtended);
+    this.setLegLength(legLengthBent, legLengthExtended);
     this.body.ApplyAngularImpulse(leanForce, true);
   }
 
   leanForward() {
     const {legLengthBent, legLengthExtended, leanForce} = this;
-    this.distanceLegLeft?.SetLength(legLengthExtended);
-    this.distanceLegRight?.SetLength(legLengthBent);
+    this.setLegLength(legLengthExtended, legLengthBent);
     this.body.ApplyAngularImpulse(-leanForce, true);
   }
 
   leanCenter() {
     const {legLengthBent} = this;
-    this.distanceLegLeft?.SetLength(legLengthBent);
-    this.distanceLegRight?.SetLength(legLengthBent);
+    this.setLegLength(legLengthBent, legLengthBent);
   }
 
   leanUp() {
     const {legLengthExtended} = this;
-    this.distanceLegLeft?.SetLength(legLengthExtended);
-    this.distanceLegRight?.SetLength(legLengthExtended);
+    this.setLegLength(legLengthExtended, legLengthExtended);
   }
 
   jump() {
@@ -114,15 +115,15 @@ export class Character {
     return this.scene.b2Physics.loader.loadedScenes.get(this.id)?.bodies.some(b => b === body); // TODO optimize for performance as this will be called often
   }
 
-  update() {
-    this.state.update();
-    if (this.board.getFramesInAir() > 6) this.resetLegs();
-    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
-    if (this.state.isCrashed || this.state.isLevelFinished) return;
-    this.board.update();
+  private setLegLength(left: number, right: number) {
+    this.distanceLegLeft?.SetLength(left);
+    this.distanceLegRight?.SetLength(right);
+  }
 
-    this.updateLookAtDirection();
-    if (this.state.isCrashed && !this.alreadyDetached) this.detachBoard(); // joints cannot be destroyed within post-solve callback
+  private resetLegs() {
+    const {legLengthRelaxed} = this;
+    this.distanceLegLeft?.SetLength(legLengthRelaxed);
+    this.distanceLegRight?.SetLength(legLengthRelaxed);
   }
 
   private updateLookAtDirection() {

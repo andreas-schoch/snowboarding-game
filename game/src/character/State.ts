@@ -1,4 +1,4 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb, trickScoreSerializer} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {ComboState} from '../UI/HUD';
@@ -6,7 +6,7 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTE
 import {framesToTime} from '../helpers/framesToTime';
 import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {TrickScore, IScore, TrickScoreType} from '../pocketbase/types';
+import {IScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
@@ -24,8 +24,6 @@ export class State {
   private comboMultiplier = 0;
   private totalTrickScore = 0;
   private totalCollectedPresents = 0;
-  private trickScoreLog: TrickScore[] = [];
-
   private anglePreviousUpdate = 0;
   private totalRotation = 0; // total rotation while in air without touching the ground
   private currentFlipRotation = 0; // set to 0 after each flip
@@ -62,14 +60,14 @@ export class State {
   }
 
   getCurrentScore(): IScore {
-    const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
-    const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(encodedCustom);
+    // const encodedCustom = trickScoreSerializer.encode(this.trickScoreLog);
+    const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(GameInfo.tsl);
     const score: IScore = {
       user: pb.auth.loggedInUser()?.id,
       level: Settings.currentLevel(),
       crashed: this.isCrashed,
       finishedLevel: this.isLevelFinished,
-      tsl: encodedCustom,
+      // tsl: encodedCustom,
       pointsCoin: fromCoins,
       pointsTrick: fromTricks,
       pointsCombo: fromCombos,
@@ -102,7 +100,7 @@ export class State {
 
   reset() {
     this.totalTrickScore = 0;
-    this.trickScoreLog = [];
+    // this.trickScoreLog = [];
     if (this.comboLeeway) {
       this.comboLeeway.stop();
       this.comboLeeway = null;
@@ -156,7 +154,7 @@ export class State {
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
-        this.trickScoreLog.push({type: TrickScoreType.flip, flips: numFlips, frame: this.levelUnpausedFrames});
+        GameInfo.tsl.push({type: TrickScoreType.flip, flips: numFlips, frame: this.levelUnpausedFrames});
         const trickScore = numFlips * numFlips * BASE_FLIP_POINTS;
         this.totalTrickScore += trickScore;
         this.comboAccumulatedScore += trickScore * TRICK_POINTS_COMBO_FRACTION;
@@ -221,7 +219,7 @@ export class State {
       }
       this.scene.b2Physics.loader.userData.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
-      this.trickScoreLog.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
+      GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedPresents++;
       GameInfo.observer.emit(PICKUP_PRESENT, this.totalCollectedPresents);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
@@ -299,9 +297,8 @@ export class State {
     if (this.isLevelFinished) return;
     const combo = this.comboAccumulatedScore * this.comboMultiplier;
     this.totalTrickScore += combo;
-    this.trickScoreLog.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.levelUnpausedFrames});
+    GameInfo.tsl.push({type: TrickScoreType.combo, multiplier: this.comboMultiplier, accumulator: this.comboAccumulatedScore, frame: this.levelUnpausedFrames});
     GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-    console.log('Combo complete----------------------- handleComboComplete called');
     GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulatedScore, this.comboMultiplier, ComboState.Success);
     // GameInfo.observer.emit(COMBO_END, 0, 0, this.isCrashed ? ComboState.Fail : ComboState.Success);
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);

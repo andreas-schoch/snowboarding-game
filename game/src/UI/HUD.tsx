@@ -1,5 +1,5 @@
 import './HUD.css';
-import {Component, Show, createSignal} from 'solid-js';
+import {Component, createSignal} from 'solid-js';
 import {GameInfo} from '../GameInfo';
 import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PAUSE_GAME, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
 import {formatTime} from '../helpers/formatTime';

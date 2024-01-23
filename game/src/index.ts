@@ -19,8 +19,8 @@ export const SCENE_GAME = 'GameScene';
 
 export const POINTS_PER_COIN = 100;
 export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
-export const BASE_FLIP_POINTS = 200;
-export const TRICK_POINTS_COMBO_FRACTION = 0.2;
+export const BASE_FLIP_POINTS = 400;
+export const TRICK_POINTS_COMBO_FRACTION = 0.1;
 export const HEAD_MAX_IMPULSE = 8;
 
 export const DEFAULT_WIDTH = 1280;

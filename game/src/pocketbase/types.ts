@@ -43,7 +43,7 @@ export interface IScore {
   level: string; // one-to-one relation to level collection
   finishedLevel: boolean;
   crashed: boolean;
-  tsl: string;
+  tsl?: string;
   // TRICK MODE
   pointsCoin: number;
   pointsTrick: number;

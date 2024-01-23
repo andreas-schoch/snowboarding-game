@@ -1,5 +1,5 @@
 import {BASE_FLIP_POINTS, POINTS_PER_COIN, trickScoreSerializer} from '..';
-import {IScore, TrickScoreType} from '../pocketbase/types';
+import {TrickScore, TrickScoreType} from '../pocketbase/types';
 
 export interface IPointScoreSummary {
   fromCoins: number;
@@ -16,13 +16,14 @@ export interface IRaceScoreSummary {
   time: number; // in ms
 }
 
-export const getPointScoreSummary = (tsl: IScore['tsl']): IPointScoreSummary => {
+export const getPointScoreSummary = (tsl: string | TrickScore[]): IPointScoreSummary => {
+  console.time('getPointScoreSummary');
   let fromCoins = 0;
   let fromTricks = 0;
   let fromCombos = 0;
   let bestCombo = 0;
 
-  const log = trickScoreSerializer.decode(tsl);
+  const log = typeof tsl === 'string' ? trickScoreSerializer.decode(tsl) : tsl;
   for (const trick of log) {
     if (trick.type === TrickScoreType.present) fromCoins += POINTS_PER_COIN;
     else if (trick.type === TrickScoreType.flip) fromTricks += (trick.flips * trick.flips * BASE_FLIP_POINTS);
@@ -33,6 +34,7 @@ export const getPointScoreSummary = (tsl: IScore['tsl']): IPointScoreSummary => 
     }
   }
 
+  console.timeEnd('getPointScoreSummary');
   return {
     fromCoins,
     fromCombos,

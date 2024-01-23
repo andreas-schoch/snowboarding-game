@@ -68,6 +68,7 @@ export class GameScene extends Phaser.Scene {
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';
       GameInfo.score = dummyScore;
+      GameInfo.tsl.length = 0;
       freeLeaked();
       this.scene.restart();
     });

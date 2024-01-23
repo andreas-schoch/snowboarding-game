@@ -1,5 +1,7 @@
 
 import PocketBase, {RecordModel} from 'pocketbase';
+import {trickScoreSerializer} from '..';
+import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {ILevel, LocalLevelKeys} from '../levels';
 import {Auth} from './auth';
@@ -18,7 +20,7 @@ export class Leaderboard {
   constructor(private pb: PocketBase, private auth: Auth) { }
 
   async scores(level: ILevel['id'], page = 1, perPage = 100): Promise<IScore[]> {
-    const options = {filter: `level = "${level}"`, sort: '-pointsTotal'};
+    const options = {filter: `level = "${level}"`, sort: '+pointsTotal'};
     const resultList = await this.pb.collection<IScore>('Score').getList(page, perPage, options);
     return resultList.items;
   }
@@ -26,6 +28,9 @@ export class Leaderboard {
   async submit(score: IScore): Promise<IScore> {
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('Not logged in');
+    if (score.pointsTotal !== 0 && GameInfo.tsl.length === 0) throw new Error('Missing tsl');
+    score.tsl = trickScoreSerializer.encode(GameInfo.tsl);
+    if (!score.tsl) throw new Error('Missing tsl');
     score.user = loggedInUser.id;
     score.level = Settings.currentLevel();
 

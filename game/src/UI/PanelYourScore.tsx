@@ -123,7 +123,7 @@ function TrickScoreSummary(props: {score: IScore}) {
 
   return <>
     <div class="row summary summary-presents">
-      <span class="col col-8">Collectibles</span>
+      <span class="col col-8">Coins</span>
       <span class="col col-4" id="your-score-coins">{props.score.pointsCoin}</span>
     </div>
 
