@@ -9,7 +9,7 @@ import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
 export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = props => {
-  const canGoBack = !GameInfo.crashed && !GameInfo.score.finishedLevel;
+  const canGoBack = !GameInfo.crashed && !GameInfo.score?.finishedLevel;
 
   const [levels] = createResource<ILevel[]>(() => pb.level.list());
 

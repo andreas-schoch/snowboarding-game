@@ -12,11 +12,16 @@ export const enum TrickScoreType {
   combo = 1,
   flip = 2,
   present = 3,
+  start = 4,
+  finish = 5,
+  crash = 6,
 }
 
 export interface IBaseTrickScore {
   type: TrickScoreType;
   frame: number;
+  // posX: number;
+  // posY: number;
   // distance: number;
 }
 
@@ -35,11 +40,32 @@ export interface ICoinTrickScore extends IBaseTrickScore {
   type: TrickScoreType.present;
 }
 
-export type TrickScore = IComboTrickScore | IFlipTrickScore | ICoinTrickScore;
+export interface IStartTrickScore extends IBaseTrickScore {
+  type: TrickScoreType.start;
+  timestamp: number;
+  levelRevision: 1; // placeholder for now
+  levelId: string;
+  userId: string;
+  // characterId: string;
+}
+
+export interface IFinishTrickScore extends IBaseTrickScore {
+  type: TrickScoreType.finish;
+  timestamp: number;
+  distance: number;
+}
+
+export interface ICrashTrickScore extends IBaseTrickScore {
+  type: TrickScoreType.crash;
+  timestamp: number;
+  distance: number;
+}
+
+export type TrickScore = IComboTrickScore | IFlipTrickScore | ICoinTrickScore | IStartTrickScore | IFinishTrickScore | ICrashTrickScore;
 
 export interface IScore {
   id?: string;
-  user?: string; // one-to-one relation to user collection
+  user?: string | IUser; // one-to-one relation to user collection
   level: string; // one-to-one relation to level collection
   finishedLevel: boolean;
   crashed: boolean;

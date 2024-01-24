@@ -49,6 +49,7 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(Settings.currentLevel()).then(level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
+      GameInfo.currentLevel = level;
       const encoded = rubeSceneSerializer.encode(level.scene);
       const decoded = rubeSceneSerializer.decode(encoded);
       console.log('rubeScene', JSON.stringify(level.scene).length);
@@ -69,6 +70,7 @@ export class GameScene extends Phaser.Scene {
       GameInfo.possessedCharacterId = '';
       GameInfo.score = dummyScore;
       GameInfo.tsl.length = 0;
+      GameInfo.currentLevel = null;
       freeLeaked();
       this.scene.restart();
     });

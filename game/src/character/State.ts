@@ -6,7 +6,7 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTE
 import {framesToTime} from '../helpers/framesToTime';
 import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {IScore, TrickScoreType} from '../pocketbase/types';
+import {IScore, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
@@ -39,7 +39,7 @@ export class State {
 
   update(): void {
     if (this.isCrashed || this.isLevelFinished || this.scene.b2Physics.isPaused) return;
-
+    if (this.levelUnpausedFrames === 0) this.pushStartLog();
     this.levelUnpausedFrames++; // TODO switch from leeway tween to a frame deterministic one based on levelUnpausedFrames
     GameInfo.observer.emit(TIME_CHANGE, framesToTime(this.levelUnpausedFrames));
 
@@ -60,17 +60,17 @@ export class State {
       level: Settings.currentLevel(),
       crashed: this.isCrashed,
       finishedLevel: this.isLevelFinished,
-      // tsl: encodedCustom,
+      // tsl: encodedCustom, // since we have access to the score log we don't want to set the encoded TSL yet (expensive operation)
       pointsCoin: fromCoins,
       pointsTrick: fromTricks,
       pointsCombo: fromCombos,
       pointsComboBest: bestCombo,
       pointsTotal: total,
-      distance: Math.floor(this.distancePixels / this.scene.b2Physics.worldScale),
-      time: Math.floor((this.levelUnpausedFrames / 60) * 1000), // in ms
+      distance: this.getDistanceInMeters(),
+      time: this.getTimeInMs(),
     };
 
-    GameInfo.score = score;
+    GameInfo.score = score; // TODO try using solid-js signals so UI reacts immediately to score changes (and other things it needs to know about. Or use context) 
     return score;
 
   }
@@ -87,7 +87,6 @@ export class State {
       duration: 3000,
       onUpdate: tween => GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, tween.getValue()),
       onComplete: () => this.handleComboComplete(),
-      // onStop: () => this.handleComboComplete(),
     });
   }
 
@@ -134,9 +133,9 @@ export class State {
 
   private setCrashed() {
     this.isCrashed = true;
+    GameInfo.tsl.push({type: TrickScoreType.crash, frame: this.levelUnpausedFrames, timestamp: Date.now(), distance: this.getDistanceInMeters()});
     GameInfo.observer.emit(ENTER_CRASHED, this.getCurrentScore(), this.character.id);
     if (this.character.id === GameInfo.possessedCharacterId) GameInfo.crashed = true;
-
     GameInfo.observer.emit(COMBO_CHANGE, this.comboAccumulator, this.comboMultiplier, ComboState.Fail);
     this.resetComboLeewayTween();
   }
@@ -154,6 +153,7 @@ export class State {
     case 'level_finish': {
       this.scene.cameras.main.stopFollow();
       this.handleComboComplete();
+      GameInfo.tsl.push({type: TrickScoreType.finish, frame: this.levelUnpausedFrames, timestamp: Date.now(), distance: this.getDistanceInMeters()});
       this.isLevelFinished = true;
       this.resetComboLeewayTween();
       const currentScore = this.getCurrentScore();
@@ -255,5 +255,20 @@ export class State {
     GameInfo.observer.emit(COMBO_LEEWAY_UPDATE, 0);
     this.comboAccumulator = 0;
     this.comboMultiplier = 0;
+  }
+
+  private getDistanceInMeters(): number {
+    return Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
+  }
+
+  private getTimeInMs(): number {
+    return Math.floor((this.levelUnpausedFrames / 60) * 1000);
+  }
+
+  private pushStartLog() {
+    const {id: levelId} = GameInfo.currentLevel || {id: ''};
+    const {id: userId} = pb.auth.loggedInUser() || {id: ''};
+    const log: IStartTrickScore = {type: TrickScoreType.start, frame: this.levelUnpausedFrames, timestamp: Date.now(), levelRevision: 1, userId, levelId};
+    GameInfo.tsl.push(log);
   }
 }
