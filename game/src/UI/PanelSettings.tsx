@@ -2,6 +2,7 @@ import './PanelSettings.css';
 import {Component, onMount} from 'solid-js';
 import {Settings} from '../Settings';
 import {BasePanel} from './BasePanel';
+import {ButtonPrimary} from './general/Button';
 import {PanelId} from '.';
 
 export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props => {
@@ -13,7 +14,8 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
     for (const radio of radios) if (Number(radio.value) === Settings.resolutionScale()) radio.checked = true;
   });
 
-  const handleSaveSettings = () => {
+  const handleSaveSettings = (evt: SubmitEvent) => {
+    evt.preventDefault();
     Settings.set('resolution', submitForm.resolution.value || '1');
     Settings.set('volumeMusic', submitForm.volumeMusic.value);
     Settings.set('volumeSfx', submitForm.volumeSfx.value);
@@ -24,7 +26,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
   return (
     <BasePanel id='panel-settings' title='Settings' scroll={false} backBtn={true} setPanel={props.setPanel}>
 
-      <form name="settings-form" id="settings-form" ref={el => submitForm = el}>
+      <form name="settings-form" id="settings-form"class="leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
         {/* <!-- RESOLUTION --> */}
         <div class="row">
           <span class="col col-3 settings-name">Resolution</span>
@@ -76,7 +78,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
         {/* <!-- SAVE SETTINGS --> */}
         <div class="row">
           <div class="col col-12 flex-center">
-            <button type="submit" class="btn btn-primary btn-save-settings" id="btn-save-settings" onClick={() => handleSaveSettings()}>Save Settings</button>
+            <ButtonPrimary type='submit'>Save Settings</ButtonPrimary>
           </div>
         </div>
       </form>

@@ -7,6 +7,7 @@ import {RESTART_GAME} from '../eventTypes';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {IScoreNew} from '../pocketbase/types';
 import {BasePanel} from './BasePanel';
+import {ButtonPrimary, ButtonBorderless} from './general/Button';
 import {PanelId} from '.';
 
 export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScoreNew}> = props => {
@@ -99,20 +100,20 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
               <label for="username" class="floating-label">Your name</label>
             </div>
           </div>
-          <button class="col col-4 btn btn-primary" id="btn-score-submit" onClick={() => handleInitialSubmit()}>Submit Score</button>
+          <ButtonPrimary class="col col-4" onClick={() => handleInitialSubmit()}>Submit Score</ButtonPrimary>
         </div>
       </div>
       {/* <!-- BACK / REPLAY --> */}
       <div class="row play-again">
         <div class="col col-12">
-          <button class="col col-6 btn btn-secondary" id="btn-goto-select-level" onClick={() => props.setPanel('panel-select-level')}>
-            <i class="material-icons">chevron_left</i>
+          <ButtonBorderless class="col col-6" onClick={() => props.setPanel('panel-select-level')}>
+            <i class="material-icons mr-2">chevron_left</i>
             <span>Select Level</span>
-          </button>
-          <button class="col col-6 btn btn-secondary" id="btn-play-again" onClick={() => GameInfo.observer.emit(RESTART_GAME)}>
-            <i class="material-icons">replay</i>
+          </ButtonBorderless>
+          <ButtonBorderless class="col col-6" onClick={() => GameInfo.observer.emit(RESTART_GAME)}>
+            <i class="material-icons mr-2">replay</i>
             <span>Replay Level</span>
-          </button>
+          </ButtonBorderless>
         </div>
       </div>
     </BasePanel>
