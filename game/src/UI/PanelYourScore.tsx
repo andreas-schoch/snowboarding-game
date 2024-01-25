@@ -5,11 +5,11 @@ import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {RESTART_GAME} from '../eventTypes';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
-import {IScore} from '../pocketbase/types';
+import {IScoreNew} from '../pocketbase/types';
 import {BasePanel} from './BasePanel';
 import {PanelId} from '.';
 
-export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScore}> = props => {
+export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScoreNew}> = props => {
   let submitScoreForm: HTMLElement;
   let usernameInput: HTMLInputElement;
   const [yourRank, setYourRank] = createSignal(-1);
@@ -119,7 +119,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   );
 };
 
-function TrickScoreSummary(props: {score: IScore}) {
+function TrickScoreSummary(props: {score: IScoreNew}) {
 
   return <>
     <div class="row summary summary-presents">

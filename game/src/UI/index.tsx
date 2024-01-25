@@ -5,7 +5,7 @@ import {render} from 'solid-js/web';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE} from '../eventTypes';
-import {IScore} from '../pocketbase/types';
+import {IScore, IScoreNew} from '../pocketbase/types';
 import {HUD} from './HUD';
 import {PanelCredits} from './PanelCredits';
 import {PanelHowToPlay} from './PanelHowToPlay';
@@ -18,7 +18,7 @@ import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 
 const SolidUI = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
-  const [score, setScore] = createSignal<IScore>(GameInfo.score);
+  const [score, setScore] = createSignal<IScoreNew>(GameInfo.score);
 
   const handleShowYourScore = (score: IScore, timeout: number) => {
     setScore(score);

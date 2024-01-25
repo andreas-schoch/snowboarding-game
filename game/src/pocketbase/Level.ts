@@ -8,10 +8,10 @@ export class Level {
   constructor(private pb: PocketBase, private auth: Auth) { }
 
   async list(): Promise<ILevel[]> {
-    return await this.pb.collection<ILevel>(this.collectionName).getFullList({sort: 'number'});
+    return await this.pb.collection<ILevel>(this.collectionName).getFullList({sort: 'number', expand: 'owner'});
   }
 
   async get(id: ILevel['id']): Promise<ILevel | null> {
-    return await this.pb.collection(this.collectionName).getOne<ILevel>(id).catch(() => null);
+    return await this.pb.collection(this.collectionName).getOne<ILevel>(id, {expand: 'owner'}).catch(() => null);
   }
 }

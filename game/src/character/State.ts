@@ -6,7 +6,7 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTE
 import {framesToTime} from '../helpers/framesToTime';
 import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {IScore, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
+import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
@@ -53,9 +53,9 @@ export class State {
     this.lastIsInAir = isBoardInAir;
   }
 
-  getCurrentScore(): IScore {
+  getCurrentScore(): IScoreNew {
     const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(GameInfo.tsl);
-    const score: IScore = {
+    const score: IScoreNew = {
       user: pb.auth.loggedInUser()?.id,
       level: Settings.currentLevel(),
       crashed: this.isCrashed,

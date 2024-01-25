@@ -10,7 +10,7 @@ import {CharacterController} from '../controllers/PlayerController';
 import {RESTART_GAME} from '../eventTypes';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
-import {IScore} from '../pocketbase/types';
+import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -82,8 +82,8 @@ export class GameScene extends Phaser.Scene {
   }
 }
 
-const dummyScore: IScore = {
-  user: undefined,
+const dummyScore: IScoreNew = {
+  user: '',
   level: Settings.currentLevel(),
   crashed: false,
   finishedLevel: false,

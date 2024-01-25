@@ -1,12 +1,16 @@
 import {RecordModel} from 'pocketbase';
 
-export interface IUser extends RecordModel {
+export interface IUser extends RecordModel{
   id: string;
   username: string;
   usernameChanged: boolean;
   created: string;
   updated: string;
 }
+
+export const isUser = (obj: unknown): obj is IUser => {
+  return typeof obj === 'object' && obj !== null && 'id' in obj && 'username' in obj && 'usernameChanged' in obj && 'created' in obj && 'updated' in obj;
+};
 
 export const enum TrickScoreType {
   combo = 1,
@@ -63,9 +67,8 @@ export interface ICrashTrickScore extends IBaseTrickScore {
 
 export type TrickScore = IComboTrickScore | IFlipTrickScore | ICoinTrickScore | IStartTrickScore | IFinishTrickScore | ICrashTrickScore;
 
-export interface IScore {
-  id?: string;
-  user?: string | IUser; // one-to-one relation to user collection
+export interface IScore extends RecordModel {
+  user: string; // one-to-one relation to user collection
   level: string; // one-to-one relation to level collection
   finishedLevel: boolean;
   crashed: boolean;
@@ -80,3 +83,5 @@ export interface IScore {
   distance: number;
   time: number;
 }
+
+export type IScoreNew = Omit<IScore, 'collectionId' | 'collectionName' | 'id' | 'created' | 'updated'>;

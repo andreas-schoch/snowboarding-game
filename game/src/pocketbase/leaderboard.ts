@@ -1,11 +1,12 @@
 
-import PocketBase, {RecordModel} from 'pocketbase';
+import PocketBase, {RecordListOptions, RecordModel} from 'pocketbase';
 import {scoreLogSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
+import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
 import {ILevel, LocalLevelKeys} from '../levels';
 import {Auth} from './auth';
-import {IScore} from './types';
+import {IScore, IScoreNew} from './types';
 
 export interface IUser extends RecordModel {
   id: string;
@@ -20,12 +21,23 @@ export class Leaderboard {
   constructor(private pb: PocketBase, private auth: Auth) { }
 
   async scores(level: ILevel['id'], page = 1, perPage = 100): Promise<IScore[]> {
-    const options = {filter: `level = "${level}"`, sort: '+pointsTotal'};
+    const options: RecordListOptions = {filter: `level = "${level}"`, sort: '-pointsTotal', expand: 'user'};
     const resultList = await this.pb.collection<IScore>('Score').getList(page, perPage, options);
+
+    // TODO temporary to ensure decode of TSL works until its content is finalized and server overrides the point fields using it
+    for (const score of resultList.items) {
+      const {total, fromCoins, fromCombos, fromTricks} = getPointScoreSummary(score.tsl!);
+      score.pointsTotal = total;
+      score.pointsCoin = fromCoins;
+      score.pointsCombo = fromCombos;
+      score.pointsTrick = fromTricks;
+    }
     return resultList.items;
   }
 
-  async submit(score: IScore): Promise<IScore> {
+  // TODO get existing score in advance when starting the level, so using the logs we can display to the user the score changes in realtime based on frame count
+  // Maybe even get the top 10 scores in advance and show pseudo realtime leaderboards
+  async submit(score: IScoreNew): Promise<IScore> {
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('Not logged in');
     if (score.pointsTotal !== 0 && GameInfo.tsl.length === 0) throw new Error('Missing tsl');
@@ -49,11 +61,11 @@ export class Leaderboard {
     }
 
     console.log('Score not higher than existing score. Not submitting');
-    return score;
+    return existingScore;
   }
 
-  private saveScoreLocally(score: IScore) {
-    const localScoresMap: Record<keyof LocalLevelKeys, IScore[]> = Settings.localScores();
+  private saveScoreLocally(score: IScoreNew) {
+    const localScoresMap: Record<keyof LocalLevelKeys, IScoreNew[]> = Settings.localScores();
     const localScoresLevel = localScoresMap[score.level] || [];
     localScoresLevel.push(score);
     localScoresMap[score.level] = localScoresLevel;
