@@ -1,8 +1,8 @@
 import PocketBase from 'pocketbase';
 import {rubeSceneSerializer} from '..';
+import {blobToString} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
-import {transformBlobToBinaryString} from '../scenes/GameScene';
 import {Auth} from './auth';
 
 export class Level {
@@ -24,7 +24,7 @@ export class Level {
     // console.log('--------rubescene response', response);
     const blob = await response.blob();
     // console.log('--------rubescene blob', blob);
-    const binaryString = await transformBlobToBinaryString(blob);
+    const binaryString = await blobToString(blob);
     // console.log('--------rubescene binaryString', binaryString);
     const scene = rubeSceneSerializer.decode(binaryString);
     console.log('--------rubescene scene', scene, scene.body?.filter(b => b.customProperties?.length)[0]);

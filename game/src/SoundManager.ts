@@ -17,6 +17,7 @@ export class SoundManager {
 
   constructor(private scene: GameScene) {
     const musicVolume = Settings.volumeMusic() / 100;
+    console.log('------------------musicVolume', musicVolume);
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
     this.music = this.scene.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 0.5, rate: 1, delay: 1, detune: 0});
     this.music.play();

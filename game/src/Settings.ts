@@ -40,11 +40,13 @@ export class Settings {
   }
 
   static volumeMusic(): number {
-    return Number(Settings.getRaw('volumeMusic')) || 60;
+    const volume = Settings.getRaw('volumeMusic');
+    return volume !== null ? Number(volume) : 60;
   }
 
   static volumeSfx(): number {
-    return Number(Settings.getRaw('volumeSfx')) || 60;
+    const volume = Settings.getRaw('volumeSfx');
+    return volume !== null ? Number(volume) : 60;
   }
 
   static username(): string | null {

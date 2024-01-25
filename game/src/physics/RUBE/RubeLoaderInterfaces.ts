@@ -18,7 +18,7 @@ export interface RubeScene {
 
 export interface RubeBody {
   name?: string;
-  active?: boolean;
+  active?: boolean; // if not present in rube export it seems to indicate true
   awake?: boolean;
   bullet?: boolean;
   fixedRotation?: boolean;
@@ -29,9 +29,16 @@ export interface RubeBody {
   angularVelocity?: number; // radians per second
   linearDamping?: number;
   linearVelocity?: RubeVector;
+
   'massData-mass'?: number;
   'massData-center'?: RubeVector;
-  'massData-I'?: number; // Inertia?
+  'massData-I'?: number; // Inertia
+  // Aliases for above since protobuf doesn't like hyphens.
+  // The loader will look for both before using defaults
+  massDataMass?: number;
+  massDataCenter?: RubeVector;
+  massDataI?: number;
+
   customProperties?: RubeCustomProperty[];
   fixture?: RubeFixture[];
 }
@@ -39,15 +46,20 @@ export interface RubeBody {
 export interface RubeFixture {
   name?: string;
   density?: number;
-  // if not present; interpret as 1
-  'filter-categoryBits'?: number;
-  // if not present; interpret as 65535
-  'filter-maskBits'?: number;
+
+  'filter-categoryBits'?: number; // if not present; interpret as 1
+  'filter-maskBits'?: number; // if not present; interpret as 65535
   'filter-groupIndex'?: number;
+  // Aliases for above since protobuf doesn't like hyphens.
+  // The loader will look for both before using defaults
+  filterCategoryBits?: number;
+  filterMaskBits?: number;
+  filterGroupIndex?: number;
+
   friction?: number;
   restitution?: number;
   sensor?: boolean;
-  customProperties?: RubeCustomProperty[]
+  customProperties?: RubeCustomProperty[];
   // A fixture object will only have ONE of the following shape objects
   circle?: RubeFixtureShapeCircle;
   polygon?: RubeFixtureShapePolygon;

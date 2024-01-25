@@ -8,6 +8,7 @@ import {b2, recordLeak} from '../..';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
 import {vec2Util} from './Vec2Math';
+import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
 export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
 
@@ -32,6 +33,9 @@ export class RubeLoader<IMG = unknown> {
   }
 
   load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0): [boolean, LoadedScene['id']] {
+    // Note that all the defaults should already have been set within sanitizeRubeDefaults()
+    // But for now we keep setting defaults in this loader as well until continuing work on my own level editor
+    scene = sanitizeRubeDefaults(scene);
     this.loadingBodies = scene.body ? scene.body.map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY)) : [];
     this.loadingJoints = scene.joint ? scene.joint.map(jointJson => this.loadJoint(jointJson)) : [];
     this.loadingImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
@@ -120,9 +124,9 @@ export class RubeLoader<IMG = unknown> {
     bd.set_bullet(Boolean(bodyJson.bullet || false));
 
     const massData = new b2.b2MassData();
-    massData.set_mass(bodyJson['massData-mass'] || 1);
-    massData.set_center(this.rubeToVec2(bodyJson['massData-center']));
-    massData.set_I(bodyJson['massData-I'] || 1);
+    massData.set_mass(bodyJson['massData-mass'] || bodyJson.massDataMass || 1);
+    massData.set_center(this.rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter));
+    massData.set_I(bodyJson['massData-I'] || bodyJson.massDataI || 1);
 
     const body: Box2D.b2Body = this.world.CreateBody(bd);
     body.SetMassData(massData);
@@ -137,9 +141,9 @@ export class RubeLoader<IMG = unknown> {
 
   private loadFixture(body: Box2D.b2Body, fixtureJso: RubeFixture): Box2D.b2Fixture {
     const filter = new b2.b2Filter();
-    filter.set_categoryBits(fixtureJso['filter-categoryBits'] || 1);
-    filter.set_maskBits(fixtureJso['filter-maskBits'] || 65535);
-    filter.set_groupIndex(fixtureJso['filter-groupIndex'] || 0);
+    filter.set_categoryBits(fixtureJso['filter-categoryBits'] || fixtureJso.filterCategoryBits || 1);
+    filter.set_maskBits(fixtureJso['filter-maskBits'] || fixtureJso.filterMaskBits || 65535);
+    filter.set_groupIndex(fixtureJso['filter-groupIndex'] || fixtureJso.filterGroupIndex || 0);
 
     const fd: Box2D.b2FixtureDef = this.getFixtureDefWithShape(fixtureJso);
     fd.set_friction(fixtureJso.friction || 0);
@@ -338,15 +342,17 @@ export class RubeLoader<IMG = unknown> {
 
     const {_malloc, b2Vec2, b2PolygonShape, HEAPF32, wrapPointer} = b2;
     const shape = new b2PolygonShape();
-    const buffer = _malloc(vertices.length * 8);
+    const ptr = _malloc(vertices.length * 8); // x and y are 4 bytes each so 8 bytes per b2Vec2
     let offset = 0;
     for (let i = 0; i < vertices.length; i++) {
-      HEAPF32[buffer + offset >> 2] = vertices[i].get_x();
-      HEAPF32[buffer + (offset + 4) >> 2] = vertices[i].get_y();
+      // HEAPF32 is a Float32Array view of the Emscripten HEAP
+      // Some bitwise magic is used to get the correct offset for the XY values of each created b2Vec2
+      HEAPF32[ptr + offset >> 2] = vertices[i].get_x();
+      HEAPF32[ptr + (offset + 4) >> 2] = vertices[i].get_y();
       offset += 8;
     }
-    const ptr_wrapped = wrapPointer(buffer, b2Vec2);
-    shape.Set(ptr_wrapped, vertices.length);
+    const firstVertex = wrapPointer(ptr, b2Vec2);
+    shape.Set(firstVertex, vertices.length);
     return shape;
   }
 

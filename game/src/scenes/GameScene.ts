@@ -1,4 +1,4 @@
-import {SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
+import {SCENE_GAME , freeLeaked, pb} from '..';
 import {Backdrop} from '../Backdrop';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
@@ -33,8 +33,8 @@ export class GameScene extends Phaser.Scene {
   private preload() {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
-    const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-    for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
+    // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+    // for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
   }
 
   private create() {
@@ -42,13 +42,12 @@ export class GameScene extends Phaser.Scene {
       // this.lights.enable();
       // this.lights.setAmbientColor(0x555555);
     }
-    const parsed: RubeScene = this.cache.json.get('level_002');
-    console.log('level from local', parsed, parsed.body?.filter(b => b.customProperties)[0]);
 
     // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
     // for (const level of levels) {
     //   const parsed: RubeScene = this.cache.json.get(level);
-    //   const encoded = rubeSceneSerializer.encode(parsed);
+    //   const sanitized = sanitizeRubeDefaults(parsed);
+    //   const encoded = rubeSceneSerializer.encode(sanitized);
     //   console.log('encoded', encoded);
     //   downloadBinaryStringAsFile(encoded, `${level}.bin`, 'application/octet-stream');
     // }
@@ -62,14 +61,6 @@ export class GameScene extends Phaser.Scene {
     pb.level.get(Settings.currentLevel()).then(async level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
       GameInfo.currentLevel = level;
-      // const encoded = rubeSceneSerializer.encode(level.scene);
-
-      // downloadBinaryStringAsFile(encoded, `${level.name}.bin`, 'application/octet-stream');
-      // const decoded = rubeSceneSerializer.decode(encoded);
-      // console.log('rubeScene', JSON.stringify(level.scene).length);
-      // console.log('encoded', encoded);
-      // console.log('decoded', JSON.stringify(decoded).length, decoded);
-
       const scene = await pb.level.getRubeScene(level);
       this.b2Physics.load(scene);
       new Terrain(this).draw();
@@ -112,28 +103,3 @@ const dummyScore: IScoreNew = {
   distance: 0,
   time: 0,
 };
-
-export function downloadBinaryStringAsFile(binaryString: string, filename: string, contentType: string) {
-  const blob = transformBinaryStringToBlob(binaryString, contentType);
-  const link = document.createElement('a');
-  link.download = filename;
-  link.href = window.URL.createObjectURL(blob);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-export function transformBinaryStringToBlob(binaryString: string, contentType: string): Blob {
-  const byteArray = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) byteArray[i] = binaryString.charCodeAt(i);
-  return new Blob([byteArray], {type: contentType});
-}
-
-export function transformBlobToBinaryString(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsBinaryString(blob);
-  });
-}

@@ -3,7 +3,7 @@ import PocketBase, {RecordListOptions, RecordModel} from 'pocketbase';
 import {scoreLogSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
+import {downloadBlob, stringToBlob} from '../helpers/binaryTransform';
 import {ILevel, LocalLevelKeys} from '../levels';
 import {Auth} from './auth';
 import {IScore, IScoreNew} from './types';
@@ -25,13 +25,13 @@ export class Leaderboard {
     const resultList = await this.pb.collection<IScore>('Score').getList(page, perPage, options);
 
     // TODO temporary to ensure decode of TSL works until its content is finalized and server overrides the point fields using it
-    for (const score of resultList.items) {
-      const {total, fromCoins, fromCombos, fromTricks} = getPointScoreSummary(score.tsl!);
-      score.pointsTotal = total;
-      score.pointsCoin = fromCoins;
-      score.pointsCombo = fromCombos;
-      score.pointsTrick = fromTricks;
-    }
+    // for (const score of resultList.items) {
+    //   const {total, fromCoins, fromCombos, fromTricks} = getPointScoreSummary(score.tsl!);
+    //   score.pointsTotal = total;
+    //   score.pointsCoin = fromCoins;
+    //   score.pointsCombo = fromCombos;
+    //   score.pointsTrick = fromTricks;
+    // }
     return resultList.items;
   }
 
@@ -41,7 +41,12 @@ export class Leaderboard {
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('Not logged in');
     if (score.pointsTotal !== 0 && GameInfo.tsl.length === 0) throw new Error('Missing tsl');
-    score.tsl = scoreLogSerializer.encode(GameInfo.tsl);
+
+    const tslString = scoreLogSerializer.encode(GameInfo.tsl);
+    downloadBlob(tslString, 'tsl.bin', 'application/octet-stream');
+    const blob = stringToBlob(tslString, 'application/octet-stream');
+    score.tsl = blob;
+
     if (!score.tsl) throw new Error('Missing tsl');
     score.user = loggedInUser.id;
     score.level = Settings.currentLevel();
