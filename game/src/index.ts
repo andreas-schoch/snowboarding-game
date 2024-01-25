@@ -53,8 +53,8 @@ export let game: Phaser.Game;
 export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
 export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
-export let rubeSceneSerializer: {encode: (rubeScene: RubeScene) => string, decode: (base64: string) => RubeScene};
 
+export let rubeSceneSerializer: {encode: (rubeScene: RubeScene) => string, decode: (encoded: string) => RubeScene};
 export let scoreLogSerializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
 
 window.onload = async () => {

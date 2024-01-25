@@ -14,12 +14,15 @@ message VectorArray {
 
 message CustomProperty {
   string name = 1;
-  int32 int = 2;
-  float float = 3;
-  string string = 4;
-  string color = 5; 
-  bool bool = 6;
-  Vector vec2 = 7;
+
+  oneof value {
+    int32 int = 2;
+    float float = 3;
+    string string = 4;
+    string color = 5; 
+    bool bool = 6;
+    Vector vec2 = 7;
+  }
 }
 
 message CollisionBitPlanes {
@@ -39,46 +42,46 @@ message FixtureShapePolygon {
 
 message FixtureShapeChain {
   VectorArray vertices = 1;
-  bool hasNextVertex = 2;
-  bool hasPrevVertex = 3;
-  Vector nextVertex = 4;
-  Vector prevVertex = 5;
+  optional bool hasNextVertex = 2;
+  optional bool hasPrevVertex = 3;
+  optional Vector nextVertex = 4;
+  optional Vector prevVertex = 5;
 }
 
 message Fixture {
-  string name = 1;
-  double density = 2;
-  uint32 filterCategoryBits = 3; // TODO
-  uint32 filterMaskBits = 4; // TODO
-  int32 filterGroupIndex = 5; // TODO
-  double friction = 6;
-  double restitution = 7;
-  bool sensor = 8;
+  optional string name = 1;
+  optional double density = 2;
+  optional uint32 filterCategoryBits = 3; // TODO
+  optional uint32 filterMaskBits = 4; // TODO
+  optional int32 filterGroupIndex = 5; // TODO
+  optional double friction = 6;
+  optional double restitution = 7;
+  optional bool sensor = 8;
   repeated CustomProperty customProperties = 9;
 
-  FixtureShapeCircle circle = 10;
-  FixtureShapePolygon polygon = 11;
-  FixtureShapeChain chain = 12;
+  optional FixtureShapeCircle circle = 10;
+  optional FixtureShapePolygon polygon = 11;
+  optional FixtureShapeChain chain = 12;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 message Body {
-  string name = 1;
-  bool active = 2;
-  bool awake = 3;
-  bool bullet = 4;
-  bool fixedRotation = 5;
-  uint32 type = 6;
-  Vector position = 7;
-  double angle = 8;
-  double angularDamping = 9;
-  double angularVelocity = 10;
-  double linearDamping = 11;
-  Vector linearVelocity = 12;
-  double massDataMass = 13; // TODO convert from 'massData-mass' to 'massDataMass' in ts
-  Vector massDataCenter = 14; // TODO convert from 'massData-center' to 'massDataCenter' in ts
-  double massDataI = 15; // TODO convert from 'massData-I' to 'massDataI' in ts
+  optional string name = 1;
+  optional bool active = 2;
+  optional bool awake = 3;
+  optional bool bullet = 4;
+  optional bool fixedRotation = 5;
+  optional uint32 type = 6;
+  optional Vector position = 7;
+  optional double angle = 8;
+  optional double angularDamping = 9;
+  optional double angularVelocity = 10;
+  optional double linearDamping = 11;
+  optional Vector linearVelocity = 12;
+  optional double massDataMass = 13; // TODO convert from 'massData-mass' to 'massDataMass' in ts
+  optional Vector massDataCenter = 14; // TODO convert from 'massData-center' to 'massDataCenter' in ts
+  optional double massDataI = 15; // TODO convert from 'massData-I' to 'massDataI' in ts
   repeated CustomProperty customProperties = 16;
   repeated Fixture fixture = 17;
 }
@@ -93,46 +96,47 @@ message Joint {
   Vector anchorB = 4;
   int32 bodyA = 5;
   int32 bodyB = 6;
-  bool collideConnected = 7;
+  optional bool collideConnected = 7;
   repeated CustomProperty customProperties = 8;
 
   // Fields common to multiple joint types (listed only once)
-  bool enableLimit = 9;
-  bool enableMotor = 10;
-  double jointSpeed = 11;
-  double lowerLimit = 12;
-  double upperLimit = 13;
-  double maxMotorTorque = 14;
-  double motorSpeed = 15;
-  double refAngle = 16;
-  double dampingRatio = 17;  // Common to Distance and Weld
-  double frequency = 18;     // Common to Distance and Weld
-  double length = 19;        // Specific to Distance
-  Vector localAxisA = 20;    // Common to Prismatic and Wheel
-  double maxMotorForce = 21; // Specific to Prismatic
-  double springDampingRatio = 22; // Specific to Wheel
-  double springFrequency = 23;    // Specific to Wheel
-  double maxLength = 24;          // Specific to Rope
-  double maxForce = 25;           // Common to Motor and Friction
-  double maxTorque = 26;          // Common to Motor and Friction
-  double correctionFactor = 27;   // Specific to Motor
+  optional bool enableLimit = 9;
+  optional bool enableMotor = 10;
+  optional double jointSpeed = 11;
+  optional double lowerLimit = 12;
+  optional double upperLimit = 13;
+  optional double maxMotorTorque = 14;
+  optional double motorSpeed = 15;
+  optional double refAngle = 16;
+  optional double dampingRatio = 17;  // Common to Distance and Weld
+  optional double frequency = 18;     // Common to Distance and Weld
+  optional double length = 19;        // Specific to Distance
+  optional Vector localAxisA = 20;    // Common to Prismatic and Wheel
+  optional double maxMotorForce = 21; // Specific to Prismatic
+  optional double springDampingRatio = 22; // Specific to Wheel
+  optional double springFrequency = 23;    // Specific to Wheel
+  optional double maxLength = 24;          // Specific to Rope
+  optional double maxForce = 25;           // Common to Motor and Friction
+  optional double maxTorque = 26;          // Common to Motor and Friction
+  optional double correctionFactor = 27;   // Specific to Motor
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 message Image {
-  string name = 1;
-  double opacity = 2;
-  int32 renderOrder = 3;
-  double scale = 4;
-  double aspectScale = 5;
-  double angle = 6;
-  int32 body = 7;
-  Vector center = 8;
-  VectorArray corners = 9;
-  string file = 10;
-  uint32 filter = 11;
-  bool flip = 12;
+  optional string name = 1;
+  optional double opacity = 2;
+  optional int32 renderOrder = 3;
+  optional double scale = 4;
+  optional double aspectScale = 5;
+  optional double angle = 6;
+  optional int32 body = 7;
+  optional Vector center = 8;
+  optional VectorArray corners = 9;
+  optional string file = 10;
+  optional uint32 filter = 11;
+  optional bool flip = 12;
+  
   repeated int32 colorTint = 13; 
   repeated int32 glDrawElements = 14;
   repeated double glTexCoordPointer = 15;
@@ -152,7 +156,7 @@ message Scene {
   bool warmStarting = 7;
   bool continuousPhysics = 8;
   bool subStepping = 9;
-  CollisionBitPlanes collisionBitPlanes = 10;
+  optional CollisionBitPlanes collisionBitPlanes = 10;
   repeated CustomProperty customProperties = 11;
 
   repeated Body body = 12;

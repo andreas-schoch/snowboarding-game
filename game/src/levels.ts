@@ -1,5 +1,4 @@
 import {RecordModel} from 'pocketbase';
-import {RubeScene} from './physics/RUBE/RubeLoaderInterfaces';
 
 export interface ILevel extends RecordModel {
     id: string;
@@ -8,7 +7,7 @@ export interface ILevel extends RecordModel {
     thumbnail: string;
     number: number;
     tags: string[];
-    scene: RubeScene;
+    scene: string;
     owner: string;
 }
 
