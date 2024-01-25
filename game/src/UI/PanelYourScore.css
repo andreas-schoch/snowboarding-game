@@ -25,16 +25,6 @@
   color: var(--grey-600);
 }
 
-.summary.summary-total {
-  margin-top: 2rem;
-}
-
-.summary.summary-total>span {
-  color: var(--score-total-color);
-  font-size: 24px;
-  font-weight: bolder;
-}
-
 .summary-rank {
   margin-top: 4rem;
   margin-bottom: 4rem;
@@ -49,20 +39,6 @@
 #your-score-rank-value {
   color: black;
   font-weight: bolder;
-}
-
-.summary-personal-best>span {
-  color: var(--grey-700);
-  font-size: 18px;
-}
-
-.submit-score button {
-  height: 40px;
-  font-size: 14px;
-}
-
-.play-again {
-  margin-bottom: 0;
 }
 
 .submit-score-info {

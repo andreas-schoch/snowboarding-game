@@ -33,15 +33,15 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-9 flex justify-between">
             <label>
               <input class="with-gap" name="resolution" type="radio" value="0.5" />
-              <span>640x360</span>
+              <span class="text-neutral-300">640x360</span>
             </label>
             <label>
               <input class="with-gap" name="resolution" type="radio" value="0.75" />
-              <span>960x540</span>
+              <span class="text-neutral-300">960x540</span>
             </label>
             <label>
               <input class="with-gap" name="resolution" type="radio" value="1" checked />
-              <span>1280x720</span>
+              <span class="text-neutral-300">1280x720</span>
             </label>
           </span>
         </div>

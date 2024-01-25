@@ -50,7 +50,7 @@ export const initSolidUI = (rootId: string) => {
   const root = document.getElementById(rootId);
   if (!root) throw new Error('Root ui element not found');
   root.innerHTML = '';
-  document.body.classList.add(Settings.darkmodeEnabled() ? 'darkmode' : 'ligghtmode');
+  // document.body.classList.add(Settings.darkmodeEnabled() ? 'darkmode' : 'ligghtmode');
   render(() => <SolidUI />, root);
   return root;
 };

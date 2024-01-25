@@ -24,8 +24,8 @@ export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = pr
         {item => (
           <div onClick={() => handleSelectLevel(item.id as LocalLevelKeys)} style={{'background-image': `url("${pb.getUrl(item, item.thumbnail)}`}} class="bg-cover overflow-hidden w-[310px] aspect-video relative inline-block transition mr-3 mb-3 p-2 rounded-lg border-2 border-black hover:border-gray-200">
             <span id={item.id} class="absolute cursor-pointer rounded-lg -inset-px" />
-            <div class="text-[color:var(--level-item-number-color)] leading-[1.15]">Level {String(item.number).padStart(3, '0')}</div>
-            <div class="text-xs leading-6 text-[color:var(--level-item-name-color)] [text-shadow:_1px_2px_0_black]">{item.name}</div>
+            <div class="text-neutral-400 leading-[1.15]">Level {String(item.number).padStart(3, '0')}</div>
+            <div class="text-xs leading-6 text-neutral-300 [text-shadow:_1px_2px_0_black]">{item.name}</div>
           </div>
         )}
       </For>

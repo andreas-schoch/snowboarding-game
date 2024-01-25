@@ -104,7 +104,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
         </div>
       </div>
       {/* <!-- BACK / REPLAY --> */}
-      <div class="row play-again">
+      <div class="row mb-0">
         <div class="col col-12">
           <ButtonBorderless class="col col-6" onClick={() => props.setPanel('panel-select-level')}>
             <i class="material-icons mr-2">chevron_left</i>
@@ -125,25 +125,25 @@ function TrickScoreSummary(props: {score: IScoreNew}) {
   return <>
     <div class="row summary summary-presents">
       <span class="col col-8">Coins</span>
-      <span class="col col-4" id="your-score-coins">{props.score.pointsCoin}</span>
+      <span class="col col-4">{props.score.pointsCoin}</span>
     </div>
 
     <div class="row summary summary-trick">
       <span class="col col-8">Tricks</span>
-      <span class="col col-4" id="your-score-trick-score">{props.score.pointsTrick}</span>
+      <span class="col col-4">{props.score.pointsTrick}</span>
     </div>
 
     <div class="row summary summary-trick">
       <span class="col col-8">
         <span>Combos</span>
-        <span class="summary-trick-combo"> (Best Combo: <span id="your-score-best-combo">{props.score.pointsComboBest}</span>)</span>
+        <span class="summary-trick-combo"> (Best Combo: <span>{props.score.pointsComboBest}</span>)</span>
       </span>
-      <span class="col col-4" id="your-score-trick-score">{props.score.pointsCombo}</span>
+      <span class="col col-4">{props.score.pointsCombo}</span>
     </div>
 
-    <div class="row summary summary-total">
+    <div class="row mt-8 bolder text-2xl text-white">
       <span class="col col-8">Total</span>
-      <span class="col col-4" id="your-score-total">{props.score.pointsTotal}</span>
+      <span class="col col-4 text-right">{props.score.pointsTotal}</span>
     </div>
   </>;
 }

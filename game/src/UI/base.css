@@ -2,24 +2,17 @@
 
 :root {
   --blue-400: #7893cc;
-  --blue-700: #2651ad;
-  --blue-800: #123684;
-  --blue-900: #01256E;
+  --blue-700: #1E4FD9;
+  --blue-800: #1F41B0;
+  --blue-900: #1E3A8A;
 
   --grey-400: #F7F7F7;
   --grey-500: #E8E8E8;
   --grey-600: #A8A8A8;
   --grey-700: #666666;
   --grey-900: #252525;
-
-  --green: var(--blue-900);
-  --red: #D5365E;
-  
 }
 
-body.darkmode {
-  --green: var(--blue-700);
-}
 
 * {
   box-sizing: border-box;
@@ -198,12 +191,12 @@ body.darkmode {
 [type="radio"]:checked + span:after,
 [type="radio"].with-gap:checked + span:before,
 [type="radio"].with-gap:checked + span:after {
-  border: 2px solid var(--green);
+  border: 2px solid var(--blue-700);
 }
 
 [type="radio"]:checked + span:after,
 [type="radio"].with-gap:checked + span:after {
-  background-color: var(--green);
+  background-color: var(--blue-700);
 }
 
 [type="radio"]:checked + span:after {
@@ -284,7 +277,7 @@ input[type=range] + .thumb {
   height: 0;
   width: 0;
   border-radius: 50%;
-  background-color: var(--green);
+  background-color: var(--blue-700);
   margin-left: 7px;
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
@@ -296,7 +289,7 @@ input[type=range] + .thumb .value {
   display: block;
   width: 30px;
   text-align: center;
-  color: var(--green);
+  color: var(--blue-700);
   font-size: 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
@@ -329,13 +322,13 @@ input[type=range]::-webkit-slider-thumb {
   height: 14px;
   width: 14px;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--blue-700);
   -webkit-transition: -webkit-box-shadow .3s;
   transition: -webkit-box-shadow .3s;
   transition: box-shadow .3s;
   transition: box-shadow .3s, -webkit-box-shadow .3s;
   -webkit-appearance: none;
-  background-color: var(--green);
+  background-color: var(--blue-700);
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
   margin: -5px 0 0 0;
@@ -367,7 +360,7 @@ input[type=range]::-moz-range-thumb {
   height: 14px;
   width: 14px;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--blue-700);
   -webkit-transition: -webkit-box-shadow .3s;
   transition: -webkit-box-shadow .3s;
   transition: box-shadow .3s;
@@ -406,7 +399,7 @@ input[type=range]::-ms-thumb {
   height: 14px;
   width: 14px;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--blue-700);
   -webkit-transition: -webkit-box-shadow .3s;
   transition: -webkit-box-shadow .3s;
   transition: box-shadow .3s;
@@ -536,10 +529,6 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   height: 40px; /* Depends on the following: line-height 20px + padding 2x5px + border 2x2px (when focused) = 34px */
   outline: none;
   transition: all 0.1s;
-}
-
-.darkmode .form-text-input {
-  border: 1px solid var(--grey-600);
   background-color: var(--grey-500);
 }
 
@@ -573,7 +562,8 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
 
 .form-text-input:focus + .floating-label,
 .form-text-input:not([value=""]) + .floating-label {
-  background-color: white;
+  background-color: var(--grey-700);
+  color: var(--grey-400);
   /* y-axis: height of form-text-input / 2 = 17px. That is the amount this label needs to move up. since padding-top gets removed, only 7px are left */
   /* x-axis: depends on padding-left of form-text-input + padding overwrite below */
   transform: translateY(-7px) translateX(5px);
@@ -582,18 +572,8 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   font-weight: 500;
 }
 
-.darkmode .form-text-input:focus + .floating-label,
-.darkmode .form-text-input:not([value=""]) + .floating-label {
-  background-color: var(--grey-700);
-  color: var(--grey-400);
-}
-
 .form-text-input:not([value=""]):hover + .floating-label {
-  color: var(--grey-700);
-}
-
-.darkmode .form-text-input:not([value=""]):hover + .floating-label {
-  color: white;
+  color: white
 }
 
 /* Floating label not updating with autocomplete */
@@ -605,17 +585,10 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   font-weight: 500;
   -webkit-transition: none;
   transition: none;
-}
-
-.darkmode .form-text-input:-webkit-autofill + .floating-label {
   color: var(--grey-700);
 }
 
 .form-text-input:focus + .floating-label {
-  color: var(--blue-900) !important;
-}
-
-.darkmode .form-text-input:focus + .floating-label {
   color: white !important;
 }
 
