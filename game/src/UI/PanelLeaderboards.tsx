@@ -10,7 +10,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   const [scores, setScores] = createSignal<IScore[]>([]);
 
   onMount(async () => {
-    const scores: IScore[] = await pb.leaderboard.scores(Settings.currentLevel(), 1, 200);
+    const scores: IScore[] = await pb.leaderboard.scoresFromLogs(Settings.currentLevel(), 1, 200);
     setScores(scores);
   });
 

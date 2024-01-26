@@ -23,3 +23,10 @@ export function blobToString(blob: Blob): Promise<string> {
     reader.readAsBinaryString(blob);
   });
 }
+
+export function arrayBufferToString(buffer: ArrayBuffer): string {
+  let binaryString = '';
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) binaryString += String.fromCharCode(bytes[i]);
+  return binaryString;
+}

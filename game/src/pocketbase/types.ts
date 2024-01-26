@@ -67,12 +67,12 @@ export interface ICrashTrickScore extends IBaseTrickScore {
 
 export type TrickScore = IComboTrickScore | IFlipTrickScore | ICoinTrickScore | IStartTrickScore | IFinishTrickScore | ICrashTrickScore;
 
-export interface IScore extends RecordModel {
+export interface IScoreNew {
   user: string; // one-to-one relation to user collection
   level: string; // one-to-one relation to level collection
   finishedLevel: boolean;
   crashed: boolean;
-  tsl?: string;
+  tsl: string;
   // TRICK MODE
   pointsCoin: number;
   pointsTrick: number;
@@ -84,4 +84,4 @@ export interface IScore extends RecordModel {
   time: number;
 }
 
-export type IScoreNew = Omit<IScore, 'collectionId' | 'collectionName' | 'id' | 'created' | 'updated'>;
+export type IScore = IScoreNew & RecordModel;

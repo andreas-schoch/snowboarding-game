@@ -3,7 +3,6 @@ import './index.css';
 import {createSignal, Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
 import {ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE} from '../eventTypes';
 import {IScore, IScoreNew} from '../pocketbase/types';
 import {HUD} from './HUD';
@@ -31,7 +30,8 @@ const SolidUI = () => {
 
   return (
     <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
-      <Switch fallback={<HUD setPanel={setPanel} />}>
+      <HUD panel={panel()} setPanel={setPanel} />
+      <Switch>
         <Match when={panel() === 'panel-pause-menu'}><PanelPauseMenu setPanel={setPanel} /></Match>
         <Match when={panel() === 'panel-select-level'}><PanelSelectLevel setPanel={setPanel} /></Match>
         <Match when={panel() === 'panel-leaderboards'}><PanelLeaderboards setPanel={setPanel} /></Match>

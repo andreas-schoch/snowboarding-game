@@ -1,10 +1,9 @@
 import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb} from '..';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
 import {ComboState} from '../UI/HUD';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
 import {framesToTime} from '../helpers/framesToTime';
-import {getPointScoreSummary} from '../helpers/getPointScoreSummary';
+import {generateScoreFromLogs} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
 import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
@@ -54,22 +53,8 @@ export class State {
   }
 
   getCurrentScore(): IScoreNew {
-    const {fromCoins, fromTricks, fromCombos, bestCombo, total} = getPointScoreSummary(GameInfo.tsl);
-    const score: IScoreNew = {
-      user: pb.auth.loggedInUser()?.id,
-      level: Settings.currentLevel(),
-      crashed: this.isCrashed,
-      finishedLevel: this.isLevelFinished,
-      // tsl: encodedCustom, // since we have access to the score log we don't want to set the encoded TSL yet (expensive operation)
-      pointsCoin: fromCoins,
-      pointsTrick: fromTricks,
-      pointsCombo: fromCombos,
-      pointsComboBest: bestCombo,
-      pointsTotal: total,
-      distance: this.getDistanceInMeters(),
-      time: this.getTimeInMs(),
-    };
-
+    const completed = this.isLevelFinished || this.isCrashed;
+    const score: IScoreNew = generateScoreFromLogs(GameInfo.tsl, completed);
     GameInfo.score = score; // TODO try using solid-js signals so UI reacts immediately to score changes (and other things it needs to know about. Or use context) 
     return score;
 
@@ -259,10 +244,6 @@ export class State {
 
   private getDistanceInMeters(): number {
     return Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
-  }
-
-  private getTimeInMs(): number {
-    return Math.floor((this.levelUnpausedFrames / 60) * 1000);
   }
 
   private pushStartLog() {

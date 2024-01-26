@@ -12,7 +12,7 @@ export const enum ComboState {
   Fail
 }
 
-export const HUD: Component<{setPanel: (id: PanelId) => void}> = props => {
+export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> = props => {
   let comboWrapperRef: HTMLElement;
   let comboLeewayRef: HTMLElement;
   let comboTextRef: HTMLElement;
@@ -114,24 +114,27 @@ export const HUD: Component<{setPanel: (id: PanelId) => void}> = props => {
   }
 
   return <>
-    <div class="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
-      <div>{time()}</div>
-    </div>
+    <div classList={{hidden: props.panel !== 'none'}}>
 
-    <div class="absolute top-20 left-1/2 transform -translate-x-1/2 text-center invisible" ref={el => comboWrapperRef = el}>
-      <div class="flex">
-        <div ref={el => comboLeewayRef = el} class="w-5 h-5 rounded-full m-1 mr-4 bg-white border-white border-2"/>
-        <div ref={el => comboTextRef = el} class="text-xl">{combo()}</div>
+      <div class="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
+        <div>{time()}</div>
       </div>
+
+      <div class="absolute top-20 left-1/2 transform -translate-x-1/2 text-center invisible" ref={el => comboWrapperRef = el}>
+        <div class="flex">
+          <div ref={el => comboLeewayRef = el} class="w-5 h-5 rounded-full m-1 mr-4 bg-white border-white border-2"/>
+          <div ref={el => comboTextRef = el} class="text-xl">{combo()}</div>
+        </div>
+      </div>
+
+      <span ref={el => comboMoveTextRef = el} class="relative opacity-0">{comboTotal()}</span>
+
+      <div class="absolute top-4 right-4 text-right text-2xl" ref={el => scoreTextRef = el}>
+        <div>{score()}</div>
+      </div>
+
+      <i onClick={() => pauseAndSetPanel('panel-how-to-play')} class="material-icons text-[color:var(--grey-600)] absolute left-2 bottom-2 text-3xl cursor-pointer">help_outline</i>
+      <i onClick={() => pauseAndSetPanel('panel-pause-menu')} class="material-icons text-[color:var(--grey-600)] absolute right-2 bottom-2 text-3xl cursor-pointer">pause_circle_outline</i>
     </div>
-
-    <span ref={el => comboMoveTextRef = el} class="relative opacity-0">{comboTotal()}</span>
-
-    <div class="absolute top-4 right-4 text-right text-2xl" ref={el => scoreTextRef = el}>
-      <div>{score()}</div>
-    </div>
-
-    <i onClick={() => pauseAndSetPanel('panel-how-to-play')} class="material-icons text-[color:var(--grey-600)] absolute left-2 bottom-2 text-3xl cursor-pointer">help_outline</i>
-    <i onClick={() => pauseAndSetPanel('panel-pause-menu')} class="material-icons text-[color:var(--grey-600)] absolute right-[var(--game-ui-padding)] bottom-2 text-3xl cursor-pointer">pause_circle_outline</i>
   </>;
 };
