@@ -2,10 +2,10 @@ version: '3.9'
 
 services:
   nginx:
+    restart: always
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
-    restart: always
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       - ./test:/etc/nginx/ssl
@@ -20,13 +20,14 @@ services:
       - NGINX_SSL_CERT=/etc/nginx/ssl/localhost.crt
       - NGINX_SSL_KEY=/etc/nginx/ssl/localhost.key
   pocketbase:
+    restart: always
     container_name: pocketbase
     build:
       context: .
       dockerfile: ./pocketbase/Dockerfile
-    image: pocketbase:latest
     volumes:
       - pocketbase-volume:/app/data
+      - ./pocketbase/pb_migrations:/app/data/pb_migrations
     ports:
       - "8090:8090"
 

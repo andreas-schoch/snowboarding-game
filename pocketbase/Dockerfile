@@ -1,6 +1,6 @@
 FROM alpine:3.19.0
 
-ARG POCKETBASE_VERSION=0.20.7
+ARG POCKETBASE_VERSION=0.21.1
 
 RUN apk add --no-cache \
     ca-certificates \
@@ -14,6 +14,9 @@ ADD https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VER
 RUN unzip /app/pocketbase/pocketbase.zip -d /app/pocketbase && \
     chmod +x /app/pocketbase/pocketbase && \
     rm /app/pocketbase/pocketbase.zip
+
+COPY ./pocketbase/pb_data /app/data/pb_data
+COPY ./pocketbase/pb_migrations /app/data/pb_migrations
 
 EXPOSE 8090
 
