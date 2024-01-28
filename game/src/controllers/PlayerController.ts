@@ -56,14 +56,14 @@ export class CharacterController {
   }
 
   update() {
-    if (this.scene.b2Physics.isPaused) return;
     if (!this.character) return;
+    if (this.scene.b2Physics.isPaused || this.character.state.isCrashed || this.character.state.isLevelFinished) return;
 
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.character.jumpCooldown) this.character.jump();
     if (this.jumpKeyDown) this.character.leanUp();
     if (this.keyArrowLeft.isDown || this.keyA.isDown) this.character.leanBackward();
     if (this.keyArrowRight.isDown || this.keyD.isDown) this.character.leanForward();
-    if (this.keyArrowDown.isDown || this.keyS.isDown) this.character.leanCenter(); // needs to be last to override leanForward and leanBackward and speed up rotation  }
+    if (this.keyArrowDown.isDown || this.keyS.isDown) this.character.leanCenter(); // needs to be last to override leanForward and leanBackward and speed up rotation
 
     this.setZoomLevel(this.character);
     this.setWindNoise(this.character);
@@ -100,15 +100,15 @@ export class CharacterController {
   private initKeyboardInputs() {
     const keyboard = this.scene.input.keyboard;
     if (!keyboard) throw new Error('Keyboard input not available. No touch input supported yet.');
-    this.keySpace = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    this.keyW = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.keyA = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.keyS = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.keyD = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.keyArrowUp = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-    this.keyArrowLeft = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    this.keyArrowRight = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-    this.keyArrowDown = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    this.keySpace = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false);
+    this.keyW = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
+    this.keyA = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
+    this.keyS = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
+    this.keyD = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D, false);
+    this.keyArrowUp = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP, false);
+    this.keyArrowLeft = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT, false);
+    this.keyArrowRight = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT, false);
+    this.keyArrowDown = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN, false);
 
     this.keySpace.onDown = () => this.pauseGame();
     const onJump = () => {
