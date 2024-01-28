@@ -9,15 +9,16 @@ RUN apk add --no-cache \
     zip \
     zlib-dev
 
-ADD https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip /app/pocketbase/pocketbase.zip
 
-RUN unzip /app/pocketbase/pocketbase.zip -d /app/pocketbase && \
-    chmod +x /app/pocketbase/pocketbase && \
-    rm /app/pocketbase/pocketbase.zip
+ADD https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip /pocketbase.zip
 
-COPY ./pocketbase/pb_data /app/data/pb_data
-COPY ./pocketbase/pb_migrations /app/data/pb_migrations
+RUN unzip /pocketbase.zip -d /pb && \
+    chmod +x /pb/pocketbase && \
+    rm /pocketbase.zip
+
+COPY ./pocketbase/pb_data /pb/pb_data
+COPY ./pocketbase/pb_migrations /pb/pb_migrations
 
 EXPOSE 8090
 
-CMD [ "/app/pocketbase/pocketbase", "serve", "--http=0.0.0.0:8090", "--dir=/app/data/pb_data", "--publicDir=/app/data/pb_public" ]
+CMD [ "/pb/pocketbase", "serve", "--http=0.0.0.0:8090", "--dir=/pb/pb_data", "--publicDir=/pb/pb_public" ]

@@ -3,13 +3,10 @@ version: '3.9'
 services:
   nginx:
     restart: always
+    container_name: nginx
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
-    volumes:
-      - ./nginx/templates:/etc/nginx/templates
-      - ./test:/etc/nginx/ssl
-      - ./dist:/usr/share/nginx/html
     ports:
       - "8080:80"
       - "80:80"
@@ -19,18 +16,23 @@ services:
       - NGINX_SERVER_NAME=localhost
       - NGINX_SSL_CERT=/etc/nginx/ssl/localhost.crt
       - NGINX_SSL_KEY=/etc/nginx/ssl/localhost.key
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./test/dummy_ssl:/etc/nginx/ssl
+      # - ./dist:/usr/share/nginx/html # to update frontend with `pnpm run build` without having to rebuild nginx container
+
   pocketbase:
     restart: always
     container_name: pocketbase
     build:
       context: .
       dockerfile: ./pocketbase/Dockerfile
+    # ports:
+    #   - "8090:8090" # for direct access without nginx
     volumes:
-      - pocketbase-volume:/app/data
-      - ./pocketbase/pb_migrations:/app/data/pb_migrations
-    ports:
-      - "8090:8090"
+      - pb_data_volume:/pb/pb_data
+      - ./pocketbase/pb_migrations:/pb/pb_migrations
 
 volumes:
-  pocketbase-volume:
-    name: pocketbase-volume
+  pb_data_volume:
+    name: pb_data

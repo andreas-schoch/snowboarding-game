@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  nginx:
+    restart: always
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_ENVSUBST_TEMPLATE_SUFFIX=.conf # to retain syntax highlighting
+      - NGINX_SERVER_NAME=snowboarding-game.io # change accordingly when deploying it yourself
+      - NGINX_SSL_CERT=/etc/letsencrypt/live/snowboarding-game.io/fullchain.pem
+      - NGINX_SSL_KEY=/etc/letsencrypt/live/snowboarding-game.io/privkey.pem
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - /etc/letsencrypt:/etc/letsencrypt
+
+  pocketbase:
+    restart: always
+    container_name: pocketbase
+    build:
+      context: .
+      dockerfile: ./pocketbase/Dockerfile
+    volumes:
+      - pb_data_volume:/pb/pb_data
+      - ./pocketbase/pb_migrations:/pb/pb_migrations
+
+volumes:
+  pb_data_volume:
+    name: pb_data
