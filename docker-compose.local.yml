@@ -16,6 +16,7 @@ services:
       - NGINX_SERVER_NAME=localhost
       - NGINX_SSL_CERT=/etc/nginx/ssl/localhost.crt
       - NGINX_SSL_KEY=/etc/nginx/ssl/localhost.key
+      - NGINX_SSL_DHPARAM=/etc/nginx/dhparam.pem
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       - ./test/dummy_ssl:/etc/nginx/ssl

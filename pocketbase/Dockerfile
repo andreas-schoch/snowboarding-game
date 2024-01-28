@@ -7,8 +7,8 @@ RUN apk add --no-cache \
     unzip \
     wget \
     zip \
-    zlib-dev
-
+    zlib-dev \
+    micro
 
 ADD https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip /pocketbase.zip
 

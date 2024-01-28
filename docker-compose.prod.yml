@@ -15,10 +15,10 @@ services:
       - NGINX_SERVER_NAME=snowboarding-game.io # change accordingly when deploying it yourself
       - NGINX_SSL_CERT=/etc/letsencrypt/live/snowboarding-game.io/fullchain.pem
       - NGINX_SSL_KEY=/etc/letsencrypt/live/snowboarding-game.io/privkey.pem
+      - NGINX_SSL_DHPARAM=/etc/letsencrypt/ssl-dhparams.pem
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       - /etc/letsencrypt:/etc/letsencrypt
-
   pocketbase:
     restart: always
     container_name: pocketbase

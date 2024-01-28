@@ -4,7 +4,7 @@ migrate((db) => {
     {
       "id": "_pb_users_auth_",
       "created": "2024-01-16 16:04:09.774Z",
-      "updated": "2024-01-26 11:00:29.589Z",
+      "updated": "2024-01-28 10:28:44.418Z",
       "name": "users",
       "type": "auth",
       "system": false,
@@ -41,7 +41,7 @@ migrate((db) => {
     {
       "id": "3x4pms5xedktw1m",
       "created": "2024-01-16 16:17:08.493Z",
-      "updated": "2024-01-26 10:50:10.142Z",
+      "updated": "2024-01-28 14:57:18.536Z",
       "name": "Score",
       "type": "base",
       "system": false,
@@ -219,14 +219,14 @@ migrate((db) => {
       "listRule": "@request.auth.id != \"\"",
       "viewRule": "@request.auth.id != \"\"",
       "createRule": "@request.auth.id != '' && @request.data.user = @request.auth.id",
-      "updateRule": "@request.auth.id != '' && @request.data.user = @request.auth.id && @request.data.user = user && @request.data.poinsTotal > pointsTotal",
+      "updateRule": "@request.auth.id != '' && @request.data.user = @request.auth.id && @request.data.user = user && @request.data.pointsTotal > pointsTotal",
       "deleteRule": null,
       "options": {}
     },
     {
       "id": "izinoaotvb2ehif",
       "created": "2024-01-17 08:59:14.326Z",
-      "updated": "2024-01-26 10:59:08.822Z",
+      "updated": "2024-01-28 10:28:44.421Z",
       "name": "levels",
       "type": "base",
       "system": false,
