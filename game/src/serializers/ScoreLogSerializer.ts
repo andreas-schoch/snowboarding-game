@@ -1,4 +1,5 @@
 import {deflateSync, inflateSync} from 'fflate';
+import {DEBUG_LOGS} from '..';
 import {ICoinTrickScore, IComboTrickScore, ICrashTrickScore, IFinishTrickScore, IFlipTrickScore, IStartTrickScore, TrickScore, TrickScoreType} from '../pocketbase/types';
 
 // 5 times smaller than base64 and about 40-50% smaller than protobuf (without deflate, otherwise still significant but not as much)
@@ -75,7 +76,7 @@ export async function ScoreLogSerializer() {
 
   function encode(data: TrickScore[]): string {
     const buffers: ArrayBuffer[] = [];
-    console.time('ScoreLogSerializer.encode');
+    if (DEBUG_LOGS) console.time('ScoreLogSerializer.encode');
 
     for (const score of data) {
       switch (score.type) {
@@ -112,7 +113,7 @@ export async function ScoreLogSerializer() {
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
 
-    console.timeEnd('ScoreLogSerializer.encode');
+    if (DEBUG_LOGS) console.timeEnd('ScoreLogSerializer.encode');
     return binaryString;
   }
 
@@ -127,12 +128,12 @@ export async function ScoreLogSerializer() {
   };
 
   function decode(binaryString: string): TrickScore[] {
-    console.time('ScoreLogSerializer.decode');
+    if (DEBUG_LOGS) console.time('ScoreLogSerializer.decode');
     const length = binaryString.length;
     let uint8array = new Uint8Array(length);
     for (let i = 0; i < length; i++) uint8array[i] = binaryString.charCodeAt(i);
     uint8array = inflateSync(uint8array);
-    console.timeLog('ScoreLogSerializer.decode', 'inflateSync');
+    if (DEBUG_LOGS) console.timeLog('ScoreLogSerializer.decode', 'inflateSync');
 
     let offset = 0;
     const trickScores: TrickScore[] = [];
@@ -189,8 +190,11 @@ export async function ScoreLogSerializer() {
       }
     }
 
-    console.timeEnd('ScoreLogSerializer.decode');
-    console.log('ScoreLogSerializer.decode', trickScores);
+    if (DEBUG_LOGS) {
+      console.timeEnd('ScoreLogSerializer.decode');
+      console.log('ScoreLogSerializer.decode', trickScores);
+    }
+
     return trickScores;
 
   }

@@ -1,6 +1,6 @@
 
 import PocketBase, {RecordListOptions, RecordModel} from 'pocketbase';
-import {scoreLogSerializer} from '..';
+import {DEBUG_LOGS, scoreLogSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {arrayBufferToString, stringToBlob} from '../helpers/binaryTransform';
@@ -28,14 +28,14 @@ export class Leaderboard {
   }
 
   async scoresFromLogs(level: ILevel['id'], page = 1, perPage = 100): Promise<IScore[]> {
-    console.time('fetch scoresFromLogs');
+    if (DEBUG_LOGS) console.time('fetch scoresFromLogs');
     const scores = await this.scores(level, page, perPage);
-    console.timeLog('fetch scoresFromLogs', 'scores collection items fetched');
+    if (DEBUG_LOGS) console.timeLog('fetch scoresFromLogs', 'scores collection items fetched');
 
     const blobBufferPromises = scores.map(score => fetch(this.pb.files.getUrl(score, score.tsl)).then(res => res.arrayBuffer()));
     const buffers = await Promise.all(blobBufferPromises);
     const logs = await Promise.all(buffers.map(buffer => scoreLogSerializer.decode(arrayBufferToString(buffer))));
-    console.timeLog('fetch scoresFromLogs', 'tsl blobs fetched and decoded');
+    if (DEBUG_LOGS) console.timeLog('fetch scoresFromLogs', 'related tsl blobs fetched and decoded');
 
     // TODO temporary to ensure decode of TSL works until its content is finalized and server overrides the point fields using it
     for (const [i, score] of scores.entries()) {
@@ -52,7 +52,7 @@ export class Leaderboard {
       score.distance = scoreFromLogs.distance;
       score.time = scoreFromLogs.time;
     }
-    console.timeEnd('fetch scoresFromLogs');
+    if (DEBUG_LOGS) console.timeEnd('fetch scoresFromLogs');
     return scores;
   }
   // TODO get existing score in advance when starting the level, so using the logs we can display to the user the score changes in realtime based on frame count
@@ -78,16 +78,16 @@ export class Leaderboard {
     const existingScore = await this.pb.collection('Score').getFirstListItem<IScore>(`user="${score.user}" && level="${score.level}"`).catch(() => null);
 
     if (!existingScore) {
-      console.log('No scores for this level. Submitting new score', score);
+      if (DEBUG_LOGS) console.log('No scores for this level. Submitting new score', score);
       return await this.pb.collection('Score').create<IScore>(score);
     }
 
     if (score.pointsTotal >existingScore.pointsTotal) {
-      console.log('New highscore. Update existing score', score);
+      if (DEBUG_LOGS) console.log('New highscore. Update existing score', score);
       return await this.pb.collection('Score').update<IScore>(existingScore.id!, score);
     }
 
-    console.log('Score not higher than existing score. Not submitting');
+    if (DEBUG_LOGS) console.log('Score not higher than existing score. Not submitting');
     return existingScore;
   }
 

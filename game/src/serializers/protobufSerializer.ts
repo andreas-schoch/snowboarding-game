@@ -15,10 +15,8 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
   const TrickScoreLog = root.lookupType(options.type);
 
   function encode(data: T): string {
-    console.time('ProtobufSerializer.encode');
     const transformed = options.to ? options.to(data) : data;
     const errMsg = TrickScoreLog.verify(transformed);
-    if (errMsg) console.log('ProtobufSerializer error', errMsg);
     if (errMsg) throw Error(errMsg);
     const message = TrickScoreLog.create(transformed);
     let encoded = TrickScoreLog.encode(message).finish();
@@ -26,7 +24,6 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
-    console.timeEnd('ProtobufSerializer.encode');
     return binaryString;
   }
 

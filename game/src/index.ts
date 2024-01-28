@@ -10,6 +10,7 @@ import {PreloadScene} from './scenes/PreloadScene';
 import {ScoreLogSerializer} from './serializers/ScoreLogSerializer';
 import {ProtobufSerializer} from './serializers/protobufSerializer';
 
+export const DEBUG_LOGS = Settings.debugLogs();
 export const pb = new PocketbaseService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
@@ -26,7 +27,7 @@ export const DEFAULT_HEIGHT = 720;
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '1.1.1',
+  version: '2.0.0',
   type: Phaser.WEBGL,
   backgroundColor: Settings.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
@@ -35,7 +36,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   fps: {
     target: 60,
     min: 55,
-    smoothStep: false,
+    smoothStep: true,
   },
   scale: {
     mode: Phaser.Scale.RESIZE,

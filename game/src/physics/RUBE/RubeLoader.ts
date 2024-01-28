@@ -4,7 +4,7 @@
 * Based on example loader by Chris Campbell (creator of RUBE editor): https://github.com/iforce2d/b2dJson/blob/master/js/loadrube.js
 */
 
-import {b2, recordLeak} from '../..';
+import {DEBUG_LOGS, b2, recordLeak} from '../..';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
 import {vec2Util} from './Vec2Math';
@@ -41,8 +41,8 @@ export class RubeLoader<IMG = unknown> {
     this.loadingImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
 
     const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
-    if (success) console.log('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
-    else console.error('R.U.B.E. scene failed to load fully', this.loadingBodies, this.loadingJoints, this.loadingImages);
+    if (DEBUG_LOGS && success) console.log('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
+    if (!success) console.error('R.U.B.E. scene failed to load fully', this.loadingBodies, this.loadingJoints, this.loadingImages);
     const id = pseudoRandomId();
     this.loadedScenes.set(id, {bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id});
     this.loadingBodies = [];

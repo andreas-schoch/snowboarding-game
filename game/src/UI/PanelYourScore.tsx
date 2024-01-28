@@ -1,6 +1,6 @@
 import './PanelYourScore.css';
 import {Component, createSignal, onMount} from 'solid-js';
-import {pb} from '..';
+import {DEBUG_LOGS, pb} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {RESTART_GAME} from '../eventTypes';
@@ -64,7 +64,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     if (!name || !props.score || !submitScoreForm) return;
 
     if (pb.auth.loggedInUser()) {
-      console.log('updating default username');
+      if (DEBUG_LOGS) console.log('updating default username');
       await pb.user.updateUsername(name);
     }
 

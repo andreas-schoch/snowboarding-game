@@ -3,6 +3,7 @@ import PocketBase from 'pocketbase';
 import {Settings} from '../Settings';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {IUser} from './types';
+import { DEBUG_LOGS } from '..';
 
 export class Auth {
   constructor(private pb: PocketBase) {
@@ -13,18 +14,18 @@ export class Auth {
   }
 
   async login() {
-    console.log('is login valid?', this.pb.authStore.isValid, this.pb.authStore, this.pb.authStore.isAuthRecord);
+    if (DEBUG_LOGS) console.log('is login valid?', this.pb.authStore.isValid, this.pb.authStore, this.pb.authStore.isAuthRecord);
     if (this.pb.authStore.isValid) return;
 
     let uid = Settings.anonymousUID();
     let username = Settings.username();
 
     if (!uid || !username) {
-      console.log('register anonymous user');
+      if (DEBUG_LOGS) console.log('register anonymous user');
       await this.registerAnonymousUser();
     } else if (this.pb.authStore.token) {
-      console.log('try refreshing token');
-      await this.pb.collection('users').authRefresh<IUser>().catch(() => console.log('failed to refresh token'));
+      if (DEBUG_LOGS) console.log('try refreshing token');
+      await this.pb.collection('users').authRefresh<IUser>().catch(() => console.error('failed to refresh token'));
     }
 
     username = Settings.username();
@@ -32,7 +33,7 @@ export class Auth {
 
     if (!username || !uid) throw new Error('Something wrong');
 
-    await this.pb.collection('users').authWithPassword<IUser>(username, uid).catch(() => console.log('failed to login'));
+    await this.pb.collection('users').authWithPassword<IUser>(username, uid).catch(() => console.error('failed to login'));
   }
 
   async registerAnonymousUser() {

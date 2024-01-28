@@ -1,4 +1,4 @@
-import {BASE_FLIP_POINTS, POINTS_PER_COIN, scoreLogSerializer} from '..';
+import {BASE_FLIP_POINTS, DEBUG_LOGS, POINTS_PER_COIN, scoreLogSerializer} from '..';
 import {IScoreNew, TrickScore, TrickScoreType} from '../pocketbase/types';
 
 export interface IPointScoreSummary {
@@ -16,36 +16,8 @@ export interface IRaceScoreSummary {
   time: number; // in ms
 }
 
-export const getPointScoreSummary = (tsl: string | TrickScore[]): IPointScoreSummary => {
-  console.time('getPointScoreSummary');
-  let fromCoins = 0;
-  let fromTricks = 0;
-  let fromCombos = 0;
-  let bestCombo = 0;
-
-  const log = typeof tsl === 'string' ? scoreLogSerializer.decode(tsl) : tsl;
-  for (const trick of log) {
-    if (trick.type === TrickScoreType.present) fromCoins += POINTS_PER_COIN;
-    else if (trick.type === TrickScoreType.flip) fromTricks += (trick.flips * trick.flips * BASE_FLIP_POINTS);
-    else if (trick.type === TrickScoreType.combo) {
-      const combo = trick.accumulator * trick.multiplier;
-      fromCombos += combo;
-      if (combo > bestCombo) bestCombo = combo;
-    }
-  }
-
-  console.timeEnd('getPointScoreSummary');
-  return {
-    fromCoins,
-    fromCombos,
-    fromTricks,
-    bestCombo,
-    total: fromCoins + fromCombos + fromTricks,
-  };
-};
-
 export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = false): IScoreNew => {
-  console.time('getScoreFromLogs');
+  if (DEBUG_LOGS) console.time('getScoreFromLogs');
   const log = typeof tsl === 'string' ? scoreLogSerializer.decode(tsl) : tsl;
 
   const firstLog = log[0];
@@ -81,7 +53,7 @@ export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = fa
     }
   }
 
-  console.timeEnd('getScoreFromLogs');
+  if (DEBUG_LOGS) console.timeEnd('getScoreFromLogs');
   return {
     user,
     level,

@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import {rubeSceneSerializer} from '..';
+import {DEBUG_LOGS, rubeSceneSerializer} from '..';
 import {blobToString} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
@@ -21,13 +21,10 @@ export class Level {
   async getRubeScene(level: ILevel): Promise<RubeScene> {
     const url = this.pb.files.getUrl(level, level.scene);
     const response = await fetch(url);
-    // console.log('--------rubescene response', response);
     const blob = await response.blob();
-    // console.log('--------rubescene blob', blob);
     const binaryString = await blobToString(blob);
-    // console.log('--------rubescene binaryString', binaryString);
     const scene = rubeSceneSerializer.decode(binaryString);
-    console.log('--------rubescene scene', scene, scene.body?.filter(b => b.customProperties?.length)[0]);
+    if (DEBUG_LOGS) console.log(`fetched RubeScene for level ${level}`, scene);
     return scene;
   }
 }
