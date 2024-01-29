@@ -1,4 +1,4 @@
-import {BASE_FLIP_POINTS, DEBUG_LOGS, POINTS_PER_COIN, scoreLogSerializer} from '..';
+import {BASE_FLIP_POINTS, POINTS_PER_COIN, scoreLogSerializer} from '..';
 import {IScoreNew, TrickScore, TrickScoreType} from '../pocketbase/types';
 
 export interface IPointScoreSummary {
@@ -17,7 +17,7 @@ export interface IRaceScoreSummary {
 }
 
 export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = false): IScoreNew => {
-  if (DEBUG_LOGS) console.time('getScoreFromLogs');
+  console.time('getScoreFromLogs');
   const log = typeof tsl === 'string' ? scoreLogSerializer.decode(tsl) : tsl;
 
   const firstLog = log[0];
@@ -53,7 +53,7 @@ export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = fa
     }
   }
 
-  if (DEBUG_LOGS) console.timeEnd('getScoreFromLogs');
+  console.timeEnd('getScoreFromLogs');
   return {
     user,
     level,

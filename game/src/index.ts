@@ -11,13 +11,20 @@ import {ScoreLogSerializer} from './serializers/ScoreLogSerializer';
 import {ProtobufSerializer} from './serializers/protobufSerializer';
 
 export const DEBUG_LOGS = Settings.debugLogs();
+if (!DEBUG_LOGS) {
+  const noop = () => {};
+  console.debug = noop;
+  console.time = noop;
+  console.timeLog = noop;
+  console.timeEnd = noop;
+}
+
 export const pb = new PocketbaseService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
 export const SCENE_GAME = 'GameScene';
 
 export const POINTS_PER_COIN = 100;
-export const LEVEL_SUCCESS_BONUS_POINTS = 5000;
 export const BASE_FLIP_POINTS = 400;
 export const TRICK_POINTS_COMBO_FRACTION = 0.1;
 export const HEAD_MAX_IMPULSE = 8;

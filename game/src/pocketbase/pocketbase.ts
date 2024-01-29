@@ -6,7 +6,6 @@ import {Level} from './Level';
 import {User} from './User';
 import {Auth} from './auth';
 import {Leaderboard} from './leaderboard';
-import { DEBUG_LOGS } from '..';
 
 export class PocketbaseService {
   auth: Auth;
@@ -19,12 +18,12 @@ export class PocketbaseService {
     if (!env.POCKETBASE_ENABLED) throw new Error('PocketbaseLeaderboardService not yet implemented');
     this.pb = new PocketBase(env.POCKETBASE_API);
     this.pb.authStore.onChange((token, model) => {
-      if (DEBUG_LOGS) console.log('AuthStore.onChange:', token, model);
+      console.debug('AuthStore.onChange:', {token, model});
       if (model && Settings.username() !== model.username) Settings.set('userName', model.username);
     });
 
     this.pb.beforeSend = async (url, options) => {
-      if (DEBUG_LOGS) console.log('pb.beforeSend:', this.pb.authStore.isValid, url, options);
+      console.debug('pb.beforeSend:', this.pb.authStore.isValid, url, options);
       if (options.headers?.['Authorization'] && !this.pb.authStore.isValid) this.auth.login();
       return {url, options};
     };
@@ -33,7 +32,7 @@ export class PocketbaseService {
     this.user = new User(this.pb, this.auth);
     this.level = new Level(this.pb, this.auth);
     this.leaderboard = new Leaderboard(this.pb, this.auth);
-    this.auth.login().then(() => DEBUG_LOGS && console.log('logged in'));
+    this.auth.login().then(() => console.debug('logged in'));
   }
 
   getUrl(record: RecordModel, filename: string) {

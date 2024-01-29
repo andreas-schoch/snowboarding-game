@@ -3,7 +3,6 @@ import PocketBase from 'pocketbase';
 import {Settings} from '../Settings';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {IUser} from './types';
-import { DEBUG_LOGS } from '..';
 
 export class Auth {
   constructor(private pb: PocketBase) {
@@ -14,29 +13,29 @@ export class Auth {
   }
 
   async login() {
-    if (DEBUG_LOGS) console.log('is login valid?', this.pb.authStore.isValid, this.pb.authStore, this.pb.authStore.isAuthRecord);
-    if (this.pb.authStore.isValid) return;
-
-    let uid = Settings.anonymousUID();
-    let username = Settings.username();
-
-    if (!uid || !username) {
-      if (DEBUG_LOGS) console.log('register anonymous user');
+    if (this.pb.authStore.isValid) {
+      console.debug('auth record found locally, lets try to refresh (user may not exist anymore)', this.pb.authStore);
+      const refreshedUser = await this.pb.collection<IUser>('users').authRefresh().catch(() => null);
+      if (refreshedUser) {
+        console.debug('user exists and is already logged in. Do nothing', this.pb.authStore);
+        return;
+      }
+      console.debug('user was probably deleted', this.pb.authStore);
       await this.registerAnonymousUser();
-    } else if (this.pb.authStore.token) {
-      if (DEBUG_LOGS) console.log('try refreshing token');
-      await this.pb.collection('users').authRefresh<IUser>().catch(() => console.error('failed to refresh token'));
+    } else {
+      console.debug('no auth records found locally', this.pb.authStore);
+      await this.registerAnonymousUser();
     }
 
-    username = Settings.username();
-    uid = Settings.anonymousUID();
+    const uid = Settings.anonymousUID();
+    const username = Settings.username();
+    if (!username || !uid) throw new Error('Failed to refresh or register user');
 
-    if (!username || !uid) throw new Error('Something wrong');
-
-    await this.pb.collection('users').authWithPassword<IUser>(username, uid).catch(() => console.error('failed to login'));
+    await this.pb.collection('users').authWithPassword<IUser>(username, uid).catch(() => console.error('failed to login:' + username));
   }
 
   async registerAnonymousUser() {
+    console.debug('Registering a new user');
     const username = pseudoRandomId();
     const uid = pseudoRandomId();
 
@@ -49,6 +48,6 @@ export class Auth {
 
     Settings.set('userName', newUser.username);
     Settings.set('anonymous_uid', uid);
-    return [username, uid];
+    return [newUser.username, uid];
   }
 }
