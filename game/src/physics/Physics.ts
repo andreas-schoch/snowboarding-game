@@ -1,10 +1,10 @@
-import {Settings} from '../Settings';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {b2, recordLeak} from '../index';
 import {GameScene} from '../scenes/GameScene';
 import {DebugDrawer} from './DebugDraw';
+import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
-import {RubeImage, RubeScene} from './RUBE/RubeLoaderInterfaces';
+import {RubeScene} from './RUBE/RubeLoaderInterfaces';
 import {RubeSerializer} from './RUBE/RubeSerializer';
 
 export interface IBeginContactEvent {
@@ -26,8 +26,8 @@ export interface IPostSolveEvent {
 
 export class Physics extends Phaser.Events.EventEmitter {
   world: Box2D.b2World;
-  serializer: RubeSerializer<Phaser.GameObjects.Image>;
-  loader: RubeLoader<Phaser.GameObjects.Image>;
+  serializer: RubeSerializer;
+  loader: RubeLoader;
   worldScale: number;
   isPaused: boolean = false;
   private readonly debugDrawer: DebugDrawer;
@@ -39,8 +39,16 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.worldScale = config.worldScale;
     this.debugDrawer = new DebugDrawer(this.scene.add.graphics().setDepth(5000), this.config.worldScale);
     this.world = this.initWorld();
-    this.loader = this.initLoader();
-    this.serializer = this.initSerializer();
+
+    const adapter = new PhaserImageAdapter(this.scene, this);
+    this.loader = new RubeLoader(this.world, adapter);
+    this.serializer = new RubeSerializer(this.world, adapter, this.loader);
+
+    // this.serializer.getImages = () => adapter.images;
+    // this.serializer.handleSerializeImage = adapter.serializeImage.bind(adapter);
+    // this.loader.getImages = () => adapter.images;
+    // this.loader.handleLoadImage = adapter.loadImage.bind(adapter);
+
     this.initContactListeners();
   }
 
@@ -59,8 +67,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     const worldScale = this.worldScale;
     for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (!body) continue;
-      const userdata = this.loader.userData.get(body);
-      const image = userdata?.image;
+      const image = this.loader.bodyImage.get(body) as Phaser.GameObjects.Image | null;
       if (!image) continue;
       if (body.IsEnabled()) {
         const pos = body.GetPosition();
@@ -82,51 +89,6 @@ export class Physics extends Phaser.Events.EventEmitter {
     world.SetDebugDraw(this.debugDrawer.instance);
     b2.destroy(gravityVec);
     return world;
-  }
-
-  private initLoader() {
-    const loader = new RubeLoader<Phaser.GameObjects.Image>(this.world);
-    loader.handleLoadImage = (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => {
-      const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
-      const pos = bodyObj ? bodyObj.GetPosition() : this.loader.rubeToVec2(center);
-
-      // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
-      const bodyProps = bodyObj ? this.loader.customProps.get(bodyObj) : null;
-      const isPlayerCharacterPart = Boolean(bodyProps?.['phaserPlayerCharacterPart']);
-
-      if (!pos) return null;
-
-      const textureFrame = (file || '').split('/').reverse()[0];
-      const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : customPropsMap['phaserTexture'] as string;
-      const img: Phaser.GameObjects.Image = this.scene.add.image(pos.x * this.worldScale, pos.y * -this.worldScale, textureAtlas || textureFrame, textureFrame);
-      img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
-      img.scaleY = (this.worldScale / img.height) * scale;
-      img.scaleX = img.scaleY * aspectScale;
-      img.alpha = imageJson.opacity || 1;
-      img.flipX = flip;
-      img.setDepth(renderOrder);
-      img.setDataEnabled();
-
-      if (Settings.darkmodeEnabled()) {
-        // img.setPipeline('Light2D');
-        const isLight = bodyProps?.['light'] === true || textureFrame === 'present_temp.png';
-        if (isPlayerCharacterPart) img.setTintFill(0x000000);
-        else if (isLight) img.setTintFill(0xbbbbbb);
-        else img.setTintFill(0x222222);
-      }
-      // TODO not sure if this is the way to go. If I want to keep full compatibility with RUBE, I need to somehow keep the opengl specific data.
-      //  I don't know yet if I can derive them fully from just the generated phaser image. Once I start with the level editor, I'll look into it.
-      img.data.set('image-json', imageJson);
-      img.data.set('angle_offset', -(angle || 0)); // need to preserve original angle it was expeorted with
-      return img;
-    };
-    return loader;
-  }
-
-  private initSerializer() {
-    const serializer = new RubeSerializer(this.world, this.loader);
-    serializer.handleSerializeImage = (image) => (image as Phaser.GameObjects.Image).data.get('image-json') as RubeImage;
-    return serializer;
   }
 
   private initContactListeners() {

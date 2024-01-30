@@ -6,39 +6,46 @@
 
 import {b2, recordLeak} from '../..';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
+import {IBaseAdapter} from './RubeImageAdapter';
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeLoaderInterfaces';
 import {vec2Util} from './Vec2Math';
 import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
-export type CustomPropOwner = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint;
+export type Entity = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint | unknown;
 
-export interface LoadedScene<IMG = unknown> {
+export interface LoadedScene {
   id: string;
   bodies: (Box2D.b2Body | null)[];
   joints: (Box2D.b2Joint | null)[];
-  images: (IMG | null)[];
+  images: (unknown | null)[];
 }
 
-export class RubeLoader<IMG = unknown> {
-  handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => IMG | null = () => null;
-  readonly userData: Map<Box2D.b2Body, {name: string, image: IMG | null}> = new Map();
-  readonly customProps: Map<CustomPropOwner | IMG, {[key: string]: unknown}> = new Map();
-  readonly loadedScenes: Map<LoadedScene['id'], LoadedScene<IMG>> = new Map();
+export class RubeLoader {
+  // getImages: () => (IMG | null)[] = () => {throw new Error('RubeLoader.getImages not set');};
+  // handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => IMG | null = () => {throw new Error('RubeLoader.handleLoadImage not set');};
+  readonly bodyImage: Map<Box2D.b2Body, unknown | null> = new Map();
+  readonly entityName: Map<Entity, string> = new Map();
+  readonly customProps: Map<Entity | unknown, {[key: string]: unknown}> = new Map();
+  readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
 
   private loadingBodies: LoadedScene['bodies'] = [];
   private loadingJoints: LoadedScene['joints'] = [];
-  private loadingImages: LoadedScene<IMG>['images'] = [];
+  private loadingImages: LoadedScene['images'] = [];
 
-  constructor(private world: Box2D.b2World) {
-  }
+  constructor(private world: Box2D.b2World, private adapter: IBaseAdapter) { }
 
   load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0): [boolean, LoadedScene['id']] {
     // Note that all the defaults should already have been set within sanitizeRubeDefaults()
     // But for now we keep setting defaults in this loader as well until continuing work on my own level editor
+    console.time('RubeLoader.load');
     scene = sanitizeRubeDefaults(scene);
-    this.loadingBodies = scene.body ? scene.body.map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY)) : [];
-    this.loadingJoints = scene.joint ? scene.joint.map(jointJson => this.loadJoint(jointJson)) : [];
-    this.loadingImages = scene.image ? scene.image.map(imageJson => this.loadImage(imageJson)) : [];
+    console.timeLog('RubeLoader.load', 'scene sanitized');
+    this.loadingBodies = (scene.body || []).map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY));
+    console.timeLog('RubeLoader.load', 'bodies loaded');
+    this.loadingJoints = (scene.joint || []).map(jointJson => this.loadJoint(jointJson));
+    console.timeLog('RubeLoader.load', 'joints loaded');
+    this.loadingImages = (scene.image || []).map(imageJson => this.loadImage(imageJson));
+    console.timeLog('RubeLoader.load', 'images loaded');
 
     const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
     if (success) console.debug('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
@@ -48,6 +55,7 @@ export class RubeLoader<IMG = unknown> {
     this.loadingBodies = [];
     this.loadingJoints = [];
     this.loadingImages = [];
+    console.timeEnd('RubeLoader.load');
     return [success, id];
   }
 
@@ -111,51 +119,54 @@ export class RubeLoader<IMG = unknown> {
 
   private loadBody(bodyJson: RubeBody, offsetX: number, offsetY: number): Box2D.b2Body | null {
     const bd = new b2.b2BodyDef();
-    bd.set_type(Math.min(Math.max(bodyJson.type || 0, 0), 2)); // clamp between 0-2.
-    bd.set_angle(bodyJson.angle || 0);
-    bd.set_angularVelocity(bodyJson.angularVelocity || 0);
-    bd.set_awake(Boolean(bodyJson.awake));
-    bd.set_enabled(bodyJson.hasOwnProperty('active') ? Boolean(bodyJson.active) : true);
-    bd.set_fixedRotation(Boolean(bodyJson.fixedRotation));
-    bd.set_linearVelocity(this.rubeToVec2(bodyJson.linearVelocity));
-    bd.set_linearDamping(bodyJson.linearDamping || 0);
-    bd.set_angularDamping(bodyJson.angularDamping || 0);
-    bd.set_position(this.rubeToVec2(bodyJson.position, offsetX, offsetY));
-    bd.set_bullet(Boolean(bodyJson.bullet || false));
+    bd.type = Math.min(Math.max(bodyJson.type || 0, 0), 2); // clamp between 0-2.
+    bd.angle = bodyJson.angle || 0;
+    bd.angularVelocity = bodyJson.angularVelocity || 0;
+    bd.awake = Boolean(bodyJson.awake);
+    bd.enabled = bodyJson.hasOwnProperty('active') ? Boolean(bodyJson.active) : true;
+    bd.fixedRotation = Boolean(bodyJson.fixedRotation);
+    bd.linearVelocity = this.rubeToVec2(bodyJson.linearVelocity);
+    bd.linearDamping = bodyJson.linearDamping || 0;
+    bd.angularDamping = bodyJson.angularDamping || 0;
+    bd.position = this.rubeToVec2(bodyJson.position, offsetX, offsetY);
+    bd.bullet = Boolean(bodyJson.bullet || false);
 
     const massData = new b2.b2MassData();
-    massData.set_mass(bodyJson['massData-mass'] || bodyJson.massDataMass || 1);
-    massData.set_center(this.rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter));
-    massData.set_I(bodyJson['massData-I'] || bodyJson.massDataI || 1);
+    massData.mass = bodyJson['massData-mass'] || bodyJson.massDataMass || 1 ;
+    massData.center = this.rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter) ;
+    massData.I = bodyJson['massData-I'] || bodyJson.massDataI || 1 ;
 
-    const body: Box2D.b2Body = this.world.CreateBody(bd);
+    const body = this.world.CreateBody(bd);
     body.SetMassData(massData);
     b2.destroy(massData);
     b2.destroy(bd);
 
-    this.userData.set(body, {name: bodyJson.name || '', image: null});
+    this.bodyImage.set(body, null);
+    this.entityName.set(body, bodyJson.name || 'body');
+
     this.customProps.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
-    (bodyJson.fixture || []).forEach(fixtureJson => this.loadFixture(body, fixtureJson));
+    for (const fixtureJson of bodyJson.fixture || []) this.loadFixture(body, fixtureJson);
     return body;
   }
 
-  private loadFixture(body: Box2D.b2Body, fixtureJso: RubeFixture): Box2D.b2Fixture {
+  private loadFixture(body: Box2D.b2Body, fixtureJson: RubeFixture): Box2D.b2Fixture {
     const filter = new b2.b2Filter();
-    filter.set_categoryBits(fixtureJso['filter-categoryBits'] || fixtureJso.filterCategoryBits || 1);
-    filter.set_maskBits(fixtureJso['filter-maskBits'] || fixtureJso.filterMaskBits || 65535);
-    filter.set_groupIndex(fixtureJso['filter-groupIndex'] || fixtureJso.filterGroupIndex || 0);
+    filter.categoryBits = fixtureJson['filter-categoryBits'] || fixtureJson.filterCategoryBits || 1;
+    filter.maskBits = fixtureJson['filter-maskBits'] || fixtureJson.filterMaskBits || 65535;
+    filter.groupIndex = fixtureJson['filter-groupIndex'] || fixtureJson.filterGroupIndex || 0;
 
-    const fd: Box2D.b2FixtureDef = this.getFixtureDefWithShape(fixtureJso);
-    fd.set_friction(fixtureJso.friction || 0);
-    fd.set_density(fixtureJso.density || 0);
-    fd.set_restitution(fixtureJso.restitution || 0);
-    fd.set_isSensor(Boolean(fixtureJso.sensor));
-    fd.set_filter(filter);
+    const fd: Box2D.b2FixtureDef = this.getFixtureDefWithShape(fixtureJson);
+    fd.friction = fixtureJson.friction || 0;
+    fd.density = fixtureJson.density || 0;
+    fd.restitution = fixtureJson.restitution || 0;
+    fd.isSensor = Boolean(fixtureJson.sensor);
+    fd.filter = filter;
 
     const fixture: Box2D.b2Fixture = body.CreateFixture(fd);
     b2.destroy(fd);
     b2.destroy(filter);
-    this.customProps.set(fixture, this.customPropertiesArrayToMap(fixtureJso.customProperties || []));
+    this.customProps.set(fixture, this.customPropertiesArrayToMap(fixtureJson.customProperties || []));
+    this.entityName.set(body, fixtureJson.name || 'body');
     return fixture;
   }
 
@@ -181,21 +192,21 @@ export class RubeLoader<IMG = unknown> {
     case 'revolute': {
       const jd = new b2.b2RevoluteJointDef();
       jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_referenceAngle(jointJson.refAngle || 0);
-      jd.set_enableLimit(Boolean(jointJson.enableLimit));
-      jd.set_lowerAngle(jointJson.lowerLimit || 0);
-      jd.set_upperAngle(jointJson.upperLimit || 0);
-      jd.set_enableMotor(Boolean(jointJson.enableMotor));
-      jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
-      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.referenceAngle = jointJson.refAngle || 0;
+      jd.enableLimit = Boolean(jointJson.enableLimit);
+      jd.lowerAngle = jointJson.lowerLimit || 0;
+      jd.upperAngle = jointJson.upperLimit || 0;
+      jd.enableMotor = Boolean(jointJson.enableMotor);
+      jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
+      jd.motorSpeed = jointJson.motorSpeed || 0;
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
-    // case 'rope': {
-    //   // throw new Error('Rope joint not implemented');
-    // }
+    case 'rope': {
+      throw new Error('Rope joint not supported with box2d-wasm');
+    }
     case 'distance': {
       const jd = new b2.b2DistanceJointDef();
       jd.length = (jointJson.length || 0);
@@ -205,10 +216,10 @@ export class RubeLoader<IMG = unknown> {
         vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()),
         vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorB), bodyB.GetAngle()), bodyB.GetPosition()),
       );
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_length(jointJson.length || 0);
-      jd.set_minLength(0);
-      jd.set_maxLength(jd.length * 2); // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.length = jointJson.length || 0;
+      jd.minLength = 0;
+      jd.maxLength = jd.length * 2; // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
       this.setLinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
@@ -216,15 +227,20 @@ export class RubeLoader<IMG = unknown> {
     }
     case 'prismatic': {
       const jd = new b2.b2PrismaticJointDef();
-      jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()), this.rubeToVec2(jointJson.localAxisA));
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_referenceAngle(jointJson.refAngle || 0);
-      jd.set_enableLimit(Boolean(jointJson.enableLimit));
-      jd.set_lowerTranslation(jointJson.lowerLimit || 0);
-      jd.set_upperTranslation(jointJson.upperLimit || 0);
-      jd.set_enableLimit(Boolean(jointJson.enableMotor));
-      jd.set_maxMotorForce(jointJson.maxMotorForce || 0);
-      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      jd.Initialize(
+        bodyA,
+        bodyB,
+        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()),
+        this.rubeToVec2(jointJson.localAxisA)
+      );
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.referenceAngle = jointJson.refAngle || 0;
+      jd.enableLimit = Boolean(jointJson.enableLimit);
+      jd.lowerTranslation = jointJson.lowerLimit || 0;
+      jd.upperTranslation = jointJson.upperLimit || 0;
+      jd.enableLimit = Boolean(jointJson.enableMotor);
+      jd.maxMotorForce = jointJson.maxMotorForce || 0;
+      jd.motorSpeed = jointJson.motorSpeed || 0;
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
@@ -233,10 +249,10 @@ export class RubeLoader<IMG = unknown> {
       const jd = new b2.b2WheelJointDef();
       // TODO anchorA is 0 and B is XY in world space, which should be used?
       jd.Initialize(bodyA, bodyB, this.rubeToVec2(jointJson.anchorB), this.rubeToVec2(jointJson.localAxisA));
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_enableMotor(Boolean(jointJson.enableMotor));
-      jd.set_maxMotorTorque(jointJson.maxMotorTorque || 0);
-      jd.set_motorSpeed(jointJson.motorSpeed || 0);
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.enableMotor = Boolean(jointJson.enableMotor);
+      jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
+      jd.motorSpeed = jointJson.motorSpeed || 0;
       this.setLinearStiffness(jd, jointJson.springFrequency || 0, jointJson.springDampingRatio || 0, jd.bodyA, jd.bodyB);
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
@@ -245,9 +261,9 @@ export class RubeLoader<IMG = unknown> {
     case 'friction': {
       const jd = new b2.b2FrictionJointDef();
       jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_maxForce(jointJson.maxForce || 0);
-      jd.set_maxTorque(jointJson.maxTorque || 0);
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.maxForce = jointJson.maxForce || 0;
+      jd.maxTorque = jointJson.maxTorque || 0;
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
@@ -255,8 +271,8 @@ export class RubeLoader<IMG = unknown> {
     case 'weld': {
       const jd = new b2.b2WeldJointDef();
       jd.Initialize(bodyA, bodyB, vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyA.GetAngle()), bodyA.GetPosition()));
-      jd.set_collideConnected(Boolean(jointJson.collideConnected));
-      jd.set_referenceAngle(jointJson.refAngle || 0);
+      jd.collideConnected = Boolean(jointJson.collideConnected);
+      jd.referenceAngle = jointJson.refAngle || 0;
       this.setAngularStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
       joint = this.world.CreateJoint(jd);
       b2.destroy(jd);
@@ -267,6 +283,7 @@ export class RubeLoader<IMG = unknown> {
     }
 
     this.customProps.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
+    this.entityName.set(joint, jointJson.name || 'joint');
     return joint;
   }
 
@@ -290,20 +307,19 @@ export class RubeLoader<IMG = unknown> {
     jd.damping = damping;
   }
 
-  private loadImage(imageJson: RubeImage): IMG | null {
+  private loadImage(imageJson: RubeImage): boolean {
     const {body, customProperties} = imageJson;
     const bodyObj = this.loadingBodies[body];
     const customProps = this.customPropertiesArrayToMap(customProperties || []);
-    const img = this.handleLoadImage(imageJson, bodyObj, customProps);
-    if (!img) return null;
+    const img = this.adapter.loadImage(imageJson, bodyObj, customProps);
+    if (!img) return false;
     const props = this.customPropertiesArrayToMap(customProperties || []);
     this.customProps.set(img, props);
+    this.entityName.set(img, imageJson.name || 'image');
     if (bodyObj) {
-      const userData = this.userData.get(bodyObj);
-      if (!userData) throw new Error('bodyUserDataMap is missing bodyObj. this should never happen');
-      userData.image = img;
+      this.bodyImage.set(bodyObj, img);
     }
-    return img;
+    return true;
   }
 
   private customPropertiesArrayToMap(customProperties: RubeCustomProperty[]): Record<string, unknown> {
@@ -331,8 +347,8 @@ export class RubeLoader<IMG = unknown> {
   private createCircleShape(circle: RubeFixture['circle']): Box2D.b2CircleShape {
     if (!circle) throw new Error('fixtureJson.circle is missing');
     const shape = new b2.b2CircleShape();
-    shape.set_m_radius(circle.radius);
-    shape.set_m_p(this.rubeToVec2(circle.center));
+    shape.m_radius = circle.radius;
+    shape.m_p = this.rubeToVec2(circle.center);
     return shape;
   }
 

@@ -235,25 +235,27 @@ export interface RubeImage {
   aspectScale: number;
   /** angle in radians */
   angle: number;
-  /** zero-based index of body in bodies array */
+  /** zero-based index of body in RubeScene.body array */
   body: number;
   /** center position in body local coordinates */
   center: RubeVector;
-  /** corner positions in body local coordinates */
-  corners: RubeVectorArray;
   /** Path to image. Absolute or relative to exported file (e.g. '../img/whatever.png') */
   file: string;
-  /** texture magnification filter; 0 = linear; 1 = nearest */
-  filter: 0 | 1;
   /** true if the texture should be reversed horizontally */
   flip: boolean;
-  /** RGBA values for color tint; Defaults to [255, 255, 255, 255] */
-  colorTint?: [number, number, number, number];
-  /** Indices for drawing GL_TRIANGLES with the glDrawElements function and the other glXXX properties below */
-  glDrawElements: number[];
-  /** Texture coordinates for use with glTexCoordPointer (the 'flip' property has already been taken into account) */
-  glTexCoordPointer: number[];
-  /** Vertex positions for use with glVertexPointer */
-  glVertexPointer: number[];
   customProperties?: RubeCustomProperty[];
+
+  // Properties included in RUBE's JSON export but not relevant for this game
+  // /** corner positions in body local coordinates */
+  // corners: RubeVectorArray;
+  // /** texture magnification filter; 0 = linear; 1 = nearest */
+  // filter: 0 | 1;
+  // /** RGBA values for color tint; Defaults to [255, 255, 255, 255] */
+  // colorTint?: [number, number, number, number];
+  // /** Indices for drawing GL_TRIANGLES with the glDrawElements function and the other glXXX properties below */
+  // glDrawElements: number[];
+  // /** Texture coordinates for use with glTexCoordPointer (the 'flip' property has already been taken into account) */
+  // glTexCoordPointer: number[];
+  // /** Vertex positions for use with glVertexPointer */
+  // glVertexPointer: number[];
 }

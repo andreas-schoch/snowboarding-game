@@ -16,7 +16,7 @@ export interface IRaceScoreSummary {
   time: number; // in ms
 }
 
-export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = false): IScoreNew => {
+export function generateScoreFromLogs(tsl: TrickScore[], completed: boolean = false): IScoreNew {
   console.time('getScoreFromLogs');
   const log = typeof tsl === 'string' ? scoreLogSerializer.decode(tsl) : tsl;
 
@@ -68,4 +68,4 @@ export const generateScoreFromLogs = (tsl: TrickScore[], completed: boolean = fa
     pointsComboBest,
     pointsTotal: pointsCoin + pointsCombo + pointsTrick,
   };
-};
+}

@@ -15,6 +15,7 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
   const TrickScoreLog = root.lookupType(options.type);
 
   function encode(data: T): string {
+    console.time('ProtobufSerializer.encode');
     const transformed = options.to ? options.to(data) : data;
     const errMsg = TrickScoreLog.verify(transformed);
     if (errMsg) throw Error(errMsg);
@@ -24,16 +25,19 @@ export async function ProtobufSerializer<T extends {[k: string]: any}, O extends
 
     let binaryString = '';
     for (let i = 0; i < encoded.length; i++) binaryString += String.fromCharCode(encoded[i]);
+    console.timeEnd('ProtobufSerializer.encode');
     return binaryString;
   }
 
   function decode(binaryString: string): T {
+    console.time('ProtobufSerializer.decode');
     let binary = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) binary[i] = binaryString.charCodeAt(i);
     binary = inflateSync(binary);
     const message = TrickScoreLog.decode(binary);
     const data = TrickScoreLog.toObject(message, {defaults: true}) as O;
     const transformed = options.from ? options.from(data) : data as unknown as T;
+    console.timeEnd('ProtobufSerializer.decode');
     return transformed;
   }
 

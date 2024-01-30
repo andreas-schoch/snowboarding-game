@@ -38,7 +38,7 @@ function sanitizeBody(body: RubeBody): RubeBody {
     awake: body.awake !== undefined ? body.awake : true,
     bullet: body.bullet || false,
     fixedRotation: body.fixedRotation || false,
-    type: body.type || 0,
+    type: Math.min(Math.max(body.type || 0, 0), 2) as 0 | 1 | 2,
     position: isXY(body.position) ? body.position : {x: 0, y: 0},
     angle: body.angle || 0,
     angularDamping: body.angularDamping || 0,
@@ -105,18 +105,18 @@ function sanitizeImage(image: RubeImage): RubeImage {
     angle: image.angle || 0,
     body: image.body !== undefined ? image.body : 0,
     center: isXY(image.center) ? image.center : {x: 0, y: 0},
-    corners: image.corners || {x: [], y: []},
     file: image.file || '',
-    filter: image.filter !== undefined ? image.filter : 0,
     flip: image.flip || false,
-    colorTint: image.colorTint || [255, 255, 255, 255],
-    glDrawElements: image.glDrawElements || [],
-    glTexCoordPointer: image.glTexCoordPointer || [],
-    glVertexPointer: image.glVertexPointer || [],
     customProperties: image.customProperties || []
+    // corners: image.corners || {x: [], y: []},
+    // filter: image.filter !== undefined ? image.filter : 0,
+    // colorTint: image.colorTint || [255, 255, 255, 255],
+    // glDrawElements: image.glDrawElements || [],
+    // glTexCoordPointer: image.glTexCoordPointer || [],
+    // glVertexPointer: image.glVertexPointer || [],
   };
 }
 
-function isXY(val: unknown): val is Box2D.b2Vec2 {
+function isXY(val: unknown): val is {x: number, y: number}{
   return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
 }

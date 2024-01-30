@@ -181,10 +181,10 @@ export class Character {
       return b2.castObject(joint, type);
     };
 
-    const getBodyImage = (body: Box2D.b2Body) => {
-      const image = this.scene.b2Physics.loader.userData.get(body)!.image;
+    const getBodyImage = (body: Box2D.b2Body): Phaser.GameObjects.Image => {
+      const image = this.scene.b2Physics.loader.bodyImage.get(body);
       if (!image) throw new Error(`Player character image not found: ${body}`);
-      return image;
+      return image as Phaser.GameObjects.Image;
     };
 
     const getBodyCustomProp = (body: Box2D.b2Body, prop: BodyCustomProps) => {

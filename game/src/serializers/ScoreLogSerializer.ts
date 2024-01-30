@@ -6,14 +6,14 @@ import {ICoinTrickScore, IComboTrickScore, ICrashTrickScore, IFinishTrickScore, 
 // Also probably not super future proof if things need changing
 export async function ScoreLogSerializer() {
 
-  const encodeCommon = (view: DataView, {type, frame}: Pick<TrickScore, 'type' | 'frame'>) => {
+  function encodeCommon(view: DataView, {type, frame}: Pick<TrickScore, 'type' | 'frame'>) {
     // type  frame
     // AA    BB BB
     view.setUint8(0, type); // 1 byte
     view.setUint16(1, frame, true); // 2 bytes
-  };
+  }
 
-  const encodeComboScore = ({type, frame, accumulator, multiplier}: IComboTrickScore): ArrayBuffer => {
+  function encodeComboScore({type, frame, accumulator, multiplier}: IComboTrickScore): ArrayBuffer {
     // accumulator,   multiplier
     // CC CC CC CC    DD DD
     const buffer = new ArrayBuffer(9); // 9 bytes
@@ -22,9 +22,9 @@ export async function ScoreLogSerializer() {
     view.setUint32(3, accumulator, true); // 4 bytes
     view.setUint16(7, multiplier, true); // 2 bytes
     return buffer;
-  };
+  }
 
-  const encodeFlipScore = ({type, frame, flips}: IFlipTrickScore): ArrayBuffer => {
+  function encodeFlipScore({type, frame, flips}: IFlipTrickScore): ArrayBuffer {
     // flips
     // CC
     const buffer = new ArrayBuffer(4); // 4 bytes
@@ -32,17 +32,17 @@ export async function ScoreLogSerializer() {
     encodeCommon(view, {type, frame});
     view.setUint8(3, flips); // 1 bytes
     return buffer;
-  };
+  }
 
-  const encodeCoinScore = ({type, frame}: ICoinTrickScore): ArrayBuffer => {
+  function encodeCoinScore({type, frame}: ICoinTrickScore): ArrayBuffer {
     // Only common
     const buffer = new ArrayBuffer(3); // 3 bytes
     const view = new DataView(buffer);
     encodeCommon(view, {type, frame});
     return buffer;
-  };
+  }
 
-  const encodeStartScore = ({type, frame, timestamp, levelRevision, levelId, userId}: IStartTrickScore): ArrayBuffer => {
+  function encodeStartScore({type, frame, timestamp, levelRevision, levelId, userId}: IStartTrickScore): ArrayBuffer {
     // timestamp      lvlRev   levelId     userId
     // CC CC CC CC    DD DD    15 bytes    15 bytes
     const buffer = new ArrayBuffer(39); // 39 bytes
@@ -53,16 +53,16 @@ export async function ScoreLogSerializer() {
     encodeString(view, 9, levelId, 15); // Starting at byte 9, 15 bytes for levelId
     encodeString(view, 24, userId, 15); // Starting at byte 24, 15 bytes for userId
     return buffer;
-  };
+  }
 
-  const encodeString = (view: DataView, offset: number, str: string, length: number) => {
+  function encodeString(view: DataView, offset: number, str: string, length: number) {
     for (let i = 0; i < length; i++) {
       const charCode = i < str.length ? str.charCodeAt(i) : 0; // Pad with null character if string is short
       view.setUint8(offset + i, charCode); // Store each character as 1 byte
     }
-  };
+  }
 
-  const encodeCrashOrFinishScore = ({type, frame, timestamp, distance}: ICrashTrickScore | IFinishTrickScore): ArrayBuffer => {
+  function encodeCrashOrFinishScore({type, frame, timestamp, distance}: ICrashTrickScore | IFinishTrickScore): ArrayBuffer {
     // timestamp      distance
     // CC CC CC CC    DD DD
     const buffer = new ArrayBuffer(9); // 9 bytes
@@ -71,7 +71,7 @@ export async function ScoreLogSerializer() {
     view.setUint32(3, timestamp, true); // 4 bytes
     view.setUint16(7, distance, true); // 2 bytes
     return buffer;
-  };
+  }
 
   function encode(data: TrickScore[]): string {
     const buffers: ArrayBuffer[] = [];
@@ -116,7 +116,7 @@ export async function ScoreLogSerializer() {
     return binaryString;
   }
 
-  const decodeString = (view: DataView, offset: number, length: number): string => {
+  function decodeString(view: DataView, offset: number, length: number): string {
     let str = '';
     for (let i = 0; i < length; i++) {
       const charCode = view.getUint8(offset + i);
@@ -124,7 +124,7 @@ export async function ScoreLogSerializer() {
       str += String.fromCharCode(charCode);
     }
     return str;
-  };
+  }
 
   function decode(binaryString: string): TrickScore[] {
     console.time('ScoreLogSerializer.decode');

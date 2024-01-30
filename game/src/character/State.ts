@@ -155,13 +155,12 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const userdata = this.scene.b2Physics.loader.userData.get(body);
-      const image = userdata?.image;
+      const image = this.scene.b2Physics.loader.bodyImage.get(body) as Phaser.GameObjects.Image | null;
       if (image) {
-        userdata.image = null;
+        this.scene.b2Physics.loader.bodyImage.delete(body);
         image.destroy();
       }
-      this.scene.b2Physics.loader.userData.delete(body);
+      this.scene.b2Physics.loader.bodyImage.delete(body);
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
       GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedCoins++;

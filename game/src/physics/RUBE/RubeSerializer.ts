@@ -1,28 +1,30 @@
 import {b2, recordLeak} from '../..';
-import {CustomPropOwner, RubeLoader} from './RubeLoader';
+import {IBaseAdapter} from './RubeImageAdapter';
+import {Entity, RubeLoader} from './RubeLoader';
 import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty} from './RubeLoaderInterfaces';
 import {vec2Util} from './Vec2Math';
 
-export class RubeSerializer<IMG = unknown> {
-  handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented'); };
+export class RubeSerializer {
+  // getImages: () => IMG[] = () => { throw new Error('Image getter not implemented'); };
+  // handleSerializeImage: (image: IMG) => RubeImage = () => { throw new Error('Image serialization not implemented'); };
 
   private indexByBody: Map<Box2D.b2Body, number> = new Map();
 
-  constructor(private world: Box2D.b2World, private loader: RubeLoader<IMG>) {
-  }
+  constructor(private world: Box2D.b2World, private adapter: IBaseAdapter, private loader: RubeLoader) { }
 
   serialize(): RubeScene {
+    console.time('RubeSerializer.serialize');
     const scene: RubeScene = {
       gravity: this.serializeVector(this.world.GetGravity()),
       allowSleep: this.world.GetAllowSleeping(),
       autoClearForces: this.world.GetAutoClearForces(),
-      positionIterations: 10, // TODO 
-      velocityIterations: 10,
+      positionIterations: 12,
+      velocityIterations: 12,
       stepsPerSecond: 60,
       warmStarting: this.world.GetWarmStarting(),
       continuousPhysics: this.world.GetContinuousPhysics(),
       subStepping: this.world.GetSubStepping(),
-      customProperties: [], // TODO
+      customProperties: [], // We don't use/care about world custom properties for now
 
       body: this.serializeBodies(), // needs to be serialized before joints because joints rely on the order of bodies in the array
       joint: this.serializeJoints(),
@@ -37,7 +39,10 @@ export class RubeSerializer<IMG = unknown> {
     a.download = 'rube scene test.json';
     a.click();
     URL.revokeObjectURL(url);
+    a.remove();
 
+    console.timeEnd('RubeSerializer.serialize');
+    console.debug('serialized scene', scene);
     return scene;
   }
 
@@ -52,7 +57,7 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeBody(body: Box2D.b2Body): RubeBody {
     return {
-      name: 'body name irrelevant for now',
+      name: this.loader.entityName.get(body) || 'body',
       active: body.IsEnabled(),
       awake: body.IsAwake(),
       bullet: body.IsBullet(),
@@ -71,7 +76,8 @@ export class RubeSerializer<IMG = unknown> {
       fixture: this.serializeFixtures(body),
     };
   }
-  serializeCustomProperties(owner: CustomPropOwner | IMG): RubeCustomProperty[] | undefined {
+
+  serializeCustomProperties(owner: Entity): RubeCustomProperty[] | undefined {
     const props = this.loader.customProps.get(owner);
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
@@ -101,7 +107,7 @@ export class RubeSerializer<IMG = unknown> {
     const shapeType = shape.GetType();
 
     const serialized: RubeFixture = {
-      name: 'fixture name irrelevant for now',
+      name: this.loader.entityName.get(fixture) || 'fixture',
       density: fixture.GetDensity(),
       'filter-categoryBits': categoryBits,
       'filter-maskBits': maskBits,
@@ -184,10 +190,12 @@ export class RubeSerializer<IMG = unknown> {
       return this.serializeWeldJoint(joint);
     case 'friction':
       return this.serializeFrictionJoint(joint);
-    case 'rope':
-      throw new Error('Rope joint serialization not supported by box2d-wasm');
     case 'motor':
       return this.serializeMotorJoint(joint);
+    case 'rope':
+      throw new Error('Rope joint serialization not supported by box2d-wasm');
+    default:
+      throw new Error(`Unknown joint type: ${stringType}`);
     }
   }
 
@@ -205,7 +213,7 @@ export class RubeSerializer<IMG = unknown> {
     if (indexA === undefined || indexB === undefined) throw new Error('Joint body index not found');
     return {
       type: enumTypeToRubeJointType[joint.GetType()],
-      name: 'joint name irrelevant for now',
+      name: this.loader.entityName.get(joint) || 'joint',
       anchorA: this.serializeVector(anchorALocal),
       anchorB: this.serializeVector(anchorBLocal),
       bodyA: indexA,
@@ -308,10 +316,9 @@ export class RubeSerializer<IMG = unknown> {
 
   private serializeImages(): RubeImage[] {
     const images: RubeImage[] = [];
-    // for (const image of this.loader.loadedImages) {
-    for (const image of []) { // TODO FIX --------------------------------------------------------
+    for (const image of this.adapter.images) {
       if (!image) throw new Error('Image not loaded');
-      const serialized = this.handleSerializeImage(image);
+      const serialized = this.adapter.serializeImage(image);
       images.push(serialized);
     }
 
@@ -322,6 +329,7 @@ export class RubeSerializer<IMG = unknown> {
     if (vec.x === 0 && vec.y === 0) return 0;
     return {x: vec.x, y: vec.y};
   }
+
   private getJointLinearFrequencyAndDampingRatio(joint: Box2D.b2DistanceJoint | Box2D.b2WheelJoint) {
     // Reverse b2LinearStiffness() formula. from https://github.com/erincatto/box2d/blob/main/src/dynamics/b2_joint.cpp#L40
     const stiffness = joint.GetStiffness();
