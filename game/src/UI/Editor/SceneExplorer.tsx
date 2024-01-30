@@ -1,3 +1,4 @@
+import './SceneExplorer.css';
 import {onMount} from 'solid-js';
 import {b2, recordLeak} from '../..';
 import {GameInfo} from '../../GameInfo';

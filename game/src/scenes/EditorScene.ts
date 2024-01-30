@@ -1,6 +1,10 @@
 import {DEFAULT_WIDTH, SCENE_EDITOR} from '..';
 import {Backdrop} from '../Backdrop';
+import {BackdropGrid} from '../BackdropGrid';
 import {Settings} from '../Settings';
+import { drawCoordZeroPoint } from '../helpers/drawCoordZeroPoint';
+import {Physics} from '../physics/Physics';
+import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
 
 export class EditorScene extends Phaser.Scene {
   observer: Phaser.Events.EventEmitter = new Phaser.Events.EventEmitter();
@@ -13,31 +17,42 @@ export class EditorScene extends Phaser.Scene {
   pointerCoordY: number;
   resolutionMod: number;
 
+  b2Physics: Physics;
   private backdrop: Backdrop;
+  private backdropGrid: BackdropGrid;
 
   constructor() {
     super({key: SCENE_EDITOR});
   }
 
+  private preload() {
+    const character = Settings.selectedCharacter();
+    this.load.json(character, `assets/levels/export/${character}.json`);
+  }
+
   private create() {
     this.setupCameraAndInput();
     this.backdrop = new Backdrop(this);
+    this.backdropGrid = new BackdropGrid(this);
+    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10});
 
-    const g = this.add.graphics();
-    g.lineStyle(5, 0x000000, 1);
-    g.strokeRect(-1000, -1000, 2000, 2000);
+    drawCoordZeroPoint(this);
+
+    const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+    this.b2Physics.load(rubeScene, 0, 0);
   }
 
   update(time: number, delta: number) {
     this.controls.update(delta);
     this.backdrop.update();
+    this.backdropGrid.update();
   }
 
   private setupCameraAndInput() {
     // CAMERA STUFF
     const camera = this.cameras.main;
     this.resolutionMod = camera.width / DEFAULT_WIDTH;
-    camera.setZoom(Settings.defaultZoom() * this.resolutionMod * 0.5);
+    camera.setZoom(Settings.defaultZoom() * this.resolutionMod);
     camera.setBackgroundColor(0x333333);
     camera.centerOnX(0);
     camera.centerOnY(0);
@@ -57,12 +72,12 @@ export class EditorScene extends Phaser.Scene {
       right: keyD,
       zoomIn: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
       zoomOut: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-      acceleration: 15,
+      acceleration: 10,
       drag: 0.1,
-      maxSpeed: 5,
+      maxSpeed: 1,
       maxZoom: 2,
-      minZoom: 0.05,
-      zoomSpeed: 0.05,
+      minZoom: 0.3, // whenever this is adjusted, BackdropGrid also needs to be adjusted for now 
+      zoomSpeed: 0.02,
     });
   }
 }

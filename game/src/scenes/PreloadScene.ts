@@ -7,7 +7,7 @@ import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
 import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
 import {Settings} from '../Settings';
 import {BackgroundMusicKeys} from '../SoundManager';
-import {SCENE_GAME, SCENE_PRELOAD} from '../index';
+import {SCENE_EDITOR, SCENE_GAME, SCENE_PRELOAD} from '../index';
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -20,7 +20,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(SCENE_GAME);
+    this.scene.start(SCENE_EDITOR);
   }
 
   private loadAudio() {
