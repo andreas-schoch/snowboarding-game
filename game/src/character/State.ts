@@ -5,6 +5,7 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTE
 import {framesToTime} from '../helpers/framesToTime';
 import {generateScoreFromLogs} from '../helpers/getPointScoreSummary';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
+import {BodyEntityData} from '../physics/RUBE/RubeLoader';
 import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
@@ -76,11 +77,11 @@ export class State {
   }
 
   private registerListeners() {
-    const customProps = this.scene.b2Physics.loader.customProps;
+    const entityData = this.scene.b2Physics.loader.entityData;
     this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
       if (!this.character.isPartOfMe(bodyA) && !this.character.isPartOfMe(bodyB)) return;
-      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && customProps.get(fixtureA)?.phaserSensorType) this.handleSensor(bodyA, fixtureA);
-      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && customProps.get(fixtureB)?.phaserSensorType) this.handleSensor(bodyB, fixtureB);
+      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && entityData.get(fixtureA)?.customProps.phaserSensorType) this.handleSensor(bodyA, fixtureA);
+      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && entityData.get(fixtureB)?.customProps.phaserSensorType) this.handleSensor(bodyB, fixtureB);
     });
 
     this.scene.b2Physics.on(B2_POST_SOLVE, ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
@@ -129,7 +130,7 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.isLevelFinished) return;
-    const sensorType = this.scene.b2Physics.loader.customProps.get(fixture)?.phaserSensorType;
+    const sensorType = this.scene.b2Physics.loader.entityData.get(fixture)?.customProps.phaserSensorType;
     switch (sensorType) {
     case 'pickup_present': {
       this.pickupsToProcess.add(body);
@@ -155,18 +156,16 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const image = this.scene.b2Physics.loader.bodyImage.get(body) as Phaser.GameObjects.Image | null;
-      if (image) {
-        this.scene.b2Physics.loader.bodyImage.delete(body);
-        image.destroy();
-      }
-      this.scene.b2Physics.loader.bodyImage.delete(body);
+      const entityData = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      const image = entityData?.image as Phaser.GameObjects.Image | undefined;
+      if (entityData) this.scene.b2Physics.loader.entityData.delete(body);
+      if (image) image.destroy();
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
+
       GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedCoins++;
       GameInfo.observer.emit(COLLECT_COIN, this.totalCollectedCoins);
       GameInfo.observer.emit(SCORE_CHANGE, this.getCurrentScore());
-
     }
     this.pickupsToProcess.clear();
   }

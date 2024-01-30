@@ -19,3 +19,5 @@ export const TOGGLE_PAUSE = 'toggle_pause';
 export const PAUSE_GAME = 'pause_game_icon_pressed';
 export const RESUME_GAME = 'resume_game';
 export const RESTART_GAME = 'restart_game';
+
+export const OPEN_EDITOR = 'open_editor';

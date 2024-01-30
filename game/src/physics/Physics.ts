@@ -1,9 +1,9 @@
+import {GameInfo} from '../GameInfo';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {b2, recordLeak} from '../index';
-import {GameScene} from '../scenes/GameScene';
 import {DebugDrawer} from './DebugDraw';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
-import {RubeLoader} from './RUBE/RubeLoader';
+import {BodyEntityData, RubeLoader} from './RUBE/RubeLoader';
 import {RubeScene} from './RUBE/RubeLoaderInterfaces';
 import {RubeSerializer} from './RUBE/RubeSerializer';
 
@@ -34,20 +34,16 @@ export class Physics extends Phaser.Events.EventEmitter {
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
 
-  constructor(private scene: GameScene, private config: {worldScale: number, gravityX: number, gravityY: number}) {
+  constructor(private scene: Phaser.Scene, private config: {worldScale: number, gravityX: number, gravityY: number}) {
     super();
+    GameInfo.physics = this;
     this.worldScale = config.worldScale;
-    this.debugDrawer = new DebugDrawer(this.scene.add.graphics().setDepth(5000), this.config.worldScale);
+    this.debugDrawer = new DebugDrawer(scene, this.config.worldScale);
     this.world = this.initWorld();
 
-    const adapter = new PhaserImageAdapter(this.scene, this);
+    const adapter = new PhaserImageAdapter(scene, this);
     this.loader = new RubeLoader(this.world, adapter);
     this.serializer = new RubeSerializer(this.world, adapter, this.loader);
-
-    // this.serializer.getImages = () => adapter.images;
-    // this.serializer.handleSerializeImage = adapter.serializeImage.bind(adapter);
-    // this.loader.getImages = () => adapter.images;
-    // this.loader.handleLoadImage = adapter.loadImage.bind(adapter);
 
     this.initContactListeners();
   }
@@ -67,7 +63,8 @@ export class Physics extends Phaser.Events.EventEmitter {
     const worldScale = this.worldScale;
     for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (!body) continue;
-      const image = this.loader.bodyImage.get(body) as Phaser.GameObjects.Image | null;
+      const entityData = this.loader.entityData.get(body) as BodyEntityData | undefined;
+      const image = entityData?.image as Phaser.GameObjects.Image | undefined;
       if (!image) continue;
       if (body.IsEnabled()) {
         const pos = body.GetPosition();

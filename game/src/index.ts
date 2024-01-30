@@ -9,6 +9,7 @@ import {GameScene} from './scenes/GameScene';
 import {PreloadScene} from './scenes/PreloadScene';
 import {ScoreLogSerializer} from './serializers/ScoreLogSerializer';
 import {ProtobufSerializer} from './serializers/protobufSerializer';
+import { EditorScene } from './scenes/EditorScene';
 
 export const DEBUG_LOGS = Settings.debugLogs();
 if (!DEBUG_LOGS) {
@@ -23,6 +24,7 @@ export const pb = new PocketbaseService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
 export const SCENE_GAME = 'GameScene';
+export const SCENE_EDITOR = 'EditorScene';
 
 export const POINTS_PER_COIN = 100;
 export const BASE_FLIP_POINTS = 400;
@@ -51,7 +53,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     width: Settings.widthScaled(),
     height: Settings.heightScaled(),
   },
-  scene: [PreloadScene, GameScene],
+  scene: [PreloadScene, GameScene, EditorScene],
   plugins: {
     global: []
   },

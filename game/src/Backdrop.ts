@@ -1,15 +1,14 @@
 import {Settings} from './Settings';
-import {GameScene} from './scenes/GameScene';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from './index';
 
 export class Backdrop {
-  private scene: GameScene;
+  private scene: Phaser.Scene;
   private bgSky: Phaser.GameObjects.TileSprite;
   private bgSpaceMid: Phaser.GameObjects.TileSprite;
   private bgSpaceFront: Phaser.GameObjects.TileSprite;
   private resolutionMod: number;
 
-  constructor(scene: GameScene) {
+  constructor(scene: Phaser.Scene) {
     this.scene = scene;
     this.resolutionMod = this.scene.cameras.main.width / DEFAULT_WIDTH;
 

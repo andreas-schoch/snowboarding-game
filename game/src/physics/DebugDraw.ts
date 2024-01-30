@@ -4,8 +4,10 @@ const sizeOfB2Vec2 = Float32Array.BYTES_PER_ELEMENT * 2;
 
 export class DebugDrawer {
   instance: Box2D.JSDraw = new b2.JSDraw();
+  private graphics: Phaser.GameObjects.Graphics;
 
-  constructor(private graphics: Phaser.GameObjects.Graphics, private pixelsPerMeter: number, private lineWidth: number = 2) {
+  constructor(scene: Phaser.Scene, private pixelsPerMeter: number, private lineWidth: number = 2) {
+    this.graphics = scene.add.graphics().setDepth(1000);
     this.instance.AppendFlags(b2.b2Draw.e_shapeBit);
     this.instance.AppendFlags(b2.b2Draw.e_jointBit);
     // this.instance.AppendFlags(b2.b2Draw.e_aabbBit);
@@ -53,5 +55,12 @@ export class DebugDrawer {
 
   clear() {
     setTimeout(() => this.graphics.clear(), 0);
+  }
+
+  private setGraphics(scene: Phaser.Scene) {
+    if (this.graphics.scene !== scene) {
+      this.graphics.destroy;
+      this.graphics = scene.add.graphics();
+    }
   }
 }

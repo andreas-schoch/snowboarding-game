@@ -1,4 +1,4 @@
-import {SCENE_GAME , freeLeaked, pb} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
 import {Backdrop} from '../Backdrop';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
@@ -7,7 +7,7 @@ import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
-import {RESTART_GAME} from '../eventTypes';
+import {OPEN_EDITOR, RESTART_GAME} from '../eventTypes';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
 import {IScoreNew} from '../pocketbase/types';
@@ -69,6 +69,17 @@ export class GameScene extends Phaser.Scene {
       const character = new Character(this, this.b2Physics.load(rubeScene, 0, 0));
       this.playerController.possessCharacter(character);
       this.ready = true;
+    });
+
+    GameInfo.observer.on(OPEN_EDITOR, () => {
+      this.b2Physics.loader.cleanup();
+      GameInfo.crashed = false;
+      GameInfo.possessedCharacterId = '';
+      GameInfo.score = dummyScore;
+      GameInfo.tsl.length = 0;
+      GameInfo.currentLevel = null;
+      freeLeaked();
+      this.scene.start(SCENE_EDITOR);
     });
 
     GameInfo.observer.on(RESTART_GAME, () => {

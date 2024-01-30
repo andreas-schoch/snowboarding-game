@@ -56,8 +56,9 @@ export class RubeSerializer {
   }
 
   private serializeBody(body: Box2D.b2Body): RubeBody {
+    const bodyEntityData = this.loader.entityData.get(body);
     return {
-      name: this.loader.entityName.get(body) || 'body',
+      name: bodyEntityData?.name || 'body',
       active: body.IsEnabled(),
       awake: body.IsAwake(),
       bullet: body.IsBullet(),
@@ -78,7 +79,7 @@ export class RubeSerializer {
   }
 
   serializeCustomProperties(owner: Entity): RubeCustomProperty[] | undefined {
-    const props = this.loader.customProps.get(owner);
+    const props = this.loader.entityData.get(owner)?.customProps;
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
     for (const [name, value] of Object.entries(props)) {
@@ -106,8 +107,10 @@ export class RubeSerializer {
     const shape = fixture.GetShape();
     const shapeType = shape.GetType();
 
+    const fixtureEntityData = this.loader.entityData.get(fixture);
+
     const serialized: RubeFixture = {
-      name: this.loader.entityName.get(fixture) || 'fixture',
+      name: fixtureEntityData?.name|| 'fixture',
       density: fixture.GetDensity(),
       'filter-categoryBits': categoryBits,
       'filter-maskBits': maskBits,
@@ -211,9 +214,11 @@ export class RubeSerializer {
     const anchorBLocal = vec2Util.Rotate(new b2.b2Vec2(anchorBWorld.x - bodyB.GetPosition().x, anchorBWorld.y - bodyB.GetPosition().y), -bodyB.GetAngle());
 
     if (indexA === undefined || indexB === undefined) throw new Error('Joint body index not found');
+
+    const jointEntityData = this.loader.entityData.get(joint);
     return {
       type: enumTypeToRubeJointType[joint.GetType()],
-      name: this.loader.entityName.get(joint) || 'joint',
+      name: jointEntityData?.name || 'joint',
       anchorA: this.serializeVector(anchorALocal),
       anchorB: this.serializeVector(anchorBLocal),
       bodyA: indexA,

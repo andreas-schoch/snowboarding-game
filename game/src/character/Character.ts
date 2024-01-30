@@ -1,4 +1,5 @@
 import {b2} from '..';
+import {BodyEntityData} from '../physics/RUBE/RubeLoader';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
@@ -182,13 +183,14 @@ export class Character {
     };
 
     const getBodyImage = (body: Box2D.b2Body): Phaser.GameObjects.Image => {
-      const image = this.scene.b2Physics.loader.bodyImage.get(body);
+      const entityData = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      const image = entityData?.image;
       if (!image) throw new Error(`Player character image not found: ${body}`);
       return image as Phaser.GameObjects.Image;
     };
 
     const getBodyCustomProp = (body: Box2D.b2Body, prop: BodyCustomProps) => {
-      const customProp = this.scene.b2Physics.loader.customProps.get(body)![prop];
+      const customProp = this.scene.b2Physics.loader.entityData.get(body)!.customProps[prop];
       if (!customProp) throw new Error(`Player character custom prop not found: ${body}`);
       return customProp;
     };

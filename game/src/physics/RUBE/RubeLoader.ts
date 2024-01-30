@@ -13,6 +13,34 @@ import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
 export type Entity = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint | unknown;
 
+export interface BaseEntityData {
+  type: 'body' | 'fixture' | 'joint' | 'image';
+  id: string;
+  name: string;
+  customProps: Record<string, unknown>;
+}
+
+export interface BodyEntityData extends BaseEntityData {
+  type: 'body';
+  body: Box2D.b2Body;
+  image: unknown | null;
+}
+
+export interface FixtureEntityData extends BaseEntityData {
+  type: 'fixture';
+  fixture: Box2D.b2Fixture;
+}
+
+export interface JointEntityData extends BaseEntityData {
+  type: 'joint';
+  joint: Box2D.b2Joint;
+}
+
+export interface ImageEntityData extends BaseEntityData {
+  type: 'image';
+  image: unknown;
+}
+
 export interface LoadedScene {
   id: string;
   bodies: (Box2D.b2Body | null)[];
@@ -20,12 +48,10 @@ export interface LoadedScene {
   images: (unknown | null)[];
 }
 
+export type EntityData = BodyEntityData | FixtureEntityData | JointEntityData | ImageEntityData;
+
 export class RubeLoader {
-  // getImages: () => (IMG | null)[] = () => {throw new Error('RubeLoader.getImages not set');};
-  // handleLoadImage: (imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}) => IMG | null = () => {throw new Error('RubeLoader.handleLoadImage not set');};
-  readonly bodyImage: Map<Box2D.b2Body, unknown | null> = new Map();
-  readonly entityName: Map<Entity, string> = new Map();
-  readonly customProps: Map<Entity | unknown, {[key: string]: unknown}> = new Map();
+  readonly entityData: Map<Entity, EntityData> = new Map();
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
 
   private loadingBodies: LoadedScene['bodies'] = [];
@@ -63,7 +89,7 @@ export class RubeLoader {
     const bodies: Box2D.b2Body[] = [];
     for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
-      const props = this.customProps.get(body);
+      const props = this.entityData.get(body)?.customProps;
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       bodies.push(body);
@@ -76,7 +102,7 @@ export class RubeLoader {
     for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.includes(body)) continue; // TODO turn into set
       for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
-        const props = this.customProps.get(fixture);
+        const props = this.entityData.get(fixture)?.customProps;
         if (!props) continue;
         if (props[propertyName] !== valueToMatch) continue;
         fixtures.push(fixture);
@@ -89,7 +115,7 @@ export class RubeLoader {
     const joints: Box2D.b2Joint[] = [];
     for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.joints.includes(joint)) continue; // TODO turn into set
-      const props = this.customProps.get(joint);
+      const props = this.entityData.get(joint)?.customProps;
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       joints.push(joint);
@@ -141,10 +167,15 @@ export class RubeLoader {
     b2.destroy(massData);
     b2.destroy(bd);
 
-    this.bodyImage.set(body, null);
-    this.entityName.set(body, bodyJson.name || 'body');
+    this.entityData.set(body, {
+      type: 'body',
+      id: pseudoRandomId(),
+      name: bodyJson.name || 'body',
+      customProps: this.customPropertiesArrayToMap(bodyJson.customProperties || []),
+      body,
+      image: null
+    });
 
-    this.customProps.set(body, this.customPropertiesArrayToMap(bodyJson.customProperties || []));
     for (const fixtureJson of bodyJson.fixture || []) this.loadFixture(body, fixtureJson);
     return body;
   }
@@ -165,8 +196,15 @@ export class RubeLoader {
     const fixture: Box2D.b2Fixture = body.CreateFixture(fd);
     b2.destroy(fd);
     b2.destroy(filter);
-    this.customProps.set(fixture, this.customPropertiesArrayToMap(fixtureJson.customProperties || []));
-    this.entityName.set(body, fixtureJson.name || 'body');
+
+    this.entityData.set(fixture, {
+      type: 'fixture',
+      id: pseudoRandomId(),
+      name: fixtureJson.name || 'fixture',
+      customProps: this.customPropertiesArrayToMap(fixtureJson.customProperties || []),
+      fixture
+    });
+
     return fixture;
   }
 
@@ -282,8 +320,13 @@ export class RubeLoader {
       throw new Error('Unsupported joint type: ' + jointJson.type);
     }
 
-    this.customProps.set(joint, this.customPropertiesArrayToMap(jointJson.customProperties || []));
-    this.entityName.set(joint, jointJson.name || 'joint');
+    this.entityData.set(joint, {
+      type: 'joint',
+      id: pseudoRandomId(),
+      name: jointJson.name || 'joint',
+      customProps: this.customPropertiesArrayToMap(jointJson.customProperties || []),
+      joint
+    });
     return joint;
   }
 
@@ -310,15 +353,25 @@ export class RubeLoader {
   private loadImage(imageJson: RubeImage): boolean {
     const {body, customProperties} = imageJson;
     const bodyObj = this.loadingBodies[body];
+    const bodyEntityData = this.entityData.get(bodyObj) as BodyEntityData;
     const customProps = this.customPropertiesArrayToMap(customProperties || []);
-    const img = this.adapter.loadImage(imageJson, bodyObj, customProps);
+    const img = this.adapter.loadImage(imageJson, bodyEntityData, customProps);
     if (!img) return false;
     const props = this.customPropertiesArrayToMap(customProperties || []);
-    this.customProps.set(img, props);
-    this.entityName.set(img, imageJson.name || 'image');
+
+    this.entityData.set(img, {
+      type: 'image',
+      id: pseudoRandomId(),
+      name: imageJson.name || 'image',
+      customProps: props,
+      image: img
+    });
+
     if (bodyObj) {
-      this.bodyImage.set(bodyObj, img);
+      const bodyEntityData = this.entityData.get(bodyObj) as BodyEntityData;
+      bodyEntityData.image = img;
     }
+
     return true;
   }
 

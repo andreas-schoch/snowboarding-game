@@ -39,10 +39,10 @@ export class Snowboard {
     this.initRays(this.scene.b2Physics.worldScale / 4);
     this.particles = this.initParticles();
 
-    const {worldScale, loader: {customProps: customPropertiesMapMap}} = this.scene.b2Physics;
+    const {worldScale, loader: {entityData}} = this.scene.b2Physics;
     this.scene.b2Physics.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
-      const propsBA = customPropertiesMapMap.get(bodyA);
-      const propsBB = customPropertiesMapMap.get(bodyB);
+      const propsBA = entityData.get(bodyA)?.customProps;
+      const propsBB = entityData.get(bodyB)?.customProps;
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
 
       const nonSurfaceBody = propsBA && propsBA['surfaceType'] !== 'snow' ? bodyA : bodyB;
@@ -99,8 +99,10 @@ export class Snowboard {
     const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', 'boardSegment', this.character.id);
     if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
     segmentBodies.sort((a, b) => {
-      const aIndex = Number(loader.customProps.get(a)!['phaserBoardSegmentIndex']);
-      const bIndex = Number(loader.customProps.get(b)!['phaserBoardSegmentIndex']);
+      const customPropsA = loader.entityData.get(a)?.customProps;
+      const customPropsB = loader.entityData.get(b)?.customProps;
+      const aIndex = Number(customPropsA!['phaserBoardSegmentIndex']);
+      const bIndex = Number(customPropsB!['phaserBoardSegmentIndex']);
       return aIndex - bIndex;
     });
 

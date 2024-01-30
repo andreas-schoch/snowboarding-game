@@ -1,5 +1,6 @@
 import {Settings} from '../../Settings';
 import {Physics} from '../Physics';
+import {BodyEntityData} from './RubeLoader';
 import {RubeImage} from './RubeLoaderInterfaces';
 
 // The loader and serializer classes themselves should not concern themselves with anything Phaser specific.
@@ -7,20 +8,20 @@ import {RubeImage} from './RubeLoaderInterfaces';
 export class RubeImageAdapter implements IBaseAdapter {
   readonly images: Phaser.GameObjects.Image[] = [];
 
-  constructor(private scene: Phaser.Scene, private physics: Physics) {}
+  constructor(private scene: Phaser.Scene, private physics: Physics) { }
 
-  loadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}): Phaser.GameObjects.Image | null {
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: Record<string, unknown>): Phaser.GameObjects.Image | null {
     const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
-    const pos = bodyObj ? bodyObj.GetPosition() : this.physics.loader.rubeToVec2(center);
+    const pos = bodyEntityData?.body ? bodyEntityData.body.GetPosition() : this.physics.loader.rubeToVec2(center);
 
     // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
-    const bodyProps = bodyObj ? this.physics.loader.customProps.get(bodyObj) : null;
-    const isPlayerCharacterPart = Boolean(bodyProps?.['phaserPlayerCharacterPart']);
+    // const bodyProps = bodyObj ? this.physics.loader.customProps.get(bodyObj) : null;
+    const isPlayerCharacterPart = Boolean(bodyEntityData?.customProps['phaserPlayerCharacterPart']);
 
     if (!pos) return null;
 
     const textureFrame = (file || '').split('/').reverse()[0];
-    const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : customPropsMap['phaserTexture'] as string;
+    const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : imageCustomProps['phaserTexture'] as string;
 
     const img: Phaser.GameObjects.Image = this.scene.add.image(
       pos.x * this.physics.worldScale,
@@ -29,7 +30,7 @@ export class RubeImageAdapter implements IBaseAdapter {
       textureFrame
     );
 
-    img.rotation = bodyObj ? -bodyObj.GetAngle() + -(angle || 0) : -(angle || 0);
+    img.rotation = bodyEntityData?.body ? -bodyEntityData.body.GetAngle() + -(angle || 0) : -(angle || 0);
     img.scaleY = (this.physics.worldScale / img.height) * scale;
     img.scaleX = img.scaleY * aspectScale;
     img.alpha = imageJson.opacity || 1;
@@ -38,7 +39,7 @@ export class RubeImageAdapter implements IBaseAdapter {
     img.setDataEnabled();
 
     if (Settings.darkmodeEnabled()) {
-      const isLight = bodyProps?.['light'] === true || textureFrame === 'present_temp.png';
+      const isLight = bodyEntityData?.customProps?.['light'] === true || textureFrame === 'present_temp.png';
       if (isPlayerCharacterPart) img.setTintFill(0x000000);
       else if (isLight) img.setTintFill(0xbbbbbb);
       else img.setTintFill(0x222222);
@@ -52,8 +53,9 @@ export class RubeImageAdapter implements IBaseAdapter {
   }
 
   serializeImage(image: Phaser.GameObjects.Image): RubeImage {
+    const imageEntityData = this.physics.loader.entityData.get(image);
     return {
-      name: this.physics.loader.entityName.get(image) || 'image',
+      name: imageEntityData?.name || 'image',
       opacity: image.alpha,
       renderOrder: image.depth,
       scale: image.scaleY,
@@ -70,6 +72,6 @@ export class RubeImageAdapter implements IBaseAdapter {
 
 export interface IBaseAdapter {
   images: unknown[];
-  loadImage(imageJson: RubeImage, bodyObj: Box2D.b2Body | null, customPropsMap: {[key: string]: unknown}): unknown | null;
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: Record<string, unknown>): unknown | null;
   serializeImage(image: unknown): RubeImage;
 }

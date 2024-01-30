@@ -1,7 +1,8 @@
 import './PanelPauseMenu.css';
-import {Component} from 'solid-js';
+import {Component, Show} from 'solid-js';
 import {GameInfo} from '../GameInfo';
-import {RESUME_GAME} from '../eventTypes';
+import {Settings} from '../Settings';
+import {OPEN_EDITOR, RESUME_GAME} from '../eventTypes';
 import {BasePanel} from './BasePanel';
 import {ButtonPrimary, ButtonSecondary} from './general/Button';
 import {PanelId} from '.';
@@ -10,6 +11,11 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
   const handleResumeGame = () => {
     props.setPanel('none');
     GameInfo.observer.emit(RESUME_GAME);
+  };
+
+  const handleOpenEditor = () => {
+    props.setPanel('none');
+    GameInfo.observer.emit(OPEN_EDITOR);
   };
 
   return <>
@@ -21,6 +27,11 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
       <div class="row">
         <ButtonSecondary class="col col-12" onClick={() => props.setPanel('panel-select-level')}>Select Level</ButtonSecondary>
       </div>
+      <Show when={Settings.betaFeaturesEnabled()}>
+        <div class="row">
+          <ButtonSecondary class="col col-12" onClick={() => handleOpenEditor()}>Level Editor</ButtonSecondary>
+        </div>
+      </Show>
       <div class="row mb-[4rem]">
         <ButtonSecondary class="col col-12" onClick={() => props.setPanel('panel-leaderboards')}>Leaderboard</ButtonSecondary>
       </div>
