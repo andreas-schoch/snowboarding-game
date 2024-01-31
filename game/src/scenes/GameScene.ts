@@ -7,7 +7,7 @@ import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
-import {OPEN_EDITOR, RESTART_GAME} from '../eventTypes';
+import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
 import {IScoreNew} from '../pocketbase/types';
@@ -71,7 +71,7 @@ export class GameScene extends Phaser.Scene {
       this.ready = true;
     });
 
-    GameInfo.observer.on(OPEN_EDITOR, () => {
+    GameInfo.observer.on(EDITOR_OPEN, () => {
       this.b2Physics.loader.cleanup();
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';

@@ -2,7 +2,7 @@ import './PanelPauseMenu.css';
 import {Component, Show} from 'solid-js';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {OPEN_EDITOR, RESUME_GAME} from '../eventTypes';
+import {EDITOR_OPEN, RESUME_GAME} from '../eventTypes';
 import {BasePanel} from './BasePanel';
 import {ButtonPrimary, ButtonSecondary} from './general/Button';
 import {PanelId} from '.';
@@ -15,7 +15,7 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
 
   const handleOpenEditor = () => {
     props.setPanel('none');
-    GameInfo.observer.emit(OPEN_EDITOR);
+    GameInfo.observer.emit(EDITOR_OPEN);
   };
 
   return <>

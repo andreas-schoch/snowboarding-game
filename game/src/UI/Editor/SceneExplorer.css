@@ -1,3 +1,52 @@
+  /* ======== */
+  /* = Pane = */
+  /* ======== */
+:root {
+  --pane-border-width: 3px;
+}
+
+  .pane {
+    background: white;
+    border: var(--pane-border-width) solid black;
+    border-radius: 6px;
+    width: 200px;
+    margin: 0;
+    padding: 2rem 0 1rem;
+    position: absolute;
+    font-size: 8px;
+    color: black;
+    pointer-events: auto;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .invisible {
+    visibility: hidden;
+  }
+
+  .pane-title {
+    color: white;
+    font-size: 12px;
+    line-height: 15px;
+    padding: var(--pane-border-width) 6px;
+    background-color: var(--blue-900);
+    border-bottom: var(--pane-border-width) solid black;
+    border-top-left-radius: var(--pane-border-width);
+    border-top-right-radius: var(--pane-border-width);
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+
+
+
+
+/* --------------------------------------------------- */
 #pane-scene-items {
   width: 220px;
   height: 45%;
@@ -59,8 +108,11 @@
 
 #pane-scene-items .scene-item .scene-item-name {
   flex-grow: 1;
-  display: flex;
+  /* display: flex; */
   align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #pane-scene-items .scene-item-wrapper .scene-item-children:not(.scene-item-children:empty) {

@@ -1,7 +1,7 @@
 export class BackdropGrid {
   private scene: Phaser.Scene;
   private grid: Phaser.GameObjects.TileSprite;
-  private cellSize = 40 * 8;
+  private cellSize = 40 * 8; // 8 meters
   private cellScale = 2;
 
   constructor(scene: Phaser.Scene) {

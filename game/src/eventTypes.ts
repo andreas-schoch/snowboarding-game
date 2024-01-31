@@ -1,4 +1,3 @@
-// export const DISTANCE_CHANGE = 'distance_change';
 export const SCORE_CHANGE = 'score_change';
 export const COMBO_CHANGE = 'combo_change';
 export const TIME_CHANGE = 'time_change';
@@ -20,4 +19,5 @@ export const PAUSE_GAME = 'pause_game_icon_pressed';
 export const RESUME_GAME = 'resume_game';
 export const RESTART_GAME = 'restart_game';
 
-export const OPEN_EDITOR = 'open_editor';
+export const EDITOR_OPEN = 'editor_open';
+export const EDITOR_SCENE_LOADED = 'editor_scene_loaded';

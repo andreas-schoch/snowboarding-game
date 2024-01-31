@@ -3,7 +3,7 @@ import './index.css';
 import {createSignal, Match, Show, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
 import {GameInfo} from '../GameInfo';
-import {ENTER_CRASHED, LEVEL_FINISH, OPEN_EDITOR, TOGGLE_PAUSE} from '../eventTypes';
+import {ENTER_CRASHED, LEVEL_FINISH, EDITOR_OPEN, TOGGLE_PAUSE} from '../eventTypes';
 import {IScore, IScoreNew} from '../pocketbase/types';
 import {SceneExplorer} from './Editor/SceneExplorer';
 import {HUD} from './HUD';
@@ -19,7 +19,7 @@ import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 const SolidUI = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
   const [score, setScore] = createSignal<IScoreNew>(GameInfo.score);
-  const [editorOpen, setEditorOpen] = createSignal(false);
+  const [editorOpen, setEditorOpen] = createSignal(true);
 
   const handleShowYourScore = (score: IScore, timeout: number) => {
     setScore(score);
@@ -29,7 +29,7 @@ const SolidUI = () => {
   GameInfo.observer.on(TOGGLE_PAUSE, (paused: boolean, activePanel: PanelId) => setPanel(paused ? activePanel : 'none'));
   GameInfo.observer.on(LEVEL_FINISH, (score: IScore) => handleShowYourScore(score, 2000));
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
-  GameInfo.observer.on(OPEN_EDITOR, () => setEditorOpen(true));
+  GameInfo.observer.on(EDITOR_OPEN, () => setEditorOpen(true));
 
   return (
     <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
