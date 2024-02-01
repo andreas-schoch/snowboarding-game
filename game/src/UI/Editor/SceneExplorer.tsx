@@ -1,7 +1,6 @@
 import './SceneExplorer.css';
-import {b2, recordLeak} from '../..';
 import {GameInfo} from '../../GameInfo';
-import {EDITOR_SCENE_LOADED} from '../../eventTypes';
+import {RUBE_SCENE_LOADED} from '../../eventTypes';
 import {iterBodies, iterBodyFixtures, iterBodyJoints} from '../../helpers/B2Iterators';
 import {Entity, EntityData} from '../../physics/RUBE/otherTypes';
 
@@ -9,16 +8,19 @@ export const SceneExplorer = () => {
   const physics = GameInfo.physics;
   const entityDataMap = physics.loader.entityData;
 
-  GameInfo.observer.on(EDITOR_SCENE_LOADED, id => {
-    console.log('--------------------EDITOR_SCENE_LOADED', id);
-    refresh();
+  GameInfo.observer.on(RUBE_SCENE_LOADED, id => {
+    refresh(id);
   });
 
-  const refresh = () => {
+  const refresh = (sceneId: string) => {
+    // TODO update this legacy code to use SolidJS properly and show a loaded scene as a single item in the explorer
+    // This code was mostly written 9 months ago when I had the intention to make a generic editor and only used vanilla js for the UI...
+    // For my game's editor I don't want to burden level creators with the concept of bodies, fixtures, joints, etc.
+    // I will create "prefabs" in the RUBE editor which will be shown as a single item in the scene explorer.
+    // At some point (and if there is demand) I may want to make the creation of prefabs possible within the game.
+    console.debug('refreshing SceneExplorer. New scene id', sceneId);
     const sceneItemsContainer = document.getElementById('scene-items-container');
     if (!sceneItemsContainer) throw new Error('no container for scene items');
-
-    console.log('-------------refrsh entity data', entityDataMap);
 
     // BODIES
     for (const body of iterBodies(physics.world)) {
@@ -80,8 +82,6 @@ export const SceneExplorer = () => {
       joint: 'polyline',
       image: 'wallpaper',
     };
-
-    console.log('createSceneItem', entityData, type, parent);
 
     const parentEntityData = entityDataMap.get(parent);
     if (!entityData) throw new Error('no entity data');

@@ -1,4 +1,4 @@
-import {b2, recordLeak} from '../..';
+import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
 import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty, RubeJointType} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';

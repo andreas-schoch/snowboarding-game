@@ -41,7 +41,7 @@ export class Settings {
 
   static volumeMusic(): number {
     const volume = Settings.getRaw('volumeMusic');
-    return volume !== null ? Number(volume) : 60;
+    return volume !== null ? Number(volume) : 0;
   }
 
   static volumeSfx(): number {

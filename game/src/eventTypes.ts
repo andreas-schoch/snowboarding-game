@@ -20,4 +20,4 @@ export const RESUME_GAME = 'resume_game';
 export const RESTART_GAME = 'restart_game';
 
 export const EDITOR_OPEN = 'editor_open';
-export const EDITOR_SCENE_LOADED = 'editor_scene_loaded';
+export const RUBE_SCENE_LOADED = 'rube_scene_loaded';

@@ -43,7 +43,8 @@ export class RubeLoader {
     if (success) console.debug('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
     else console.error('R.U.B.E. scene failed to load fully', this.loadingBodies, this.loadingJoints, this.loadingImages);
     const id = pseudoRandomId();
-    this.loadedScenes.set(id, {bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id});
+    const customProps = this.customPropsArrayToMap(scene.customProperties || []);
+    this.loadedScenes.set(id, {bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id, customProps});
     this.loadingBodies = [];
     this.loadingJoints = [];
     this.loadingImages = [];

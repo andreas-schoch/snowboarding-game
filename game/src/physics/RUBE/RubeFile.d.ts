@@ -177,8 +177,8 @@ export interface MetaObject {
   file: string;
   path?: string; // listed as a prop but not sure when it is there
   flip: boolean;
-  angle: number;
   id: number;
+  angle: number;
   scale: number;
   position: RubeVector;
   customProperties?: RubeCustomProperty[];

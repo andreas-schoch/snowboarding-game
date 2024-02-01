@@ -1,7 +1,7 @@
 import {GameInfo} from '../GameInfo';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
-import { iterBodies } from '../helpers/B2Iterators';
-import {b2, recordLeak} from '../index';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE, RUBE_SCENE_LOADED} from '../eventTypes';
+import {iterBodies} from '../helpers/B2Iterators';
+import {b2} from '../index';
 import {DebugDrawer} from './DebugDraw';
 import {RubeScene} from './RUBE/RubeFileExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
@@ -61,6 +61,7 @@ export class Physics extends Phaser.Events.EventEmitter {
     const [success, id] = this.loader.load(rubeScene, offsetX, offsetY);
     if (!success) throw new Error('Failed to load RUBE scene');
     if (this.debugDrawEnabled) this.world.DebugDraw();
+    GameInfo.observer.emit(RUBE_SCENE_LOADED, id); // Ensure editor open emitted before this, so scene explorer is already in the DOM
     return id;
   }
 

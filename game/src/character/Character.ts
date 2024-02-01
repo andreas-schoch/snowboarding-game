@@ -184,7 +184,6 @@ export class Character {
 
     const getBodyImage = (body: Box2D.b2Body): Phaser.GameObjects.Image => {
       const bodyEntity = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
-      console.log('----------------bodyEntity', bodyEntity);
       const imageEntity = bodyEntity?.image;
       if (!imageEntity) throw new Error(`Player character image not found: ${body}`);
       return imageEntity.image as Phaser.GameObjects.Image;

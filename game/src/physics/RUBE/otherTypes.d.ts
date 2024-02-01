@@ -44,7 +44,10 @@ export type EntityData = BodyEntityData | FixtureEntityData | JointEntityData | 
 
 export interface LoadedScene {
   id: string;
+  // prefabId: string;
   bodies: BodyEntityData[];
   joints: JointEntityData[];
   images: ImageEntityData[];
+
+  customProps: Record<string, unknown>;
 }
