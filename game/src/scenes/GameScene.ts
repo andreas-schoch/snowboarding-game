@@ -9,7 +9,7 @@ import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {Physics} from '../physics/Physics';
-import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
+import {RubeScene} from '../physics/RUBE/RubeFileExport';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -79,6 +79,8 @@ export class GameScene extends Phaser.Scene {
       GameInfo.tsl.length = 0;
       GameInfo.currentLevel = null;
       freeLeaked();
+      this.sound.stopAll();
+      this.scene.stop(SCENE_GAME);
       this.scene.start(SCENE_EDITOR);
     });
 

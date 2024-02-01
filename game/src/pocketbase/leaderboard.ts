@@ -4,7 +4,7 @@ import {scoreLogSerializer} from '..';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {arrayBufferToString, stringToBlob} from '../helpers/binaryTransform';
-import {generateScoreFromLogs} from '../helpers/getPointScoreSummary';
+import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {ILevel, LocalLevelKeys} from '../levels';
 import {Auth} from './auth';
 import {IScore, IScoreNew} from './types';

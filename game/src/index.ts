@@ -2,14 +2,14 @@ import 'phaser';
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {Settings} from './Settings';
-import {RubeScene} from './physics/RUBE/RubeLoaderInterfaces';
+import {RubeScene} from './physics/RUBE/RubeFileExport';
 import {PocketbaseService} from './pocketbase/pocketbase';
 import {TrickScore} from './pocketbase/types';
+import {EditorScene} from './scenes/EditorScene';
 import {GameScene} from './scenes/GameScene';
 import {PreloadScene} from './scenes/PreloadScene';
 import {ScoreLogSerializer} from './serializers/ScoreLogSerializer';
 import {ProtobufSerializer} from './serializers/protobufSerializer';
-import { EditorScene } from './scenes/EditorScene';
 
 export const DEBUG_LOGS = Settings.debugLogs();
 if (!DEBUG_LOGS) {

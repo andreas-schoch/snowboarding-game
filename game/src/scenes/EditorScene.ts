@@ -1,3 +1,4 @@
+import {Game} from 'phaser';
 import {SCENE_EDITOR} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
@@ -5,10 +6,10 @@ import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
-import { EDITOR_SCENE_LOADED } from '../eventTypes';
+import {EDITOR_OPEN, EDITOR_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {Physics} from '../physics/Physics';
-import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
+import {RubeScene} from '../physics/RUBE/RubeFileExport';
 
 export class EditorScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -31,7 +32,7 @@ export class EditorScene extends Phaser.Scene {
 
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
-    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10});
+    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10, debugDrawEnabled: true});
     this.controller = new EditorController(this);
 
     drawCoordZeroPoint(this);
@@ -41,7 +42,8 @@ export class EditorScene extends Phaser.Scene {
     const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
     const id = this.b2Physics.load(rubeScene, 0, 0);
     initSolidUI('root-ui');
-    GameInfo.observer.emit(EDITOR_SCENE_LOADED, id);
+    GameInfo.observer.emit(EDITOR_OPEN);
+    GameInfo.observer.emit(EDITOR_SCENE_LOADED, id); // Ensure editor open emitted before this, so scene explorer is already in the DOM
 
   }
 

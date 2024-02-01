@@ -1,11 +1,11 @@
-import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeScene} from './RubeLoaderInterfaces';
+import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeScene} from './RubeFileExport';
 
 // TODO eventually we can simplify the loader which checks the defaults for each optional property and just use this
 //  It will require a bit more memory but probably negligible. Protobuf encoded size is almost the same even with optional fields included
 //  For now this stays like this until I continue work on my own level editor and decide wheather to stay compatible with RUBE or not.
 
 // TODO consider overriding the existing objects/arrays instead of creating new ones
-export const sanitizeRubeDefaults = (scene: RubeScene) => {
+export function sanitizeRubeDefaults(scene: RubeScene) {
   const sanitizedScene: Partial<RubeScene> = {
     gravity: isXY(scene.gravity) ? scene.gravity : {x: 0, y: 0},
     allowSleep: scene.allowSleep,
@@ -25,7 +25,7 @@ export const sanitizeRubeDefaults = (scene: RubeScene) => {
   if (scene.image) sanitizedScene.image = scene.image.map(sanitizeImage);
 
   return sanitizedScene as RubeScene;
-};
+}
 
 function sanitizeBody(body: RubeBody): RubeBody {
   const massDataMass = body['massData-mass'] || body.massDataMass || 1;

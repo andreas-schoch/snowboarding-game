@@ -9,7 +9,7 @@ export class DebugDrawer {
   constructor(scene: Phaser.Scene, private pixelsPerMeter: number, private lineWidth: number = 2) {
     this.graphics = scene.add.graphics().setDepth(1000);
     this.instance.AppendFlags(b2.b2Draw.e_shapeBit);
-    this.instance.AppendFlags(b2.b2Draw.e_jointBit);
+    // this.instance.AppendFlags(b2.b2Draw.e_jointBit);
     // this.instance.AppendFlags(b2.b2Draw.e_aabbBit);
     // this.instance.AppendFlags(b2.b2Draw.e_centerOfMassBit);
     // this.instance.AppendFlags(b2.b2Draw.e_pairBit);

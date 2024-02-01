@@ -1,6 +1,6 @@
 import {b2} from '..';
-import {BodyEntityData} from '../physics/RUBE/RubeLoader';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
+import {BodyEntityData} from '../physics/RUBE/otherTypes';
 import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
@@ -117,7 +117,7 @@ export class Character {
   }
 
   isPartOfMe(body: Box2D.b2Body) {
-    return this.scene.b2Physics.loader.loadedScenes.get(this.id)?.bodies.some(b => b === body); // TODO optimize for performance as this will be called often
+    return this.scene.b2Physics.loader.loadedScenes.get(this.id)?.bodies.some(e => e.body === body); // TODO optimize for performance as this will be called often
   }
 
   private setLegLength(left: number, right: number) {
@@ -183,10 +183,11 @@ export class Character {
     };
 
     const getBodyImage = (body: Box2D.b2Body): Phaser.GameObjects.Image => {
-      const entityData = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
-      const image = entityData?.image;
-      if (!image) throw new Error(`Player character image not found: ${body}`);
-      return image as Phaser.GameObjects.Image;
+      const bodyEntity = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      console.log('----------------bodyEntity', bodyEntity);
+      const imageEntity = bodyEntity?.image;
+      if (!imageEntity) throw new Error(`Player character image not found: ${body}`);
+      return imageEntity.image as Phaser.GameObjects.Image;
     };
 
     const getBodyCustomProp = (body: Box2D.b2Body, prop: BodyCustomProps) => {

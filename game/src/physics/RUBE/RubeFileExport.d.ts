@@ -18,10 +18,11 @@ export interface RubeScene {
 
 export interface RubeBody {
   name?: string;
-  active?: boolean; // if not present in rube export it seems to indicate true
+  active?: boolean; // Only present if false. Absence means true.
   awake?: boolean;
   bullet?: boolean;
-  fixedRotation?: boolean;
+  fixedRotation?: boolean; // Only present if true. Absence means false.
+  sleepingAllowed?: boolean;
   type?: 0 | 1 | 2;
   position?: RubeVector;
   angle?: number; // radians
@@ -40,9 +41,11 @@ export interface RubeBody {
   massDataI?: number;
 
   customProperties?: RubeCustomProperty[];
-  fixture?: RubeFixture[];
+  fixture?: RubeFixture[]; // omitted when no fixtures
 }
 
+// May be turned into multiple fixtures in export.
+// Afaik Rube uses poly2tri to triangulate polygons and box2d cannot have more than 8 vertices per polygon fixture.
 export interface RubeFixture {
   name?: string;
   density?: number;
@@ -97,7 +100,7 @@ export interface RubeFixtureShapePolygon {
   vertices: RubeVectorArray;
 }
 
-// also used for edge shapes
+// also used for edge shapes TODO separate interface for loop and line
 export interface RubeFixtureShapeChain {
   vertices: RubeVectorArray;
   // If the following properties are not present, the shape is an open-ended
@@ -126,21 +129,6 @@ export const enum RubeJointType {
   e_ropeJoint,
   e_motorJoint
 }
-
-export const enumTypeToRubeJointType = {
-  // [RubeJointType.e_unknownJoint]: 'unknown' as const,
-  [RubeJointType.e_revoluteJoint]: 'revolute' as const,
-  [RubeJointType.e_prismaticJoint]: 'prismatic' as const,
-  [RubeJointType.e_distanceJoint]: 'distance' as const,
-  // [RubeJointType.e_pulleyJoint]: 'pulley' as const,
-  // [RubeJointType.e_mouseJoint]: 'mouse' as const,
-  // [RubeJointType.e_gearJoint]: 'gear' as const,
-  [RubeJointType.e_wheelJoint]: 'wheel' as const,
-  [RubeJointType.e_weldJoint]: 'weld' as const,
-  [RubeJointType.e_frictionJoint]: 'friction' as const,
-  [RubeJointType.e_ropeJoint]: 'rope' as const,
-  [RubeJointType.e_motorJoint]: 'motor' as const
-};
 
 export interface RubeJointBase {
   type: 'revolute' | 'distance' | 'prismatic' | 'wheel' | 'rope' | 'motor' | 'weld' | 'friction';

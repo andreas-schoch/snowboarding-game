@@ -2,6 +2,7 @@ import './base.css';
 import './index.css';
 import {createSignal, Match, Show, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
+import {game, SCENE_EDITOR} from '..';
 import {GameInfo} from '../GameInfo';
 import {ENTER_CRASHED, LEVEL_FINISH, EDITOR_OPEN, TOGGLE_PAUSE} from '../eventTypes';
 import {IScore, IScoreNew} from '../pocketbase/types';
@@ -19,7 +20,7 @@ import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 const SolidUI = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
   const [score, setScore] = createSignal<IScoreNew>(GameInfo.score);
-  const [editorOpen, setEditorOpen] = createSignal(true);
+  const [editorOpen, setEditorOpen] = createSignal(game.scene.isActive(SCENE_EDITOR));
 
   const handleShowYourScore = (score: IScore, timeout: number) => {
     setScore(score);
@@ -33,7 +34,10 @@ const SolidUI = () => {
 
   return (
     <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
-      <HUD panel={panel()} setPanel={setPanel} />
+
+      <Show when={!editorOpen()} >
+        <HUD panel={panel()} setPanel={setPanel} />
+      </Show>
 
       <Show when={editorOpen()} >
         <SceneExplorer />

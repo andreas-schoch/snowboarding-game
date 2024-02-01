@@ -1,8 +1,25 @@
 import {b2, recordLeak} from '../..';
+import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
+import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty, RubeJointType} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';
-import {Entity, RubeLoader} from './RubeLoader';
-import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, enumTypeToRubeJointType, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty} from './RubeLoaderInterfaces';
+import {RubeLoader} from './RubeLoader';
 import {vec2Util} from './Vec2Math';
+import {Entity} from './otherTypes';
+
+export const enumTypeToRubeJointType = {
+  // [RubeJointType.e_unknownJoint]: 'unknown' as const,
+  [RubeJointType.e_revoluteJoint]: 'revolute' as const,
+  [RubeJointType.e_prismaticJoint]: 'prismatic' as const,
+  [RubeJointType.e_distanceJoint]: 'distance' as const,
+  // [RubeJointType.e_pulleyJoint]: 'pulley' as const,
+  // [RubeJointType.e_mouseJoint]: 'mouse' as const,
+  // [RubeJointType.e_gearJoint]: 'gear' as const,
+  [RubeJointType.e_wheelJoint]: 'wheel' as const,
+  [RubeJointType.e_weldJoint]: 'weld' as const,
+  [RubeJointType.e_frictionJoint]: 'friction' as const,
+  [RubeJointType.e_ropeJoint]: 'rope' as const,
+  [RubeJointType.e_motorJoint]: 'motor' as const
+};
 
 export class RubeSerializer {
   // getImages: () => IMG[] = () => { throw new Error('Image getter not implemented'); };
@@ -48,7 +65,7 @@ export class RubeSerializer {
 
   private serializeBodies(): RubeBody[] {
     const bodies: RubeBody[] = [];
-    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
+    for (const body of iterBodies(this.world)) {
       this.indexByBody.set(body, bodies.length);
       bodies.push(this.serializeBody(body));
     }
@@ -95,9 +112,7 @@ export class RubeSerializer {
 
   private serializeFixtures(body: Box2D.b2Body): RubeFixture[] {
     const fixtures: RubeFixture[] = [];
-    for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
-      fixtures.push(this.serializeFixture(fixture));
-    }
+    for (const fixture of iterBodyFixtures(body)) fixtures.push(this.serializeFixture(fixture));
     return fixtures;
   }
 
@@ -166,11 +181,8 @@ export class RubeSerializer {
 
   private serializeJoints(): RubeJoint[] {
     if (this.world.GetJointCount() !== 0 && this.indexByBody.size === 0) throw new Error('Joints cannot be serialized before bodies');
-
     const joints: RubeJoint[] = [];
-    for (let joint = recordLeak(this.world.GetJointList()); b2.getPointer(joint) !== b2.getPointer(b2.NULL); joint = recordLeak(joint.GetNext())) {
-      joints.push(this.serializeJoint(joint));
-    }
+    for (const joint of iterJoints(this.world)) joints.push(this.serializeJoint(joint));
     return joints;
   }
 

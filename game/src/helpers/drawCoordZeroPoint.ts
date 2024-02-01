@@ -15,4 +15,4 @@ export const drawCoordZeroPoint = (scene: Phaser.Scene) => {
   graphics.closePath();
   graphics.setDepth(1000);
   graphics.strokePath();
-}
+};

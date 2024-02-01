@@ -4,7 +4,7 @@ import {Settings} from '../Settings';
 import {PanelId} from '../UI';
 import {Character} from '../character/Character';
 import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
-import {BodyEntityData} from '../physics/RUBE/RubeLoader';
+import {BodyEntityData} from '../physics/RUBE/otherTypes';
 import {IScore} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 
@@ -43,9 +43,10 @@ export class CharacterController {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    const bodyEntityData = this.scene.b2Physics.loader.entityData.get(this.character.body) as BodyEntityData | null;
-    if (!bodyEntityData?.image) return;
-    camera.startFollow(bodyEntityData.image, false, 0.5, 0.5);
+    const bodyEntityData = this.scene.b2Physics.loader.entityData.get(this.character.body) as BodyEntityData | undefined;
+    const image = bodyEntityData?.image?.image as Phaser.GameObjects.Image | undefined;
+    if (!image) return;
+    camera.startFollow(image, false, 0.5, 0.5);
 
     // if (DARKMODE_ENABLED) {
     //   const glowingBodies = this.scene.b2Physics.loader.getBodiesByCustomProperty('light', true);

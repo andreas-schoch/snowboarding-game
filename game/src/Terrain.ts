@@ -1,6 +1,7 @@
 import {Settings} from './Settings';
+import {iterBodyFixtures} from './helpers/B2Iterators';
 import {GameScene} from './scenes/GameScene';
-import {b2, recordLeak} from './index';
+import {b2} from './index';
 
 export type XY = {x: number, y: number};
 
@@ -17,7 +18,7 @@ export class Terrain {
       const bodyPos = body.GetPosition();
       // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
       const edgeShape = new b2.b2EdgeShape();
-      for (let fixture = recordLeak(body.GetFixtureList()); b2.getPointer(fixture) !== b2.getPointer(b2.NULL); fixture = recordLeak(fixture.GetNext())) {
+      for (const fixture of iterBodyFixtures(body)) {
         const shape = b2.castObject(fixture.GetShape(), b2.b2ChainShape);
         const chunkPoints: XY[] = [];
         for (let i = 0; i < shape.get_m_count() - 1; i++) {

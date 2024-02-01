@@ -3,9 +3,9 @@ import {GameInfo} from '../GameInfo';
 import {ComboState} from '../UI/HUD';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
 import {framesToTime} from '../helpers/framesToTime';
-import {generateScoreFromLogs} from '../helpers/getPointScoreSummary';
+import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {BodyEntityData} from '../physics/RUBE/RubeLoader';
+import {BodyEntityData} from '../physics/RUBE/otherTypes';
 import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
@@ -156,9 +156,9 @@ export class State {
 
   private processPickups() {
     for (const body of this.pickupsToProcess) {
-      const entityData = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
-      const image = entityData?.image as Phaser.GameObjects.Image | undefined;
-      if (entityData) this.scene.b2Physics.loader.entityData.delete(body);
+      const bodyEntity = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      const image = bodyEntity?.image?.image as Phaser.GameObjects.Image | undefined;
+      if (bodyEntity) this.scene.b2Physics.loader.entityData.delete(body);
       if (image) image.destroy();
       this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
 

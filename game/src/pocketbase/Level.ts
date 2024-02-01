@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 import {rubeSceneSerializer} from '..';
 import {blobToString} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
-import {RubeScene} from '../physics/RUBE/RubeLoaderInterfaces';
+import {RubeScene} from '../physics/RUBE/RubeFileExport';
 import {Auth} from './auth';
 
 export class Level {

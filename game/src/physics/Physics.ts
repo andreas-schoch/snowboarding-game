@@ -1,10 +1,11 @@
 import {GameInfo} from '../GameInfo';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
+import { iterBodies } from '../helpers/B2Iterators';
 import {b2, recordLeak} from '../index';
 import {DebugDrawer} from './DebugDraw';
+import {RubeScene} from './RUBE/RubeFileExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
-import {BodyEntityData, RubeLoader} from './RUBE/RubeLoader';
-import {RubeScene} from './RUBE/RubeLoaderInterfaces';
+import {RubeLoader} from './RUBE/RubeLoader';
 import {RubeSerializer} from './RUBE/RubeSerializer';
 
 export interface IBeginContactEvent {
@@ -29,16 +30,18 @@ export class Physics extends Phaser.Events.EventEmitter {
   serializer: RubeSerializer;
   loader: RubeLoader;
   worldScale: number;
+  debugDrawEnabled = false;
   isPaused: boolean = false;
   private readonly debugDrawer: DebugDrawer;
   private readonly stepDeltaTime = 1 / 60;
   private readonly stepConfig = {positionIterations: 12, velocityIterations: 12};
 
-  constructor(private scene: Phaser.Scene, private config: {worldScale: number, gravityX: number, gravityY: number}) {
+  constructor(private scene: Phaser.Scene, private config: {worldScale: number, gravityX: number, gravityY: number, debugDrawEnabled?: boolean}) {
     super();
     GameInfo.physics = this;
     this.worldScale = config.worldScale;
-    this.debugDrawer = new DebugDrawer(scene, this.config.worldScale);
+    this.debugDrawEnabled = Boolean(config.debugDrawEnabled);
+    this.debugDrawer = new DebugDrawer(scene, this.config.worldScale, 1);
     this.world = this.initWorld();
 
     const adapter = new PhaserImageAdapter(scene, this);
@@ -48,24 +51,30 @@ export class Physics extends Phaser.Events.EventEmitter {
     this.initContactListeners();
   }
 
+  setDebugDraw(enabled: boolean) {
+    this.debugDrawEnabled = enabled;
+    // this.debugDrawer.instance.SetFlags(enabled ? 1 : 0);
+  }
+
   load(rubeScene: RubeScene, offsetX: number = 0, offsetY: number = 0) {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     const [success, id] = this.loader.load(rubeScene, offsetX, offsetY);
     if (!success) throw new Error('Failed to load RUBE scene');
-    // this.world.DebugDraw();
+    if (this.debugDrawEnabled) this.world.DebugDraw();
     return id;
   }
 
   update() {
     if (this.isPaused) return;
     this.world.Step(this.stepDeltaTime, this.stepConfig.positionIterations, this.stepConfig.positionIterations);
-    // this.world.DebugDraw();
+    if (this.debugDrawEnabled) this.world.DebugDraw();
     const worldScale = this.worldScale;
-    for (let body = recordLeak(this.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
-      if (!body) continue;
-      const entityData = this.loader.entityData.get(body) as BodyEntityData | undefined;
-      const image = entityData?.image as Phaser.GameObjects.Image | undefined;
-      if (!image) continue;
+    for (const body of iterBodies(this.world)) {
+      const bodyEntity = this.loader.entityData.get(body);
+      if (bodyEntity?.type !== 'body') throw new Error('Expected bodyEntity to be of type "body"');
+      const imageEntity = bodyEntity?.image;
+      if (!imageEntity) continue;
+      const image = imageEntity.image as Phaser.GameObjects.Image;
       if (body.IsEnabled()) {
         const pos = body.GetPosition();
         image.setVisible(true);
@@ -76,7 +85,8 @@ export class Physics extends Phaser.Events.EventEmitter {
         image.visible = false;
       }
     }
-    // this.debugDrawer.clear();
+
+    if (this.debugDrawEnabled) this.debugDrawer.clear();
   }
 
   private initWorld() {

@@ -20,7 +20,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(SCENE_EDITOR);
+    this.scene.start(SCENE_GAME);
   }
 
   private loadAudio() {

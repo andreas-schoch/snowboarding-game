@@ -2,10 +2,13 @@ import './SceneExplorer.css';
 import {b2, recordLeak} from '../..';
 import {GameInfo} from '../../GameInfo';
 import {EDITOR_SCENE_LOADED} from '../../eventTypes';
-import {BodyEntityData, Entity} from '../../physics/RUBE/RubeLoader';
+import {iterBodies, iterBodyFixtures, iterBodyJoints} from '../../helpers/B2Iterators';
+import {Entity, EntityData} from '../../physics/RUBE/otherTypes';
 
 export const SceneExplorer = () => {
   const physics = GameInfo.physics;
+  const entityDataMap = physics.loader.entityData;
+
   GameInfo.observer.on(EDITOR_SCENE_LOADED, id => {
     console.log('--------------------EDITOR_SCENE_LOADED', id);
     refresh();
@@ -14,27 +17,40 @@ export const SceneExplorer = () => {
   const refresh = () => {
     const sceneItemsContainer = document.getElementById('scene-items-container');
     if (!sceneItemsContainer) throw new Error('no container for scene items');
-    // BODY and nested FIXTURES, JOINTS, IMAGES
-    for (let body = recordLeak(physics.world.GetBodyList()); b2.getPointer(body) !== b2.getPointer(b2.NULL); body = recordLeak(body.GetNext())) {
-      if (!body) continue;
-      const sceneItemBody = createSceneItem(body, 'body');
+
+    console.log('-------------refrsh entity data', entityDataMap);
+
+    // BODIES
+    for (const body of iterBodies(physics.world)) {
+      const bodyEntity = entityDataMap.get(body);
+      if (!bodyEntity || bodyEntity.type !== 'body') throw new Error('no body entity data');
+      const sceneItemBody = createSceneItem(bodyEntity, 'body');
+
       const sceneItemChildren = sceneItemBody.querySelector('.scene-item-children');
       if (!sceneItemChildren) throw new Error('no container for scene item children');
 
-      for (let f = recordLeak(body.GetFixtureList()); b2.getPointer(f) !== b2.getPointer(b2.NULL); f = recordLeak(f.GetNext())) {
-        sceneItemChildren.appendChild(createSceneItem(f, 'fixture', body));
+      // FIXTURES
+      for (const fixture of iterBodyFixtures(body)) {
+        const fixtureEntity = entityDataMap.get(fixture);
+        sceneItemChildren.appendChild(createSceneItem(fixtureEntity, 'fixture', body));
       }
 
-      for (let j = recordLeak(body.GetJointList()); b2.getPointer(j) !== b2.getPointer(b2.NULL); j = recordLeak(j.next)) {
-        sceneItemChildren.appendChild(createSceneItem(j.joint, 'joint', body));
+      // JOINTS
+      for (const joint of iterBodyJoints(body)) {
+        const jointEntity = entityDataMap.get(joint);
+        console.log('jointEntity', jointEntity, joint);
+        sceneItemChildren.appendChild(createSceneItem(jointEntity, 'joint', body));
       }
 
-      const bodyEntityData = physics.loader.entityData.get(body) as BodyEntityData | undefined;
-      const image = bodyEntityData?.image;
-      if (image) sceneItemChildren.appendChild(createSceneItem(image, 'image', body));
+      // IMAGES
+      const imageEntity = bodyEntity.image;
+      if (imageEntity) sceneItemChildren.appendChild(createSceneItem(imageEntity, 'image', body));
+
       if (sceneItemBody.querySelector('.scene-item-children')?.children.length) sceneItemBody.querySelector('.scene-item-collapse')?.classList.remove('invisible');
       sceneItemsContainer.appendChild(sceneItemBody);
     }
+
+    // TODO images without body
   };
 
   const handleClick = (evt: Event) => {
@@ -57,7 +73,7 @@ export const SceneExplorer = () => {
     target.innerHTML = isHidden || forceExpand ? 'expand_more' : 'expand_less';
   };
 
-  const createSceneItem = (entity: Entity, type: 'body' | 'fixture' | 'joint' | 'image', parent?: Entity): HTMLElement => {
+  const createSceneItem = (entityData: EntityData | undefined, type: 'body' | 'fixture' | 'joint' | 'image', parent?: Entity): HTMLElement => {
     const typeToIconMap = {
       body: 'window',
       fixture: 'border_clear',
@@ -65,17 +81,10 @@ export const SceneExplorer = () => {
       image: 'wallpaper',
     };
 
-    const entityData = physics.loader.entityData.get(entity);
-    const parentEntityData = physics.loader.entityData.get(parent);
-    console.log('entityData', entityData, entity, type);
-    if (!entityData) {
-      const fixture = entity as Box2D.b2Fixture;
-      const body = fixture.GetBody();
-      const bodyEntityData = physics.loader.entityData.get(body);
-      console.log('---------------------- bodyEntityData of broken fixture', bodyEntityData);
+    console.log('createSceneItem', entityData, type, parent);
 
-      throw new Error('no entity data');
-    }
+    const parentEntityData = entityDataMap.get(parent);
+    if (!entityData) throw new Error('no entity data');
     if (parent && !parentEntityData) throw new Error('no parent entity data');
 
     const sceneItemTemplate: HTMLTemplateElement | null = document.getElementById('scene-item-template') as HTMLTemplateElement;
