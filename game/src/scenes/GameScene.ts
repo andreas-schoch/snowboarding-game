@@ -54,7 +54,8 @@ export class GameScene extends Phaser.Scene {
 
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
-    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10});
+    // TODO adjust everything for either 32 or 64 pixels per meter so we can better make use of PoW2 textures when chunking terrain 
+    this.b2Physics = new Physics(this, {pixelsPerMeter: 40, gravityX: 0, gravityY: -10, debugDrawEnabled: false});
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
 
@@ -62,8 +63,8 @@ export class GameScene extends Phaser.Scene {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
       GameInfo.currentLevel = level;
       const scene = await pb.level.getRubeScene(level);
-      this.b2Physics.load(scene);
-      new Terrain(this).draw();
+      const loadedScene = this.b2Physics.load(scene);
+      new Terrain(this, loadedScene).draw();
       this.playerController = new CharacterController(this);
       const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
       const character = new Character(this, this.b2Physics.load(rubeScene, 0, 0));

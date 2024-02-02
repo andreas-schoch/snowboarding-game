@@ -1,8 +1,9 @@
-import {SCENE_EDITOR} from '..';
+import {SCENE_EDITOR, pb} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
+import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
 import {EDITOR_OPEN} from '../eventTypes';
@@ -15,6 +16,7 @@ export class EditorScene extends Phaser.Scene {
   private backdrop: Backdrop;
   private backdropGrid: BackdropGrid;
   private controller: EditorController;
+  private ready: boolean;
 
   constructor() {
     super({key: SCENE_EDITOR});
@@ -31,17 +33,27 @@ export class EditorScene extends Phaser.Scene {
 
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
-    this.b2Physics = new Physics(this, {worldScale: 40, gravityX: 0, gravityY: -10, debugDrawEnabled: true});
+    this.b2Physics = new Physics(this, {pixelsPerMeter: 40, gravityX: 0, gravityY: -10, debugDrawEnabled: true});
     this.controller = new EditorController(this);
 
     drawCoordZeroPoint(this);
+    initSolidUI('root-ui');
+    GameInfo.observer.emit(EDITOR_OPEN);
+
+    pb.level.get(Settings.currentLevel()).then(async level => {
+      if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
+      // GameInfo.currentLevel = level;
+      const scene = await pb.level.getRubeScene(level);
+      const loadedScene = this.b2Physics.load(scene);
+      new Terrain(this, loadedScene).draw();
+
+      const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+      this.b2Physics.load(rubeScene, 0, 0);
+      this.ready = true;
+    });
 
     // TODO ability to load individual RubeScenes and treat them as an Object Entity similar like in RUBE
     //  An object may contain many Bodies, Joints, Fixtures, etc. but will be displayed as a single entity
-    initSolidUI('root-ui');
-    GameInfo.observer.emit(EDITOR_OPEN);
-    const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
-    this.b2Physics.load(rubeScene, 0, 0);
   }
 
   update(time: number, delta: number) {

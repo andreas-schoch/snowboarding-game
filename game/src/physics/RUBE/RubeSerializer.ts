@@ -4,7 +4,7 @@ import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, RubeJointBase, 
 import {IBaseAdapter} from './RubeImageAdapter';
 import {RubeLoader} from './RubeLoader';
 import {vec2Util} from './Vec2Math';
-import {Entity} from './otherTypes';
+import {Entity, WorldEntityData} from './otherTypes';
 
 export const enumTypeToRubeJointType = {
   // [RubeJointType.e_unknownJoint]: 'unknown' as const,
@@ -27,20 +27,20 @@ export class RubeSerializer {
 
   private indexByBody: Map<Box2D.b2Body, number> = new Map();
 
-  constructor(private world: Box2D.b2World, private adapter: IBaseAdapter, private loader: RubeLoader) { }
+  constructor(private worldEntity: WorldEntityData, private adapter: IBaseAdapter, private loader: RubeLoader) { }
 
   serialize(): RubeScene {
     console.time('RubeSerializer.serialize');
     const scene: RubeScene = {
-      gravity: this.serializeVector(this.world.GetGravity()),
-      allowSleep: this.world.GetAllowSleeping(),
-      autoClearForces: this.world.GetAutoClearForces(),
-      positionIterations: 12,
-      velocityIterations: 12,
-      stepsPerSecond: 60,
-      warmStarting: this.world.GetWarmStarting(),
-      continuousPhysics: this.world.GetContinuousPhysics(),
-      subStepping: this.world.GetSubStepping(),
+      gravity: this.serializeVector(this.worldEntity.world.GetGravity()),
+      allowSleep: this.worldEntity.world.GetAllowSleeping(),
+      autoClearForces: this.worldEntity.world.GetAutoClearForces(),
+      positionIterations: this.worldEntity.positionIterations,
+      velocityIterations: this.worldEntity.velocityIterations,
+      stepsPerSecond: this.worldEntity.stepsPerSecond,
+      warmStarting: this.worldEntity.world.GetWarmStarting(),
+      continuousPhysics: this.worldEntity.world.GetContinuousPhysics(),
+      subStepping: this.worldEntity.world.GetSubStepping(),
       customProperties: [], // We don't use/care about world custom properties for now
 
       body: this.serializeBodies(), // needs to be serialized before joints because joints rely on the order of bodies in the array
@@ -65,7 +65,7 @@ export class RubeSerializer {
 
   private serializeBodies(): RubeBody[] {
     const bodies: RubeBody[] = [];
-    for (const body of iterBodies(this.world)) {
+    for (const body of iterBodies(this.worldEntity.world)) {
       this.indexByBody.set(body, bodies.length);
       bodies.push(this.serializeBody(body));
     }
@@ -180,9 +180,9 @@ export class RubeSerializer {
   }
 
   private serializeJoints(): RubeJoint[] {
-    if (this.world.GetJointCount() !== 0 && this.indexByBody.size === 0) throw new Error('Joints cannot be serialized before bodies');
+    if (this.worldEntity.world.GetJointCount() !== 0 && this.indexByBody.size === 0) throw new Error('Joints cannot be serialized before bodies');
     const joints: RubeJoint[] = [];
-    for (const joint of iterJoints(this.world)) joints.push(this.serializeJoint(joint));
+    for (const joint of iterJoints(this.worldEntity.world)) joints.push(this.serializeJoint(joint));
     return joints;
   }
 

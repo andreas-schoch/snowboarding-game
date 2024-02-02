@@ -1,6 +1,6 @@
 import {b2} from '..';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
-import {BodyEntityData, LoadedScene} from '../physics/RUBE/otherTypes';
+import {LoadedScene} from '../physics/RUBE/otherTypes';
 import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
@@ -160,7 +160,7 @@ export class Character {
   }
 
   private detachBoard() {
-    const world = this.scene.b2Physics.world;
+    const world = this.scene.b2Physics.worldEntity.world;
     if (this.bindingLeft) world.DestroyJoint(b2.getPointer(this.bindingLeft));
     if (this.bindingRight) world.DestroyJoint(b2.getPointer(this.bindingRight));
     if (this.distanceLegLeft) world.DestroyJoint(b2.getPointer(this.distanceLegLeft));

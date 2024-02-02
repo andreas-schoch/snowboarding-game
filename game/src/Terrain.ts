@@ -1,20 +1,20 @@
 import {Settings} from './Settings';
 import {iterBodyFixtures} from './helpers/B2Iterators';
-import {GameScene} from './scenes/GameScene';
+import {LoadedScene} from './physics/RUBE/otherTypes';
 import {b2} from './index';
 
 export type XY = {x: number, y: number};
 
 export class Terrain {
 
-  constructor(private scene: GameScene) { }
+  constructor(private scene: Phaser.Scene, private rubeScene: LoadedScene) { }
 
   draw() {
-    const terrainBodies = this.scene.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow');
-    if (!terrainBodies.length) return; // There may be levels where no terrain is present
-    const scale = this.scene.b2Physics.worldScale;
+    const {worldEntity: {pixelsPerMeter}} = this.rubeScene;
+    const terrainBodyEntities = this.rubeScene.bodies.filter(body => body.customProps.surfaceType === 'snow');
+    if (!terrainBodyEntities.length) return; // There may be levels where no terrain is present
 
-    for (const body of terrainBodies) {
+    for (const {body} of terrainBodyEntities) {
       const bodyPos = body.GetPosition();
       // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
       const edgeShape = new b2.b2EdgeShape();
@@ -23,8 +23,8 @@ export class Terrain {
         const chunkPoints: XY[] = [];
         for (let i = 0; i < shape.get_m_count() - 1; i++) {
           shape.GetChildEdge(edgeShape, i);
-          const vert1 = {x: (edgeShape.m_vertex1.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex1.y + bodyPos.y) * scale};
-          const vert2 = {x: (edgeShape.m_vertex2.x + bodyPos.x) * scale, y: -(edgeShape.m_vertex2.y + bodyPos.y) * scale};
+          const vert1 = {x: (edgeShape.m_vertex1.x + bodyPos.x) * pixelsPerMeter, y: -(edgeShape.m_vertex1.y + bodyPos.y) * pixelsPerMeter};
+          const vert2 = {x: (edgeShape.m_vertex2.x + bodyPos.x) * pixelsPerMeter, y: -(edgeShape.m_vertex2.y + bodyPos.y) * pixelsPerMeter};
           chunkPoints.push(vert1, vert2);
         }
         this.drawChunk(chunkPoints);

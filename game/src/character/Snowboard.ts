@@ -36,10 +36,10 @@ export class Snowboard {
     this.scene = character.scene;
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.initRays(this.scene.b2Physics.worldScale / 4);
+    this.initRays(this.scene.b2Physics.worldEntity.pixelsPerMeter / 4);
     this.particles = this.initParticles();
 
-    const {worldScale, loader: {entityData}} = this.scene.b2Physics;
+    const {worldEntity: {pixelsPerMeter}, loader: {entityData}} = this.scene.b2Physics;
     this.scene.b2Physics.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
       const propsBA = entityData.get(bodyA)?.customProps;
       const propsBB = entityData.get(bodyB)?.customProps;
@@ -51,7 +51,7 @@ export class Snowboard {
       const manifold = new b2.b2WorldManifold();
       contact.GetWorldManifold(manifold);
       for (let i = 0; i < impulse.get_count(); i++) {
-        const point = vec2Util.Scale(manifold.get_points(i), worldScale, -worldScale);
+        const point = vec2Util.Scale(manifold.get_points(i), pixelsPerMeter, -pixelsPerMeter);
         const normalImpulse = impulse.get_normalImpulses(i);
         if (!this.scene.cameras.main.worldView.contains(point.x, point.y)) continue;
         if (normalImpulse < 4 || velocityLength < 0.5) continue;
@@ -79,6 +79,7 @@ export class Snowboard {
 
   update() {
     const segments = this.segments;
+    const world = this.scene.b2Physics.worldEntity.world;
     for (const segment of this.segments) {
       segment.groundRayResult.hit = false;
       segment.groundRayResult.point.SetZero();
@@ -86,7 +87,7 @@ export class Snowboard {
       segment.groundRayResult.fraction = -1; // Raycast doesn't work without cloning vectors returned by GetWorldPoint()
       const pointStart = vec2Util.Clone(segment.body.GetWorldPoint(this.ZERO));
       const pointEnd = vec2Util.Clone(segment.body.GetWorldPoint(segment.groundRayDirection));
-      this.scene.b2Physics.world.RayCast(segment.groundRayCallback, pointStart, pointEnd);
+      world.RayCast(segment.groundRayCallback, pointStart, pointEnd);
     }
 
     this.isTailGrounded = segments[0].groundRayResult.hit;
@@ -106,7 +107,7 @@ export class Snowboard {
       return aIndex - bIndex;
     });
 
-    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.scene.b2Physics.worldScale);
+    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.scene.b2Physics.worldEntity.pixelsPerMeter);
     for (const body of segmentBodies) {
       const groundRayResult: IRayCastResult = {hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1};
 

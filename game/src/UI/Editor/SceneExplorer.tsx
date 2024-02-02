@@ -27,7 +27,7 @@ export const SceneExplorer = () => {
     if (!sceneItemsContainer) throw new Error('no container for scene items');
 
     // BODIES
-    for (const body of iterBodies(physics.world)) {
+    for (const body of iterBodies(physics.worldEntity.world)) {
       const bodyEntity = entityDataMap.get(body);
       if (!bodyEntity || bodyEntity.type !== 'body') throw new Error('no body entity data');
       const sceneItemBody = createSceneItem(bodyEntity, 'body');

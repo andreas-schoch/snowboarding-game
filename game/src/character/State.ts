@@ -38,7 +38,7 @@ export class State {
   }
 
   update(): void {
-    if (this.isCrashed || this.isLevelFinished || this.scene.b2Physics.isPaused) return;
+    if (this.isCrashed || this.isLevelFinished || this.scene.b2Physics.worldEntity.isPaused) return;
     if (this.levelUnpausedFrames === 0) this.pushStartLog();
     this.levelUnpausedFrames++; // TODO switch from leeway tween to a frame deterministic one based on levelUnpausedFrames
     GameInfo.observer.emit(TIME_CHANGE, framesToTime(this.levelUnpausedFrames));
@@ -160,7 +160,7 @@ export class State {
       const image = bodyEntity?.image?.image as Phaser.GameObjects.Image | undefined;
       if (bodyEntity) this.scene.b2Physics.loader.entityData.delete(body);
       if (image) image.destroy();
-      this.scene.b2Physics.world.DestroyBody(body as Box2D.b2Body);
+      this.scene.b2Physics.worldEntity.world.DestroyBody(body as Box2D.b2Body);
 
       GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedCoins++;
@@ -196,7 +196,7 @@ export class State {
     //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
     //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
-      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.scene.b2Physics.isPaused) {
+      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.scene.b2Physics.worldEntity.isPaused) {
         this.comboLeeway.isPlaying() && this.comboLeeway.pause();
       } else {
         this.comboLeeway.isPaused() && this.comboLeeway.resume();
@@ -241,7 +241,7 @@ export class State {
   }
 
   private getDistanceInMeters(): number {
-    return Math.floor(this.distancePixels / this.scene.b2Physics.worldScale);
+    return Math.floor(this.distancePixels / this.scene.b2Physics.worldEntity.pixelsPerMeter);
   }
 
   private pushStartLog() {

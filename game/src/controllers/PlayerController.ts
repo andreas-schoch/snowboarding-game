@@ -27,7 +27,7 @@ export class CharacterController {
   constructor(private scene: GameScene) {
 
     GameInfo.observer.on(PAUSE_GAME, () => this.pauseGame());
-    GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.isPaused = false);
+    GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.worldEntity.isPaused = false);
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)); });
 
     this.initKeyboardInputs();
@@ -59,7 +59,7 @@ export class CharacterController {
 
   update() {
     if (!this.character) return;
-    if (this.scene.b2Physics.isPaused || this.character.state.isCrashed || this.character.state.isLevelFinished) return;
+    if (this.scene.b2Physics.worldEntity.isPaused || this.character.state.isCrashed || this.character.state.isLevelFinished) return;
 
     if (this.jumpKeyDown && this.scene.game.getFrame() - this.jumpKeyDownStartFrame <= this.character.jumpCooldown) this.character.jump();
     if (this.jumpKeyDown) this.character.leanUp();
@@ -115,7 +115,7 @@ export class CharacterController {
     this.keySpace.onDown = () => this.pauseGame();
     const onJump = () => {
       this.jumpKeyDown = true;
-      if (!this.character?.board.isInAir() && !this.scene.b2Physics.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
+      if (!this.character?.board.isInAir() && !this.scene.b2Physics.worldEntity.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
     };
     this.keyW.onDown = onJump;
     this.keyArrowUp.onDown = onJump;
@@ -126,8 +126,8 @@ export class CharacterController {
   private pauseGame(activePanel: PanelId = 'panel-pause-menu') {
     if (!this.character) return;
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
-    this.scene.b2Physics.isPaused = !this.scene.b2Physics.isPaused;
+    this.scene.b2Physics.worldEntity.isPaused = !this.scene.b2Physics.worldEntity.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.isPaused, activePanel);
+    GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.worldEntity.isPaused, activePanel);
   }
 }

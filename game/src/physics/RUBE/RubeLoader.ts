@@ -10,7 +10,7 @@ import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
-import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData} from './otherTypes';
+import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './otherTypes';
 import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
 export class RubeLoader {
@@ -24,7 +24,7 @@ export class RubeLoader {
   private loadingJoints: LoadedScene['joints'] = [];
   private loadingImages: LoadedScene['images'] = [];
 
-  constructor(private world: Box2D.b2World, private adapter: IBaseAdapter) { }
+  constructor(private worldEntity: WorldEntityData, private adapter: IBaseAdapter) { }
 
   load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
     // Note that all the defaults should already have been set within sanitizeRubeDefaults()
@@ -52,6 +52,7 @@ export class RubeLoader {
       images: this.loadingImages,
       entityData: this.loadingSceneEntityData,
       customProps: this.customPropsArrayToMap(scene.customProperties || []),
+      worldEntity: this.worldEntity,
     };
 
     this.loadedScenes.set(loadedScene.id, loadedScene);
@@ -66,7 +67,7 @@ export class RubeLoader {
 
   getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Body[] {
     const bodies: Box2D.b2Body[] = [];
-    for (const body of iterBodies(this.world)) {
+    for (const body of iterBodies(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.find(e => e.body === body)) continue; // TODO turn into set
       const props = this.entityData.get(body)?.customProps;
       if (!props) continue;
@@ -78,7 +79,7 @@ export class RubeLoader {
 
   getFixturesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Fixture[] {
     const fixtures: Box2D.b2Fixture[] = [];
-    for (const body of iterBodies(this.world)) {
+    for (const body of iterBodies(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.find(e => e.body === body)) continue; // TODO turn into set
       for (const fixture of iterBodyFixtures(body)) {
         const props = this.entityData.get(fixture)?.customProps;
@@ -92,7 +93,7 @@ export class RubeLoader {
 
   getJointsByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Joint[] {
     const joints: Box2D.b2Joint[] = [];
-    for (const joint of iterJoints(this.world)) {
+    for (const joint of iterJoints(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.joints.find(e => e.joint === joint)) continue; // TODO turn into set
       const props = this.entityData.get(joint)?.customProps;
       if (!props) continue;
@@ -113,8 +114,8 @@ export class RubeLoader {
 
   cleanup() {
     // Seems to be recommended https://github.com/Birch-san/box2d-wasm/blob/master/docs/memory-model.md
-    for (const body of iterBodies(this.world)) this.world.DestroyBody(body);
-    for (const joint of iterJoints(this.world)) this.world.DestroyJoint(joint);
+    for (const body of iterBodies(this.worldEntity.world)) this.worldEntity.world.DestroyBody(body);
+    for (const joint of iterJoints(this.worldEntity.world)) this.worldEntity.world.DestroyJoint(joint);
   }
 
   private loadBody(bodyJson: RubeBody, offsetX: number, offsetY: number): BodyEntityData {
@@ -136,7 +137,7 @@ export class RubeLoader {
     massData.center = this.rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter);
     massData.I = bodyJson['massData-I'] || bodyJson.massDataI || 1;
 
-    const body = this.world.CreateBody(bd);
+    const body = this.worldEntity.world.CreateBody(bd);
     body.SetMassData(massData);
     b2.destroy(massData);
     b2.destroy(bd);
@@ -219,7 +220,7 @@ export class RubeLoader {
       jd.enableMotor = Boolean(jointJson.enableMotor);
       jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
       jd.motorSpeed = jointJson.motorSpeed || 0;
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
@@ -240,7 +241,7 @@ export class RubeLoader {
       jd.minLength = 0;
       jd.maxLength = jd.length * 2; // previous box2d port had issues without setting min and max length. Can maybe be removed with box2d-wasm
       this.setLinearStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
@@ -260,7 +261,7 @@ export class RubeLoader {
       jd.enableLimit = Boolean(jointJson.enableMotor);
       jd.maxMotorForce = jointJson.maxMotorForce || 0;
       jd.motorSpeed = jointJson.motorSpeed || 0;
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
@@ -273,7 +274,7 @@ export class RubeLoader {
       jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
       jd.motorSpeed = jointJson.motorSpeed || 0;
       this.setLinearStiffness(jd, jointJson.springFrequency || 0, jointJson.springDampingRatio || 0, jd.bodyA, jd.bodyB);
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
@@ -284,7 +285,7 @@ export class RubeLoader {
       jd.collideConnected = Boolean(jointJson.collideConnected);
       jd.maxForce = jointJson.maxForce || 0;
       jd.maxTorque = jointJson.maxTorque || 0;
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }
@@ -295,7 +296,7 @@ export class RubeLoader {
       jd.collideConnected = Boolean(jointJson.collideConnected);
       jd.referenceAngle = jointJson.refAngle || 0;
       this.setAngularStiffness(jd, jointJson.frequency || 0, jointJson.dampingRatio || 0, jd.bodyA, jd.bodyB);
-      joint = this.world.CreateJoint(jd);
+      joint = this.worldEntity.world.CreateJoint(jd);
       b2.destroy(jd);
       break;
     }

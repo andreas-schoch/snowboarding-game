@@ -1,3 +1,18 @@
+export interface WorldEntityData {
+  type: 'world';
+  world: Box2D.b2World;
+  debugDrawer: DebugDrawer;
+  debugDrawEnabled: boolean;
+  isPaused: boolean;
+  pixelsPerMeter: number;
+  gravityX: number;
+  gravityY: number;
+  stepsPerSecond: number;
+  positionIterations: number;
+  velocityIterations: number;
+}
+
+export type WorldEntityConfig = Pick<WorldEntityData, 'pixelsPerMeter' | 'gravityX' | 'gravityY' | 'debugDrawEnabled'>;
 
 ////////////////////////////
 // ENTITY AND ENTITY DATA //
@@ -44,11 +59,17 @@ export type EntityData = BodyEntityData | FixtureEntityData | JointEntityData | 
 
 export interface LoadedScene {
   id: string;
-  // prefabId: string;
+
+  // All things loaded with this particular scene
   bodies: BodyEntityData[];
   joints: JointEntityData[];
   images: ImageEntityData[];
 
+  // All the above but mapped by the entity reference
   entityData: Map<Entity, EntityData>;
+
+  // These are technically world custom properties but we (mis)use them to store metadate specific to the loaded scene NOT the world
+  // This is due to the fact that we load multiple scenes into the same world.
   customProps: Record<string, unknown>;
+  worldEntity: WorldEntityData;
 }
