@@ -1,56 +1,52 @@
 import './SceneExplorer.css';
 import {GameInfo} from '../../GameInfo';
 import {RUBE_SCENE_LOADED} from '../../eventTypes';
-import {iterBodies, iterBodyFixtures, iterBodyJoints} from '../../helpers/B2Iterators';
-import {Entity, EntityData} from '../../physics/RUBE/otherTypes';
+import {iterBodyFixtures, iterBodyJoints} from '../../helpers/B2Iterators';
+import {Entity, EntityData, LoadedScene} from '../../physics/RUBE/otherTypes';
 
 export const SceneExplorer = () => {
-  const physics = GameInfo.physics;
-  const entityDataMap = physics.loader.entityData;
-
   GameInfo.observer.on(RUBE_SCENE_LOADED, scene => {
-    refresh(scene.id);
+    refresh(scene);
   });
 
   // TODO use the scene passed to the event to populate the scene explorer instead of iterating over bodies. 
   // For now the loaded in scene is passed but it should actually be the .rube file from the metaObject or terrain
   // Maybe the terrain can also be of .rube but we use it as a template to parametrize the points and if it is line or loop?
   // Maybe make it so that instead of a file path it has an inlined MetaBody[]? 
-  const refresh = (sceneId: string) => {
+  const refresh = (loadedScene: LoadedScene) => {
     // TODO update this legacy code to use SolidJS properly and show a loaded scene as a single item in the explorer
     // This code was mostly written 9 months ago when I had the intention to make a generic editor and only used vanilla js for the UI...
     // For my game's editor I don't want to burden level creators with the concept of bodies, fixtures, joints, etc.
     // I will create "prefabs" in the RUBE editor which will be shown as a single item in the scene explorer.
     // At some point (and if there is demand) I may want to make the creation of prefabs possible within the game.
-    console.debug('refreshing SceneExplorer. New scene id', sceneId);
+    console.debug('refreshing SceneExplorer. New scene id', loadedScene.id);
     const sceneItemsContainer = document.getElementById('scene-items-container');
     if (!sceneItemsContainer) throw new Error('no container for scene items');
 
+    const worldEntityData = loadedScene.worldEntity.entityData;
+
     // BODIES
-    for (const body of iterBodies(physics.worldEntity.world)) {
-      const bodyEntity = entityDataMap.get(body);
-      if (!bodyEntity || bodyEntity.type !== 'body') throw new Error('no body entity data');
-      const sceneItemBody = createSceneItem(bodyEntity, 'body');
+    for (const {body} of loadedScene.bodies) {
+      const sceneItemBody = createSceneItem(loadedScene, body);
 
       const sceneItemChildren = sceneItemBody.querySelector('.scene-item-children');
       if (!sceneItemChildren) throw new Error('no container for scene item children');
 
       // FIXTURES
       for (const fixture of iterBodyFixtures(body)) {
-        const fixtureEntity = entityDataMap.get(fixture);
-        sceneItemChildren.appendChild(createSceneItem(fixtureEntity, 'fixture', body));
+        sceneItemChildren.appendChild(createSceneItem(loadedScene, fixture, body));
       }
 
       // JOINTS
       for (const joint of iterBodyJoints(body)) {
-        const jointEntity = entityDataMap.get(joint);
-        console.log('jointEntity', jointEntity, joint);
-        sceneItemChildren.appendChild(createSceneItem(jointEntity, 'joint', body));
+        sceneItemChildren.appendChild(createSceneItem(loadedScene, joint, body));
       }
 
       // IMAGES
+      const bodyEntity = worldEntityData.get(body);
+      if (!bodyEntity || bodyEntity.type !== 'body') throw new Error('no body entity');
       const imageEntity = bodyEntity.image;
-      if (imageEntity) sceneItemChildren.appendChild(createSceneItem(imageEntity, 'image', body));
+      if (imageEntity) sceneItemChildren.appendChild(createSceneItem(loadedScene, imageEntity.image, body));
 
       if (sceneItemBody.querySelector('.scene-item-children')?.children.length) sceneItemBody.querySelector('.scene-item-collapse')?.classList.remove('invisible');
       sceneItemsContainer.appendChild(sceneItemBody);
@@ -79,30 +75,32 @@ export const SceneExplorer = () => {
     target.innerHTML = isHidden || forceExpand ? 'expand_more' : 'expand_less';
   };
 
-  const createSceneItem = (entityData: EntityData | undefined, type: 'body' | 'fixture' | 'joint' | 'image', parent?: Entity): HTMLElement => {
-    const typeToIconMap = {
+  const createSceneItem = (loadedScene: LoadedScene, item: Entity, parentItem?: Entity): HTMLElement => {
+    const itemEntityData = loadedScene.entityData.get(item);
+    if (!itemEntityData) throw new Error('no entity data');
+
+    const parentEntityData = parentItem ? loadedScene.entityData.get(parentItem) : undefined;
+    if (parentItem && !parentEntityData) throw new Error('no parent entity data');
+
+    const typeToIconMap: Record<EntityData['type'], string> = {
       body: 'window',
       fixture: 'border_clear',
       joint: 'polyline',
       image: 'wallpaper',
     };
 
-    const parentEntityData = entityDataMap.get(parent);
-    if (!entityData) throw new Error('no entity data');
-    if (parent && !parentEntityData) throw new Error('no parent entity data');
-
     const sceneItemTemplate: HTMLTemplateElement | null = document.getElementById('scene-item-template') as HTMLTemplateElement;
     const clone: HTMLElement = sceneItemTemplate.content.cloneNode(true) as HTMLElement;
     const sceneItem: HTMLElement | null = clone.querySelector('.scene-item');
     if (!sceneItem) throw new Error('no scene item');
     if (parent && parentEntityData) sceneItem.dataset.parentId = parentEntityData.id;
-    sceneItem.dataset.id = entityData.id;
-    sceneItem.dataset.type = type;
+    sceneItem.dataset.id = itemEntityData.id;
+    sceneItem.dataset.type = itemEntityData.type;
     const cloneElName = clone.querySelector('.scene-item-name');
     const cloneElIcon = clone.querySelector('.scene-item-type-icon');
-    const name = entityData.name;
-    if (cloneElName) cloneElName.innerHTML = name || type;
-    if (cloneElIcon) cloneElIcon.innerHTML = typeToIconMap[type];
+    const name = itemEntityData.name;
+    if (cloneElName) cloneElName.innerHTML = name || itemEntityData.type;
+    if (cloneElIcon) cloneElIcon.innerHTML = typeToIconMap[itemEntityData.type];
     return clone;
   };
 

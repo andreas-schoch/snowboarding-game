@@ -73,7 +73,7 @@ export class RubeSerializer {
   }
 
   private serializeBody(body: Box2D.b2Body): RubeBody {
-    const bodyEntityData = this.loader.entityData.get(body);
+    const bodyEntityData = this.worldEntity.entityData.get(body);
     return {
       name: bodyEntityData?.name || 'body',
       active: body.IsEnabled(),
@@ -96,7 +96,7 @@ export class RubeSerializer {
   }
 
   serializeCustomProperties(owner: Entity): RubeCustomProperty[] | undefined {
-    const props = this.loader.entityData.get(owner)?.customProps;
+    const props = this.worldEntity.entityData.get(owner)?.customProps;
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
     for (const [name, value] of Object.entries(props)) {
@@ -122,7 +122,7 @@ export class RubeSerializer {
     const shape = fixture.GetShape();
     const shapeType = shape.GetType();
 
-    const fixtureEntityData = this.loader.entityData.get(fixture);
+    const fixtureEntityData = this.worldEntity.entityData.get(fixture);
 
     const serialized: RubeFixture = {
       name: fixtureEntityData?.name|| 'fixture',
@@ -227,7 +227,7 @@ export class RubeSerializer {
 
     if (indexA === undefined || indexB === undefined) throw new Error('Joint body index not found');
 
-    const jointEntityData = this.loader.entityData.get(joint);
+    const jointEntityData = this.worldEntity.entityData.get(joint);
     return {
       type: enumTypeToRubeJointType[joint.GetType()],
       name: jointEntityData?.name || 'joint',

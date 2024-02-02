@@ -43,7 +43,7 @@ export class CharacterController {
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
-    const bodyEntityData = this.scene.b2Physics.loader.entityData.get(this.character.body) as BodyEntityData | undefined;
+    const bodyEntityData = character.rubeScene.entityData.get(this.character.body) as BodyEntityData | undefined;
     const image = bodyEntityData?.image?.image as Phaser.GameObjects.Image | undefined;
     if (!image) return;
     camera.startFollow(image, false, 0.5, 0.5);

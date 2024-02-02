@@ -7,7 +7,6 @@ import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
 import {BodyEntityData} from '../physics/RUBE/otherTypes';
 import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
-import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
 export class State {
@@ -18,7 +17,6 @@ export class State {
 
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
-  private scene: GameScene;
   private comboLeeway: Phaser.Tweens.Tween | null = null;
   private comboAccumulator = 0;
   private comboMultiplier = 0;
@@ -33,12 +31,11 @@ export class State {
   private lastPosY = 0;
 
   constructor(private character: Character) {
-    this.scene = character.scene;
     this.registerListeners();
   }
 
   update(): void {
-    if (this.isCrashed || this.isLevelFinished || this.scene.b2Physics.worldEntity.isPaused) return;
+    if (this.isCrashed || this.isLevelFinished || this.character.rubeScene.worldEntity.isPaused) return;
     if (this.levelUnpausedFrames === 0) this.pushStartLog();
     this.levelUnpausedFrames++; // TODO switch from leeway tween to a frame deterministic one based on levelUnpausedFrames
     GameInfo.observer.emit(TIME_CHANGE, framesToTime(this.levelUnpausedFrames));
@@ -66,7 +63,7 @@ export class State {
   }
 
   createComboLeewayTween(paused: boolean = true): Phaser.Tweens.Tween {
-    return this.scene.tweens.addCounter({
+    return this.character.scene.tweens.addCounter({
       paused,
       from: 0,
       to: 360,
@@ -77,14 +74,18 @@ export class State {
   }
 
   private registerListeners() {
-    const entityData = this.scene.b2Physics.loader.entityData;
-    this.scene.b2Physics.on(B2_BEGIN_CONTACT, ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
+    const {observer, entityData} = this.character.rubeScene.worldEntity;
+    observer.on(B2_BEGIN_CONTACT, ({bodyA, bodyB, fixtureA, fixtureB}: IBeginContactEvent) => {
       if (!this.character.isPartOfMe(bodyA) && !this.character.isPartOfMe(bodyB)) return;
-      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && entityData.get(fixtureA)?.customProps.phaserSensorType) this.handleSensor(bodyA, fixtureA);
-      else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && entityData.get(fixtureB)?.customProps.phaserSensorType) this.handleSensor(bodyB, fixtureB);
+
+      if (fixtureA.IsSensor() && !this.seenSensors.has(bodyA) && entityData.get(fixtureA)?.customProps['phaserSensorType']) {
+        this.handleSensor(bodyA, fixtureA);
+      } else if (fixtureB.IsSensor() && !this.seenSensors.has(bodyB) && entityData.get(fixtureB)?.customProps['phaserSensorType']) {
+        this.handleSensor(bodyB, fixtureB);
+      }
     });
 
-    this.scene.b2Physics.on(B2_POST_SOLVE, ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
+    observer.on(B2_POST_SOLVE, ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
@@ -96,7 +97,7 @@ export class State {
 
     // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
     GameInfo.observer.on(ENTER_GROUNDED, () => {
-      this.numFramesGrounded = this.scene.game.getFrame();
+      this.numFramesGrounded = this.character.scene.game.getFrame();
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {
@@ -130,14 +131,15 @@ export class State {
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.isLevelFinished) return;
-    const sensorType = this.scene.b2Physics.loader.entityData.get(fixture)?.customProps.phaserSensorType;
+    const sensorType = this.character.rubeScene.worldEntity.entityData.get(fixture)?.customProps['phaserSensorType'];
+    console.debug('handleSensor() type:', sensorType);
     switch (sensorType) {
     case 'pickup_present': {
       this.pickupsToProcess.add(body);
       break;
     }
     case 'level_finish': {
-      this.scene.cameras.main.stopFollow();
+      this.character.scene.cameras.main.stopFollow();
       this.handleComboComplete();
       GameInfo.tsl.push({type: TrickScoreType.finish, frame: this.levelUnpausedFrames, timestamp: Date.now(), distance: this.getDistanceInMeters()});
       this.isLevelFinished = true;
@@ -155,12 +157,13 @@ export class State {
   }
 
   private processPickups() {
+    const worldEntity = this.character.rubeScene.worldEntity;
     for (const body of this.pickupsToProcess) {
-      const bodyEntity = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      const bodyEntity = worldEntity.entityData.get(body) as BodyEntityData | undefined;
       const image = bodyEntity?.image?.image as Phaser.GameObjects.Image | undefined;
-      if (bodyEntity) this.scene.b2Physics.loader.entityData.delete(body);
+      if (bodyEntity) worldEntity.entityData.delete(body);
       if (image) image.destroy();
-      this.scene.b2Physics.worldEntity.world.DestroyBody(body as Box2D.b2Body);
+      worldEntity.world.DestroyBody(body as Box2D.b2Body);
 
       GameInfo.tsl.push({type: TrickScoreType.present, frame: this.levelUnpausedFrames});
       this.totalCollectedCoins++;
@@ -196,7 +199,7 @@ export class State {
     //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
     //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
-      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.scene.b2Physics.worldEntity.isPaused) {
+      if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.character.rubeScene.worldEntity.isPaused) {
         this.comboLeeway.isPlaying() && this.comboLeeway.pause();
       } else {
         this.comboLeeway.isPaused() && this.comboLeeway.resume();
@@ -241,7 +244,7 @@ export class State {
   }
 
   private getDistanceInMeters(): number {
-    return Math.floor(this.distancePixels / this.scene.b2Physics.worldEntity.pixelsPerMeter);
+    return Math.floor(this.distancePixels / this.character.rubeScene.worldEntity.pixelsPerMeter);
   }
 
   private pushStartLog() {

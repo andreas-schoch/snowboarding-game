@@ -54,7 +54,7 @@ export class RubeImageAdapter implements IBaseAdapter {
   }
 
   serializeImage(image: Phaser.GameObjects.Image): RubeImage {
-    const imageEntityData = this.physics.loader.entityData.get(image);
+    const imageEntityData = this.physics.worldEntity.entityData.get(image);
     return {
       name: imageEntityData?.name || 'image',
       opacity: image.alpha,

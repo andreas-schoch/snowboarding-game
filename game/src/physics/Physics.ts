@@ -26,21 +26,18 @@ export interface IPostSolveEvent {
   bodyB: Box2D.b2Body;
 }
 
-export class Physics extends Phaser.Events.EventEmitter {
+export class Physics {
   worldEntity: WorldEntityData;
   serializer: RubeSerializer;
   loader: RubeLoader;
 
   constructor(private scene: Phaser.Scene, config: WorldEntityConfig) {
-    super();
     GameInfo.physics = this;
     this.worldEntity = this.initWorld(config);
 
     const adapter = new PhaserImageAdapter(scene, this);
     this.loader = new RubeLoader(this.worldEntity, adapter);
     this.serializer = new RubeSerializer(this.worldEntity, adapter, this.loader);
-
-    this.initContactListeners();
   }
 
   setDebugDraw(enabled: boolean) {
@@ -57,12 +54,12 @@ export class Physics extends Phaser.Events.EventEmitter {
   }
 
   update() {
-    const {isPaused, debugDrawEnabled, world, stepsPerSecond, velocityIterations, positionIterations, pixelsPerMeter} = this.worldEntity;
+    const {isPaused, debugDrawEnabled, world, stepsPerSecond, velocityIterations, positionIterations, pixelsPerMeter, entityData} = this.worldEntity;
     if (isPaused) return;
     world.Step(1 / stepsPerSecond, velocityIterations, positionIterations);
     if (debugDrawEnabled) world.DebugDraw();
     for (const body of iterBodies(world)) {
-      const bodyEntity = this.loader.entityData.get(body);
+      const bodyEntity = entityData.get(body);
       if (bodyEntity?.type !== 'body') throw new Error('Expected bodyEntity to be of type "body"');
       const imageEntity = bodyEntity?.image;
       if (!imageEntity) continue;
@@ -89,6 +86,8 @@ export class Physics extends Phaser.Events.EventEmitter {
       type: 'world',
       world:  new b2.b2World(gravityVec),
       debugDrawer: new DebugDrawer(this.scene, config.pixelsPerMeter, 1),
+      observer: new Phaser.Events.EventEmitter(), // TODO get rid of phaser dependency
+      entityData: new Map(),
       stepsPerSecond: 60,
       positionIterations: 12,
       velocityIterations: 12,
@@ -97,12 +96,15 @@ export class Physics extends Phaser.Events.EventEmitter {
 
     worldEntity.world.SetAutoClearForces(true);
     worldEntity.world.SetDebugDraw(worldEntity.debugDrawer.instance);
+    this.initContactListeners(worldEntity);
+
     b2.destroy(gravityVec);
     return worldEntity;
   }
 
-  private initContactListeners() {
+  private initContactListeners(worldEntity: WorldEntityData) {
     const listeners = new b2.JSContactListener();
+    const observer = worldEntity.observer;
     listeners.BeginContact = (contactPtr: number) => {
       const contact = b2.wrapPointer(contactPtr, b2.b2Contact);
       const fixtureA: Box2D.b2Fixture = contact.GetFixtureA();
@@ -110,7 +112,7 @@ export class Physics extends Phaser.Events.EventEmitter {
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
       const data: IBeginContactEvent = {contact, fixtureA, fixtureB, bodyA, bodyB};
-      this.emit(B2_BEGIN_CONTACT, data);
+      observer.emit(B2_BEGIN_CONTACT, data);
     };
     listeners.EndContact = () => null;
     listeners.PreSolve = () => null;
@@ -122,9 +124,9 @@ export class Physics extends Phaser.Events.EventEmitter {
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
       const data: IPostSolveEvent = {contact, impulse, fixtureA, fixtureB, bodyA, bodyB};
-      this.emit(B2_POST_SOLVE, data);
+      observer.emit(B2_POST_SOLVE, data);
     };
-    this.worldEntity.world.SetContactListener(listeners);
+    worldEntity.world.SetContactListener(listeners);
     // b2.destroy(listeners); // error when we destroy this so don't do it
   }
 }

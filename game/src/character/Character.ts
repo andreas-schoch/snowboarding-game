@@ -1,7 +1,6 @@
 import {b2} from '..';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {LoadedScene} from '../physics/RUBE/otherTypes';
-import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
 
@@ -50,7 +49,7 @@ export class Character {
   private alreadyDetached: boolean = false;
   private currentBodyFlipDot: number = 1;
 
-  constructor(public scene: GameScene, private rubeScene: LoadedScene) {
+  constructor(public scene: Phaser.Scene, public rubeScene: LoadedScene) {
     this.id = rubeScene.id;
     this.initBodyParts();
     this.state = new State(this);
@@ -160,7 +159,7 @@ export class Character {
   }
 
   private detachBoard() {
-    const world = this.scene.b2Physics.worldEntity.world;
+    const world = this.rubeScene.worldEntity.world;
     if (this.bindingLeft) world.DestroyJoint(b2.getPointer(this.bindingLeft));
     if (this.bindingRight) world.DestroyJoint(b2.getPointer(this.bindingRight));
     if (this.distanceLegLeft) world.DestroyJoint(b2.getPointer(this.distanceLegLeft));

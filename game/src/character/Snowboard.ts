@@ -4,7 +4,6 @@ import {B2_POST_SOLVE, SURFACE_IMPACT} from '../eventTypes';
 import {b2} from '../index';
 import {IPostSolveEvent} from '../physics/Physics';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
-import {GameScene} from '../scenes/GameScene';
 import {Character} from './Character';
 
 interface IRayCastResult {
@@ -27,7 +26,7 @@ export class Snowboard {
   isNoseGrounded: boolean;
   isCenterGrounded: boolean;
 
-  private readonly scene: GameScene;
+  private readonly scene: Phaser.Scene;
   private readonly segments: ISegment[] = [];
   private readonly ZERO: Box2D.b2Vec2;
   private readonly particles: Phaser.GameObjects.Particles.ParticleEmitter;
@@ -36,11 +35,12 @@ export class Snowboard {
     this.scene = character.scene;
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.initRays(this.scene.b2Physics.worldEntity.pixelsPerMeter / 4);
+    this.initRays(this.character.rubeScene.worldEntity.pixelsPerMeter / 4);
     this.particles = this.initParticles();
 
-    const {worldEntity: {pixelsPerMeter}, loader: {entityData}} = this.scene.b2Physics;
-    this.scene.b2Physics.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
+    const {entityData, observer} = this.character.rubeScene.worldEntity;
+
+    observer.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
       const propsBA = entityData.get(bodyA)?.customProps;
       const propsBB = entityData.get(bodyB)?.customProps;
       if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
@@ -48,6 +48,7 @@ export class Snowboard {
       const nonSurfaceBody = propsBA && propsBA['surfaceType'] !== 'snow' ? bodyA : bodyB;
       const velocityLength = nonSurfaceBody.GetLinearVelocity().Length();
 
+      const pixelsPerMeter = this.character.rubeScene.worldEntity.pixelsPerMeter;
       const manifold = new b2.b2WorldManifold();
       contact.GetWorldManifold(manifold);
       for (let i = 0; i < impulse.get_count(); i++) {
@@ -79,7 +80,7 @@ export class Snowboard {
 
   update() {
     const segments = this.segments;
-    const world = this.scene.b2Physics.worldEntity.world;
+    const world = this.character.rubeScene.worldEntity.world;
     for (const segment of this.segments) {
       segment.groundRayResult.hit = false;
       segment.groundRayResult.point.SetZero();
@@ -96,19 +97,16 @@ export class Snowboard {
   }
 
   private initRays(rayLength: number) {
-    const {loader} = this.scene.b2Physics;
-    const segmentBodies = loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', 'boardSegment', this.character.id);
-    if (segmentBodies.length !== 7) throw new Error('Player character board segments missing');
-    segmentBodies.sort((a, b) => {
-      const customPropsA = loader.entityData.get(a)?.customProps;
-      const customPropsB = loader.entityData.get(b)?.customProps;
-      const aIndex = Number(customPropsA!['phaserBoardSegmentIndex']);
-      const bIndex = Number(customPropsB!['phaserBoardSegmentIndex']);
+    const segmentBodyEntityData = this.character.rubeScene.bodies.filter(b => b.customProps['phaserPlayerCharacterPart'] === 'boardSegment');
+    if (segmentBodyEntityData.length !== 7) throw new Error('Player character board segments missing');
+    segmentBodyEntityData.sort((a, b) => {
+      const aIndex = Number(a.customProps['phaserBoardSegmentIndex']);
+      const bIndex = Number(b.customProps['phaserBoardSegmentIndex']);
       return aIndex - bIndex;
     });
 
-    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.scene.b2Physics.worldEntity.pixelsPerMeter);
-    for (const body of segmentBodies) {
+    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.character.rubeScene.worldEntity.pixelsPerMeter);
+    for (const {body} of segmentBodyEntityData) {
       const groundRayResult: IRayCastResult = {hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1};
 
       const groundRayCallback = new b2.JSRayCastCallback();

@@ -1,6 +1,7 @@
 export interface WorldEntityData {
   type: 'world';
   world: Box2D.b2World;
+  observer: Phaser.Events.EventEmitter; // TODO get rid of phaser dependency
   debugDrawer: DebugDrawer;
   debugDrawEnabled: boolean;
   isPaused: boolean;
@@ -10,6 +11,7 @@ export interface WorldEntityData {
   stepsPerSecond: number;
   positionIterations: number;
   velocityIterations: number;
+  entityData: Map<Entity, EntityData>;
 }
 
 export type WorldEntityConfig = Pick<WorldEntityData, 'pixelsPerMeter' | 'gravityX' | 'gravityY' | 'debugDrawEnabled'>;

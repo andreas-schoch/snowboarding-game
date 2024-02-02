@@ -14,8 +14,6 @@ import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, Imag
 import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
 export class RubeLoader {
-  readonly entityData: Map<Entity, EntityData> = new Map();
-  readonly entityDataBySceneId: Map<LoadedScene['id'], Map<Entity, EntityData>> = new Map();
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
 
   private loadingSceneEntityData: Map<Entity, EntityData> = new Map();
@@ -69,7 +67,7 @@ export class RubeLoader {
     const bodies: Box2D.b2Body[] = [];
     for (const body of iterBodies(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.find(e => e.body === body)) continue; // TODO turn into set
-      const props = this.entityData.get(body)?.customProps;
+      const props = this.worldEntity.entityData.get(body)?.customProps;
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       bodies.push(body);
@@ -82,7 +80,7 @@ export class RubeLoader {
     for (const body of iterBodies(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.bodies.find(e => e.body === body)) continue; // TODO turn into set
       for (const fixture of iterBodyFixtures(body)) {
-        const props = this.entityData.get(fixture)?.customProps;
+        const props = this.worldEntity.entityData.get(fixture)?.customProps;
         if (!props) continue;
         if (props[propertyName] !== valueToMatch) continue;
         fixtures.push(fixture);
@@ -95,7 +93,7 @@ export class RubeLoader {
     const joints: Box2D.b2Joint[] = [];
     for (const joint of iterJoints(this.worldEntity.world)) {
       if (sceneId && !this.loadedScenes.get(sceneId)!.joints.find(e => e.joint === joint)) continue; // TODO turn into set
-      const props = this.entityData.get(joint)?.customProps;
+      const props = this.worldEntity.entityData.get(joint)?.customProps;
       if (!props) continue;
       if (props[propertyName] !== valueToMatch) continue;
       joints.push(joint);
@@ -153,7 +151,7 @@ export class RubeLoader {
       fixtures: []
     };
 
-    this.entityData.set(body, bodyEntity);
+    this.worldEntity.entityData.set(body, bodyEntity);
     this.loadingSceneEntityData.set(body, bodyEntity);
 
     for (const fixtureJson of bodyJson.fixture || []) this.loadFixture(bodyEntity, fixtureJson);
@@ -186,7 +184,7 @@ export class RubeLoader {
       fixture
     };
 
-    this.entityData.set(fixture, fixtureEntity);
+    this.worldEntity.entityData.set(fixture, fixtureEntity);
     this.loadingSceneEntityData.set(fixture, fixtureEntity);
     bodyEntity.fixtures.push(fixtureEntity);
 
@@ -313,7 +311,7 @@ export class RubeLoader {
       joint
     };
 
-    this.entityData.set(joint, jointEntity);
+    this.worldEntity.entityData.set(joint, jointEntity);
     this.loadingSceneEntityData.set(joint, jointEntity);
     return jointEntity;
   }
@@ -341,7 +339,7 @@ export class RubeLoader {
   private loadImage(imageJson: RubeImage): ImageEntityData {
     const {body, customProperties} = imageJson;
     const bodyEntityData = this.loadingBodies[body];
-    // const bodyEntityData = this.entityData.get(bodyObj) as BodyEntityData;
+    // const bodyEntityData = this.worldEntity.entityData.get(bodyObj) as BodyEntityData;
     const customProps = this.customPropsArrayToMap(customProperties || []);
     const img = this.adapter.loadImage(imageJson, bodyEntityData, customProps);
     if (!img) throw new Error(`Image could not be loaded. ImageName: ${imageJson.name}, ImageFile: ${imageJson.file}, ImageBody: ${imageJson.body}`);
@@ -356,7 +354,7 @@ export class RubeLoader {
       image: img
     };
 
-    this.entityData.set(img, imageEntity);
+    this.worldEntity.entityData.set(img, imageEntity);
     this.loadingSceneEntityData.set(img, imageEntity);
     if (bodyEntityData) bodyEntityData.image = imageEntity;
 
