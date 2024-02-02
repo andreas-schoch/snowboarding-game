@@ -1,12 +1,13 @@
 import {b2} from '..';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
-import {BodyEntityData} from '../physics/RUBE/otherTypes';
+import {BodyEntityData, LoadedScene} from '../physics/RUBE/otherTypes';
 import {GameScene} from '../scenes/GameScene';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
 
 export class Character {
   static instances: Character[] = [];
+
   head: Box2D.b2Body;
   body: Box2D.b2Body;
   armUpperLeft: Box2D.b2Body;
@@ -40,6 +41,7 @@ export class Character {
   jumpForce: number;
   leanForce: number;
 
+  id: string;
   board: Snowboard;
   state: State;
   private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
@@ -48,7 +50,8 @@ export class Character {
   private alreadyDetached: boolean = false;
   private currentBodyFlipDot: number = 1;
 
-  constructor(public scene: GameScene, public id: string = '') {
+  constructor(public scene: GameScene, private rubeScene: LoadedScene) {
+    this.id = rubeScene.id;
     this.initBodyParts();
     this.state = new State(this);
     this.board = new Snowboard(this);
@@ -116,8 +119,8 @@ export class Character {
     }
   }
 
-  isPartOfMe(body: Box2D.b2Body) {
-    return this.scene.b2Physics.loader.loadedScenes.get(this.id)?.bodies.some(e => e.body === body); // TODO optimize for performance as this will be called often
+  isPartOfMe(body: Box2D.b2Body): boolean {
+    return Boolean(this.rubeScene.entityData.get(body));
   }
 
   private setLegLength(left: number, right: number) {
@@ -168,29 +171,33 @@ export class Character {
   }
 
   private initBodyParts() {
+    const rubeScene = this.rubeScene;
 
-    const getBodyByProp = (partId: CharacterPartId) => {
-      const body = this.scene.b2Physics.loader.getBodiesByCustomProperty('phaserPlayerCharacterPart', partId, this.id)[0];
-      if (!body) throw new Error(`Player character body not found: ${partId}`);
-      return body;
-    };
+    function getBodyByProp(partId: CharacterPartId) {
+      const bodyEntities = rubeScene.bodies.filter(e => e.customProps['phaserPlayerCharacterPart'] === partId);
+      if (!bodyEntities.length) throw new Error(`Player character body not found: ${partId}`);
+      if (bodyEntities.length > 1) throw new Error(`Player character multiple bodies found for part id: ${partId}`);
+      return bodyEntities[0].body;
+    }
 
-    const getJointByProp = (partId: CharacterPartId, type: unknown) => {
-      const joint = this.scene.b2Physics.loader.getJointsByCustomProperty('phaserPlayerCharacterSpring', partId, this.id)[0];
-      if (!joint) throw new Error(`Player character joint not found: ${partId}`);
+    function getJointByProp(partId: CharacterPartId, type: unknown) {
+      const jointEntities = rubeScene.joints.filter(e => e.customProps['phaserPlayerCharacterSpring'] === partId);
+      if (!jointEntities.length) throw new Error(`Player character joint not found: ${partId}`);
+      if (jointEntities.length > 1) throw new Error(`Player character multiple joints found for part id: ${partId}`);
       // @ts-expect-error type is unknown gives lint error but it's fine here
-      return b2.castObject(joint, type);
-    };
+      return b2.castObject(jointEntities[0].joint, type);
+    }
 
     const getBodyImage = (body: Box2D.b2Body): Phaser.GameObjects.Image => {
-      const bodyEntity = this.scene.b2Physics.loader.entityData.get(body) as BodyEntityData | undefined;
+      const bodyEntity = rubeScene.entityData.get(body);
+      if (bodyEntity && bodyEntity.type !== 'body') throw new Error('Expected bodyEntity to be of type "body"');
       const imageEntity = bodyEntity?.image;
-      if (!imageEntity) throw new Error(`Player character image not found: ${body}`);
+      if (!imageEntity || imageEntity.type !== 'image') throw new Error('Expected imageEntity to be of type "image"');
       return imageEntity.image as Phaser.GameObjects.Image;
     };
 
     const getBodyCustomProp = (body: Box2D.b2Body, prop: BodyCustomProps) => {
-      const customProp = this.scene.b2Physics.loader.entityData.get(body)!.customProps[prop];
+      const customProp = rubeScene.entityData.get(body)?.customProps[prop];
       if (!customProp) throw new Error(`Player character custom prop not found: ${body}`);
       return customProp;
     };

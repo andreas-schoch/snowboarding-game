@@ -58,11 +58,10 @@ export class Physics extends Phaser.Events.EventEmitter {
 
   load(rubeScene: RubeScene, offsetX: number = 0, offsetY: number = 0) {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
-    const [success, id] = this.loader.load(rubeScene, offsetX, offsetY);
-    if (!success) throw new Error('Failed to load RUBE scene');
+    const loadedScene = this.loader.load(rubeScene, offsetX, offsetY);
     if (this.debugDrawEnabled) this.world.DebugDraw();
-    GameInfo.observer.emit(RUBE_SCENE_LOADED, id); // Ensure editor open emitted before this, so scene explorer is already in the DOM
-    return id;
+    GameInfo.observer.emit(RUBE_SCENE_LOADED, loadedScene); // Ensure editor open emitted before this, so scene explorer is already in the DOM
+    return loadedScene;
   }
 
   update() {

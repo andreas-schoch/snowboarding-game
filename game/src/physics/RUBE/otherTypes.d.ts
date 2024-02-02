@@ -49,5 +49,6 @@ export interface LoadedScene {
   joints: JointEntityData[];
   images: ImageEntityData[];
 
+  entityData: Map<Entity, EntityData>;
   customProps: Record<string, unknown>;
 }

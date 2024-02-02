@@ -8,10 +8,14 @@ export const SceneExplorer = () => {
   const physics = GameInfo.physics;
   const entityDataMap = physics.loader.entityData;
 
-  GameInfo.observer.on(RUBE_SCENE_LOADED, id => {
-    refresh(id);
+  GameInfo.observer.on(RUBE_SCENE_LOADED, scene => {
+    refresh(scene.id);
   });
 
+  // TODO use the scene passed to the event to populate the scene explorer instead of iterating over bodies. 
+  // For now the loaded in scene is passed but it should actually be the .rube file from the metaObject or terrain
+  // Maybe the terrain can also be of .rube but we use it as a template to parametrize the points and if it is line or loop?
+  // Maybe make it so that instead of a file path it has an inlined MetaBody[]? 
   const refresh = (sceneId: string) => {
     // TODO update this legacy code to use SolidJS properly and show a loaded scene as a single item in the explorer
     // This code was mostly written 9 months ago when I had the intention to make a generic editor and only used vanilla js for the UI...

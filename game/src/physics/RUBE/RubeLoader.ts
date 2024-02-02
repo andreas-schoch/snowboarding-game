@@ -18,6 +18,7 @@ export class RubeLoader {
   readonly entityDataBySceneId: Map<LoadedScene['id'], Map<Entity, EntityData>> = new Map();
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
 
+  private loadingSceneEntityData: Map<Entity, EntityData> = new Map();
   private loadingSceneId: LoadedScene['id'] = '';
   private loadingBodies: LoadedScene['bodies'] = [];
   private loadingJoints: LoadedScene['joints'] = [];
@@ -25,11 +26,12 @@ export class RubeLoader {
 
   constructor(private world: Box2D.b2World, private adapter: IBaseAdapter) { }
 
-  load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0): [boolean, LoadedScene['id']] {
+  load(scene: RubeScene, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
     // Note that all the defaults should already have been set within sanitizeRubeDefaults()
     // But for now we keep setting defaults in this loader as well until continuing work on my own level editor
     console.time('RubeLoader.load');
-    this.loadingSceneId = pseudoRandomId();
+    this.loadingSceneId = idOverride || pseudoRandomId();
+    this.loadingSceneEntityData = new Map();
     scene = sanitizeRubeDefaults(scene);
     console.timeLog('RubeLoader.load', 'scene sanitized');
     this.loadingBodies = (scene.body || []).map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY));
@@ -42,14 +44,24 @@ export class RubeLoader {
     const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
     if (success) console.debug('R.U.B.E. scene loaded successfully', this.loadingBodies, this.loadingJoints, this.loadingImages);
     else console.error('R.U.B.E. scene failed to load fully', this.loadingBodies, this.loadingJoints, this.loadingImages);
-    const id = pseudoRandomId();
-    const customProps = this.customPropsArrayToMap(scene.customProperties || []);
-    this.loadedScenes.set(id, {bodies: this.loadingBodies, joints: this.loadingJoints, images: this.loadingImages, id, customProps});
+
+    const loadedScene: LoadedScene = {
+      id: this.loadingSceneId,
+      bodies: this.loadingBodies,
+      joints: this.loadingJoints,
+      images: this.loadingImages,
+      entityData: this.loadingSceneEntityData,
+      customProps: this.customPropsArrayToMap(scene.customProperties || []),
+    };
+
+    this.loadedScenes.set(loadedScene.id, loadedScene);
+
     this.loadingBodies = [];
     this.loadingJoints = [];
     this.loadingImages = [];
+
     console.timeEnd('RubeLoader.load');
-    return [success, id];
+    return loadedScene;
   }
 
   getBodiesByCustomProperty(propertyName: string, valueToMatch: unknown, sceneId?: LoadedScene['id']): Box2D.b2Body[] {
@@ -141,6 +153,7 @@ export class RubeLoader {
     };
 
     this.entityData.set(body, bodyEntity);
+    this.loadingSceneEntityData.set(body, bodyEntity);
 
     for (const fixtureJson of bodyJson.fixture || []) this.loadFixture(bodyEntity, fixtureJson);
     return bodyEntity;
@@ -173,6 +186,7 @@ export class RubeLoader {
     };
 
     this.entityData.set(fixture, fixtureEntity);
+    this.loadingSceneEntityData.set(fixture, fixtureEntity);
     bodyEntity.fixtures.push(fixtureEntity);
 
     return fixtureEntity;
@@ -299,6 +313,7 @@ export class RubeLoader {
     };
 
     this.entityData.set(joint, jointEntity);
+    this.loadingSceneEntityData.set(joint, jointEntity);
     return jointEntity;
   }
 
@@ -341,6 +356,7 @@ export class RubeLoader {
     };
 
     this.entityData.set(img, imageEntity);
+    this.loadingSceneEntityData.set(img, imageEntity);
     if (bodyEntityData) bodyEntityData.image = imageEntity;
 
     return imageEntity;
