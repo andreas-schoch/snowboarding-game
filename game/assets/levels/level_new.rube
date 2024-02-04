@@ -1,0 +1,943 @@
+
+{
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "bitplane1",
+      "bitplane2",
+      "bitplane3",
+      "bitplane4",
+      "bitplane5",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "customPropertyDefs" : 
+  [
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "body"
+        },
+        
+        {
+          "entry" : "head"
+        },
+        
+        {
+          "entry" : "armUpperLeft"
+        },
+        
+        {
+          "entry" : "armUpperRight"
+        },
+        
+        {
+          "entry" : "armLowerLeft"
+        },
+        
+        {
+          "entry" : "armLowerRight"
+        },
+        
+        {
+          "entry" : "legUpperLeft"
+        },
+        
+        {
+          "entry" : "legUpperRight"
+        },
+        
+        {
+          "entry" : "legLowerLeft"
+        },
+        
+        {
+          "entry" : "legLowerRight"
+        },
+        
+        {
+          "entry" : "boardSegment"
+        },
+        
+        {
+          "entry" : "boardSegmentNose"
+        }
+      ],
+      "displayName" : "phaserPlayerBodyPart",
+      "name" : "phaserPlayerCharacterPart",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "character_start"
+        }
+      ],
+      "displayName" : "spawn",
+      "name" : "spawn",
+      "type" : "string"
+    }
+  ],
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : true,
+      "saveFullPathForImages" : false,
+      "saveFullPathForSamplerOutput" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "saveSamplerOutputPathsRelativeToRUBEFile" : false,
+      "useGsonFormat" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 
+    {
+      "x" : 0,
+      "y" : -10
+    },
+    "metabody" : 
+    [
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "spawn",
+            "string" : "character_start"
+          }
+        ],
+        "id" : 1,
+        "linearVelocity" : 0,
+        "massData-mass" : 1,
+        "name" : "spawn",
+        "position" : 
+        {
+          "x" : 0,
+          "y" : 1
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "surfaceType",
+            "string" : "snow"
+          }
+        ],
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.5,
+            "id" : 2,
+            "name" : "terrainChunk",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "line"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -4.97375488281250,
+                -35.82015991210938,
+                -35.89171218872070,
+                -31.34864807128906,
+                -25.82873153686523,
+                -19.84306907653809,
+                -16.09747695922852,
+                -11.86923694610596,
+                -7.174993991851807,
+                -1.139328002929688,
+                1.908139586448669,
+                6.843852519989014,
+                9.747496604919434,
+                11.88760280609131,
+                13.45939159393311,
+                14.59478664398193,
+                15.73351097106934,
+                17.18820762634277,
+                19.09692192077637,
+                21.13005447387695,
+                23.31371688842773,
+                24.92911148071289,
+                26.52336502075195,
+                27.35654067993164,
+                28.16750717163086,
+                29.40996742248535,
+                30.21090698242188,
+                30.89623451232910,
+                31.56286621093750,
+                32.22949981689453,
+                32.65870285034180,
+                32.98096084594727,
+                34.66606140136719,
+                36.58819580078125,
+                38.42918014526367,
+                40.24495315551758,
+                42.59470748901367,
+                44.54166793823242,
+                46.70486450195312,
+                48.99815750122070,
+                50.96157073974609,
+                52.94255065917969,
+                54.56210327148438,
+                57.47653579711914,
+                59.47135162353516,
+                61.18648147583008,
+                62.89785766601562,
+                65.60994720458984,
+                69.21862792968750,
+                73.12336730957031,
+                76.10572052001953,
+                77.40171051025391,
+                78.00395202636719,
+                78.44461059570312,
+                78.89470672607422,
+                79.26828765869141,
+                79.67911529541016,
+                79.93614959716797,
+                80.06033325195312,
+                80.11985015869141,
+                80.10072326660156,
+                80.43467712402344,
+                78.32145690917969,
+                41.60113525390625
+              ],
+              "y" : 
+              [
+                -45.37693405151367,
+                -29.27334976196289,
+                11.02163505554199,
+                7.186628341674805,
+                5.241142272949219,
+                3.432925224304199,
+                2.409292459487915,
+                1.485883712768555,
+                1.143137454986572,
+                0.6488414406776428,
+                0.3399276137351990,
+                -0.3499944508075714,
+                -0.8636797666549683,
+                -1.279514551162720,
+                -1.713311553001404,
+                -2.285621643066406,
+                -3.244657039642334,
+                -4.564909934997559,
+                -6.097345829010010,
+                -7.265998840332031,
+                -8.208995819091797,
+                -8.639691352844238,
+                -8.899690628051758,
+                -8.955507278442383,
+                -8.942563056945801,
+                -8.751317024230957,
+                -8.503987312316895,
+                -8.133863449096680,
+                -7.707656383514404,
+                -7.281449794769287,
+                -7.238634109497070,
+                -7.628247737884521,
+                -7.506202220916748,
+                -7.625538825988770,
+                -7.781933784484863,
+                -8.122991561889648,
+                -8.764500617980957,
+                -9.686051368713379,
+                -10.99375343322754,
+                -12.59656620025635,
+                -13.92295074462891,
+                -15.07580375671387,
+                -15.84593200683594,
+                -16.82699966430664,
+                -17.22593879699707,
+                -17.47858428955078,
+                -17.76329803466797,
+                -18.03087043762207,
+                -18.17293167114258,
+                -18.18383407592773,
+                -18.22043609619141,
+                -18.23470687866211,
+                -18.23571395874023,
+                -18.20399093627930,
+                -18.12823867797852,
+                -18.03731155395508,
+                -17.92504119873047,
+                -17.83633041381836,
+                -17.85109519958496,
+                -17.93637084960938,
+                -18.03143310546875,
+                -18.78402137756348,
+                -66.57376098632812,
+                -62.26379394531250
+              ]
+            }
+          },
+          
+          {
+            "density" : 1,
+            "friction" : 0.5,
+            "id" : 4,
+            "name" : "terrainChunk",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "line"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                104.1613311767578,
+                76.72167968750,
+                80.43467712402344,
+                81.34074401855469,
+                82.57695007324219,
+                84.02061462402344,
+                85.55546569824219,
+                87.42121124267578,
+                90.29238128662109,
+                93.42035675048828,
+                95.33686828613281,
+                97.24603271484375,
+                99.29586791992188,
+                101.1361312866211,
+                103.0144500732422,
+                104.9275436401367,
+                107.2422103881836,
+                109.0860671997070,
+                110.5144729614258,
+                111.7689361572266,
+                112.7057952880859,
+                113.7613830566406,
+                114.7847213745117,
+                115.7947540283203,
+                117.9330978393555,
+                120.9056396484375,
+                124.1541442871094,
+                127.6925964355469,
+                131.4309844970703,
+                140.1960296630859,
+                144.1032714843750,
+                148.7171630859375,
+                152.1156311035156,
+                154.9711761474609,
+                156.6407775878906,
+                158.0238952636719,
+                158.81152343750,
+                159.5644378662109,
+                161.0337371826172,
+                162.0822296142578,
+                163.256347656250,
+                164.6912689208984,
+                165.7505340576172,
+                185.8572082519531,
+                193.6908416748047,
+                144.5614624023438
+              ],
+              "y" : 
+              [
+                -75.50566101074219,
+                -69.20549011230469,
+                -18.78402137756348,
+                -18.76458930969238,
+                -18.79430580139160,
+                -18.90848731994629,
+                -19.11084365844727,
+                -19.46512603759766,
+                -20.31157875061035,
+                -21.36545944213867,
+                -22.25904083251953,
+                -23.25363540649414,
+                -24.20617103576660,
+                -25.23754310607910,
+                -26.39534950256348,
+                -27.55049324035645,
+                -28.96094703674316,
+                -29.83596611022949,
+                -30.40789985656738,
+                -30.84261894226074,
+                -31.14423942565918,
+                -31.38381385803223,
+                -31.64078330993652,
+                -31.83297920227051,
+                -32.14045715332031,
+                -32.53150939941406,
+                -32.74533081054688,
+                -32.84156036376953,
+                -32.83315277099609,
+                -32.70574951171875,
+                -32.59438323974609,
+                -32.32797241210938,
+                -32.08393859863281,
+                -31.62619209289551,
+                -31.29476356506348,
+                -30.89208793640137,
+                -30.60180473327637,
+                -30.25284767150879,
+                -29.46526527404785,
+                -28.85488319396973,
+                -27.66131019592285,
+                -25.48953056335449,
+                -22.76497077941895,
+                -24.77186775207520,
+                -59.31649398803711,
+                -79.79377746582031
+              ]
+            }
+          }
+        ],
+        "id" : 37,
+        "linearVelocity" : 0,
+        "name" : "terrain",
+        "position" : 0,
+        "type" : "static"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "phaserSensorType",
+                "string" : "level_finish"
+              }
+            ],
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 172,
+            "name" : "finish",
+            "sensor" : true,
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -2.043525695800781,
+                2.043266296386719,
+                2.043266296386719,
+                -2.043525695800781
+              ],
+              "y" : 
+              [
+                -30.53490447998047,
+                -30.53490447998047,
+                30.53571319580078,
+                30.53571319580078
+              ]
+            }
+          }
+        ],
+        "id" : 170,
+        "linearVelocity" : 0,
+        "name" : "level_finish",
+        "position" : 
+        {
+          "x" : 139.5787963867188,
+          "y" : -24.68101310729980
+        },
+        "type" : "static"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : -11.07451248168945,
+          "y" : 4.274106979370117
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 2,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -100.0,
+        "scale" : 6
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 139.7693176269531,
+          "y" : -29.38068008422852
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/cottage.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 3,
+        "name" : "house",
+        "opacity" : 1,
+        "renderOrder" : -20.0,
+        "scale" : 7.7
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 10.02989959716797,
+          "y" : 1.995970010757446
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 112,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -100.0,
+        "scale" : 6
+      },
+      
+      {
+        "angle" : -0.1357129812240601,
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 13.45141792297363,
+          "y" : 0.9749739766120911
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 113,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -100.0,
+        "scale" : 5.319893836975098
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 64.69887542724609,
+          "y" : -14.98181724548340
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 114,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -100.0,
+        "scale" : 6
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 67.37283325195312,
+          "y" : -14.16280651092529
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 115,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -99.0,
+        "scale" : 8.063877105712891
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : 70.85424041748047,
+          "y" : -15.24190330505371
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/tree_01.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 116,
+        "name" : "tree_01",
+        "opacity" : 1,
+        "renderOrder" : -100.0,
+        "scale" : 6
+      },
+      
+      {
+        "aspectScale" : 1,
+        "center" : 
+        {
+          "x" : -4.329219818115234,
+          "y" : 4.084489822387695
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../img/svgsilh/cottage.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 183,
+        "name" : "house",
+        "opacity" : 1,
+        "renderOrder" : -20.0,
+        "scale" : 7.7
+      }
+    ],
+    "metaobject" : 
+    [
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 1,
+        "name" : "coin",
+        "position" : 
+        {
+          "x" : 36.65840148925781,
+          "y" : -3.350970029830933
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 2,
+        "name" : "coin",
+        "position" : 
+        {
+          "x" : 41.47589874267578,
+          "y" : -3.798079967498779
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 3,
+        "name" : "coin",
+        "position" : 
+        {
+          "x" : 39.31430053710938,
+          "y" : -3.143889904022217
+        },
+        "scale" : 1
+      }
+    ],
+    "positionIterations" : 12,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 12,
+    "warmStarting" : true
+  }
+}

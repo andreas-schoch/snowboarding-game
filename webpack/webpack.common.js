@@ -82,7 +82,7 @@ module.exports = {
         {from: 'game/assets/img/packed', to: 'assets/img/packed'},
         {from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails'},
         {from: 'game/assets/audio/music', to: 'assets/audio/music'},
-        {from: 'game/assets/levels/export', to: 'assets/levels/export'},
+        {from: 'game/assets/levels', to: 'assets/levels'},
         {from: 'game/assets/protobuf', to: 'assets/protobuf'},
       ],
     }),

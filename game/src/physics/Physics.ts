@@ -49,7 +49,7 @@ export class Physics {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     const loadedScene = this.loader.load(rubeScene, offsetX, offsetY);
     if (this.worldEntity.debugDrawEnabled) this.worldEntity.world.DebugDraw();
-    GameInfo.observer.emit(RUBE_SCENE_LOADED, loadedScene); // Ensure editor open emitted before this, so scene explorer is already in the DOM
+    // GameInfo.observer.emit(RUBE_SCENE_LOADED, loadedScene); // Ensure editor open emitted before this, so scene explorer is already in the DOM
     return loadedScene;
   }
 

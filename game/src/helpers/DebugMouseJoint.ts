@@ -1,70 +1,97 @@
-// import {Physics} from '../components/Physics';
-// import * as Pl from '@box2d/core';
-// import {b2BodyType} from '@box2d/core';
-// import GameScene from '../scenes/GameScene';
+import {b2, recordLeak} from '..';
+import {XY} from '../Terrain';
+import {Physics} from '../physics/Physics';
 
-// export class DebugMouseJoint {
-//   private mouseJoint: Pl.b2MouseJoint | null;
+// TODO fix this
+export class MouseJoint {
+  private mouseJoint: Box2D.b2MouseJoint | null;
 
-//   private scene: GameScene;
-//   private b2Physics: Physics;
+  constructor(private scene: Phaser.Scene, private b2Physics: Physics) {
+    const {pixelsPerMeter} = b2Physics.worldEntity;
+    const {worldX, worldY} = scene.input.activePointer;
+    addEventListener('pointerdown', () => this.MouseDown({x: worldX / pixelsPerMeter, y: -worldY / pixelsPerMeter}));
+    addEventListener('pointerup', () => this.MouseUp());
+    addEventListener('pointermove', () => this.MouseMove({x: worldX / pixelsPerMeter, y: -worldY / pixelsPerMeter}, true));
 
-//   constructor(scene: GameScene, b2Physics: Physics) {
-//     this.scene = scene;
-//     this.b2Physics = b2Physics;
+  }
 
-//     this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => this.MouseDown({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-//     this.scene.input.on('pointerup', (pointer: Phaser.Input.Pointer) => this.MouseUp({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}));
-//     this.scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.MouseMove({x: pointer.worldX / this.b2Physics.worldScale, y: -pointer.worldY / this.b2Physics.worldScale}, true));
+  MouseMove(p: XY, leftDrag: boolean): void {
+    if (leftDrag && this.mouseJoint) {
+      console.log('mouseJoint exists, setting target');
+      const point = recordLeak(new b2.b2Vec2(p.x, p.y));
+      this.mouseJoint.SetTarget(point);
+    }
+  }
 
-//   }
+  MouseUp(): void {
+    if (this.mouseJoint) {
+      this.b2Physics.worldEntity.world.DestroyJoint(this.mouseJoint);
+      console.log('mouseJoint destroyed');
+      this.mouseJoint = null;
+    }
+  }
 
-//   MouseMove(p: Pl.XY, leftDrag: boolean): void {
-//     if (leftDrag && this.mouseJoint) {
-//       this.mouseJoint.SetTarget(p);
-//     }
-//   }
+  MouseDown(p: XY): void {
+    if (this.mouseJoint) {
+      console.log('mouseJoint already exists, destroying it before creating a new one.');
+      this.b2Physics.worldEntity.world.DestroyJoint(this.mouseJoint);
+      this.mouseJoint = null;
+    }
 
-//   MouseUp(p: Pl.XY): void {
-//     if (this.mouseJoint) {
-//       this.b2Physics.world.DestroyJoint(this.mouseJoint);
-//       this.mouseJoint = null;
-//     }
-//   }
+    const point = recordLeak(new b2.b2Vec2(p.x, p.y));
 
-//   MouseDown(p: Pl.XY): void {
-//     if (this.mouseJoint) {
-//       this.b2Physics.world.DestroyJoint(this.mouseJoint);
-//       this.mouseJoint = null;
-//     }
+    // Query the world for overlapping shapes.
+    let hit_fixture: Box2D.b2Fixture | undefined;
+    const aabb = new b2.b2AABB();
+    aabb.lowerBound.Set(point.x - 0.001, point.y - 0.001);
+    aabb.upperBound.Set(point.x + 0.001, point.y + 0.001);
 
-//     // Query the world for overlapping shapes.
-//     let hit_fixture: Pl.b2Fixture | undefined;
-//     this.b2Physics.world.QueryPointAABB(p, (fixture) => {
-//       const body = fixture.GetBody();
-//       if (body.GetType() === b2BodyType.b2_dynamicBody && fixture.TestPoint(p)) {
-//         hit_fixture = fixture;
-//         return false; // We are done, terminate the query.
-//       }
-//       return true; // Continue the query.
-//     });
+    const callback = new b2.JSQueryCallback();
+    callback.ReportFixture = (fixture_ptr: number) => {
+      const fixture = b2.wrapPointer(fixture_ptr, b2.b2Fixture);
+      const body = fixture.GetBody();
+      if (body.GetType() === b2.b2_dynamicBody && fixture.TestPoint(point)) {
+        hit_fixture = fixture;
+        return false; // We are done, terminate the query.
+      }
+      return true; // Continue the query.
+    };
 
-//     if (hit_fixture) {
-//       const frequencyHz = 5;
-//       const dampingRatio = 0.5;
+    this.b2Physics.worldEntity.world.QueryAABB(callback, aabb);
 
-//       const body = hit_fixture.GetBody();
-//       const jd = new Pl.b2MouseJointDef();
-//       jd.collideConnected = true;
-//       jd.damping = 0.1;
-//       jd.bodyA = this.b2Physics.loader.getBodiesByCustomProperty('bool', 'phaserTerrain', true)[0];
-//       jd.bodyB = body;
-//       jd.target.Copy(p);
-//       jd.maxForce = 700 * body.GetMass();
-//       Pl.b2LinearStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
+    if (hit_fixture) {
+      const frequencyHz = 5;
+      const dampingRatio = 0.5;
 
-//       this.mouseJoint = this.b2Physics.world.CreateJoint(jd) as Pl.b2MouseJoint;
-//       body.SetAwake(true);
-//     }
-//   }
-// }
+      const body = hit_fixture.GetBody();
+      const jd = new b2.b2MouseJointDef();
+      jd.collideConnected = true;
+      jd.damping = 0.1;
+      jd.bodyA = this.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow')[0];
+      jd.bodyB = body;
+      jd.target.Set(p.x, p.y);
+      jd.maxForce = 700 * body.GetMass();
+      this.setLinearStiffness(jd, frequencyHz, dampingRatio, jd.bodyA, jd.bodyB);
+
+      const joint = this.b2Physics.worldEntity.world.CreateJoint(jd);
+      this.mouseJoint = b2.castObject(joint, b2.b2MouseJoint);
+      console.log('mouseJoint created');
+      body.SetAwake(true);
+      b2.destroy(jd);
+      b2.destroy(point);
+      b2.destroy(aabb);
+      b2.destroy(callback);
+    }
+  }
+
+  // TODO deduplicate. Copied from RubeLoader
+  private setLinearStiffness(jd: {stiffness: number, damping: number}, frequency: number, dampingRatio: number, bodyA: Box2D.b2Body, bodyB: Box2D.b2Body) {
+    // See comment for b2LinearStiffness to see why this is done in such a way
+    const output_p = b2._malloc(Float32Array.BYTES_PER_ELEMENT * 2);
+    b2.b2LinearStiffness(output_p, output_p + Float32Array.BYTES_PER_ELEMENT, frequency || 0, dampingRatio || 0, bodyA, bodyB);
+    const [stiffness, damping] = b2.HEAPF32.subarray(output_p >> 2);
+    b2._free(output_p);
+    jd.stiffness = stiffness;
+    jd.damping = damping;
+  }
+}

@@ -6,9 +6,10 @@ import {Settings} from '../Settings';
 import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
-import {EDITOR_OPEN} from '../eventTypes';
+import {EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {Physics} from '../physics/Physics';
+import { RubeFile } from '../physics/RUBE/RubeFile';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
 
 export class EditorScene extends Phaser.Scene {
@@ -25,6 +26,9 @@ export class EditorScene extends Phaser.Scene {
   private preload() {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
+
+    this.load.json('rube_level', 'assets/levels/level_new.rube');
+
   }
 
   private create() {
@@ -40,17 +44,18 @@ export class EditorScene extends Phaser.Scene {
     initSolidUI('root-ui');
     GameInfo.observer.emit(EDITOR_OPEN);
 
-    pb.level.get(Settings.currentLevel()).then(async level => {
-      if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
-      // GameInfo.currentLevel = level;
-      const scene = await pb.level.getRubeScene(level);
-      const loadedScene = this.b2Physics.load(scene);
-      new Terrain(this, loadedScene).draw();
+    // pb.level.get(Settings.currentLevel()).then(async level => {
+    // GameInfo.currentLevel = level;
+    // const scene = await pb.level.getRubeScene(level);
+    const scene: RubeFile = this.cache.json.get('rube_level');
+    GameInfo.observer.emit(RUBE_SCENE_LOADED, scene);
+    // const loadedScene = this.b2Physics.load(scene);
+    // new Terrain(this, loadedScene).draw();
 
-      const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
-      this.b2Physics.load(rubeScene, 0, 0);
-      this.ready = true;
-    });
+    const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+    this.b2Physics.load(rubeScene, 0, 0);
+    this.ready = true;
+    // });
 
     // TODO ability to load individual RubeScenes and treat them as an Object Entity similar like in RUBE
     //  An object may contain many Bodies, Joints, Fixtures, etc. but will be displayed as a single entity

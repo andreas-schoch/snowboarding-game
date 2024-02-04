@@ -36,7 +36,7 @@ export interface MetaWorld {
   metabody?: MetaBody[]; // body in export
   metajoint?: MetaJoint[]; // joint in export
   metaimage?: MetaImage[]; // image in export
-  metaObject?: MetaObject[]; // Not in export, it get's inlined
+  metaobject?: MetaObject[]; // Not in export, it get's inlined
 
   exportOptions: ExportOptions; // not in export
 }
