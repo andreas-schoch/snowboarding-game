@@ -1,10 +1,10 @@
 import './HUD.css';
 import {Component, createSignal} from 'solid-js';
-import {GameInfo} from '../GameInfo';
-import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PAUSE_GAME, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
-import {formatTime} from '../helpers/formatTime';
-import {IScore} from '../pocketbase/types';
-import {PanelId} from '.';
+import {GameInfo} from '../../GameInfo';
+import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PAUSE_GAME, SCORE_CHANGE, TIME_CHANGE} from '../../eventTypes';
+import {formatTime} from '../../helpers/formatTime';
+import {IScore} from '../../pocketbase/types';
+import {PanelId} from './GameUI';
 
 export const enum ComboState {
   Change,

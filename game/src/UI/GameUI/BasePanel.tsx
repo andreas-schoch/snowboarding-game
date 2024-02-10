@@ -1,6 +1,6 @@
 import {ParentComponent, Show} from 'solid-js';
-import {ButtonBorderless} from './general/Button';
-import {PanelId} from '.';
+import {ButtonBorderless} from '../general/Button';
+import {PanelId} from './GameUI';
 
 type BasePanelProps = {id: string, title: string, scroll: boolean, backBtn: boolean, setPanel: (id: PanelId) => void};
 

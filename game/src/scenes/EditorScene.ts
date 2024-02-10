@@ -9,8 +9,9 @@ import {EditorController} from '../controllers/EditorController';
 import {EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {Physics} from '../physics/Physics';
-import { RubeFile } from '../physics/RUBE/RubeFile';
+import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
+import {RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 
 export class EditorScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -48,7 +49,9 @@ export class EditorScene extends Phaser.Scene {
     // GameInfo.currentLevel = level;
     // const scene = await pb.level.getRubeScene(level);
     const scene: RubeFile = this.cache.json.get('rube_level');
-    GameInfo.observer.emit(RUBE_SCENE_LOADED, scene);
+    const metaLoader = new RubeMetaLoader(this);
+    const items = metaLoader.load(scene);
+    GameInfo.observer.emit(RUBE_SCENE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
     // new Terrain(this, loadedScene).draw();
 

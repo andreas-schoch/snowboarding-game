@@ -1,0 +1,48 @@
+#pane-item-properties {
+  width: 220px;
+  height: 55%;
+  right: 0;
+  bottom: 0;
+  font-size: 7px;
+}
+
+#pane-item-properties .row {
+  margin-bottom: 0;
+  padding: 0 5px;
+}
+
+#pane-item-properties .col {
+  padding: 0 4px;
+}
+
+#pane-item-properties .scrollbar {
+  height: 100%;
+}
+
+#pane-item-properties .pane-item-properties-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#pane-item-properties i {
+  margin: 0 auto 8px;
+}
+
+#pane-item-properties input,
+#pane-item-properties select {
+  width: 100%;
+  height: 24px;
+  font-size: 7px;
+  line-height: initial;
+  margin: 5px 0;
+}
+
+#pane-item-properties div:first-of-type {
+  line-height: 1.15;
+  display: flex;
+  align-items: center;
+}
+
+#pane-item-properties input[type="checkbox"] {
+  height: 14px;
+}

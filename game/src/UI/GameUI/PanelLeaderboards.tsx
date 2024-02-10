@@ -1,10 +1,10 @@
 import './PanelLeaderboards.css';
 import {Component, For, Show, createSignal, onMount} from 'solid-js';
-import {pb} from '..';
-import {Settings} from '../Settings';
-import {IScore, isUser} from '../pocketbase/types';
+import {pb} from '../..';
+import {Settings} from '../../Settings';
+import {IScore, isUser} from '../../pocketbase/types';
 import {BasePanel} from './BasePanel';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = props => {
   const [scores, setScores] = createSignal<IScore[]>([]);

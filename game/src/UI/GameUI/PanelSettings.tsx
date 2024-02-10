@@ -1,9 +1,9 @@
 import './PanelSettings.css';
 import {Component, onMount} from 'solid-js';
-import {Settings} from '../Settings';
+import {Settings} from '../../Settings';
+import {ButtonPrimary} from '../general/Button';
 import {BasePanel} from './BasePanel';
-import {ButtonPrimary} from './general/Button';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props => {
   let submitForm: HTMLFormElement;

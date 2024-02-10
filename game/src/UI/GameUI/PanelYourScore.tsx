@@ -1,14 +1,14 @@
 import './PanelYourScore.css';
 import {Component, createSignal, onMount} from 'solid-js';
-import {pb} from '..';
-import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
-import {RESTART_GAME} from '../eventTypes';
-import {pseudoRandomId} from '../helpers/pseudoRandomId';
-import {IScoreNew} from '../pocketbase/types';
+import {pb} from '../..';
+import {GameInfo} from '../../GameInfo';
+import {Settings} from '../../Settings';
+import {RESTART_GAME} from '../../eventTypes';
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
+import {IScoreNew} from '../../pocketbase/types';
+import {ButtonBorderless, ButtonPrimary} from '../general/Button';
 import {BasePanel} from './BasePanel';
-import {ButtonPrimary, ButtonBorderless} from './general/Button';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScoreNew}> = props => {
   let submitScoreForm: HTMLElement;

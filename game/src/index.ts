@@ -48,7 +48,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     smoothStep: true,
   },
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: Settings.widthScaled(),
     height: Settings.heightScaled(),

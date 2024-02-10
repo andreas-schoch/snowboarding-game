@@ -24,10 +24,12 @@ export class GameScene extends Phaser.Scene {
 
   update() {
     if (!this.ready) return;
+    console.time('update');
     this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
     Character.instances.forEach(character => character.update());
     this.playerController.update();
     this.backdrop.update();
+    console.timeEnd('update');
   }
 
   private preload() {
@@ -62,12 +64,15 @@ export class GameScene extends Phaser.Scene {
     pb.level.get(Settings.currentLevel()).then(async level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
       GameInfo.currentLevel = level;
-      const scene = await pb.level.getRubeScene(level);
-      const loadedScene = this.b2Physics.load(scene);
-      new Terrain(this, loadedScene).draw();
+      const levelScene = await pb.level.getRubeScene(level);
+      const loadedLevelScene = this.b2Physics.load(levelScene);
+      new Terrain(this, loadedLevelScene).draw();
       this.playerController = new CharacterController(this);
-      const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
-      const character = new Character(this, this.b2Physics.load(rubeScene, 0, 0));
+      const characterScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+      // const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
+      // if (!spawnStart) throw new Error('No spawn point found in level');
+      // const {x, y} = spawnStart.body.GetPosition();
+      const character = new Character(this, this.b2Physics.load(characterScene, 0, 0)); // TODO spawn at spawn point once all levels are updated
       this.playerController.possessCharacter(character);
       this.ready = true;
     });

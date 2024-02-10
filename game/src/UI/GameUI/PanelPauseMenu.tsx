@@ -1,11 +1,11 @@
 import './PanelPauseMenu.css';
 import {Component, Show} from 'solid-js';
-import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
-import {EDITOR_OPEN, RESUME_GAME} from '../eventTypes';
+import {GameInfo} from '../../GameInfo';
+import {Settings} from '../../Settings';
+import {EDITOR_OPEN, RESUME_GAME} from '../../eventTypes';
+import {ButtonPrimary, ButtonSecondary} from '../general/Button';
 import {BasePanel} from './BasePanel';
-import {ButtonPrimary, ButtonSecondary} from './general/Button';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = props => {
   const handleResumeGame = () => {

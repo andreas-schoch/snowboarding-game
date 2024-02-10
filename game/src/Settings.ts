@@ -11,7 +11,7 @@ export class Settings {
     localStorage.setItem('snowboarding_game_' + setting, value);
   }
 
-  static anonymousUID(): string | null{
+  static anonymousUID(): string | null {
     return Settings.getRaw('anonymous_uid');
   }
 

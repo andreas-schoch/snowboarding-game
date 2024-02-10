@@ -1,7 +1,7 @@
 import './PanelCredits.css';
 import {Component, ParentComponent} from 'solid-js';
 import {BasePanel} from './BasePanel';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props => (
   <BasePanel id='panel-credits' title='Credits' scroll={true} backBtn={true} setPanel={props.setPanel} >

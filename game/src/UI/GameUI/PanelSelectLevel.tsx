@@ -1,12 +1,12 @@
 import './PanelSelectLevel.css';
 import {Component, For, createResource} from 'solid-js';
-import {pb} from '..';
-import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
-import {RESTART_GAME} from '../eventTypes';
-import {ILevel, LocalLevelKeys} from '../levels';
+import {pb} from '../..';
+import {GameInfo} from '../../GameInfo';
+import {Settings} from '../../Settings';
+import {RESTART_GAME} from '../../eventTypes';
+import {ILevel, LocalLevelKeys} from '../../levels';
 import {BasePanel} from './BasePanel';
-import {PanelId} from '.';
+import {PanelId} from './GameUI';
 
 export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = props => {
   const canGoBack = !GameInfo.crashed && !GameInfo.score?.finishedLevel;

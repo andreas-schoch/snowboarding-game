@@ -1,56 +1,25 @@
 import './base.css';
 import './index.css';
-import {createSignal, Match, Show, Switch} from 'solid-js';
+import {createSignal, Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
 import {game, SCENE_EDITOR} from '..';
 import {GameInfo} from '../GameInfo';
-import {ENTER_CRASHED, LEVEL_FINISH, EDITOR_OPEN, TOGGLE_PAUSE} from '../eventTypes';
-import {IScore, IScoreNew} from '../pocketbase/types';
-import {SceneExplorer} from './Editor/SceneExplorer';
-import {HUD} from './HUD';
-import {PanelCredits} from './PanelCredits';
-import {PanelHowToPlay} from './PanelHowToPlay';
-import {PanelLeaderboards} from './PanelLeaderboards';
-import {PanelPauseMenu} from './PanelPauseMenu';
-import {PanelSelectLevel} from './PanelSelectLevel';
-import {PanelSettings} from './PanelSettings';
-import {PanelYourScore} from './PanelYourScore';
+import {EDITOR_OPEN} from '../eventTypes';
+import {EditorUI} from './EditorUI/EditorUI';
+import {GameUI} from './GameUI/GameUI';
 import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 
 const SolidUI = () => {
-  const [panel, setPanel] = createSignal<PanelId>('none');
-  const [score, setScore] = createSignal<IScoreNew>(GameInfo.score);
   const [editorOpen, setEditorOpen] = createSignal(game.scene.isActive(SCENE_EDITOR));
 
-  const handleShowYourScore = (score: IScore, timeout: number) => {
-    setScore(score);
-    setTimeout(() => setPanel('panel-your-score'), timeout);
-  };
-
-  GameInfo.observer.on(TOGGLE_PAUSE, (paused: boolean, activePanel: PanelId) => setPanel(paused ? activePanel : 'none'));
-  GameInfo.observer.on(LEVEL_FINISH, (score: IScore) => handleShowYourScore(score, 2000));
-  GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
   GameInfo.observer.on(EDITOR_OPEN, () => setEditorOpen(true));
 
   return (
     <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
 
-      <Show when={!editorOpen()} >
-        <HUD panel={panel()} setPanel={setPanel} />
-      </Show>
-
-      <Show when={editorOpen()} >
-        <SceneExplorer />
-      </Show>
-
       <Switch>
-        <Match when={panel() === 'panel-pause-menu'}><PanelPauseMenu setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-select-level'}><PanelSelectLevel setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-leaderboards'}><PanelLeaderboards setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-how-to-play'}><PanelHowToPlay setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-settings'}><PanelSettings setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-credits'}><PanelCredits setPanel={setPanel} /></Match>
-        <Match when={panel() === 'panel-your-score'}><PanelYourScore score={score()} setPanel={setPanel} /></Match>
+        <Match when={editorOpen()}><EditorUI /></Match>
+        <Match when={!editorOpen()}><GameUI /></Match>
       </Switch>
 
       <UnsupportedBrowserNotice />
@@ -66,5 +35,3 @@ export const initSolidUI = (rootId: string) => {
   render(() => <SolidUI />, root);
   return root;
 };
-
-export type PanelId = 'panel-pause-menu' | 'panel-select-level' | 'panel-leaderboards' | 'panel-how-to-play' | 'panel-settings' | 'panel-credits' | 'panel-your-score' | 'none';

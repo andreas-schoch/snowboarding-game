@@ -1,7 +1,7 @@
 import {RubeCustomProperty, RubeVector, RubeVectorArray} from './RubeFileExport';
 
 export interface RubeFile {
-  collisionbitplanes: CollisionBitPlanes;
+  // collisionbitplanes: CollisionBitPlanes; // won't use
   customPropertyDefs: CustomPropertyDef[];
   metaworld: MetaWorld;
 }
