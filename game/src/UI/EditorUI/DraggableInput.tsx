@@ -1,16 +1,17 @@
 import './DraggableInput.css';
-import {Component, createSignal, onCleanup} from 'solid-js';
+import {Component, onCleanup} from 'solid-js';
 
-export const DraggableInput: Component<{id: string, min: number, max: number, step: number, value: number, class: string}> = (props) => {
+export const DraggableInput: Component<{id: string, min: number, max: number, step: number, value: number, class: string, onChange: (val: number) => void}> = props => {
   let inputRef: HTMLInputElement;
-  const [value, setValue] = createSignal(0);
+  const displayValue = () => Number.isInteger(props.step) ? props.value : props.value.toFixed(3);
 
   const onMouseDown = () => {
     document.body.requestPointerLock();
     const onMouseMove = (e: MouseEvent) => {
       const newValue = Number(inputRef.value) + (e.movementX * props.step);
       const clamped = Math.max(props.min, Math.min(props.max, newValue));
-      inputRef.value = clamped.toFixed(3).toString();
+      // inputRef.value = clamped.toFixed(3).toString();
+      props.onChange(clamped);
     };
 
     const onMouseUp = () => {
@@ -36,7 +37,7 @@ export const DraggableInput: Component<{id: string, min: number, max: number, st
       type="number"
       class={'text-black ' + props.class}
       classList={{'value-input': true}}
-      // value={value()}
+      value={displayValue()}
       // onInput={(e) => setValue(Number(e.target.value))}
       onMouseDown={() => onMouseDown()}
     />

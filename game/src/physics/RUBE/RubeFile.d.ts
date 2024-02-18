@@ -135,6 +135,7 @@ export interface MetaLoopShape {
 export type Shape = MetaCircleShape | MetaPolygonShape | MetaLineShape | MetaLoopShape;
 
 export interface MetaImage {
+  angle: number;
   aspectScale: number;
   body: number; // reference to metabody id
   center: RubeVector | 0;

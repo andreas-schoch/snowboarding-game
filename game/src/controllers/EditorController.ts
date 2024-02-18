@@ -42,7 +42,7 @@ export class EditorController {
       drag: 0.1,
       maxSpeed: 1,
       maxZoom: 3,
-      minZoom: 0.3, // whenever this is adjusted, BackdropGrid also needs to be adjusted for now 
+      minZoom: 0.2, // whenever this is adjusted, BackdropGrid also needs to be adjusted for now 
       zoomSpeed: 0.02,
     });
   }

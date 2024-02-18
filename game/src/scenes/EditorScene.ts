@@ -1,17 +1,19 @@
-import {SCENE_EDITOR, pb} from '..';
+import {SCENE_EDITOR} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
-import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
+import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
+import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
+import {MetaTerrain} from '../editor/renderers/MetaTerrainRenderer';
 import {EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {Physics} from '../physics/Physics';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
-import {RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
+import {EditorItem, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 
 export class EditorScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -29,7 +31,6 @@ export class EditorScene extends Phaser.Scene {
     this.load.json(character, `assets/levels/export/${character}.json`);
 
     this.load.json('rube_level', 'assets/levels/level_new.rube');
-
   }
 
   private create() {
@@ -45,6 +46,13 @@ export class EditorScene extends Phaser.Scene {
     initSolidUI('root-ui');
     GameInfo.observer.emit(EDITOR_OPEN);
 
+    GameInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
+      const x = item.position ? item.position.x : 0;
+      const y = item.position ? -item.position.y : 0;
+      const ppm = this.b2Physics.worldEntity.pixelsPerMeter;
+      if (centerOn) this.cameras.main.pan(x * ppm, y * ppm, 300, 'Power2', true);
+    });
+
     // pb.level.get(Settings.currentLevel()).then(async level => {
     // GameInfo.currentLevel = level;
     // const scene = await pb.level.getRubeScene(level);
@@ -53,7 +61,9 @@ export class EditorScene extends Phaser.Scene {
     const items = metaLoader.load(scene);
     GameInfo.observer.emit(RUBE_SCENE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
-    // new Terrain(this, loadedScene).draw();
+    new MetaTerrain(this, this.b2Physics.worldEntity.pixelsPerMeter).draw(items.terrainChunks);
+    new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter).render(items.images);
+    new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter).render(items.objects);
 
     const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
     this.b2Physics.load(rubeScene, 0, 0);

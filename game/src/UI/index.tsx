@@ -14,17 +14,15 @@ const SolidUI = () => {
 
   GameInfo.observer.on(EDITOR_OPEN, () => setEditorOpen(true));
 
-  return (
-    <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
+  return <>
+    <Switch>
+      <Match when={editorOpen()}><EditorUI /></Match>
+      <Match when={!editorOpen()}><GameUI /></Match>
+    </Switch>
 
-      <Switch>
-        <Match when={editorOpen()}><EditorUI /></Match>
-        <Match when={!editorOpen()}><GameUI /></Match>
-      </Switch>
+    <UnsupportedBrowserNotice />
+  </>;
 
-      <UnsupportedBrowserNotice />
-    </div>
-  );
 };
 
 export const initSolidUI = (rootId: string) => {

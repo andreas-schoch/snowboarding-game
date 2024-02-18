@@ -1,7 +1,7 @@
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {MetaFixture, MetaImage, MetaObject, RubeFile} from './RubeFile';
-import {RubeCustomProperty, RubeVectorArray} from './RubeFileExport';
+import {MetaBody, MetaFixture, MetaImage, MetaObject, RubeFile} from './RubeFile';
+import {RubeCustomProperty, RubeVector, RubeVectorArray} from './RubeFileExport';
 
 export interface EditorItems {
   objects: EditorObject[];
@@ -9,33 +9,38 @@ export interface EditorItems {
   images: EditorImage[];
 }
 
-export interface EditorObject {
+interface BaseEditorItem {
   id: string;
+  customProps: Record<string, unknown>;
+  position: XY;
+  angle: number;
+}
+
+export interface EditorObject extends BaseEditorItem {
+  type: 'object';
   meta: MetaObject;
   items: EditorItems
 }
 
-export interface EditorTerrainChunk {
-  id: string;
+export interface EditorTerrainChunk extends BaseEditorItem{
+  type: 'terrain';
   meta: MetaFixture;
   vertices: EditorVertex[];
 }
 
-export interface EditorVolume {
-  id: string;
+export interface EditorVolume extends BaseEditorItem {
   meta: MetaFixture;
-  type: 'level_finish' | 'level_deathzone'
+  type: 'level_finish' | 'level_deathzone';
 }
 
-export interface EditorSpawnPoint {
-  id: string;
+export interface EditorSpawnPoint extends BaseEditorItem {
   meta: MetaFixture;
-  point: XY;
 }
 
-export interface EditorImage {
-  id: string;
+export interface EditorImage extends BaseEditorItem {
+  type: 'image';
   meta: MetaImage;
+  depth: number;
 }
 
 export interface EditorVertex extends XY {
@@ -54,8 +59,9 @@ export class RubeMetaLoader {
     const objects = metaObjects.map(metaObject => this.loadObject(metaObject));
 
     const terrainBody = rubeFile.metaworld?.metabody?.filter(b => b.customProperties?.some(prop => prop.name === 'surfaceType' && prop.string === 'snow'));
+    if (!terrainBody) throw new Error('No terrain body found in the RUBE file TEMP');
     const terrainFixtures = (terrainBody || []).flatMap(b => b.fixture!);
-    const terrainChunks = terrainFixtures.map(metaFixture => this.loadTerrainChunks(metaFixture));
+    const terrainChunks = terrainFixtures.map(metaFixture => this.loadTerrainChunks(metaFixture, terrainBody[0]));
 
     const metaImages = rubeFile.metaworld?.metaimage || [];
     const images = metaImages.map(imageJson => this.loadImage(imageJson));
@@ -68,27 +74,39 @@ export class RubeMetaLoader {
     const rubeFile: RubeFile = this.scene.cache.json.get(fileName);
     const scene = this.load(rubeFile);
     return {
+      type: 'object',
       id: pseudoRandomId(),
       meta: metaObject,
-      items: scene
+      items: scene,
+      customProps: this.customPropsArrayToMap(metaObject.customProperties || []),
+      position: this.rubeToXY(metaObject.position),
+      angle: metaObject.angle || 0
     };
-
   }
 
-  private loadTerrainChunks(metaFixture: MetaFixture): EditorTerrainChunk {
+  private loadTerrainChunks(metaFixture: MetaFixture, metaBody: MetaBody): EditorTerrainChunk {
     // get the vertices from the fixture
     // create a terrain chunk with the vertices
     return {
+      type: 'terrain',
       id: pseudoRandomId(),
       meta: metaFixture,
-      vertices: this.editorVertsFromSeparatedVerts(metaFixture.vertices)
+      vertices: this.editorVertsFromSeparatedVerts(metaFixture.vertices),
+      customProps: this.customPropsArrayToMap(metaFixture.customProperties || []),
+      position: this.rubeToXY(metaBody.position),
+      angle: metaBody.angle || 0
     };
   }
 
   private loadImage(metaImage: MetaImage): EditorImage {
     return {
+      type: 'image',
       id: pseudoRandomId(),
-      meta: metaImage
+      meta: metaImage,
+      customProps: this.customPropsArrayToMap(metaImage.customProperties || []),
+      position: this.rubeToXY(metaImage.center),
+      angle: metaImage.angle || 0,
+      depth: metaImage.renderOrder || 0
     };
   }
 
@@ -115,5 +133,16 @@ export class RubeMetaLoader {
       index: i
     });
     return verts;
+  }
+
+  private rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
+    if (this.isXY(val)) return {x: val.x + offsetX, y: val.y + offsetY};
+    // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
+    else if (val === 0) return {x: 0, y: 0};
+    return {x: 0, y: 0};
+  }
+
+  private isXY(val: unknown): val is Box2D.b2Vec2 {
+    return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
   }
 }
