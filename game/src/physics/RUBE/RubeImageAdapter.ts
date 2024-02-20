@@ -1,7 +1,8 @@
 import {Settings} from '../../Settings';
+import {rubeToVec2} from '../../helpers/rubeTransformers';
 import {Physics} from '../Physics';
 import {RubeImage} from './RubeFileExport';
-import {BodyEntityData} from './otherTypes';
+import {BodyEntityData, RubeCustomPropsMap} from './otherTypes';
 
 // The loader and serializer classes themselves should not concern themselves with anything Phaser specific.
 // They should not care about how we decide to render the images. That is the job of the adapter.
@@ -10,9 +11,9 @@ export class RubeImageAdapter implements IBaseAdapter {
 
   constructor(private scene: Phaser.Scene, private physics: Physics) { }
 
-  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: Record<string, unknown>): Phaser.GameObjects.Image | null {
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: RubeCustomPropsMap): Phaser.GameObjects.Image | null {
     const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
-    const pos = bodyEntityData?.body ? bodyEntityData.body.GetPosition() : this.physics.loader.rubeToVec2(center);
+    const pos = bodyEntityData?.body ? bodyEntityData.body.GetPosition() : rubeToVec2(center);
 
     // For any player character part, we interject and choose a texture atlas based on what skin the player has selected.
     // const bodyProps = bodyObj ? this.physics.loader.customProps.get(bodyObj) : null;
@@ -73,6 +74,6 @@ export class RubeImageAdapter implements IBaseAdapter {
 
 export interface IBaseAdapter {
   images: unknown[];
-  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: Record<string, unknown>): unknown | null;
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: RubeCustomPropsMap): unknown | null;
   serializeImage(image: unknown): RubeImage;
 }

@@ -1,3 +1,5 @@
+import {CustomPropertyDefNames} from './RubeFile';
+
 export interface WorldEntityData {
   type: 'world';
   world: Box2D.b2World;
@@ -24,7 +26,7 @@ export interface BaseEntityData {
   sceneId: LoadedScene['id'];
   id: string;
   name: string;
-  customProps: Record<string, unknown>;
+  customProps: RubeCustomPropsMap;
 }
 
 export interface BodyEntityData extends BaseEntityData {
@@ -72,6 +74,8 @@ export interface LoadedScene {
 
   // These are technically world custom properties but we (mis)use them to store metadate specific to the loaded scene NOT the world
   // This is due to the fact that we load multiple scenes into the same world.
-  customProps: Record<string, unknown>;
+  customProps: RubeCustomPropsMap
   worldEntity: WorldEntityData;
 }
+
+export type RubeCustomPropsMap = Record<CustomPropertyDefNames, CustomPropertyValue>;

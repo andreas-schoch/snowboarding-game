@@ -285,7 +285,7 @@
     "exportOptions" : 
     {
       "compactCommonFloats" : true,
-      "compactZeroVecs" : true,
+      "compactZeroVecs" : false,
       "saveFullPathForImages" : false,
       "saveFullPathForSamplerOutput" : false,
       "saveImagePathsRelativeToRUBEFile" : false,
@@ -359,7 +359,11 @@
       {
         "aspectScale" : 1,
         "body" : 24,
-        "center" : 0,
+        "center" : 
+        {
+          "x" : 0,
+          "y" : 0
+        },
         "customProperties" : 
         [
           

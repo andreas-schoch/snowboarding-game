@@ -1,3 +1,6 @@
+import {RubeCustomProperty, RubeVectorArray,RubeVector} from './RubeFile';
+
+// Typings corresponding to the R.U.B.E. JSON export format described here: https://www.iforce2d.net/rube/json-structure
 export interface RubeScene {
   gravity: RubeVector;
   allowSleep: boolean;
@@ -67,26 +70,6 @@ export interface RubeFixture {
   circle?: RubeFixtureShapeCircle;
   polygon?: RubeFixtureShapePolygon;
   chain?: RubeFixtureShapeChain;
-}
-
-// These will have a "name" property, and ONLY one other property depending on desired type as the value.
-export interface RubeCustomProperty {
-  name: string;
-  int?: number;
-  float?: number;
-  string?: string;
-  color?: string; // TODO verify format
-  bool?: boolean;
-  vec2?: RubeVector
-}
-
-// zero needs to be turned into { x: 0, y: 0 }
-export type RubeVector = {x: number, y: number} | 0;
-
-// Not sure why RUBE json export represents lists of vectors like this. Maybe an openGL thing?
-export interface RubeVectorArray {
-  x: number[];
-  y: number[];
 }
 
 ////////////////////////////////////////////////////////////////////////////

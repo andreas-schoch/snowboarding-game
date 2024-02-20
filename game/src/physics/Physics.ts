@@ -1,5 +1,5 @@
 import {GameInfo} from '../GameInfo';
-import {B2_BEGIN_CONTACT, B2_POST_SOLVE, RUBE_SCENE_LOADED} from '../eventTypes';
+import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {iterBodies} from '../helpers/B2Iterators';
 import {b2} from '../index';
 import {DebugDrawer} from './DebugDraw';

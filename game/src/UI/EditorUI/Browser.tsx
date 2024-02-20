@@ -11,15 +11,13 @@ export const Browser: Component<ResizeProps> = props => {
   };
 
   const items = [
-    {name: 'Terrain', thumbnail: 'https://via.placeholder.com/100', type: 'terrain'},
-    {name: 'House', thumbnail: 'https://via.placeholder.com/100', type: 'image'},
-    {name: 'Tree', thumbnail: 'https://via.placeholder.com/100', type: 'image'},
-    {name: 'Rock', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
-    {name: 'Crate', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
-    {name: 'Cane', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
-    {name: 'Coin', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
-    {name: 'Item 8', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
-    {name: 'Item 9', thumbnail: 'https://via.placeholder.com/100', type: 'object'},
+    {name: 'Terrain', type: 'terrain'},
+    {name: 'House', type: 'image'},
+    {name: 'Tree', type: 'image'},
+    {name: 'Rock', type: 'object', file: 'assets/levels/prefabs/rock.rube'},
+    {name: 'Crate', type: 'object', file: 'assets/levels/prefabs/crate.rube'},
+    {name: 'Cane', type: 'object', file: 'assets/levels/prefabs/cane.rube'},
+    {name: 'Coin', type: 'object', file: 'assets/levels/prefabs/coin.rube'},
   ];
 
   return <>

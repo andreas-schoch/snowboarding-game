@@ -1,5 +1,8 @@
-import {RubeCustomProperty, RubeVector, RubeVectorArray} from './RubeFileExport';
 
+// Typings corresponding to the .rube file format of R.U.B.E. It is similar to the json export format described here: https://www.iforce2d.net/rube/json-structure
+// There are 2 key differences between .rube files and the json export:
+// - fixtures aren't triangulated in .rube files. So 1 MetaFixture may turn into multiple RubeFixtures (polygon fixture has a limit of 8 vertices in box2d I think)
+// - Objects get inlined in the export. So MetaObject information won't be available in the export
 export interface RubeFile {
   // collisionbitplanes: CollisionBitPlanes; // won't use
   customPropertyDefs: CustomPropertyDef[];
@@ -13,8 +16,8 @@ export interface CollisionBitPlanes {
 export interface CustomPropertyDef {
   class: 'world' | 'body' | 'fixture' | 'joint' | 'image' | 'object' | 'sampler';
   type: 'int' | 'float' | 'string' | 'bool' | 'vec2' | 'color';
-  name: string;
-  displayName: string;
+  name: CustomPropertyDefNames; // CustomPropertyDefNames are the known names since we don't need to extend them dynamically
+  displayName: CustomPropertyDefNames; // CustomPropertyDefNames are the known names since we don't need to extend them dynamically
   comboboxEntries?: ComboBoxEntry[];
 }
 
@@ -138,7 +141,7 @@ export interface MetaImage {
   angle: number;
   aspectScale: number;
   body: number; // reference to metabody id
-  center: RubeVector | 0;
+  center: RubeVector;
   customProperties?: RubeCustomProperty[];
   file: string;
   filter: number;
@@ -170,7 +173,6 @@ export interface MetaJoint {
   referenceAngle: number;
   type: 'revolute' | 'distance' | 'prismatic' | 'wheel' | 'rope' | 'motor' | 'weld' | 'friction';
   upperLimit?: number;
-  // Additional properties can be added based on the joint types
 }
 
 export interface MetaObject {
@@ -183,4 +185,29 @@ export interface MetaObject {
   scale: number;
   position: RubeVector;
   customProperties?: RubeCustomProperty[];
+}
+
+// Can be this if we allow "compact zero vectors" in RUBE, which is very annoying to work with.
+// For ease of use, errors will be thrown if a zero vector is encountered in this project
+export type RubeVector = {x: number; y: number;} | 0;
+
+// This game doesn't require dynamic custom property names (yet), so we can use a union of all known names
+export type CustomPropertyDefNames = 'phaserBoardEdge' | 'phaserCameraFollow' | 'surfaceType' | 'phaserTextureFrame' | 'phaserSensorType' | 'phaserTexture' | 'phaserBoardSegmentIndex' | 'phaserPlayerCharacterSpring' | 'phaserPlayerCharacterPart' | 'light';
+export type CustomPropertyValue = number | string | boolean | RubeVector;
+// These will have a "name" property, and EXACTLY one of the optional properties depending on desired type as the value.
+// TODO We could type these as standalone interfaces and then use a union type
+export interface RubeCustomProperty {
+  name: CustomPropertyDefNames;
+  int?: number;
+  float?: number;
+  string?: string;
+  color?: string; // TODO verify format
+  bool?: boolean;
+  vec2?: RubeVector;
+}
+
+// Not sure why RUBE represents lists of vectors like this. Maybe an openGL thing?
+export interface RubeVectorArray {
+  x: number[];
+  y: number[];
 }

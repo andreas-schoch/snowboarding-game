@@ -1,6 +1,6 @@
 import {Settings} from '../../Settings';
 import {XY} from '../../Terrain';
-import {RubeVector} from '../../physics/RUBE/RubeFileExport';
+import {rubeToXY} from '../../helpers/rubeTransformers';
 import {EditorImage} from '../../physics/RUBE/RubeMetaLoader';
 
 export class MetaImageRenderer {
@@ -14,7 +14,7 @@ export class MetaImageRenderer {
       const textureFrame = (file || '').split('/').reverse()[0];
       const textureAtlas = customProps['phaserTexture'] as string;
 
-      const position = this.rubeToXY(center);
+      const position = rubeToXY(center);
       position.x += offset.x;
       position.y += offset.y;
 
@@ -57,16 +57,5 @@ export class MetaImageRenderer {
       graphics.strokeRect(-width / 2, -height / 2, width, height);
       graphics.rotation = img.rotation;
     }
-  }
-
-  private rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
-    if (this.isXY(val)) return {x: val.x + offsetX, y: val.y + offsetY};
-    // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
-    else if (val === 0) return {x: 0, y: 0};
-    return {x: 0, y: 0};
-  }
-
-  private isXY(val: unknown): val is Box2D.b2Vec2 {
-    return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
   }
 }

@@ -14,7 +14,7 @@ export class BackdropGrid {
     graphics.destroy();
 
     this.grid = this.scene.add
-      .tileSprite(0, 0, this.cellSize * 10, this.cellSize * 6, 'grid_1m')
+      .tileSprite(0, 0, this.cellSize * 12, this.cellSize * 8, 'grid_1m')
       .setOrigin(0.5)
       .setScrollFactor(0)
       .setDepth(-200)

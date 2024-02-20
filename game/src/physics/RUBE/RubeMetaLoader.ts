@@ -1,17 +1,20 @@
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {MetaBody, MetaFixture, MetaImage, MetaObject, RubeFile} from './RubeFile';
-import {RubeCustomProperty, RubeVector, RubeVectorArray} from './RubeFileExport';
+import {customPropsArrayToMap, rubeToXY} from '../../helpers/rubeTransformers';
+import {MetaBody, MetaImage, MetaObject, RubeFile, RubeCustomProperty, RubeVectorArray , RubeVector} from './RubeFile';
+import {customPropertyDefs} from './customPropertyDefs';
+import {RubeCustomPropsMap} from './otherTypes';
 
 export interface EditorItems {
   objects: EditorObject[];
   terrainChunks: EditorTerrainChunk[];
+  sensors: EditorSensor[];
   images: EditorImage[];
 }
 
 interface BaseEditorItem {
   id: string;
-  customProps: Record<string, unknown>;
+  customProps: RubeCustomPropsMap;
   position: XY;
   angle: number;
 }
@@ -19,22 +22,23 @@ interface BaseEditorItem {
 export interface EditorObject extends BaseEditorItem {
   type: 'object';
   meta: MetaObject;
-  items: EditorItems
+  items: EditorItems;
 }
 
-export interface EditorTerrainChunk extends BaseEditorItem{
+export interface EditorTerrainChunk extends BaseEditorItem {
   type: 'terrain';
-  meta: MetaFixture;
+  meta: MetaBody;
+  metaFixtureIndex: number;
   vertices: EditorVertex[];
 }
 
-export interface EditorVolume extends BaseEditorItem {
-  meta: MetaFixture;
-  type: 'level_finish' | 'level_deathzone';
+export interface EditorSensor extends BaseEditorItem {
+  meta: MetaBody;
+  type: 'level_finish' | 'level_deathzone' | 'pickup_present';
 }
 
 export interface EditorSpawnPoint extends BaseEditorItem {
-  meta: MetaFixture;
+  meta: MetaBody;
 }
 
 export interface EditorImage extends BaseEditorItem {
@@ -55,47 +59,89 @@ export class RubeMetaLoader {
   constructor(private scene: Phaser.Scene) { }
 
   load(rubeFile: RubeFile): EditorItems {
+    return {
+      objects: this.loadObjects(rubeFile),
+      terrainChunks: this.loadTerrainChunks(rubeFile),
+      sensors: this.loadSensors(rubeFile),
+      images: this.loadImages(rubeFile)
+    };
+  }
+
+  private loadObjects(rubeFile: RubeFile): EditorObject[] {
     const metaObjects = rubeFile.metaworld?.metaobject || [];
-    const objects = metaObjects.map(metaObject => this.loadObject(metaObject));
+    const objects: EditorObject[] = [];
+    for (const metaObject of metaObjects) {
+      const fileName = metaObject.file.split('/').reverse()[0];
+      const rubeFile: RubeFile = this.scene.cache.json.get(fileName);
+      const scene = this.load(rubeFile);
+      objects.push({
+        type: 'object',
+        id: pseudoRandomId(),
+        meta: metaObject,
+        items: scene,
+        customProps: customPropsArrayToMap(metaObject.customProperties || []),
+        position: rubeToXY(metaObject.position),
+        angle: metaObject.angle || 0
+      });
+    }
+    return objects;
+  }
 
-    const terrainBody = rubeFile.metaworld?.metabody?.filter(b => b.customProperties?.some(prop => prop.name === 'surfaceType' && prop.string === 'snow'));
-    if (!terrainBody) throw new Error('No terrain body found in the RUBE file TEMP');
-    const terrainFixtures = (terrainBody || []).flatMap(b => b.fixture!);
-    const terrainChunks = terrainFixtures.map(metaFixture => this.loadTerrainChunks(metaFixture, terrainBody[0]));
-
+  private loadImages(rubeFile: RubeFile): EditorImage[] {
     const metaImages = rubeFile.metaworld?.metaimage || [];
     const images = metaImages.map(imageJson => this.loadImage(imageJson));
-
-    return {objects, terrainChunks, images};
+    return images;
   }
 
-  private loadObject(metaObject: MetaObject): EditorObject {
-    const fileName = metaObject.file.split('/').reverse()[0];
-    const rubeFile: RubeFile = this.scene.cache.json.get(fileName);
-    const scene = this.load(rubeFile);
-    return {
-      type: 'object',
-      id: pseudoRandomId(),
-      meta: metaObject,
-      items: scene,
-      customProps: this.customPropsArrayToMap(metaObject.customProperties || []),
-      position: this.rubeToXY(metaObject.position),
-      angle: metaObject.angle || 0
-    };
+  private loadTerrainChunks(rubeFile: RubeFile): EditorTerrainChunk[] {
+    const terrainBodies = rubeFile.metaworld?.metabody?.filter(b => b.customProperties?.some(prop => prop.name === 'surfaceType' && prop.string === 'snow')) || [];
+    const terrainChunks: EditorTerrainChunk[] = [];
+    for (const metaBody of terrainBodies) {
+      if (!metaBody.fixture) continue;
+      for (let i = 0; i < metaBody.fixture.length; i++) {
+        if (!metaBody.fixture) throw new Error('No fixture found in the terrain body');
+        const metaFixture = metaBody.fixture[i];
+        if (metaFixture.shapes.length === 0) throw new Error('No shapes found in the fixture');
+        if (metaFixture.shapes.length > 1) throw new Error('Multiple shapes found in the fixture');
+        const metaFixtureShape = metaFixture.shapes[0];
+        if (metaFixtureShape.type !== 'line' && metaFixtureShape.type !== 'loop') throw new Error('Only polygon shapes are supported for terrain chunks');
+
+        terrainChunks.push({
+          type: 'terrain',
+          id: pseudoRandomId(),
+          meta: metaBody,
+          metaFixtureIndex: i,
+          vertices: this.editorVertsFromSeparatedVerts(metaFixture.vertices),
+          customProps: customPropsArrayToMap(metaFixture.customProperties || []),
+          position: rubeToXY(metaBody.position),
+          angle: metaBody.angle || 0
+        });
+      }
+    }
+
+    return terrainChunks;
   }
 
-  private loadTerrainChunks(metaFixture: MetaFixture, metaBody: MetaBody): EditorTerrainChunk {
-    // get the vertices from the fixture
-    // create a terrain chunk with the vertices
-    return {
-      type: 'terrain',
-      id: pseudoRandomId(),
-      meta: metaFixture,
-      vertices: this.editorVertsFromSeparatedVerts(metaFixture.vertices),
-      customProps: this.customPropsArrayToMap(metaFixture.customProperties || []),
-      position: this.rubeToXY(metaBody.position),
-      angle: metaBody.angle || 0
-    };
+  private loadSensors(rubeFile: RubeFile): EditorSensor[] {
+    const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0].customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
+    const sensors: EditorSensor[] = []; // TODO
+    for (const body of sensorBodies) {
+      const sensorFixture = body.fixture?.[0];
+      if (!sensorFixture) throw new Error('No fixture found in the sensor body');
+      const sensorType = sensorFixture.customProperties?.find(prop => prop.name === 'phaserSensorType')?.string;
+      if (!sensorType) throw new Error('Sensor type not defined on the sensor body');
+      if (sensorType !== 'level_finish' && sensorType !== 'level_deathzone' && sensorType !== 'pickup_present') throw new Error('Invalid sensor type');
+      sensors.push({
+        type: sensorType,
+        id: pseudoRandomId(),
+        meta: body,
+        customProps: customPropsArrayToMap(sensorFixture.customProperties || []),
+        position: rubeToXY(body.position),
+        angle: body.angle || 0
+      });
+    }
+
+    return sensors;
   }
 
   private loadImage(metaImage: MetaImage): EditorImage {
@@ -103,24 +149,11 @@ export class RubeMetaLoader {
       type: 'image',
       id: pseudoRandomId(),
       meta: metaImage,
-      customProps: this.customPropsArrayToMap(metaImage.customProperties || []),
-      position: this.rubeToXY(metaImage.center),
+      customProps: customPropsArrayToMap(metaImage.customProperties || []),
+      position: rubeToXY(metaImage.center),
       angle: metaImage.angle || 0,
       depth: metaImage.renderOrder || 0
     };
-  }
-
-  private customPropsArrayToMap(customProperties: RubeCustomProperty[]): Record<string, unknown> {
-    return customProperties.reduce((obj, cur) => {
-      if (cur.hasOwnProperty('int')) obj[cur.name] = cur.int;
-      else if (cur.hasOwnProperty('float')) obj[cur.name] = cur.float;
-      else if (cur.hasOwnProperty('string')) obj[cur.name] = cur.string;
-      else if (cur.hasOwnProperty('color')) obj[cur.name] = cur.color;
-      else if (cur.hasOwnProperty('bool')) obj[cur.name] = cur.bool;
-      else if (cur.hasOwnProperty('vec2')) obj[cur.name] = cur.vec2;
-      else throw new Error('invalid or missing custom property type');
-      return obj;
-    }, {});
   }
 
   private editorVertsFromSeparatedVerts(vertices: RubeVectorArray): EditorVertex[] {
@@ -134,15 +167,58 @@ export class RubeMetaLoader {
     });
     return verts;
   }
+}
 
-  private rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
-    if (this.isXY(val)) return {x: val.x + offsetX, y: val.y + offsetY};
-    // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
-    else if (val === 0) return {x: 0, y: 0};
-    return {x: 0, y: 0};
+export class RubeMetaSerializer {
+  constructor(private scene: Phaser.Scene) { }
+
+  serialize(items: EditorItems): RubeFile {
+    // Apart from the meta properties
+    const {customPropertyDefs, metaworld}: RubeFile = this.scene.cache.json.get('level_new.rube');
+
+    const rubeFile: RubeFile = {
+      customPropertyDefs,
+      metaworld: {
+        ...metaworld,
+        metaobject: items.objects.map(o => o.meta),
+        metaimage: items.images.map(i => i.meta),
+        metabody: items.terrainChunks.map(t => t.meta),
+      },
+
+    };
+    return rubeFile;
   }
 
-  private isXY(val: unknown): val is Box2D.b2Vec2 {
-    return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
+  // private serializeObject(meta: MetaObject, items: EditorItems): MetaObject {
+  //   const fileName = meta.file.split('/').reverse()[0];
+  //   const rubeFile: RubeFile = this.serialize(items);
+  //   this.scene.cache.json.add(fileName, rubeFile);
+  //   return meta;
+  // }
+
+  private customPropsMapToArray(customProps: RubeCustomPropsMap): RubeCustomProperty[] {
+    return Object.entries(customProps).map(([key, value]) => {
+      const propDef = customPropertyDefs[key];
+      // Since we don't dynamically create custom properties, we know which keys are available
+      if (!propDef) throw new Error(`No custom property definition found for key: ${key}`);
+
+      // TODO get rid of type casting
+      switch (propDef.type) {
+      case 'int':
+        return {name: key, int: value as number} as RubeCustomProperty;
+      case 'float':
+        return {name: key, float: value as number} as RubeCustomProperty;
+      case 'string':
+        return {name: key, string: value as string} as RubeCustomProperty;
+      case 'color':
+        return {name: key, color: value as string} as RubeCustomProperty;
+      case 'bool':
+        return {name: key, bool: value as boolean} as RubeCustomProperty;
+      case 'vec2':
+        return {name: key, vec2: value as RubeVector} as RubeCustomProperty;
+      default:
+        throw new Error(`Invalid custom property type: ${propDef.type}`);
+      }
+    });
   }
 }

@@ -1,6 +1,8 @@
 import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
-import {RubeScene, RubeBody, RubeJoint, RubeVector, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeVectorArray, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeCustomProperty, RubeJointType} from './RubeFileExport';
+import {RubeScene, RubeBody, RubeJoint, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeJointType} from './RubeFileExport';
+import { RubeVectorArray, RubeCustomProperty, CustomPropertyDefNames, CustomPropertyValue } from './RubeFile';
+import { RubeVector } from "./RubeFile";
 import {IBaseAdapter} from './RubeImageAdapter';
 import {RubeLoader} from './RubeLoader';
 import {vec2Util} from './Vec2Math';
@@ -99,7 +101,8 @@ export class RubeSerializer {
     const props = this.worldEntity.entityData.get(owner)?.customProps;
     if (!props) return undefined;
     const serialized: RubeCustomProperty[] = [];
-    for (const [name, value] of Object.entries(props)) {
+    for (const [key, value] of Object.entries<CustomPropertyValue>(props)) {
+      const name = key as CustomPropertyDefNames;
       if (typeof value === 'number' && Number.isInteger(value)) serialized.push({name, int: value});
       else if (typeof value === 'number') serialized.push({name, float: value});
       else if (typeof value === 'string') serialized.push({name, string: value});

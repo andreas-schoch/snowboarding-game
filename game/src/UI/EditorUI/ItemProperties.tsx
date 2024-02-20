@@ -14,11 +14,15 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
   const onPositionXChange = (newX: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update X when nothing is selected');
     const updated = {...localProps.selected, position: {x: newX, y: localProps.selected.position.y}};
+    if (updated.type === 'image') {
+      updated.meta.center = {x: newX, y: localProps.selected.position.y};
+    }
     localProps.updateSelected(updated);
   };
   const onPositionYChange = (newY: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update Y when nothing is selected');
     const updated = {...localProps.selected, position: {x: localProps.selected.position.x, y: newY}};
+    // updated.meta.center = {x: localProps.selected.position.x, y: newY};
     localProps.updateSelected(updated);
   };
   const onAngleChange = (newAngle: number) => {
@@ -84,7 +88,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                 id="property-angle"
                 min={0}
                 max={6.28318531}
-                step={1}
+                step={0.01}
                 value={angle()}
                 onChange={onAngleChange}
                 class=""
@@ -102,7 +106,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                   min={-1000}
                   max={1000}
                   step={1}
-                  value={1}
+                  value={(localProps.selected as EditorImage).depth || 0}
                   onChange={onDepthChange}
                   class=""
                 />

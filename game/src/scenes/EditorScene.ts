@@ -30,7 +30,7 @@ export class EditorScene extends Phaser.Scene {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
 
-    this.load.json('rube_level', 'assets/levels/level_new.rube');
+    this.load.json('level_new.rube', 'assets/levels/level_new.rube');
   }
 
   private create() {
@@ -56,7 +56,7 @@ export class EditorScene extends Phaser.Scene {
     // pb.level.get(Settings.currentLevel()).then(async level => {
     // GameInfo.currentLevel = level;
     // const scene = await pb.level.getRubeScene(level);
-    const scene: RubeFile = this.cache.json.get('rube_level');
+    const scene: RubeFile = this.cache.json.get('level_new.rube');
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(scene);
     GameInfo.observer.emit(RUBE_SCENE_LOADED, items);

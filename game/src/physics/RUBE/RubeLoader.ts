@@ -4,10 +4,11 @@
 * Based on example loader by Chris Campbell (creator of RUBE editor): https://github.com/iforce2d/b2dJson/blob/master/js/loadrube.js
 */
 
-import {b2, recordLeak} from '../..';
+import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage, RubeVector, RubeCustomProperty} from './RubeFileExport';
+import {customPropsArrayToMap, rubeToVec2} from '../../helpers/rubeTransformers';
+import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
 import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './otherTypes';
@@ -49,7 +50,7 @@ export class RubeLoader {
       joints: this.loadingJoints,
       images: this.loadingImages,
       entityData: this.loadingSceneEntityData,
-      customProps: this.customPropsArrayToMap(scene.customProperties || []),
+      customProps: customPropsArrayToMap(scene.customProperties || []),
       worldEntity: this.worldEntity,
     };
 
@@ -101,15 +102,6 @@ export class RubeLoader {
     return joints;
   }
 
-  rubeToVec2(val?: RubeVector, offsetX = 0, offsetY = 0): Box2D.b2Vec2 {
-    const vec = recordLeak(new b2.b2Vec2(0, 0)); // TODO ensure this doesn't cause errors as recordLeak did when I tried wrapping everything in it
-    if (this.isXY(val)) vec.Set(val.x + offsetX, val.y + offsetY);
-    // Non-compacted scenes seem to be around 5-10% larger in character size but it's negligible for the moment.
-    // While the app can handle compact zero vectors, protobuf does not seem to support conditional types like that.
-    else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
-    return vec;
-  }
-
   cleanup() {
     // Seems to be recommended https://github.com/Birch-san/box2d-wasm/blob/master/docs/memory-model.md
     for (const body of iterBodies(this.worldEntity.world)) this.worldEntity.world.DestroyBody(body);
@@ -124,15 +116,15 @@ export class RubeLoader {
     bd.awake = Boolean(bodyJson.awake);
     bd.enabled = bodyJson.hasOwnProperty('active') ? Boolean(bodyJson.active) : true;
     bd.fixedRotation = Boolean(bodyJson.fixedRotation);
-    bd.linearVelocity = this.rubeToVec2(bodyJson.linearVelocity);
+    bd.linearVelocity = rubeToVec2(bodyJson.linearVelocity);
     bd.linearDamping = bodyJson.linearDamping || 0;
     bd.angularDamping = bodyJson.angularDamping || 0;
-    bd.position = this.rubeToVec2(bodyJson.position, offsetX, offsetY);
+    bd.position = rubeToVec2(bodyJson.position, offsetX, offsetY);
     bd.bullet = Boolean(bodyJson.bullet || false);
 
     const massData = new b2.b2MassData();
     massData.mass = bodyJson['massData-mass'] || bodyJson.massDataMass || 1;
-    massData.center = this.rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter);
+    massData.center = rubeToVec2(bodyJson['massData-center'] || bodyJson.massDataCenter);
     massData.I = bodyJson['massData-I'] || bodyJson.massDataI || 1;
 
     const body = this.worldEntity.world.CreateBody(bd);
@@ -145,7 +137,7 @@ export class RubeLoader {
       sceneId: this.loadingSceneId,
       id: pseudoRandomId(),
       name: bodyJson.name || 'body',
-      customProps: this.customPropsArrayToMap(bodyJson.customProperties || []),
+      customProps: customPropsArrayToMap(bodyJson.customProperties || []),
       body,
       image: null,
       fixtures: []
@@ -180,7 +172,7 @@ export class RubeLoader {
       sceneId: this.loadingSceneId,
       id: pseudoRandomId(),
       name: fixtureJson.name || 'fixture',
-      customProps: this.customPropsArrayToMap(fixtureJson.customProperties || []),
+      customProps: customPropsArrayToMap(fixtureJson.customProperties || []),
       fixture
     };
 
@@ -204,7 +196,7 @@ export class RubeLoader {
     case 'revolute': {
 
       const anchor = vec2Util.Add(
-        vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()),
+        vec2Util.Rotate(rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()),
         bodyEntityA.body.GetPosition()
       );
 
@@ -231,8 +223,8 @@ export class RubeLoader {
       jd.Initialize(
         bodyEntityA.body,
         bodyEntityB.body,
-        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition()),
-        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorB), bodyEntityB.body.GetAngle()), bodyEntityB.body.GetPosition()),
+        vec2Util.Add(vec2Util.Rotate(rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition()),
+        vec2Util.Add(vec2Util.Rotate(rubeToVec2(jointJson.anchorB), bodyEntityB.body.GetAngle()), bodyEntityB.body.GetPosition()),
       );
       jd.collideConnected = Boolean(jointJson.collideConnected);
       jd.length = jointJson.length || 0;
@@ -248,8 +240,8 @@ export class RubeLoader {
       jd.Initialize(
         bodyEntityA.body,
         bodyEntityB.body,
-        vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition()),
-        this.rubeToVec2(jointJson.localAxisA)
+        vec2Util.Add(vec2Util.Rotate(rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition()),
+        rubeToVec2(jointJson.localAxisA)
       );
       jd.collideConnected = Boolean(jointJson.collideConnected);
       jd.referenceAngle = jointJson.refAngle || 0;
@@ -266,7 +258,7 @@ export class RubeLoader {
     case 'wheel': {
       const jd = new b2.b2WheelJointDef();
       // TODO anchorA is 0 and B is XY in world space, which should be used?
-      jd.Initialize(bodyEntityA.body, bodyEntityB.body, this.rubeToVec2(jointJson.anchorB), this.rubeToVec2(jointJson.localAxisA));
+      jd.Initialize(bodyEntityA.body, bodyEntityB.body, rubeToVec2(jointJson.anchorB), rubeToVec2(jointJson.localAxisA));
       jd.collideConnected = Boolean(jointJson.collideConnected);
       jd.enableMotor = Boolean(jointJson.enableMotor);
       jd.maxMotorTorque = jointJson.maxMotorTorque || 0;
@@ -277,7 +269,7 @@ export class RubeLoader {
       break;
     }
     case 'friction': {
-      const anchor = vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition());
+      const anchor = vec2Util.Add(vec2Util.Rotate(rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition());
       const jd = new b2.b2FrictionJointDef();
       jd.Initialize(bodyEntityA.body, bodyEntityB.body, anchor);
       jd.collideConnected = Boolean(jointJson.collideConnected);
@@ -288,7 +280,7 @@ export class RubeLoader {
       break;
     }
     case 'weld': {
-      const anchor = vec2Util.Add(vec2Util.Rotate(this.rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition());
+      const anchor = vec2Util.Add(vec2Util.Rotate(rubeToVec2(jointJson.anchorA), bodyEntityA.body.GetAngle()), bodyEntityA.body.GetPosition());
       const jd = new b2.b2WeldJointDef();
       jd.Initialize(bodyEntityA.body, bodyEntityB.body, anchor);
       jd.collideConnected = Boolean(jointJson.collideConnected);
@@ -307,7 +299,7 @@ export class RubeLoader {
       sceneId: this.loadingSceneId,
       id: pseudoRandomId(),
       name: jointJson.name || 'joint',
-      customProps: this.customPropsArrayToMap(jointJson.customProperties || []),
+      customProps: customPropsArrayToMap(jointJson.customProperties || []),
       joint
     };
 
@@ -339,18 +331,16 @@ export class RubeLoader {
   private loadImage(imageJson: RubeImage): ImageEntityData {
     const {body, customProperties} = imageJson;
     const bodyEntityData = this.loadingBodies[body];
-    // const bodyEntityData = this.worldEntity.entityData.get(bodyObj) as BodyEntityData;
-    const customProps = this.customPropsArrayToMap(customProperties || []);
+    const customProps = customPropsArrayToMap(customProperties || []);
     const img = this.adapter.loadImage(imageJson, bodyEntityData, customProps);
     if (!img) throw new Error(`Image could not be loaded. ImageName: ${imageJson.name}, ImageFile: ${imageJson.file}, ImageBody: ${imageJson.body}`);
-    const props = this.customPropsArrayToMap(customProperties || []);
 
     const imageEntity: ImageEntityData = {
       type: 'image',
       sceneId: this.loadingSceneId,
       id: pseudoRandomId(),
       name: imageJson.name || 'image',
-      customProps: props,
+      customProps: customProps,
       image: img
     };
 
@@ -359,19 +349,6 @@ export class RubeLoader {
     if (bodyEntityData) bodyEntityData.image = imageEntity;
 
     return imageEntity;
-  }
-
-  private customPropsArrayToMap(customProperties: RubeCustomProperty[]): Record<string, unknown> {
-    return customProperties.reduce((obj, cur) => {
-      if (cur.hasOwnProperty('int')) obj[cur.name] = cur.int;
-      else if (cur.hasOwnProperty('float')) obj[cur.name] = cur.float;
-      else if (cur.hasOwnProperty('string')) obj[cur.name] = cur.string;
-      else if (cur.hasOwnProperty('color')) obj[cur.name] = cur.color;
-      else if (cur.hasOwnProperty('bool')) obj[cur.name] = cur.bool;
-      else if (cur.hasOwnProperty('vec2')) obj[cur.name] = this.rubeToVec2(cur.vec2);
-      else throw new Error('invalid or missing custom property type');
-      return obj;
-    }, {});
   }
 
   private getFixtureDefWithShape(fixtureJso: RubeFixture): Box2D.b2FixtureDef {
@@ -387,7 +364,7 @@ export class RubeLoader {
     if (!circle) throw new Error('fixtureJson.circle is missing');
     const shape = new b2.b2CircleShape();
     shape.m_radius = circle.radius;
-    shape.m_p = this.rubeToVec2(circle.center);
+    shape.m_p = rubeToVec2(circle.center);
     return shape;
   }
 
@@ -429,7 +406,7 @@ export class RubeLoader {
     }
     const ptr_wrapped = wrapPointer(buffer, b2Vec2);
     if (closedLoop) shape.CreateLoop(ptr_wrapped, vertices.length);
-    else shape.CreateChain(ptr_wrapped, vertices.length, this.rubeToVec2(chain.prevVertex), this.rubeToVec2(chain.nextVertex));
+    else shape.CreateChain(ptr_wrapped, vertices.length, rubeToVec2(chain.prevVertex), rubeToVec2(chain.nextVertex));
     return shape;
   }
 
@@ -438,9 +415,5 @@ export class RubeLoader {
     // In RUBE Editor the Y coordinates are upside down when compared to Phaser3
     for (let v = 0; v < vertices.x.length; v++) verts.push(new b2.b2Vec2(vertices.x[v], vertices.y[v]));
     return verts;
-  }
-
-  private isXY(val: unknown): val is Box2D.b2Vec2 {
-    return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
   }
 }
