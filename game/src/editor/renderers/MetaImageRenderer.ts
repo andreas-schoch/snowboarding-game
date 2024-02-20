@@ -1,6 +1,5 @@
 import {Settings} from '../../Settings';
 import {XY} from '../../Terrain';
-import {rubeToXY} from '../../helpers/rubeTransformers';
 import {EditorImage} from '../../physics/RUBE/RubeMetaLoader';
 
 export class MetaImageRenderer {
@@ -9,18 +8,17 @@ export class MetaImageRenderer {
 
   render(images: EditorImage[], offset: XY = {x: 0, y: 0}) {
     for (const image of images) {
-      const {meta: {center, angle, file, scale, aspectScale, flip, renderOrder, opacity}, customProps} = image;
+      const {meta: {angle, file, scale, aspectScale, flip, renderOrder, opacity}} = image;
+      const customProps = image.getCustomProps();
 
       const textureFrame = (file || '').split('/').reverse()[0];
       const textureAtlas = customProps['phaserTexture'] as string;
 
-      const position = rubeToXY(center);
-      position.x += offset.x;
-      position.y += offset.y;
+      const position = image.getPosition();
 
       const img: Phaser.GameObjects.Image = this.scene.add.image(
-        position.x * this.pixelsPerMeter,
-        -position.y * this.pixelsPerMeter,
+        (position.x + offset.x) * this.pixelsPerMeter,
+        (position.y + offset.y) * this.pixelsPerMeter,
         textureAtlas || textureFrame,
         textureFrame
       );
@@ -35,7 +33,7 @@ export class MetaImageRenderer {
       // TODO deduplicate this code and RubeImageAdapter
       const isPlayerCharacterPart = customProps['playerCharacterPart'] === true;
       if (Settings.darkmodeEnabled()) {
-        const isLight = customProps?.['light'] === true || textureFrame === 'present_temp.png';
+        const isLight = customProps['light'] === true || textureFrame === 'present_temp.png';
         if (isPlayerCharacterPart) img.setTintFill(0x000000);
         else if (isLight) img.setTintFill(0xbbbbbb);
         else img.setTintFill(0x222222);

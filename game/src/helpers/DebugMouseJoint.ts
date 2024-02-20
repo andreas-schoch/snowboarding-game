@@ -67,7 +67,8 @@ export class MouseJoint {
       const jd = new b2.b2MouseJointDef();
       jd.collideConnected = true;
       jd.damping = 0.1;
-      jd.bodyA = this.b2Physics.loader.getBodiesByCustomProperty('surfaceType', 'snow')[0];
+      const fixture = this.b2Physics.loader.getFixturesByCustomProperty('surfaceType', 'snow')[0];
+      jd.bodyA = fixture.GetBody();
       jd.bodyB = body;
       jd.target.Set(p.x, p.y);
       jd.maxForce = 700 * body.GetMass();

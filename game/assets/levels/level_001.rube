@@ -56,7 +56,7 @@
     },
     
     {
-      "class" : "body",
+      "class" : "fixture",
       "comboboxEntries" : 
       [
         
@@ -1650,10 +1650,18 @@
         [
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 2,
-            "name" : "fixture8",
+            "name" : "terrainChunk01",
             "shapes" : 
             [
               
@@ -1779,10 +1787,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 4,
-            "name" : "fixture8",
+            "name" : "terrainChunk02",
             "shapes" : 
             [
               
@@ -1914,10 +1930,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 6,
-            "name" : "fixture8",
+            "name" : "terrainChunk03",
             "shapes" : 
             [
               
@@ -2031,10 +2055,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 9,
-            "name" : "fixture8",
+            "name" : "terrainChunk04",
             "shapes" : 
             [
               
@@ -2152,10 +2184,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 16,
-            "name" : "fixture8",
+            "name" : "terrainChunk05",
             "shapes" : 
             [
               
@@ -2265,10 +2305,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 39,
-            "name" : "fixture8",
+            "name" : "terrainChunk06",
             "shapes" : 
             [
               
@@ -2432,10 +2480,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 41,
-            "name" : "fixture8",
+            "name" : "terrainChunk07",
             "shapes" : 
             [
               
@@ -2599,10 +2655,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 42,
-            "name" : "fixture8",
+            "name" : "terrainChunk09",
             "shapes" : 
             [
               
@@ -2746,10 +2810,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 43,
-            "name" : "fixture8",
+            "name" : "terrainChunk08",
             "shapes" : 
             [
               
@@ -2914,7 +2986,7 @@
         ],
         "id" : 37,
         "linearVelocity" : 0,
-        "name" : "body3",
+        "name" : "Terrain",
         "position" : 0,
         "type" : "static"
       },

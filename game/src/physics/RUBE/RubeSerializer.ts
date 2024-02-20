@@ -6,7 +6,7 @@ import { RubeVector } from "./RubeFile";
 import {IBaseAdapter} from './RubeImageAdapter';
 import {RubeLoader} from './RubeLoader';
 import {vec2Util} from './Vec2Math';
-import {Entity, WorldEntityData} from './otherTypes';
+import {Entity, WorldEntityData} from './EntityTypes';
 
 export const enumTypeToRubeJointType = {
   // [RubeJointType.e_unknownJoint]: 'unknown' as const,

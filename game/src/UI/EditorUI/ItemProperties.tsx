@@ -6,36 +6,26 @@ import {Pane, ResizeProps} from './Pane';
 
 export const ItemProperties: Component<{selected: EditorItem | null, updateSelected: (updated: EditorItem) => void} & ResizeProps> = props => {
   const [localProps, resizeProps] = splitProps(props, ['selected', 'updateSelected']);
-  const name = () => localProps.selected?.meta.name || '';
-  const positionX = () => localProps.selected?.position.x || 0;
-  const positionY = () => localProps.selected?.position.y || 0;
-  const angle = () => localProps.selected?.angle || 0;
 
   const onPositionXChange = (newX: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update X when nothing is selected');
-    const updated = {...localProps.selected, position: {x: newX, y: localProps.selected.position.y}};
-    if (updated.type === 'image') {
-      updated.meta.center = {x: newX, y: localProps.selected.position.y};
-    }
-    localProps.updateSelected(updated);
+    localProps.selected.setPosition({x: newX, y: localProps.selected.getPosition().y});
   };
+
   const onPositionYChange = (newY: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update Y when nothing is selected');
-    const updated = {...localProps.selected, position: {x: localProps.selected.position.x, y: newY}};
-    // updated.meta.center = {x: localProps.selected.position.x, y: newY};
-    localProps.updateSelected(updated);
+    localProps.selected.setPosition({x: localProps.selected.getPosition().x, y: newY});
   };
+
   const onAngleChange = (newAngle: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update angle when nothing is selected');
-    const updated = {...localProps.selected, angle: newAngle};
-    localProps.updateSelected(updated);
+    localProps.selected.setAngle(newAngle);
   };
 
   const onDepthChange = (newDepth: number) => {
     if (!localProps.selected) throw new Error('It should never be possible to update depth when nothing is selected');
     if (localProps.selected.type !== 'image') throw new Error('It should never be possible to update depth when the selected item is not an image');
-    const updated: EditorImage = {...localProps.selected, depth: newDepth};
-    localProps.updateSelected(updated);
+    localProps.selected.setDepth(newDepth);
   };
 
   return <>
@@ -48,7 +38,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
           <div class="row">
             <div class="col col-5">Name</div>
             <div class="col col-7">
-              <input type="text" class="form-control form-text-input text-black" id="property-name" placeholder="enter body name" value={name()} />
+              <input type="text" class="form-control form-text-input text-black" id="property-name" placeholder="enter body name" value={props.selected!.getName()} />
             </div>
           </div>
           {/* <!-- POSITION --> */}
@@ -60,7 +50,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                 min={0}
                 max={100}
                 step={0.1}
-                value={positionX()}
+                value={props.selected!.getPosition().x}
                 onChange={onPositionXChange}
                 class="!border-l-8 !border-green-600"
               />
@@ -74,7 +64,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                 min={0}
                 max={100}
                 step={0.1}
-                value={positionY()}
+                value={props.selected!.getPosition().y}
                 onChange={onPositionYChange}
                 class="!border-l-8 !border-red-600"
               />
@@ -89,7 +79,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                 min={0}
                 max={6.28318531}
                 step={0.01}
-                value={angle()}
+                value={props.selected!.getAngle()}
                 onChange={onAngleChange}
                 class=""
               />
@@ -106,7 +96,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
                   min={-1000}
                   max={1000}
                   step={1}
-                  value={(localProps.selected as EditorImage).depth || 0}
+                  value={(localProps.selected as EditorImage).getDepth()}
                   onChange={onDepthChange}
                   class=""
                 />

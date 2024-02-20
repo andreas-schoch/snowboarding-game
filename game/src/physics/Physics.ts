@@ -7,7 +7,7 @@ import {RubeScene} from './RUBE/RubeFileExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
 import {RubeSerializer} from './RUBE/RubeSerializer';
-import {WorldEntityConfig, WorldEntityData} from './RUBE/otherTypes';
+import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;

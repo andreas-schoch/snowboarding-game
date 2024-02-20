@@ -1,6 +1,6 @@
 import {b2} from '..';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
-import {LoadedScene} from '../physics/RUBE/otherTypes';
+import {LoadedScene} from '../physics/RUBE/EntityTypes';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
 

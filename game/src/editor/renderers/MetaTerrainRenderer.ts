@@ -9,7 +9,7 @@ export class MetaTerrain {
 
   draw(chunks: EditorTerrainChunk[], offset: XY = {x: 0, y: 0}) {
     for (const chunk of chunks) {
-      const vertsPixelSpace = chunk.vertices.map(vertex => ({x: (vertex.x + offset.x) * this.pixelsPerMeter, y: (vertex.y + offset.y) * this.pixelsPerMeter}));
+      const vertsPixelSpace = chunk.getVertices().map(vertex => ({x: (vertex.x + offset.x) * this.pixelsPerMeter, y: (vertex.y + offset.y) * this.pixelsPerMeter}));
       this.drawChunk(vertsPixelSpace);
     }
   }

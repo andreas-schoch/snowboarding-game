@@ -1,4 +1,4 @@
-import {CustomPropertyDefNames} from './RubeFile';
+import {CustomPropertyDefNames, CustomPropertyValue} from './RubeFile';
 
 export interface WorldEntityData {
   type: 'world';

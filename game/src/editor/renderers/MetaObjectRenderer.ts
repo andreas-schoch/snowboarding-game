@@ -1,5 +1,4 @@
 import {XY} from '../../Terrain';
-import {rubeToXY} from '../../helpers/rubeTransformers';
 import {EditorObject} from '../../physics/RUBE/RubeMetaLoader';
 import {MetaImageRenderer} from './MetaImageRenderer';
 import {MetaTerrain} from './MetaTerrainRenderer';
@@ -20,7 +19,7 @@ export class MetaObjectRenderer {
 
   private renderObject(object: EditorObject, offset: XY = {x: 0, y: 0}) {
     console.log('render object', object);
-    const origin = rubeToXY(object.position);
+    const origin = object.getPosition();
     origin.x += offset.x;
     origin.y += offset.y;
     this.terrainRenderer.draw(object.items.terrainChunks, origin);

@@ -5,7 +5,7 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTE
 import {framesToTime} from '../helpers/framesToTime';
 import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {BodyEntityData} from '../physics/RUBE/otherTypes';
+import {BodyEntityData} from '../physics/RUBE/EntityTypes';
 import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {Character} from './Character';
 

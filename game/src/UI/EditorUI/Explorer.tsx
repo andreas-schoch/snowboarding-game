@@ -22,7 +22,8 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
   const iconMap: Record<EditorItem['type'], string> = {
     object: 'view_in_ar',
     terrain: 'terrain',
-    image: 'wallpaper'
+    image: 'wallpaper',
+    sensor: 'border_clear',
   };
 
   return (
@@ -33,7 +34,7 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
           {(item) => (
             <div onClick={() => localProps.setSelected(item)} classList={{'bg-neutral-500': localProps.selected?.id === item.id}} class="relative py-1 px-2 text-white text-[10px] cursor-pointer flex justify-center items-center">
               <i class="material-icons text-black text-xl mr-2 flex items-center justify-center p-[2px] aspect-square h-6 rounded-sm bg-neutral-400">{iconMap[item.type]}</i>
-              <div class="grow overflow-hidden text-ellipsis text-nowrap">{item.meta.name}</div>
+              <div class="grow overflow-hidden text-ellipsis text-nowrap">{item.getName()}</div>
             </div>
           )}
         </For>

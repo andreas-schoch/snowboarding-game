@@ -47,10 +47,9 @@ export class EditorScene extends Phaser.Scene {
     GameInfo.observer.emit(EDITOR_OPEN);
 
     GameInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
-      const x = item.position ? item.position.x : 0;
-      const y = item.position ? -item.position.y : 0;
+      const position = item.getPosition();
       const ppm = this.b2Physics.worldEntity.pixelsPerMeter;
-      if (centerOn) this.cameras.main.pan(x * ppm, y * ppm, 300, 'Power2', true);
+      if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
     });
 
     // pb.level.get(Settings.currentLevel()).then(async level => {
@@ -59,6 +58,9 @@ export class EditorScene extends Phaser.Scene {
     const scene: RubeFile = this.cache.json.get('level_new.rube');
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(scene);
+    // const metaSerializer = new RubeMetaSerializer(this);
+    // const reserialized = metaSerializer.serialize(metaLoader.load(scene));
+    // const items = metaLoader.load(reserialized);
     GameInfo.observer.emit(RUBE_SCENE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
     new MetaTerrain(this, this.b2Physics.worldEntity.pixelsPerMeter).draw(items.terrainChunks);
@@ -134,4 +136,36 @@ When hitting the play button:
 2. Load it into the phaser scene the same way we do today.
 3. Ensure the editor scene changes from "EditorController" to "PlayerController" and possesses the character
 
+--------------------------------
+How terrain vertices are edited?
+--------------------------------
+- User has to switch to terrain edit mode. The individual points will be shown
+- User can press down on a point and drag it to a new position (single press ideally)
+- User can add a new point by double clicking on the line between 2 points or by selecting 2 points and opening context menu with right click (or show possible actions in the UI)
+- User can add a new point at the end of the line
+  (haven't decided how yet, maybe select the last point for it to be possible,
+   then automatically select the new point, so user can add points quickly.
+   Or simply have sub modes while in terrain edit mode? Add, Move, Delete, Select?
+   Maybe have a panel to the left like in photoshop with different tools?)
+- User can delete a point by selecting it and pressing the delete key or select delete from the context menu
+- User can select multiple points and move them at the same time (implement at a later stage)
+
+Consider using marching squares to allow drawing of terrain with various tools. Ideally this would be the ONLY way to draw terrain but I guess we can keep both
+ways available. I just don't like to muddy the waters with too many options and I am not too fond of the current way (with the "control points")
+
+This marching squares tool would simplify some things but make things behind the scenes considerably more difficult:
+- We need to dynamically get the isolines
+- We need to dynamically split up the terrain texture into chunks (shouldn't be too difficult but need to ensure that there are no gaps due to pixel rounding errors)
+- We need to dynamically create the fixtures and vertices. This may be tricky due to ghost collisions. Some ideas:
+  - Ghost collisions can be prevented by setting the prev and next vertex where we split them apart I think (verify!)
+  - Ghost collisions can potentially be avoided by constantly re-creating the fixtures around the player and other non-static bodies
+  - We could only chunk the textures and see how well it works to create all fixtures at once without splitting.
+    This would be the easiest way. I know it works well enough for not too complex maps (like 1-5 which I didn't split into chunks until recently)
+    But for long maps with lots of overhangs etc. it may not work well. Verify limits by having a huge map (8km) with a lot of vertices on a single fixture
+    Also test huge map with lots and lots of fixtures. Compare againest each other
 */
+
+// TODO Create a component for bezier curve generation. It could be used for terrain or for spawning objects along a path (e.g. coins)
+// TODO Create a component for drawing with marching squares. It could be used for terrain or just for background decoration
+//  Potentially users could create their own parallax backgrounds with this tool by allowing TilePosition and scrollFactor to be set
+//  This could be a very powerful tool for the user to create their own unique levels but may be overkill for the first version of the editor...

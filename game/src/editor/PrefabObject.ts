@@ -1,4 +1,4 @@
-import {LoadedScene} from '../physics/RUBE/otherTypes';
+import {LoadedScene} from '../physics/RUBE/EntityTypes';
 
 export class Prefab {
   id: string;

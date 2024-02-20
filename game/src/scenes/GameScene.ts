@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
@@ -8,8 +8,10 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
+import {downloadBlob} from '../helpers/binaryTransform';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
+import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeDefaults';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -35,8 +37,9 @@ export class GameScene extends Phaser.Scene {
   private preload() {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
-    // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-    // for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
+
+    const levels = ['level_001'];
+    for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
   }
 
   private create() {
@@ -44,15 +47,6 @@ export class GameScene extends Phaser.Scene {
       // this.lights.enable();
       // this.lights.setAmbientColor(0x555555);
     }
-
-    // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-    // for (const level of levels) {
-    //   const parsed: RubeScene = this.cache.json.get(level);
-    //   const sanitized = sanitizeRubeDefaults(parsed);
-    //   const encoded = rubeSceneSerializer.encode(sanitized);
-    //   console.log('encoded', encoded);
-    //   downloadBinaryStringAsFile(encoded, `${level}.bin`, 'application/octet-stream');
-    // }
 
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
@@ -103,8 +97,23 @@ export class GameScene extends Phaser.Scene {
 
     initSolidUI('root-ui');
 
-    // TODO remove. Temporary to serialize open level
-    this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
+    if (Settings.debug()) {
+      // TODO remove. Temporary to serialize open level
+      this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
+      this.input.keyboard!.on('keydown-TWO', () => {
+        // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
+        //  Can be removed once we have the editor in place to do that properly
+        // TODO make this possible via cli script
+        const levels = ['level_001'];
+        for (const level of levels) {
+          const parsed: RubeScene = this.cache.json.get(level);
+          const sanitized = sanitizeRubeDefaults(parsed);
+          const encoded = rubeSceneSerializer.encode(sanitized);
+          console.log('encoded', encoded);
+          downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+        }
+      });
+    }
   }
 }
 

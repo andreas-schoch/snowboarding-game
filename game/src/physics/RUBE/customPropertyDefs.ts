@@ -15,7 +15,7 @@ const phaserCameraFollow: CustomPropertyDef = {
 };
 
 const surfaceType: CustomPropertyDef = {
-  class: 'body',
+  class: 'fixture',
   type: 'string',
   name: 'surfaceType',
   displayName: 'surfaceType',

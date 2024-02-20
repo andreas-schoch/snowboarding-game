@@ -42,75 +42,6 @@
   [
     
     {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
-    },
-    
-    {
       "class" : "image",
       "comboboxEntries" : 
       [
@@ -214,6 +145,13 @@
     
     {
       "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
       "comboboxEntries" : 
       [
         
@@ -289,6 +227,68 @@
       "displayName" : "spawn",
       "name" : "spawn",
       "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -343,38 +343,22 @@
       {
         "angle" : 0,
         "angularVelocity" : 0,
-        "awake" : true,
-        "id" : 2,
-        "linearVelocity" : 0,
-        "massData-mass" : 1,
-        "name" : "body0",
-        "position" : 
-        {
-          "x" : 107.4145202636719,
-          "y" : -52.55641174316406
-        },
-        "type" : "dynamic"
-      },
-      
-      {
-        "angle" : 0,
-        "angularVelocity" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 2,
-            "name" : "terrainChunk",
+            "name" : "TerrainChunk01",
             "shapes" : 
             [
               
@@ -522,10 +506,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 4,
-            "name" : "terrainChunk",
+            "name" : "TerrainChunk02",
             "shapes" : 
             [
               

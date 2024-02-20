@@ -11,7 +11,7 @@ import {customPropsArrayToMap, rubeToVec2} from '../../helpers/rubeTransformers'
 import {RubeBody, RubeFixture, RubeScene, RubeJoint, RubeImage} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
-import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './otherTypes';
+import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './EntityTypes';
 import {sanitizeRubeDefaults} from './sanitizeRubeDefaults';
 
 export class RubeLoader {

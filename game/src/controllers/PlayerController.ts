@@ -4,7 +4,7 @@ import {Settings} from '../Settings';
 import {PanelId} from '../UI/GameUI/GameUI';
 import {Character} from '../character/Character';
 import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
-import {BodyEntityData} from '../physics/RUBE/otherTypes';
+import {BodyEntityData} from '../physics/RUBE/EntityTypes';
 import {IScore} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
 

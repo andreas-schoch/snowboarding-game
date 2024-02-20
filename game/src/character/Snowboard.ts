@@ -40,12 +40,12 @@ export class Snowboard {
 
     const {entityData, observer} = this.character.rubeScene.worldEntity;
 
-    observer.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB}: IPostSolveEvent) => {
-      const propsBA = entityData.get(bodyA)?.customProps;
-      const propsBB = entityData.get(bodyB)?.customProps;
-      if (propsBA && propsBA['surfaceType'] !== 'snow' && propsBB && propsBB['surfaceType'] !== 'snow') return;
+    observer.on(B2_POST_SOLVE, ({contact, impulse, bodyA, bodyB, fixtureA, fixtureB}: IPostSolveEvent) => {
+      const propsFA = entityData.get(fixtureA)?.customProps;
+      const propsFB = entityData.get(fixtureB)?.customProps;
+      if (propsFA && propsFA['surfaceType'] !== 'snow' && propsFB && propsFB['surfaceType'] !== 'snow') return;
 
-      const nonSurfaceBody = propsBA && propsBA['surfaceType'] !== 'snow' ? bodyA : bodyB;
+      const nonSurfaceBody = propsFA && propsFA['surfaceType'] !== 'snow' ? bodyA : bodyB;
       const velocityLength = nonSurfaceBody.GetLinearVelocity().Length();
 
       const pixelsPerMeter = this.character.rubeScene.worldEntity.pixelsPerMeter;
