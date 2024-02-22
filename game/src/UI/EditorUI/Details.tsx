@@ -50,7 +50,7 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
                 min={0}
                 max={100}
                 step={0.1}
-                value={props.selected!.getPosition().x}
+                value={(localProps.selected!).signal().getPosition().x}
                 onChange={onPositionXChange}
                 class="!border-l-8 !border-green-600"
               />

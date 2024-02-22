@@ -1,8 +1,10 @@
-import {Component, ParentComponent, createSignal} from 'solid-js';
-import {Portal} from 'solid-js/web';
+import {Component, ParentComponent, Show, createEffect, createSignal} from 'solid-js';
+import {Dynamic, Portal} from 'solid-js/web';
 import {ButtonIcon} from '../general/Button';
 
 type MenuName = 'File' | 'Edit' | 'View' | 'Actions' | 'Help';
+type DialogName = 'Help' | 'About' | 'Settings';
+const [activeDialog, setActiveDialog] = createSignal<DialogName | null>(null);
 
 export const Actionbar: Component = () => {
   const [activeMenu, setActiveMenu] = createSignal<MenuName | null>(null);
@@ -11,6 +13,13 @@ export const Actionbar: Component = () => {
     if (activeMenu() === menu) setActiveMenu(null); // toggle when clicking and already open
     else setActiveMenu(menu); // open when none or another menu is open
   }
+
+  createEffect(() => {
+    if (activeDialog() !== null) setActiveMenu(null);
+  });
+
+  // TODO how can I dynamically do this?
+  // EditorInfo.observer.on('open_dialog', (content: Component) => dialogRef.innerHTML = dialogContent());
 
   return <>
     <header class="absolute top-0 left-0 right-0 h-[76px] flex items-center bg-stone-900 border-stone-600 border-b text-white">
@@ -22,7 +31,7 @@ export const Actionbar: Component = () => {
       <div class="flex flex-col pt-2 h-full">
         <div contentEditable class="p-1 border border-transparent transition-all hover:border-stone-600 rounded-sm text-sm">Dummy Level Name"</div>
 
-        <div class="mt-auto pr-5 flex gap-x-6 items-center">
+        <ul class="mt-auto pr-5 flex gap-x-6 items-center">
           <Menu name="File" activeName={activeMenu()} setActive={setMenu}><MenuFile /></Menu>
           <Menu name="Edit" activeName={activeMenu()} setActive={setMenu}><MenuEdit /></Menu>
           <Menu name="View" activeName={activeMenu()} setActive={setMenu}><MenuView /></Menu>
@@ -31,7 +40,7 @@ export const Actionbar: Component = () => {
 
           {/* <ButtonBorderless class="actionbar-menu-btn" onClick={() => setMenu('menu-actions')} ref={el => menuBtnActions = el}>Actions</ButtonBorderless>
           <ButtonBorderless class="actionbar-menu-btn" onClick={() => setMenu('menu-help')} ref={el => menuBtnHelp = el}>Help</ButtonBorderless> */}
-        </div>
+        </ul>
 
       </div>
 
@@ -41,6 +50,13 @@ export const Actionbar: Component = () => {
 
     <Portal>
       <div class="absolute inset-0 z-[2000]" classList={{hidden: activeMenu() === null}} onClick={() => setMenu(null)} />
+
+      <Show when={activeDialog() !== null}>
+        <div class="absolute inset-0 z-index-[3000] bg-stone-950 opacity-75" onClick={() => setActiveDialog(null)} />
+        <div class="absolute w-[500px] h-[500px] bg-stone-800 rounded-lg border border-stone-600 z-[3001] top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
+          <Dynamic component={dialogNameMap[activeDialog()!]} />
+        </div>
+      </Show>
     </Portal>
   </>;
 
@@ -49,12 +65,12 @@ export const Actionbar: Component = () => {
 const Menu: ParentComponent<{name: MenuName, activeName: MenuName | null, setActive: (name: MenuName | null) => void}> = props => {
   const isOpen = () => props.activeName === props.name;
   return <>
-    <div class="btn-menu z-[2002]">
+    <li class="btn-menu z-[2002]" tabIndex={-1}>
       <button class="btn-menu" classList={{underline: isOpen()}} onClick={() => props.setActive(props.name)}>{props.name}</button>
       <div classList={{hidden: !isOpen()}} class="top-[32px] left-[-10px] absolute w-[350px] min-h-fit bg-stone-900 p-3 z-[2001] border border-t-0 border-stone-600 rounded-b-lg flex grow flex-col gap-y-1 overflow-y-auto" >
         {props.children}
       </div>
-    </div>
+    </li>
 
   </>;
 };
@@ -167,14 +183,20 @@ const MenuActions: Component = () => {
 
 const MenuHelp: Component = () => {
   return <>
-    <button class="btn-menu-item">
+    <button class="btn-menu-item" onClick={() => setActiveDialog('Help')}>
       <i class="material-icons text-stone-600">help_outline</i>Open Help Docs
     </button>
-    <button class="btn-menu-item">
+    <a class="btn-menu-item" href='https://github.com/andreas-schoch/snowboarding-game/discussions' target="_blank" rel='noopener'>
       <i class="material-icons text-stone-600">forum</i>Forum
-    </button>
+    </a>
     <button class="btn-menu-item">
       <i class="material-icons text-stone-600">info</i>About
     </button>
   </>;
+};
+
+const dialogNameMap: Record<DialogName, Component> = {
+  Help: () => <div>Help</div>,
+  About: () => <div>About</div>,
+  Settings: () => <div>Settings</div>,
 };

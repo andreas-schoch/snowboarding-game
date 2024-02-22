@@ -1,14 +1,14 @@
 import {XY} from '../../Terrain';
 import {EditorObject} from '../../physics/RUBE/RubeMetaLoader';
 import {MetaImageRenderer} from './MetaImageRenderer';
-import {MetaTerrain} from './MetaTerrainRenderer';
+import {MetaTerrainRenderer} from './MetaTerrainRenderer';
 
 export class MetaObjectRenderer {
   private imageRenderer: MetaImageRenderer;
-  private terrainRenderer: MetaTerrain;
+  private terrainRenderer: MetaTerrainRenderer;
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) {
     this.imageRenderer = new MetaImageRenderer(scene, pixelsPerMeter);
-    this.terrainRenderer = new MetaTerrain(scene, pixelsPerMeter);
+    this.terrainRenderer = new MetaTerrainRenderer(scene, pixelsPerMeter);
   }
 
   render(objects: EditorObject[]) {

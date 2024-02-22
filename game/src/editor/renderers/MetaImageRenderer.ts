@@ -2,41 +2,55 @@ import {Settings} from '../../Settings';
 import {XY} from '../../Terrain';
 import {EditorImage} from '../../physics/RUBE/RubeMetaLoader';
 
+type ImageContext = {
+  imageId: string;
+  image: Phaser.GameObjects.Image;
+  gizmo: Phaser.GameObjects.Graphics;
+  // bounds: Bounds
+};
 export class MetaImageRenderer {
+  contextMap: Map<string, ImageContext> = new Map();
+
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) {
   }
 
   render(images: EditorImage[], offset: XY = {x: 0, y: 0}) {
-    for (const image of images) {
-      const {meta: {angle, file, scale, aspectScale, flip, renderOrder, opacity}} = image;
-      const customProps = image.getCustomProps();
+    for (const metaImage of images) {
+      console.log('rendering image', metaImage.id);
+      const {meta: {angle, file, scale, aspectScale, flip, renderOrder, opacity}} = metaImage;
+      const customProps = metaImage.getCustomProps();
+
+      let context = this.contextMap.get(metaImage.id);
+      if (!context) {
+        const image: Phaser.GameObjects.Image = this.scene.add.image(0, 0, 'missing');
+        const gizmo = this.scene.add.graphics().setDepth(100000).fillStyle(0x00ff00, 1);
+        context = {image, gizmo, imageId: metaImage.id};
+        this.contextMap.set(metaImage.id, context);
+      }
 
       const textureFrame = (file || '').split('/').reverse()[0];
       const textureAtlas = customProps['phaserTexture'] as string;
+      const position = metaImage.getPosition();
 
-      const position = image.getPosition();
-
-      const img: Phaser.GameObjects.Image = this.scene.add.image(
-        (position.x + offset.x) * this.pixelsPerMeter,
-        (position.y + offset.y) * this.pixelsPerMeter,
-        textureAtlas || textureFrame,
-        textureFrame
-      );
-      img.rotation = -(angle || 0);
-      img.scaleY = (this.pixelsPerMeter / img.height) * scale;
-      img.scaleX = img.scaleY * aspectScale;
-      img.alpha = opacity || 1;
-      img.flipX = flip;
-      img.setDepth(renderOrder);
-      img.setDataEnabled();
+      const image = context.image;
+      image.setTexture(textureAtlas || textureFrame, textureFrame);
+      image.x = (position.x + offset.x) * this.pixelsPerMeter;
+      image.y = (position.y + offset.y) * this.pixelsPerMeter;
+      image.rotation = -(angle || 0);
+      image.scaleY = (this.pixelsPerMeter / image.height) * scale;
+      image.scaleX = image.scaleY * aspectScale;
+      image.alpha = opacity || 1;
+      image.flipX = flip;
+      image.setDepth(renderOrder);
+      image.setDataEnabled();
 
       // TODO deduplicate this code and RubeImageAdapter
       const isPlayerCharacterPart = customProps['playerCharacterPart'] === true;
       if (Settings.darkmodeEnabled()) {
         const isLight = customProps['light'] === true || textureFrame === 'present_temp.png';
-        if (isPlayerCharacterPart) img.setTintFill(0x000000);
-        else if (isLight) img.setTintFill(0xbbbbbb);
-        else img.setTintFill(0x222222);
+        if (isPlayerCharacterPart) image.setTintFill(0x000000);
+        else if (isLight) image.setTintFill(0xbbbbbb);
+        else image.setTintFill(0x222222);
       }
 
       // draw image bounds as outline (not using tint but graphics and taking angle into account)
@@ -44,16 +58,16 @@ export class MetaImageRenderer {
       // img.on('pointerdown', () => {
       // });
 
-      const graphics = this.scene.add.graphics().setDepth(100000);
-      graphics.setPosition(img.x, img.y);
-      graphics.fillStyle(0x00ff00, 1);
-      graphics.fillCircle(0, 0, 10);
+      // const graphics = context.gizmo;
+      // graphics.setPosition(image.x, image.y);
+      // graphics.fillStyle(0x00ff00, 1);
+      // graphics.fillCircle(0, 0, 10);
 
-      graphics.lineStyle(2, 0x00ff00, 1);
-      const width = img.width * img.scaleX;
-      const height = img.height * img.scaleY;
-      graphics.strokeRect(-width / 2, -height / 2, width, height);
-      graphics.rotation = img.rotation;
+      // graphics.lineStyle(2, 0x00ff00, 1);
+      // const width = image.width * image.scaleX;
+      // const height = image.height * image.scaleY;
+      // graphics.strokeRect(-width / 2, -height / 2, width, height);
+      // graphics.rotation = image.rotation;
     }
   }
 }

@@ -3,7 +3,15 @@ import {EditorTerrainChunk} from '../../physics/RUBE/RubeMetaLoader';
 
 export type XY = {x: number, y: number};
 
-export class MetaTerrain {
+type TerrainChunkContext = {
+  chunkId: string;
+  terrain: Phaser.GameObjects.Graphics;
+  gizmo: Phaser.GameObjects.Graphics;
+  // bounds: Bounds
+};
+
+export class MetaTerrainRenderer {
+  contextMap: Map<string, TerrainChunkContext> = new Map();
 
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
 
@@ -11,15 +19,24 @@ export class MetaTerrain {
     const ppm = this.pixelsPerMeter;
     for (const chunk of chunks) {
       const vertsPixelSpace = chunk.getVertices().map(vertex => ({x: (vertex.x + offset.x) * ppm, y: (vertex.y + offset.y) * ppm}));
-      this.drawChunk(vertsPixelSpace);
 
-      const position = chunk.getPosition();
-      const graphics = this.scene.add.graphics().setDepth(100000);
-      graphics.setPosition(position.x * ppm, position.y * ppm);
-      graphics.fillStyle(0x00ff00, 1);
-      graphics.fillCircle(0, 0, 10);
+      let context = this.contextMap.get(chunk.id);
+      if (!context) {
+        // const bounds = chunk.getBounds();
+        const terrain = this.scene.add.graphics().setDepth(100000);
+        const gizmo = this.scene.add.graphics().setDepth(100000).fillStyle(0x00ff00, 1);
+        context = {terrain, gizmo, chunkId: chunk.id};
+        this.contextMap.set(chunk.id, context);
+      }
 
-      // const bounds = chunk.getBounds();
+      this.drawChunk(context, vertsPixelSpace);
+      // const {bounds, gizmo} = context;
+      // const x = (bounds.x + bounds.width / 2) * ppm;
+      // const y = (bounds.y + bounds.height / 2) * ppm;
+      // // const position = chunk.getPosition(); // Not sure if this is the cause of insane persistent fps drop when changing position via details panel like a mad man
+      // gizmo.setPosition(x, y);
+      // gizmo.fillCircle(0, 0, 10);
+
       // const width = bounds.width * ppm;
       // const height = bounds.height * ppm;
       // const graphics2 = this.scene.add.graphics().setDepth(100000);
@@ -31,10 +48,12 @@ export class MetaTerrain {
     }
   }
 
-  private drawChunk(pointsWorld: XY[]): void {
+  private drawChunk(context: TerrainChunkContext, pointsWorld: XY[]): void {
     const minX = Math.min(...pointsWorld.map(point => point.x));
     const minY = Math.min(...pointsWorld.map(point => point.y));
-    const graphics = this.scene.add.graphics().setDepth(10);
+
+    const graphics = context.terrain;
+    graphics.clear();
     graphics.setPosition(minX, minY);
     const pointsLocal: XY[] = pointsWorld.map(point => ({x: point.x - minX, y: point.y - minY}));
     graphics.fillStyle(Settings.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);

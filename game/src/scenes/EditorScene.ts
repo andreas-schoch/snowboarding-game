@@ -8,7 +8,7 @@ import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
-import {MetaTerrain} from '../editor/renderers/MetaTerrainRenderer';
+import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
 import {EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {Physics} from '../physics/Physics';
@@ -64,9 +64,23 @@ export class EditorScene extends Phaser.Scene {
     // const items = metaLoader.load(reserialized);
     EditorInfo.observer.emit(RUBE_SCENE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
-    new MetaTerrain(this, this.b2Physics.worldEntity.pixelsPerMeter).draw(items.terrainChunks);
-    new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter).render(items.images);
-    new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter).render(items.objects);
+    const metaTerrainRenderer = new MetaTerrainRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
+    const metaImageRenderer = new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
+    const metaObjectRenderer = new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
+    metaTerrainRenderer.draw(items.terrainChunks);
+    metaImageRenderer.render(items.images);
+    metaObjectRenderer.render(items.objects);
+
+    EditorInfo.observer.on('editor_scene_changed', (item: EditorItem) => {
+      switch (item.type) {
+      case 'terrain':
+        return metaTerrainRenderer.draw([item]);
+      case 'image':
+        return metaImageRenderer.render([item]);
+      case 'object':
+        return metaObjectRenderer.render([item]);
+      }
+    });
 
     const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
     this.b2Physics.load(rubeScene, 0, 0);

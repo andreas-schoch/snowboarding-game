@@ -1,3 +1,5 @@
+import {Accessor, Setter, createSignal} from 'solid-js';
+import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeVectorArrayToXY, XYToRubeVectorArray, customPropsArrayToMap, customPropsMapToArray, rubeToXY} from '../../helpers/rubeTransformers';
@@ -10,6 +12,8 @@ export interface EditorItems {
   sensors: EditorSensor[];
   images: EditorImage[];
 }
+
+export type Bounds = {x: number, y: number, width: number, height: number};
 
 interface BaseEditorItem {
   id: string;
@@ -33,12 +37,19 @@ export class EditorObject implements BaseEditorItem {
   readonly type = 'object';
   readonly items: EditorItems;
 
+  readonly signal: Accessor<EditorObject>;
+  private readonly setSignal: Setter<EditorObject>;
+
   constructor(private loader: RubeMetaLoader, public meta: MetaObject) {
     this.id = pseudoRandomId();
     const fileName = meta.file.split('/').reverse()[0];
     if (!this.loader.scene.cache.json.has(fileName)) throw new Error(`RUBE file "${fileName}" not found in the cache`);
     const rubeFile: RubeFile = this.loader.scene.cache.json.get(fileName);
     this.items = loader.load(rubeFile);
+
+    const [signal, setSignal] = createSignal<EditorObject>(this, {name: 'terrainChunk', equals: (a, b) => false});
+    this.signal = signal;
+    this.setSignal = setSignal;
   }
 
   getCustomProps() {
@@ -63,14 +74,20 @@ export class EditorObject implements BaseEditorItem {
 
   setName(name: string) {
     this.meta.name = name;
+    this.setSignal(this as EditorObject);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setPosition(position: XY) {
     this.meta.position = {x: position.x, y: position.y};
+    this.setSignal(this as EditorObject);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setAngle(angle: number) {
     this.meta.angle = angle;
+    this.setSignal(this as EditorObject);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 }
 
@@ -79,10 +96,15 @@ export class EditorObject implements BaseEditorItem {
 export class EditorTerrainChunk implements BaseEditorItem {
   readonly id: string;
   readonly type = 'terrain';
+  readonly signal: Accessor<EditorTerrainChunk>;
+  private readonly setSignal: Setter<EditorTerrainChunk>;
   private pseudoAngle: number = 0;
 
   constructor(private loader: RubeMetaLoader, public metaBody: MetaBody, private metaFixture: MetaFixture) {
     this.id = pseudoRandomId();
+    const [signal, setSignal] = createSignal<EditorTerrainChunk>(this, {name: 'terrainChunk', equals: (a, b) => false});
+    this.signal = signal;
+    this.setSignal = setSignal;
   }
 
   getCustomProps() {
@@ -113,7 +135,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
     return RubeVectorArrayToXY(this.metaFixture.vertices);
   }
 
-  getBounds(): {x: number, y: number, width: number, height: number} {
+  getBounds(): Bounds {
     const vertices = this.getVertices();
     const minX = vertices.reduce((min, v) => Math.min(min, v.x), vertices[0].x);
     const minY = vertices.reduce((min, v) => Math.min(min, v.y), vertices[0].y);
@@ -124,10 +146,14 @@ export class EditorTerrainChunk implements BaseEditorItem {
 
   setCustomProps(props: RubeCustomPropsMap) {
     this.metaFixture.customProperties = customPropsMapToArray(props);
+    this.setSignal(this as EditorTerrainChunk);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setName(name: string) {
     this.metaBody.name = name;
+    this.setSignal(this as EditorTerrainChunk);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setPosition(position: XY) {
@@ -136,7 +162,12 @@ export class EditorTerrainChunk implements BaseEditorItem {
     const oldPosition = this.getPosition();
     const diff = {x: position.x - oldPosition.x, y: position.y - oldPosition.y};
     const newVertices = vertices.map(v => ({x: v.x + diff.x, y: v.y + diff.y}));
+    console.log('diff', diff, 'newVertices', position);
     this.setVertices(newVertices);
+    this.setSignal(this as EditorTerrainChunk);
+    // TODO can be optimized by passing which properties changed. If only pos or rot change, we can just translate or rotate the graphics
+    //  Only when the vertices change due to user editing them (well excluding rotation which also changes then) we need to redraw the graphics for terrain
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setAngle(angle: number) {
@@ -154,9 +185,11 @@ export class EditorTerrainChunk implements BaseEditorItem {
     });
 
     this.setVertices(newVertices);
+    this.setSignal(this as EditorTerrainChunk);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
-  setVertices(vertices: XY[]) {
+  private setVertices(vertices: XY[]) {
     this.metaFixture.vertices = XYToRubeVectorArray(vertices);
   }
 }
@@ -167,10 +200,16 @@ export class EditorSensor implements BaseEditorItem {
   readonly id: string;
   readonly type: 'sensor';
 
+  readonly signal: Accessor<EditorSensor>;
+  private readonly setSignal: Setter<EditorSensor>;
+
   constructor(private loader: RubeMetaLoader, public meta: MetaBody, public sensorType: 'level_finish' | 'level_deathzone' | 'pickup_present') {
     this.id = pseudoRandomId();
     this.meta = meta;
     this.sensorType = sensorType;
+    const [signal, setSignal] = createSignal<EditorSensor>(this, {name: 'terrainChunk', equals: (a, b) => false});
+    this.signal = signal;
+    this.setSignal = setSignal;
   }
 
   getCustomProps() {
@@ -199,14 +238,20 @@ export class EditorSensor implements BaseEditorItem {
 
   setName(name: string) {
     this.meta.name = name;
+    this.setSignal(this as EditorSensor);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setPosition(position: XY) {
     this.meta.position = {x: position.x, y: position.y};
+    this.setSignal(this as EditorSensor);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setAngle(angle: number) {
     this.meta.angle = angle;
+    this.setSignal(this as EditorSensor);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 }
 
@@ -216,8 +261,14 @@ export class EditorImage implements BaseEditorItem {
   readonly id: string;
   readonly type = 'image';
 
+  readonly signal: Accessor<EditorImage>;
+  private readonly setSignal: Setter<EditorImage>;
+
   constructor(private loader: RubeMetaLoader, public meta: MetaImage) { // TODO consider making meta private, used for rendering for now
     this.id = pseudoRandomId();
+    const [signal, setSignal] = createSignal<EditorImage>(this, {name: 'terrainChunk', equals: (a, b) => false});
+    this.signal = signal;
+    this.setSignal = setSignal;
   }
 
   getCustomProps() {
@@ -242,22 +293,32 @@ export class EditorImage implements BaseEditorItem {
 
   setCustomProps(props: RubeCustomPropsMap) {
     this.meta.customProperties = customPropsMapToArray(props);
+    this.setSignal(this as EditorImage);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setName(name: string) {
     this.meta.name = name;
+    this.setSignal(this as EditorImage);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setPosition(position: XY) {
     this.meta.center = {x: position.x, y: position.y};
+    this.setSignal(this as EditorImage);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setAngle(angle: number) {
     this.meta.angle = angle;
+    this.setSignal(this as EditorImage);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setDepth(depth: number) {
     this.meta.renderOrder = depth;
+    this.setSignal(this as EditorImage);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 }
 
