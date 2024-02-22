@@ -74,7 +74,7 @@ export const Pane: ParentComponent<PaneProps> = props => {
   // };
 
   const resizeStart = (e: PointerEvent) => {
-    console.log('resizeStart', e);
+    console.debug('resizeStart', e);
     if (!(e.target as HTMLElement).classList.contains('resizer')) return;
 
     let resizer: HTMLElement | null = e.target as HTMLElement;
@@ -96,7 +96,7 @@ export const Pane: ParentComponent<PaneProps> = props => {
       const changeX = Math.round((e.clientX - posStart.x) / cellSizeX);
       const changeY = Math.round((e.clientY - posStart.y) / cellSizeY);
 
-      console.log('resize change', changeX, changeY, 'cellsize', cellSizeX, cellSizeY);
+      console.debug('resize change', changeX, changeY, 'cellsize', cellSizeX, cellSizeY);
 
       const cl = resizer.classList;
       const pes = paneRef.style;
@@ -108,7 +108,7 @@ export const Pane: ParentComponent<PaneProps> = props => {
 
     const resizeStop = () => {
       if (!resizer) return;
-      console.log('resizeStop');
+      console.debug('resizeStop');
       resizer = null;
       // resizer.parentElement?.classList.remove(this.CLASS_RESIZING);
       document.removeEventListener('pointermove', resize);

@@ -14,10 +14,7 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
 
   const [localProps, resizeProps] = splitProps(props, ['selected', 'setSelected']);
 
-  EditorInfo.observer.on(RUBE_SCENE_LOADED, (items: EditorItems) => {
-    console.log('SceneExplorer on RUBE_SCENE_LOADED', items);
-    setRube(items);
-  });
+  EditorInfo.observer.on(RUBE_SCENE_LOADED, (items: EditorItems) => setRube(items));
 
   const iconMap: Record<EditorItem['type'], string> = {
     object: 'view_in_ar',

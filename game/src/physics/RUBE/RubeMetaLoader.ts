@@ -70,6 +70,7 @@ export class EditorObject implements BaseEditorItem {
 
   setCustomProps(props: RubeCustomPropsMap) {
     this.meta.customProperties = customPropsMapToArray(props);
+    EditorInfo.observer.emit('editor_scene_changed', this);
   }
 
   setName(name: string) {
@@ -162,7 +163,6 @@ export class EditorTerrainChunk implements BaseEditorItem {
     const oldPosition = this.getPosition();
     const diff = {x: position.x - oldPosition.x, y: position.y - oldPosition.y};
     const newVertices = vertices.map(v => ({x: v.x + diff.x, y: v.y + diff.y}));
-    console.log('diff', diff, 'newVertices', position);
     this.setVertices(newVertices);
     this.setSignal(this as EditorTerrainChunk);
     // TODO can be optimized by passing which properties changed. If only pos or rot change, we can just translate or rotate the graphics
@@ -304,7 +304,9 @@ export class EditorImage implements BaseEditorItem {
   }
 
   setPosition(position: XY) {
-    this.meta.center = {x: position.x, y: position.y};
+    // IMPORTANT: The Y axis is inverted here as rubeToXY will change it back to the correct orientation for phaser
+    // TODO maybe consider adding a XYToRube to make it explicit that we're changing the orientation
+    this.meta.center = {x: position.x, y: -position.y};
     this.setSignal(this as EditorImage);
     EditorInfo.observer.emit('editor_scene_changed', this);
   }
@@ -383,7 +385,6 @@ export class RubeMetaLoader {
       }
     }
 
-    console.log('terrainChunks', terrainChunks);
     return terrainChunks;
   }
 

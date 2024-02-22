@@ -111,7 +111,6 @@ export class GameScene extends Phaser.Scene {
           const parsed: RubeScene = this.cache.json.get(level);
           const sanitized = sanitizeRubeDefaults(parsed);
           const encoded = rubeSceneSerializer.encode(sanitized);
-          console.log('encoded', encoded);
           downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
         }
       });

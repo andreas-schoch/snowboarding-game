@@ -14,9 +14,10 @@ export class MetaImageRenderer {
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) {
   }
 
-  render(images: EditorImage[], offset: XY = {x: 0, y: 0}) {
+  render(images: EditorImage[], offsetX = 0, offsetY = 0) {
+    const ppm = this.pixelsPerMeter;
+
     for (const metaImage of images) {
-      console.log('rendering image', metaImage.id);
       const {meta: {angle, file, scale, aspectScale, flip, renderOrder, opacity}} = metaImage;
       const customProps = metaImage.getCustomProps();
 
@@ -34,10 +35,10 @@ export class MetaImageRenderer {
 
       const image = context.image;
       image.setTexture(textureAtlas || textureFrame, textureFrame);
-      image.x = (position.x + offset.x) * this.pixelsPerMeter;
-      image.y = (position.y + offset.y) * this.pixelsPerMeter;
+      image.x = (position.x + offsetX) * ppm;
+      image.y = (position.y + offsetY) * ppm;
       image.rotation = -(angle || 0);
-      image.scaleY = (this.pixelsPerMeter / image.height) * scale;
+      image.scaleY = (ppm / image.height) * scale;
       image.scaleX = image.scaleY * aspectScale;
       image.alpha = opacity || 1;
       image.flipX = flip;

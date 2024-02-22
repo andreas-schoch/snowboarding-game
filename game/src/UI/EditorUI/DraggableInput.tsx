@@ -38,7 +38,7 @@ export const DraggableInput: Component<{id: string, min: number, max: number, st
       class={'text-black ' + props.class}
       classList={{'value-input': true}}
       value={displayValue()}
-      // onInput={(e) => setValue(Number(e.target.value))}
+      onChange={(e) => props.onChange(Number(e.target.value))}
       onMouseDown={() => onMouseDown()}
     />
   );

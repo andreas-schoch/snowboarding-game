@@ -15,10 +15,10 @@ export class MetaTerrainRenderer {
 
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
 
-  draw(chunks: EditorTerrainChunk[], offset: XY = {x: 0, y: 0}) {
+  draw(chunks: EditorTerrainChunk[], offsetX = 0, offsetY = 0) {
     const ppm = this.pixelsPerMeter;
     for (const chunk of chunks) {
-      const vertsPixelSpace = chunk.getVertices().map(vertex => ({x: (vertex.x + offset.x) * ppm, y: (vertex.y + offset.y) * ppm}));
+      const vertsPixelSpace = chunk.getVertices().map(vertex => ({x: (vertex.x + offsetX) * ppm, y: (vertex.y + offsetY) * ppm}));
 
       let context = this.contextMap.get(chunk.id);
       if (!context) {

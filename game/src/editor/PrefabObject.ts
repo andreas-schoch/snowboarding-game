@@ -24,6 +24,9 @@ PLANNED PREFABS:
 - 
 - background images can be prefabs too
 
+- teleporter (can actually just be a sensor and a custom property referencing the other side) Very useful to allow laps and make
+  levels more interesting and less linear
+
 ------------------
 Things to consider
 ------------------

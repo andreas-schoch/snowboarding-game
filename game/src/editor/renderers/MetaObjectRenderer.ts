@@ -1,4 +1,3 @@
-import {XY} from '../../Terrain';
 import {EditorObject} from '../../physics/RUBE/RubeMetaLoader';
 import {MetaImageRenderer} from './MetaImageRenderer';
 import {MetaTerrainRenderer} from './MetaTerrainRenderer';
@@ -17,15 +16,16 @@ export class MetaObjectRenderer {
     }
   }
 
-  private renderObject(object: EditorObject, offset: XY = {x: 0, y: 0}) {
-    console.log('render object', object);
-    const origin = object.getPosition();
-    origin.x += offset.x;
-    origin.y += offset.y;
-    this.terrainRenderer.draw(object.items.terrainChunks, origin);
-    this.imageRenderer.render(object.items.images, origin);
+  private renderObject(object: EditorObject, offsetX = 0, offsetY = 0) {
+    const position = object.getPosition();
+    const x = position.x + offsetX;
+    const y = position.y + offsetY;
+    this.terrainRenderer.draw(object.items.terrainChunks, x, y);
+    this.imageRenderer.render(object.items.images, x, y);
     for (const subObject of object.items.objects) {
-      this.renderObject(subObject, origin);
+      this.renderObject(subObject, x, y);
     }
   }
 }
+
+// TODO fix translation of objects. I think the negation of the Y axis causes it to flip flop and not move in the right direction

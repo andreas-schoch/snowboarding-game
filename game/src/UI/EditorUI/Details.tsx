@@ -4,6 +4,9 @@ import {EditorImage, EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
 
+const MAX_METERS_FROM_ZERO = 512;
+// TODO add UI to change step sizes for translate and rotate like in UE4
+
 export const Details: Component<{selected: EditorItem | null, updateSelected: (updated: EditorItem) => void} & ResizeProps> = props => {
   const [localProps, resizeProps] = splitProps(props, ['selected', 'updateSelected']);
 
@@ -47,8 +50,8 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
             <div class="col col-7">
               <DraggableInput
                 id={'property-position-x'}
-                min={0}
-                max={100}
+                min={-MAX_METERS_FROM_ZERO}
+                max={MAX_METERS_FROM_ZERO}
                 step={0.1}
                 value={(localProps.selected!).signal().getPosition().x}
                 onChange={onPositionXChange}
@@ -61,10 +64,10 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
             <div class="col col-7">
               <DraggableInput
                 id="property-position-y"
-                min={0}
-                max={100}
+                min={-MAX_METERS_FROM_ZERO}
+                max={MAX_METERS_FROM_ZERO}
                 step={0.1}
-                value={props.selected!.getPosition().y}
+                value={(localProps.selected!).signal().getPosition().y}
                 onChange={onPositionYChange}
                 class="!border-l-8 !border-red-600"
               />
