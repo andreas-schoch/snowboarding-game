@@ -126,10 +126,10 @@ export const Pane: ParentComponent<PaneProps> = props => {
   };
 
   return (
-    <div onPointerDown={resizeStart} class={'p-1 border border-stone-600 rounded-md m-0 pt-8 pb-2 absolute text-[8px] text-white bg-stone-800 ' + (props.class || '')} ref={el => paneRef = el} >
+    <div onPointerDown={resizeStart} class={'p-1 border border-stone-600 rounded-md overflow-hidden m-0 pt-8 pb-2 absolute text-[8px] text-white bg-stone-800 ' + (props.class || '')} ref={el => paneRef = el} >
 
       <Show when={props.title}>
-        <div class="text-white text-[12px] bg-stone-900 rounded-t-md px-1 absolute left-0 right-0 top-0 border-b border-stone-600">{props.title}</div>
+        <div class="text-white text-[12px] bg-stone-900 rounded-t-md px-2.5 absolute left-0 right-0 top-0 border-b border-stone-600">{props.title}</div>
       </Show>
 
       {props.children}

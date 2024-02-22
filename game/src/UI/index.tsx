@@ -1,23 +1,19 @@
 import './base.css';
 import './index.css';
-import {createSignal, Match, Switch} from 'solid-js';
+import {Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
-import {game, SCENE_EDITOR} from '..';
-import {GameInfo} from '../GameInfo';
-import {EDITOR_OPEN} from '../eventTypes';
+import {Settings} from '../Settings';
 import {EditorUI} from './EditorUI/EditorUI';
 import {GameUI} from './GameUI/GameUI';
 import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 
 const SolidUI = () => {
-  const [editorOpen, setEditorOpen] = createSignal(game.scene.isActive(SCENE_EDITOR));
-
-  GameInfo.observer.on(EDITOR_OPEN, () => setEditorOpen(true));
+  const editorOpen = Settings.editorOpen();
 
   return <>
     <Switch>
-      <Match when={editorOpen()}><EditorUI /></Match>
-      <Match when={!editorOpen()}><GameUI /></Match>
+      <Match when={editorOpen}><EditorUI /></Match>
+      <Match when={!editorOpen}><GameUI /></Match>
     </Switch>
 
     <UnsupportedBrowserNotice />

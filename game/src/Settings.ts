@@ -2,7 +2,7 @@ import {LocalLevelKeys} from './levels';
 import {IScore} from './pocketbase/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
-export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled';
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen';
 export type CharacterKeys = 'character_v01' | 'character_v02';
 export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
@@ -29,6 +29,10 @@ export class Settings {
 
   static defaultZoom(): number {
     return Number(Settings.getRaw('debugZoom')) || 1;
+  }
+
+  static editorOpen(): boolean {
+    return Settings.getRaw('editorOpen') === 'true';
   }
 
   static darkmodeEnabled(): boolean {

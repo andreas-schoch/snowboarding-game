@@ -16,6 +16,7 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
   const handleOpenEditor = () => {
     props.setPanel('none');
     GameInfo.observer.emit(EDITOR_OPEN);
+    Settings.set('editorOpen', 'true');
   };
 
   return <>

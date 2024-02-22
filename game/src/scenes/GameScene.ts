@@ -1,5 +1,6 @@
 import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
 import {Backdrop} from '../Backdrop';
+import { EditorInfo } from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {SoundManager} from '../SoundManager';
@@ -48,6 +49,7 @@ export class GameScene extends Phaser.Scene {
       // this.lights.setAmbientColor(0x555555);
     }
 
+    if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
     // TODO adjust everything for either 32 or 64 pixels per meter so we can better make use of PoW2 textures when chunking terrain 

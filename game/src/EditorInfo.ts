@@ -4,6 +4,7 @@ import {XY} from './Terrain';
 // import {Prefab} from './editor/PrefabObject';
 
 export class EditorInfo {
+  static observer: Phaser.Events.EventEmitter;
   static readonly cursor: XY = {x: 0, y: 0};
   static readonly selectedEntityIds: string[] = [];
 

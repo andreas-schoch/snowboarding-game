@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-menu {
+  @apply relative flex items-center justify-center text-xs text-neutral-300 cursor-pointer border-transparent bg-transparent p-1;
+}
+.btn-menu-item {
+  @apply flex items-center border-transparent bg-transparent h-10 cursor-pointer hover:bg-stone-600 w-full !justify-start p-2 !text-sm leading-6 rounded-md gap-x-3 !text-stone-400;
+}

@@ -113,6 +113,15 @@ export class EditorTerrainChunk implements BaseEditorItem {
     return RubeVectorArrayToXY(this.metaFixture.vertices);
   }
 
+  getBounds(): {x: number, y: number, width: number, height: number} {
+    const vertices = this.getVertices();
+    const minX = vertices.reduce((min, v) => Math.min(min, v.x), vertices[0].x);
+    const minY = vertices.reduce((min, v) => Math.min(min, v.y), vertices[0].y);
+    const maxX = vertices.reduce((max, v) => Math.max(max, v.x), vertices[0].x);
+    const maxY = vertices.reduce((max, v) => Math.max(max, v.y), vertices[0].y);
+    return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
+  }
+
   setCustomProps(props: RubeCustomPropsMap) {
     this.metaFixture.customProperties = customPropsMapToArray(props);
   }

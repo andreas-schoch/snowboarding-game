@@ -1,4 +1,3 @@
-import './ItemProperties.css';
 import {Component, For} from 'solid-js';
 import {Pane, ResizeProps} from './Pane';
 

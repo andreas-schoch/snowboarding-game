@@ -1,10 +1,10 @@
-import './ItemProperties.css';
+import './Details.css';
 import {Component, Show, splitProps} from 'solid-js';
 import {EditorImage, EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
 
-export const ItemProperties: Component<{selected: EditorItem | null, updateSelected: (updated: EditorItem) => void} & ResizeProps> = props => {
+export const Details: Component<{selected: EditorItem | null, updateSelected: (updated: EditorItem) => void} & ResizeProps> = props => {
   const [localProps, resizeProps] = splitProps(props, ['selected', 'updateSelected']);
 
   const onPositionXChange = (newX: number) => {
@@ -29,7 +29,7 @@ export const ItemProperties: Component<{selected: EditorItem | null, updateSelec
   };
 
   return <>
-    <Pane title="Item Properties" class="" {...resizeProps}>
+    <Pane title="Details" class="" {...resizeProps}>
       <Show when={localProps.selected} fallback={<div class="p-4">Nothing selected</div>}>
 
         <i class="scene-item-type-icon material-icons">window</i>

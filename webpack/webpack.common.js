@@ -81,6 +81,7 @@ module.exports = {
         // Some of these things below will be fetched from the server in future versions so it wouldn't make sense to hardcode them
         {from: 'game/assets/img/packed', to: 'assets/img/packed'},
         {from: 'game/assets/img/thumbnails', to: 'assets/img/thumbnails'},
+        {from: 'game/assets/img/logo.png', to: 'assets/img/logo.png'},
         {from: 'game/assets/audio/music', to: 'assets/audio/music'},
         {from: 'game/assets/levels', to: 'assets/levels'},
         {from: 'game/assets/protobuf', to: 'assets/protobuf'},

@@ -1,6 +1,7 @@
 import {SCENE_EDITOR} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
+import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {initSolidUI} from '../UI';
@@ -29,13 +30,13 @@ export class EditorScene extends Phaser.Scene {
   private preload() {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
-
     this.load.json('level_new.rube', 'assets/levels/level_new.rube');
   }
 
   private create() {
-    if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
-    GameInfo.observer = new Phaser.Events.EventEmitter();
+    if (GameInfo.observer) GameInfo.observer.destroy();
+    if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
+    EditorInfo.observer = new Phaser.Events.EventEmitter();
 
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
@@ -44,9 +45,9 @@ export class EditorScene extends Phaser.Scene {
 
     drawCoordZeroPoint(this);
     initSolidUI('root-ui');
-    GameInfo.observer.emit(EDITOR_OPEN);
+    EditorInfo.observer.emit(EDITOR_OPEN);
 
-    GameInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
+    EditorInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
       const position = item.getPosition();
       const ppm = this.b2Physics.worldEntity.pixelsPerMeter;
       if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
@@ -61,7 +62,7 @@ export class EditorScene extends Phaser.Scene {
     // const metaSerializer = new RubeMetaSerializer(this);
     // const reserialized = metaSerializer.serialize(metaLoader.load(scene));
     // const items = metaLoader.load(reserialized);
-    GameInfo.observer.emit(RUBE_SCENE_LOADED, items);
+    EditorInfo.observer.emit(RUBE_SCENE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
     new MetaTerrain(this, this.b2Physics.worldEntity.pixelsPerMeter).draw(items.terrainChunks);
     new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter).render(items.images);

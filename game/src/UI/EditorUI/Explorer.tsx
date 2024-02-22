@@ -1,5 +1,5 @@
 import {Component, For, createSignal, splitProps} from 'solid-js';
-import {GameInfo} from '../../GameInfo';
+import {EditorInfo} from '../../EditorInfo';
 import {RUBE_SCENE_LOADED} from '../../eventTypes';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
 import {Pane, ResizeProps} from './Pane';
@@ -14,7 +14,7 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
 
   const [localProps, resizeProps] = splitProps(props, ['selected', 'setSelected']);
 
-  GameInfo.observer.on(RUBE_SCENE_LOADED, (items: EditorItems) => {
+  EditorInfo.observer.on(RUBE_SCENE_LOADED, (items: EditorItems) => {
     console.log('SceneExplorer on RUBE_SCENE_LOADED', items);
     setRube(items);
   });
@@ -27,7 +27,7 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
   };
 
   return (
-    <Pane {...resizeProps} title="Scene Explorer" class="">
+    <Pane {...resizeProps} title="Explorer" class="">
 
       <div class="scene-items-scrollable scrollbar max-h-full">
         <For each={items()} fallback={<div>Empty</div>}>
