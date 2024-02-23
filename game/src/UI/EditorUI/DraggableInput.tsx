@@ -1,16 +1,17 @@
 import './DraggableInput.css';
 import {Component, onCleanup} from 'solid-js';
 
+const noop = () => {};
 export const DraggableInput: Component<{id: string, min: number, max: number, step: number, value: number, class: string, onChange: (val: number) => void}> = props => {
   let inputRef: HTMLInputElement;
   const displayValue = () => Number.isInteger(props.step) ? props.value : props.value.toFixed(3);
+  let cleanupMove: () => void = () => noop;
 
   const onMouseDown = () => {
     document.body.requestPointerLock();
     const onMouseMove = (e: MouseEvent) => {
       const newValue = Number(inputRef.value) + (e.movementX * props.step);
       const clamped = Math.max(props.min, Math.min(props.max, newValue));
-      // inputRef.value = clamped.toFixed(3).toString();
       props.onChange(clamped);
     };
 
@@ -23,11 +24,16 @@ export const DraggableInput: Component<{id: string, min: number, max: number, st
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
 
-    onCleanup(() => {
+    // eslint-disable-next-line solid/reactivity
+    cleanupMove = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    });
+    };
   };
+
+  onCleanup(() => {
+    cleanupMove();
+  });
 
   return (
     <input

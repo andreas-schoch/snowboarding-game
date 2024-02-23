@@ -138,8 +138,7 @@ export interface MetaLoopShape {
 export type Shape = MetaCircleShape | MetaPolygonShape | MetaLineShape | MetaLoopShape;
 
 export interface MetaImage {
-  angle: number;
-  aspectScale: number;
+  angle?: number;
   body: number; // reference to metabody id
   center: RubeVector;
   customProperties?: RubeCustomProperty[];
@@ -150,7 +149,8 @@ export interface MetaImage {
   name: string;
   opacity: number;
   renderOrder: number;
-  scale: number;
+  aspectScale: number; // the ratio of width to height; e.g. scale: 4 and aspecScale: 0.25 results in 1m width 
+  scale: number; // length of the vertical side of the image in physics units (meters)
   // Additional properties can be added based on the image types
 }
 

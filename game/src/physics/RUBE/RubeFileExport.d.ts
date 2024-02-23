@@ -200,9 +200,9 @@ export interface RubeImage {
   /** Between [0,1] */
   opacity: number;
   renderOrder: number;
-  /** the length of the vertical side of the image in physics units */
+  /** the length of the vertical side of the image in physics units (meters) */
   scale: number;
-  /** the ratio of width to height; relative to the natural dimensions */
+  /** the ratio of width to height; e.g. scale: 1 and aspecScale: 0.5 results in 0.5m width */
   aspectScale: number;
   /** angle in radians */
   angle: number;

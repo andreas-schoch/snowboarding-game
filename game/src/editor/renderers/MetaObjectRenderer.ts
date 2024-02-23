@@ -1,11 +1,14 @@
-import {EditorObject} from '../../physics/RUBE/RubeMetaLoader';
+import {throttle} from '../../helpers/debounce';
+import {EditorObject} from '../items/EditorObject';
 import {MetaImageRenderer} from './MetaImageRenderer';
 import {MetaTerrainRenderer} from './MetaTerrainRenderer';
 
 export class MetaObjectRenderer {
+  renderThrottled = throttle(this.render.bind(this), 100);
   private imageRenderer: MetaImageRenderer;
   private terrainRenderer: MetaTerrainRenderer;
-  constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) {
+
+  constructor(scene: Phaser.Scene, pixelsPerMeter: number) {
     this.imageRenderer = new MetaImageRenderer(scene, pixelsPerMeter);
     this.terrainRenderer = new MetaTerrainRenderer(scene, pixelsPerMeter);
   }
@@ -16,16 +19,23 @@ export class MetaObjectRenderer {
     }
   }
 
-  private renderObject(object: EditorObject, offsetX = 0, offsetY = 0) {
+  private renderObject(object: EditorObject, offsetX = 0, offsetY = 0, offsetAngle = 0) {
     const position = object.getPosition();
     const x = position.x + offsetX;
     const y = position.y + offsetY;
-    this.terrainRenderer.draw(object.items.terrainChunks, x, y);
-    this.imageRenderer.render(object.items.images, x, y);
+
+    // the angle is in radians and clamped to 6.28 (2 * PI). I need to make sure it overflows  correctly. When 7.28, it should be 1.0
+    const twoPI = 6.28;
+    let angle = object.getAngle() + offsetAngle;
+    if (angle > twoPI) angle -= twoPI;
+    if (angle < 0) angle += twoPI;
+
+    console.log('rendering object', object, x, y, angle);
+
+    this.terrainRenderer.render(object.items.terrainChunks, x, y, angle);
+    this.imageRenderer.render(object.items.images, x, y, angle);
     for (const subObject of object.items.objects) {
-      this.renderObject(subObject, x, y);
+      this.renderObject(subObject, x, y, angle);
     }
   }
 }
-
-// TODO fix translation of objects. I think the negation of the Y axis causes it to flip flop and not move in the right direction

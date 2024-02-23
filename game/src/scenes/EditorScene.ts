@@ -67,18 +67,18 @@ export class EditorScene extends Phaser.Scene {
     const metaTerrainRenderer = new MetaTerrainRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaImageRenderer = new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaObjectRenderer = new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
-    metaTerrainRenderer.draw(items.terrainChunks);
-    metaImageRenderer.render(items.images);
-    metaObjectRenderer.render(items.objects);
+    metaTerrainRenderer.renderThrottled(items.terrainChunks);
+    metaImageRenderer.renderThrottled(items.images);
+    metaObjectRenderer.renderThrottled(items.objects);
 
     EditorInfo.observer.on('editor_scene_changed', (item: EditorItem) => {
       switch (item.type) {
       case 'terrain':
-        return metaTerrainRenderer.draw([item]);
+        return metaTerrainRenderer.renderThrottled([item]);
       case 'image':
-        return metaImageRenderer.render([item]);
+        return metaImageRenderer.renderThrottled([item]);
       case 'object':
-        return metaObjectRenderer.render([item]);
+        return metaObjectRenderer.renderThrottled([item]);
       }
     });
 

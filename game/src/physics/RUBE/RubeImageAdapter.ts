@@ -1,8 +1,8 @@
 import {Settings} from '../../Settings';
 import {rubeToVec2} from '../../helpers/rubeTransformers';
 import {Physics} from '../Physics';
-import {RubeImage} from './RubeFileExport';
 import {BodyEntityData, RubeCustomPropsMap} from './EntityTypes';
+import {RubeImage} from './RubeFileExport';
 
 // The loader and serializer classes themselves should not concern themselves with anything Phaser specific.
 // They should not care about how we decide to render the images. That is the job of the adapter.

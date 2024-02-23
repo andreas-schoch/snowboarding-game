@@ -3,11 +3,11 @@ import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {iterBodies} from '../helpers/B2Iterators';
 import {b2} from '../index';
 import {DebugDrawer} from './DebugDraw';
+import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
 import {RubeScene} from './RUBE/RubeFileExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
 import {RubeSerializer} from './RUBE/RubeSerializer';
-import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;

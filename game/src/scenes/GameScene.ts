@@ -1,6 +1,6 @@
 import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
 import {Backdrop} from '../Backdrop';
-import { EditorInfo } from '../EditorInfo';
+import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {SoundManager} from '../SoundManager';

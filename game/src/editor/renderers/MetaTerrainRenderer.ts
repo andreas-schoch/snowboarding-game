@@ -1,5 +1,6 @@
 import {Settings} from '../../Settings';
-import {EditorTerrainChunk} from '../../physics/RUBE/RubeMetaLoader';
+import {throttle} from '../../helpers/debounce';
+import {EditorTerrainChunk} from '../items/EditorTerrain';
 
 export type XY = {x: number, y: number};
 
@@ -11,24 +12,19 @@ type TerrainChunkContext = {
 };
 
 export class MetaTerrainRenderer {
-  contextMap: Map<string, TerrainChunkContext> = new Map();
+  renderThrottled = throttle(this.render.bind(this), 100);
+  private contextMap: Map<string, TerrainChunkContext> = new Map();
 
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
 
-  draw(chunks: EditorTerrainChunk[], offsetX = 0, offsetY = 0) {
+  // TODO take offsetAngle into account
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  render(chunks: EditorTerrainChunk[], offsetX = 0, offsetY = 0, offsetAngle = 0) {
     const ppm = this.pixelsPerMeter;
     for (const chunk of chunks) {
+      const context = this.getContext(chunk.id);
+
       const vertsPixelSpace = chunk.getVertices().map(vertex => ({x: (vertex.x + offsetX) * ppm, y: (vertex.y + offsetY) * ppm}));
-
-      let context = this.contextMap.get(chunk.id);
-      if (!context) {
-        // const bounds = chunk.getBounds();
-        const terrain = this.scene.add.graphics().setDepth(100000);
-        const gizmo = this.scene.add.graphics().setDepth(100000).fillStyle(0x00ff00, 1);
-        context = {terrain, gizmo, chunkId: chunk.id};
-        this.contextMap.set(chunk.id, context);
-      }
-
       this.drawChunk(context, vertsPixelSpace);
       // const {bounds, gizmo} = context;
       // const x = (bounds.x + bounds.width / 2) * ppm;
@@ -74,5 +70,17 @@ export class MetaTerrainRenderer {
 
     graphics.lineStyle(4, 0x00ff00, 1);
     graphics.strokePoints(pointsLocal, false, false);
+  }
+
+  getContext(chunkId: string): TerrainChunkContext {
+    let context = this.contextMap.get(chunkId);
+    if (!context) {
+      // const bounds = chunk.getBounds();
+      const terrain = this.scene.add.graphics().setDepth(100000);
+      const gizmo = this.scene.add.graphics().setDepth(100000).fillStyle(0x00ff00, 1);
+      context = {terrain, gizmo, chunkId: chunkId};
+      this.contextMap.set(chunkId, context);
+    }
+    return context;
   }
 }

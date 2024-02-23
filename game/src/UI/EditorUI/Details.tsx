@@ -1,6 +1,7 @@
 import './Details.css';
 import {Component, Show, splitProps} from 'solid-js';
-import {EditorImage, EditorItem} from '../../physics/RUBE/RubeMetaLoader';
+import {EditorImage} from '../../editor/items/EditorImage';
+import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
 
@@ -79,10 +80,10 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
             <div class="col col-7">
               <DraggableInput
                 id="property-angle"
-                min={0}
-                max={6.28318531}
+                min={Math.PI * -2}
+                max={Math.PI * 2}
                 step={0.01}
-                value={props.selected!.getAngle()}
+                value={props.selected!.signal().getAngle()}
                 onChange={onAngleChange}
                 class=""
               />
