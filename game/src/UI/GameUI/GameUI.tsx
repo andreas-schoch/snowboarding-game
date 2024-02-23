@@ -27,7 +27,7 @@ export const GameUI: Component = () => {
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
 
   return (
-    <div class="block! text-white text-lg absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
+    <div class="absolute inset-0 block overflow-hidden text-lg text-white">
 
       <HUD panel={panel()} setPanel={setPanel} />
 

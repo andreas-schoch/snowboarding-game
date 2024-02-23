@@ -116,25 +116,25 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
   return <>
     <div classList={{hidden: props.panel !== 'none'}}>
 
-      <div class="absolute top-2 left-1/2 transform -translate-x-1/2 text-center">
+      <div class="absolute left-1/2 top-2 -translate-x-1/2 text-center">
         <div>{time()}</div>
       </div>
 
-      <div class="absolute top-20 left-1/2 transform -translate-x-1/2 text-center invisible" ref={el => comboWrapperRef = el}>
+      <div class="invisible absolute left-1/2 top-20 -translate-x-1/2 text-center" ref={el => comboWrapperRef = el}>
         <div class="flex">
-          <div ref={el => comboLeewayRef = el} class="w-5 h-5 rounded-full m-1 mr-4 bg-white border-white border-2"/>
+          <div ref={el => comboLeewayRef = el} class="m-1 mr-4 size-5 rounded-full border-2 border-white bg-white"/>
           <div ref={el => comboTextRef = el} class="text-xl">{combo()}</div>
         </div>
       </div>
 
       <span ref={el => comboMoveTextRef = el} class="relative opacity-0">{comboTotal()}</span>
 
-      <div class="absolute top-4 right-4 text-right text-2xl" ref={el => scoreTextRef = el}>
+      <div class="absolute right-4 top-4 text-right text-2xl" ref={el => scoreTextRef = el}>
         <div>{score()}</div>
       </div>
 
-      <i onClick={() => pauseAndSetPanel('panel-how-to-play')} class="material-icons text-[color:var(--grey-600)] absolute left-2 bottom-2 text-3xl cursor-pointer">help_outline</i>
-      <i onClick={() => pauseAndSetPanel('panel-pause-menu')} class="material-icons text-[color:var(--grey-600)] absolute right-2 bottom-2 text-3xl cursor-pointer">pause_circle_outline</i>
+      <i onClick={() => pauseAndSetPanel('panel-how-to-play')} class="material-icons absolute bottom-2 left-2 cursor-pointer text-3xl text-[color:var(--grey-600)]">help_outline</i>
+      <i onClick={() => pauseAndSetPanel('panel-pause-menu')} class="material-icons absolute bottom-2 right-2 cursor-pointer text-3xl text-[color:var(--grey-600)]">pause_circle_outline</i>
     </div>
   </>;
 };

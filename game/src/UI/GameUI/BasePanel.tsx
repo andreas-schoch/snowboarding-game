@@ -4,9 +4,9 @@ import {PanelId} from './GameUI';
 
 type BasePanelProps = {id: string, title: string, scroll: boolean, backBtn: boolean, setPanel: (id: PanelId) => void};
 
-export const BasePanel: ParentComponent<BasePanelProps> = props => (
-  <div id={props.id} class={'bg-neutral-800 border-neutral-500 w-[700px] absolute -translate-x-1/2 -translate-y-1/2 text-[8px] text-neutral-500 max-w-[100vw] max-h-screen m-0 pt-12 pb-4 px-4 rounded-md border-[3px] border-solid left-1/2 top-1/2'}>
-    <div class="text-white text-xl leading-6 bg-blue-900 absolute -translate-x-1/2 mx-auto my-0 px-2 py-1 rounded border-[3px] border-black left-1/2 -top-5">
+export const BasePanel: ParentComponent<BasePanelProps> = props => <>
+  <div id={props.id} class={'absolute left-1/2 top-1/2 z-[5001] m-0 max-h-screen w-[700px] max-w-[100vw] -translate-x-1/2 -translate-y-1/2 rounded-md border-2 border-stone-600 bg-stone-800 px-4 pb-4 pt-12 text-[8px] text-neutral-500'}>
+    <div class="absolute -top-5 left-1/2 mx-auto my-0 -translate-x-1/2 rounded border-[3px] border-black bg-blue-900 px-2 py-1 text-xl leading-6 text-white">
       {props.title}
     </div>
 
@@ -21,4 +21,6 @@ export const BasePanel: ParentComponent<BasePanelProps> = props => (
       </div>
     </Show>
   </div>
-);
+
+  <div class="absolute inset-0 z-[5000] bg-stone-900 opacity-40" />
+</>;

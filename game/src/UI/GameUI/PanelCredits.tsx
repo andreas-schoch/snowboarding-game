@@ -32,7 +32,7 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
     <span class="row">
       <span class="col col-12">
         <span>The game is released under the open-source GPL-3.0 license (initially MIT): </span>
-        <a class="credits-link" rel="noopener" href="https://github.com/andreas-schoch/snowboarding-game"
+        <a class="" rel="noopener" href="https://github.com/andreas-schoch/snowboarding-game"
           target="_blank">Source code</a>.
       </span>
     </span>
@@ -55,7 +55,7 @@ const CreditsTitle: ParentComponent = props => (
 
 const CreditsEntry: Component<{name: string, source?: string, website?: string}> = props => (
   <span class="row">
-    <span class="col col-6 credits-name">{props.name}</span>
+    <span class="col col-6">{props.name}</span>
     {props.source ? <a class="col col-3 text-[10px]" rel="noopener" href={props.source} target="_blank">Source</a> : <span class="col col-3" />}
     {props.website ? <a class="col col-3 text-[10px]" rel="noopener" href={props.website} target="_blank">Website</a> : <span class="col col-3" />}
   </span>

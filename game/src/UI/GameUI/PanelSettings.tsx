@@ -29,7 +29,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
       <form name="settings-form" id="settings-form"class="leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
         {/* <!-- RESOLUTION --> */}
         <div class="row">
-          <span class="col col-3 settings-name">Resolution</span>
+          <span class="col col-3">Resolution</span>
           <span class="col col-9 flex justify-between">
             <label>
               <input class="with-gap" name="resolution" type="radio" value="0.5" />
@@ -47,7 +47,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
         </div>
         {/* <!-- VOLUME MUSIC --> */}
         <div class="row">
-          <span class="col col-3 settings-name">Volume Music</span>
+          <span class="col col-3">Volume Music</span>
           <span class="col col-9">
             <div class="range-field">
               <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value={Settings.volumeMusic()} aria-label="Music volume" />
@@ -56,7 +56,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
         </div>
         {/* <!-- VOLUME SFX --> */}
         <div class="row">
-          <span class="col col-3 settings-name">Volume SFX</span>
+          <span class="col col-3">Volume SFX</span>
           <span class="col col-9">
             <div class="range-field">
               <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value={Settings.volumeSfx()} aria-label="SFX volume" />
@@ -65,8 +65,8 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
         </div>
         {/* <!-- DARK MODE --> */}
         <div class="row">
-          <span class="col col-3 settings-name">Darkmode</span>
-          <span class="col col-9 settings-darkmode-enabled">
+          <span class="col col-3">Darkmode</span>
+          <span class="col col-9">
             <div class="switch">
               <label>
                 <input type="checkbox" name="darkmodeEnabled" aria-label="darkmode toggle" checked={Settings.darkmodeEnabled()} />

@@ -7,7 +7,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:solid/typescript',
-    'plugin:import/recommended'
+    'plugin:import/recommended',
+    'plugin:tailwindcss/recommended'
   ],
   settings: {
     'import/parsers': {
@@ -85,6 +86,12 @@ module.exports = {
         order: 'asc',
         orderImportKind: 'asc'
       }
+    }],
+    'tailwindcss/classnames-order': ['error', {removeDuplicates: true}],
+    'tailwindcss/enforces-negative-arbitrary-values': 'error',
+    'tailwindcss/enforces-shorthand': 'error',
+    'tailwindcss/no-custom-classname': ['warn', {
+      whitelist: ['material-icons', 'resizer', 'row', 'col', 'scrollbar']
     }],
   }
 };

@@ -36,13 +36,13 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
     <Pane title="Details" class="" {...resizeProps}>
       <Show when={localProps.selected} fallback={<div class="p-4">Nothing selected</div>}>
 
-        <i class="scene-item-type-icon material-icons">window</i>
+        <i class="material-icons">window</i>
         <form action="" id="form-properties">
           {/* <!-- NAME --> */}
           <div class="row">
             <div class="col col-5">Name</div>
             <div class="col col-7">
-              <input type="text" class="form-control form-text-input text-black" id="property-name" placeholder="enter body name" value={props.selected!.getName()} />
+              <input type="text" class="form-text-input text-black" id="property-name" placeholder="enter body name" value={props.selected!.getName()} />
             </div>
           </div>
           {/* <!-- POSITION --> */}

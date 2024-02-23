@@ -21,7 +21,7 @@ export const EditorUI: Component = () => {
 
   return <>
     <Actionbar />
-    <div class={'text-white text-lg absolute top-[80px] bottom-0 left-0 right-0 overflow-hidden grid gap-2.5 p-2.5 grid-cols-[repeat(32,1fr)] grid-rows-[repeat(25,1fr)] bg-stone-950'} id="editor-ui">
+    <div class={'absolute inset-x-0 bottom-0 top-[80px] grid grid-cols-[repeat(32,1fr)] grid-rows-[repeat(25,1fr)] gap-2.5 overflow-hidden bg-stone-950 p-2.5 text-lg text-white'} id="editor-ui">
       <Explorer colStart={27} rowStart={1} colEnd={33} rowEnd={13} selected={selected()} setSelected={select} />
       <Details colStart={27} rowStart={13} colEnd={33} rowEnd={26} selected={selected()} updateSelected={onUpdateSelected} />
       <Canvas colStart={1} rowStart={1} colEnd={27} rowEnd={19} />

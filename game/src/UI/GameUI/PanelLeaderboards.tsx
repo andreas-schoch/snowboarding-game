@@ -33,15 +33,15 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
       </Show>
 
       <div class="row text-sm">
-        <span class="col col-2 bolder leaderboard">#</span>
-        <span class="col col-7 bolder leaderboard">Name</span>
-        <span class="col col-3 bolder leaderboard flex-right">Score</span>
+        <span class="col col-2 bolder">#</span>
+        <span class="col col-7 bolder">Name</span>
+        <span class="col col-3 bolder flex-right">Score</span>
       </div>
 
       <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container">
         <For each={scores()} fallback={<div>Loading...</div>}>
           {(score, index) => (
-            <div class="row text-sm pr-2">
+            <div class="row pr-2 text-sm">
               <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
               <span class={(pb.auth.loggedInUser()?.id === score.user ? 'your-own-score ' : '') + 'col col-7 overflow-hidden text-ellipsis'}>{getUsername(score)}</span>
               <span class="col col-3 flex-right" id="leaderboard-item-score">{score.pointsTotal}</span>

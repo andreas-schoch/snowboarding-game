@@ -1,4 +1,3 @@
-import './PanelYourScore.css';
 import {Component, createSignal, onMount} from 'solid-js';
 import {pb} from '../..';
 import {GameInfo} from '../../GameInfo';
@@ -79,17 +78,17 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
 
       <TrickScoreSummary score={props.score} />
 
-      <div class="row summary summary-rank">
-        <span class="col col-12">{rankText()}</span>
+      <div class="row my-16 text-sm leading-4 text-stone-400">
+        <span class="col col-12 text-center">{rankText()}</span>
       </div>
 
       {/* <!--  SUBMIT SCORE --> */}
-      <div class="submit-score" ref={el => submitScoreForm = el}>
-        <div class="row submit-score-info"><span class="col col-12">You haven't submitted a score yet.
+      <div class="" ref={el => submitScoreForm = el}>
+        <div class="row mt-8 border-t-2 border-solid border-t-stone-500 pt-6 text-[10px] leading-normal text-gray-600"><span class="col col-12">You haven't submitted a score yet.
           Please choose your name.
           The next time you finish a level, this will happen automatically.</span></div>
-        <div class="row submit-score-offline-info"><span class="col col-12">This version of the game has online
-          leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div>
+        {/* <div class="row text-[10px] leading-normal text-gray-700"><span class="col col-12">This version of the game has online
+          leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div> */}
         <div class="row" id="your-score-name-form">
           <div class="col col-8">
             <div class="form-group">
@@ -123,58 +122,27 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
 function TrickScoreSummary(props: {score: IScoreNew}) {
 
   return <>
-    <div class="row summary summary-presents">
-      <span class="col col-8">Coins</span>
-      <span class="col col-4">{props.score.pointsCoin}</span>
+    <div class="row text-sm leading-4 text-stone-400">
+      <span class="col col-8 text-left">Coins</span>
+      <span class="col col-4 text-right">{props.score.pointsCoin}</span>
     </div>
 
-    <div class="row summary summary-trick">
-      <span class="col col-8">Tricks</span>
-      <span class="col col-4">{props.score.pointsTrick}</span>
+    <div class="row text-sm leading-4 text-stone-400">
+      <span class="col col-8 text-left">Tricks</span>
+      <span class="col col-4 text-right">{props.score.pointsTrick}</span>
     </div>
 
-    <div class="row summary summary-trick">
-      <span class="col col-8">
+    <div class="row text-sm leading-4 text-stone-400">
+      <span class="col col-8 text-left">
         <span>Combos</span>
-        <span class="summary-trick-combo"> (Best Combo: <span>{props.score.pointsComboBest}</span>)</span>
+        <span class="text-[10px]"> (Best Combo: <span>{props.score.pointsComboBest}</span>)</span>
       </span>
-      <span class="col col-4">{props.score.pointsCombo}</span>
+      <span class="col col-4 text-right">{props.score.pointsCombo}</span>
     </div>
 
-    <div class="row mt-8 bolder text-2xl text-white">
+    <div class="row bolder mt-8 text-2xl text-white">
       <span class="col col-8">Total</span>
       <span class="col col-4 text-right">{props.score.pointsTotal}</span>
     </div>
   </>;
 }
-
-// function RaceScoreSummary(props: {score: IScore}) {
-//   const raceSummary = createMemo(() => getRaceScoreSummary(props.score));
-//   const distance = () => raceSummary().distance.toFixed(1) + ' m';
-//   const avgSpeed = () => raceSummary().avgSpeed.toFixed(1) + ' km/h';
-//   const time = () => formatTime(raceSummary().time);
-
-//   return (
-//     <>
-//       <div class="row summary summary-distance">
-//         <span class="col col-6">Distance</span>
-//         <span class="col col-6" id="your-score-distance">{distance()}</span>
-//       </div>
-
-//       <div class="row summary summary-avg-speed">
-//         <span class="col col-6">Average Speed</span>
-//         <span class="col col-6" id="your-score-avg-speed">{avgSpeed()}</span>
-//       </div>
-
-//       <div class="row summary summary-time summary-total">
-//         <span class="col col-6">Time</span>
-//         <span class="col col-6" id="your-score-time">{time()}</span>
-//       </div>
-
-//       <div class="row summary summary-avg-speed">
-//         {/* <span class="col col-6">Average Speed</span> */}
-//         <span class="col col-12" id="your-score-avg-speed">{avgSpeed()}</span>
-//       </div>
-//     </>
-//   );
-// }

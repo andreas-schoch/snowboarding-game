@@ -129,20 +129,20 @@ export const Pane: ParentComponent<PaneProps> = props => {
     <div onPointerDown={resizeStart} class={'p-1 border border-stone-600 rounded-md overflow-hidden m-0 pt-8 pb-2 absolute text-[8px] text-white bg-stone-800 ' + (props.class || '')} ref={el => paneRef = el} >
 
       <Show when={props.title}>
-        <div class="text-white text-[12px] bg-stone-900 rounded-t-md px-2.5 absolute left-0 right-0 top-0 border-b border-stone-600">{props.title}</div>
+        <div class="absolute inset-x-0 top-0 rounded-t-md border-b border-stone-600 bg-stone-900 px-2.5 text-[12px] text-white">{props.title}</div>
       </Show>
 
       {props.children}
 
-      <div class="resizer cursor-n-resize absolute h-1 top-[-2px] left-0 right-0 z-10" /> {/* top */}
-      <div class="resizer cursor-s-resize absolute h-1 bottom-[-2px] left-0 right-0 z-10" /> {/* bottom */}
-      <div class="resizer cursor-w-resize absolute w-1 left-[-2px] top-0 bottom-0 z-10" /> {/* left */}
-      <div class="resizer cursor-e-resize absolute w-1 right-[-2px] top-0 bottom-0 z-10" /> {/* right */}
+      <div class="resizer absolute inset-x-0 top-[-2px] z-10 h-1 cursor-n-resize" /> {/* top */}
+      <div class="resizer absolute inset-x-0 bottom-[-2px] z-10 h-1 cursor-s-resize" /> {/* bottom */}
+      <div class="resizer absolute inset-y-0 left-[-2px] z-10 w-1 cursor-w-resize" /> {/* left */}
+      <div class="resizer absolute inset-y-0 right-[-2px] z-10 w-1 cursor-e-resize" /> {/* right */}
 
-      <div class="resizer cursor-nw-resize absolute w-2 h-2 top-[-2px] left-[-2px] z-10" /> {/* top-left */}
-      <div class="resizer cursor-ne-resize absolute w-2 h-2 top-[-2px] right-[-2px] z-10" /> {/* top-right */}
-      <div class="resizer cursor-sw-resize absolute w-2 h-2 bottom-[-2px] left-[-2px] z-10" /> {/* bottom-left */}
-      <div class="resizer cursor-se-resize absolute w-2 h-2 bottom-[-2px] right-[-2px] z-10" /> {/* bottom-right */}
+      <div class="resizer absolute left-[-2px] top-[-2px] z-10 size-2 cursor-nw-resize" /> {/* top-left */}
+      <div class="resizer absolute right-[-2px] top-[-2px] z-10 size-2 cursor-ne-resize" /> {/* top-right */}
+      <div class="resizer absolute bottom-[-2px] left-[-2px] z-10 size-2 cursor-sw-resize" /> {/* bottom-left */}
+      <div class="resizer absolute bottom-[-2px] right-[-2px] z-10 size-2 cursor-se-resize" /> {/* bottom-right */}
 
     </div>
   );

@@ -26,11 +26,11 @@ export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
   return (
     <Pane {...resizeProps} title="Explorer" class="">
 
-      <div class="scene-items-scrollable scrollbar max-h-full">
+      <div class="scrollbar max-h-full">
         <For each={items()} fallback={<div>Empty</div>}>
           {(item) => (
-            <div onClick={() => localProps.setSelected(item)} classList={{'bg-neutral-500': localProps.selected?.id === item.id}} class="relative py-1 px-2 text-white text-[10px] cursor-pointer flex justify-center items-center">
-              <i class="material-icons text-black text-xl mr-2 flex items-center justify-center p-[2px] aspect-square h-6 rounded-sm bg-neutral-400">{iconMap[item.type]}</i>
+            <div onClick={() => localProps.setSelected(item)} classList={{'bg-neutral-500': localProps.selected?.id === item.id}} class="relative flex cursor-pointer items-center justify-center px-2 py-1 text-[10px] text-white">
+              <i class="material-icons mr-2 flex aspect-square h-6 items-center justify-center rounded-sm bg-neutral-400 p-[2px] text-xl text-black">{iconMap[item.type]}</i>
               <div class="grow overflow-hidden text-ellipsis text-nowrap">{item.getName()}</div>
             </div>
           )}
