@@ -1,0 +1,413 @@
+
+{
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "bitplane1",
+      "bitplane2",
+      "bitplane3",
+      "bitplane4",
+      "bitplane5",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "customPropertyDefs" : 
+  [
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "body"
+        },
+        
+        {
+          "entry" : "head"
+        },
+        
+        {
+          "entry" : "armUpperLeft"
+        },
+        
+        {
+          "entry" : "armUpperRight"
+        },
+        
+        {
+          "entry" : "armLowerLeft"
+        },
+        
+        {
+          "entry" : "armLowerRight"
+        },
+        
+        {
+          "entry" : "legUpperLeft"
+        },
+        
+        {
+          "entry" : "legUpperRight"
+        },
+        
+        {
+          "entry" : "legLowerLeft"
+        },
+        
+        {
+          "entry" : "legLowerRight"
+        },
+        
+        {
+          "entry" : "boardSegment"
+        },
+        
+        {
+          "entry" : "boardSegmentNose"
+        }
+      ],
+      "displayName" : "phaserPlayerBodyPart",
+      "name" : "phaserPlayerCharacterPart",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    }
+  ],
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : false,
+      "saveFullPathForImages" : false,
+      "saveFullPathForSamplerOutput" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "saveSamplerOutputPathsRelativeToRUBEFile" : false,
+      "useGsonFormat" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 
+    {
+      "x" : 0,
+      "y" : -10
+    },
+    "metabody" : 
+    [
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 1,
+            "name" : "Cane",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -2.892469406127930,
+                -2.802880525588989,
+                -2.793719768524170,
+                -2.825190067291260,
+                -2.904949426651001,
+                -3.034210443496704,
+                -3.156069993972778,
+                -3.258910417556763,
+                -3.322350263595581,
+                -3.319919824600220,
+                -3.212689876556396,
+                -3.015990018844604,
+                3.190800666809082,
+                3.287360429763794,
+                3.335438966751099,
+                3.337623834609985,
+                3.287314176559448,
+                3.190799236297607
+              ],
+              "y" : 
+              [
+                -0.01320336014032364,
+                0.1193161830306053,
+                0.1964823901653290,
+                0.2802459895610809,
+                0.3462722599506378,
+                0.3541760444641113,
+                0.3009693026542664,
+                0.2133242487907410,
+                0.07492389529943466,
+                -0.1002707853913307,
+                -0.2728326320648193,
+                -0.3582667112350464,
+                -0.3552001118659973,
+                -0.3048968613147736,
+                -0.2421025335788727,
+                -0.1307989209890366,
+                -0.05628754943609238,
+                -0.01102479267865419
+              ]
+            }
+          }
+        ],
+        "id" : 1,
+        "linearVelocity" : 0,
+        "name" : "Cane",
+        "position" : 0,
+        "type" : "static"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "angle" : 3.141592741012573,
+        "aspectScale" : 1,
+        "body" : 1,
+        "center" : 
+        {
+          "x" : -1.879315252679634e-13,
+          "y" : -9.536739753457368e-07
+        },
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../../img/cane.png",
+        "filter" : 1,
+        "flip" : true,
+        "id" : 1,
+        "name" : "Cane",
+        "opacity" : 1,
+        "scale" : -0.7061570286750793
+      }
+    ],
+    "positionIterations" : 12,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 12,
+    "warmStarting" : true
+  }
+}

@@ -42,96 +42,6 @@
   [
     
     {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "0"
-        },
-        
-        {
-          "entry" : "1"
-        },
-        
-        {
-          "entry" : "2"
-        },
-        
-        {
-          "entry" : "3"
-        },
-        
-        {
-          "entry" : "4"
-        },
-        
-        {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
-        }
-      ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
-    },
-    
-    {
       "class" : "image",
       "displayName" : "phaserTextureFrame",
       "name" : "phaserTextureFrame",
@@ -139,24 +49,36 @@
     },
     
     {
-      "class" : "fixture",
+      "class" : "joint",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "pickup_present"
+          "entry" : "distanceLegLeft"
         },
         
         {
-          "entry" : "level_finish"
+          "entry" : "distanceLegRight"
         },
         
         {
-          "entry" : "level_deathzone"
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
         }
       ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
       "type" : "string"
     },
     
@@ -219,6 +141,104 @@
     },
     
     {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
       "class" : "image",
       "comboboxEntries" : 
       [
@@ -237,37 +257,17 @@
     },
     
     {
-      "class" : "joint",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "distanceLegLeft"
-        },
-        
-        {
-          "entry" : "distanceLegRight"
-        },
-        
-        {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
-        }
-      ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
-      "type" : "string"
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -314,7 +314,7 @@
             "density" : 1,
             "friction" : 0.2,
             "id" : 1,
-            "name" : "fixture2",
+            "name" : "LevelFinish",
             "sensor" : true,
             "shapes" : 
             [
@@ -344,34 +344,11 @@
         ],
         "id" : 1,
         "linearVelocity" : 0,
-        "name" : "body2",
+        "name" : "LevelFinish",
         "position" : 
         {
           "x" : -1233.012451171875,
           "y" : -396.3235168457031
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : 0.2218321561813354,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
-        "id" : 2,
-        "linearVelocity" : 0,
-        "name" : "body4",
-        "position" : 
-        {
-          "x" : -852.8245239257812,
-          "y" : -468.6521606445312
         },
         "type" : "static"
       },
@@ -392,10 +369,18 @@
         [
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.2,
             "id" : 3,
-            "name" : "fixture0",
+            "name" : "TerrainChunk03",
             "shapes" : 
             [
               
@@ -614,7 +599,7 @@
         ],
         "id" : 3,
         "linearVelocity" : 0,
-        "name" : "body0",
+        "name" : "Terrain",
         "position" : 
         {
           "x" : -391.1309509277344,
@@ -639,10 +624,18 @@
         [
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 4,
-            "name" : "fixture8",
+            "name" : "TerrainChunk02",
             "shapes" : 
             [
               
@@ -654,8 +647,8 @@
             {
               "x" : 
               [
-                -200.6824340820312,
-                -211.3696136474609,
+                -180.6324920654297,
+                -194.0071258544922,
                 -268.0920104980469,
                 -268.5561828613281,
                 -269.4499206542969,
@@ -817,8 +810,8 @@
               ],
               "y" : 
               [
-                -157.8189544677734,
-                -203.3042755126953,
+                -169.7842559814453,
+                -201.7640533447266,
                 -200.0399932861328,
                 -198.1560668945312,
                 -195.5520019531250,
@@ -982,10 +975,18 @@
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 6,
-            "name" : "fixture8",
+            "name" : "TerrainChunk01",
             "shapes" : 
             [
               
@@ -997,8 +998,8 @@
             {
               "x" : 
               [
-                -81.59660339355469,
-                -126.6340942382812,
+                -104.0932312011719,
+                -127.3263015747070,
                 -125.4652481079102,
                 -125.2764434814453,
                 -123.3065032958984,
@@ -1081,12 +1082,12 @@
                 2.412346601486206,
                 24.51248931884766,
                 24.79376983642578,
-                -12.16872787475586
+                -0.07827377319335938
               ],
               "y" : 
               [
-                -74.86804199218750,
-                -75.30355072021484,
+                -105.6711273193359,
+                -101.0881576538086,
                 -53.08532333374023,
                 -52.83078765869141,
                 -47.32174301147461,
@@ -1169,16 +1170,24 @@
                 0.8371568918228149,
                 4.106696605682373,
                 -16.22932243347168,
-                -43.77652740478516
+                -58.95986938476562
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 9,
-            "name" : "fixture8",
+            "name" : "TerrainChunk04",
             "shapes" : 
             [
               
@@ -1190,8 +1199,8 @@
             {
               "x" : 
               [
-                -298.8066406250,
-                -385.3086853027344,
+                -336.9033813476562,
+                -386.107910156250,
                 -384.8380126953125,
                 -384.7644653320312,
                 -381.4437866210938,
@@ -1223,13 +1232,13 @@
                 -268.4226684570312,
                 -267.8208923339844,
                 -268.0920104980469,
-                -217.2187805175781,
-                -212.9026336669922
+                -199.4362182617188,
+                -191.3678436279297
               ],
               "y" : 
               [
-                -303.6320190429688,
-                -303.6898193359375,
+                -343.8600158691406,
+                -328.7324218750,
                 -246.0645751953125,
                 -245.9068450927734,
                 -234.4783782958984,
@@ -1261,17 +1270,25 @@
                 -207.7539825439453,
                 -202.1524963378906,
                 -200.0399932861328,
-                -196.8725280761719,
-                -252.0298614501953
+                -195.0522613525391,
+                -328.0349731445312
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 10,
-            "name" : "fixture8",
+            "name" : "TerrainChunk05",
             "shapes" : 
             [
               
@@ -1283,8 +1300,8 @@
             {
               "x" : 
               [
-                -569.2800903320312,
-                -609.3693847656250,
+                -574.0462036132812,
+                -612.6830444335938,
                 -606.3060302734375,
                 -604.027832031250,
                 -600.7613525390625,
@@ -1360,13 +1377,13 @@
                 -385.0809020996094,
                 -384.9421691894531,
                 -384.8380126953125,
-                -382.3240661621094,
-                -472.0922241210938
+                -382.7166748046875,
+                -421.9548645019531
               ],
               "y" : 
               [
-                -330.2486572265625,
-                -314.1011962890625,
+                -342.7909851074219,
+                -340.3358459472656,
                 -295.7810058593750,
                 -295.57324218750,
                 -294.5941772460938,
@@ -1442,17 +1459,25 @@
                 -246.0811767578125,
                 -246.094238281250,
                 -246.0645751953125,
-                -298.4289550781250,
-                -315.6081542968750
+                -318.0592956542969,
+                -334.1272888183594
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 12,
-            "name" : "fixture8",
+            "name" : "TerrainChunk06",
             "shapes" : 
             [
               
@@ -1464,8 +1489,8 @@
             {
               "x" : 
               [
-                -701.9490356445312,
-                -761.4367065429688,
+                -734.8698730468750,
+                -759.2541503906250,
                 -756.7172241210938,
                 -756.2957153320312,
                 -755.7904052734375,
@@ -1521,13 +1546,13 @@
                 -614.2936401367188,
                 -610.8015136718750,
                 -606.3060302734375,
-                -607.5792236328125,
-                -645.943847656250
+                -608.833496093750,
+                -647.9506225585938
               ],
               "y" : 
               [
-                -345.0611267089844,
-                -343.9608764648438,
+                -389.0768127441406,
+                -377.9729919433594,
                 -308.70996093750,
                 -308.7029113769531,
                 -308.6965942382812,
@@ -1583,17 +1608,25 @@
                 -294.2380065917969,
                 -295.4929199218750,
                 -295.7810058593750,
-                -320.4600524902344,
-                -336.9298095703125
+                -343.2871093750,
+                -359.7568664550781
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 14,
-            "name" : "fixture8",
+            "name" : "TerrainChunk07",
             "shapes" : 
             [
               
@@ -1605,8 +1638,8 @@
             {
               "x" : 
               [
-                -917.1885986328125,
-                -973.9006347656250,
+                -937.736816406250,
+                -969.9946899414062,
                 -966.2119750976562,
                 -965.7103271484375,
                 -965.5575561523438,
@@ -1656,13 +1689,13 @@
                 -759.9761962890625,
                 -757.2247314453125,
                 -756.7172241210938,
-                -756.970214843750,
-                -791.5482788085938
+                -755.5030517578125,
+                -781.5228881835938
               ],
               "y" : 
               [
-                -401.6100769042969,
-                -394.7949523925781,
+                -435.3927307128906,
+                -423.8943786621094,
                 -353.3000183105469,
                 -353.2671813964844,
                 -353.2695617675781,
@@ -1712,17 +1745,25 @@
                 -308.9051208496094,
                 -308.7351684570312,
                 -308.70996093750,
-                -361.2189941406250,
-                -388.3171081542969
+                -384.6930236816406,
+                -409.3459472656250
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 16,
-            "name" : "fixture8",
+            "name" : "TerrainChunk08",
             "shapes" : 
             [
               
@@ -1734,8 +1775,8 @@
             {
               "x" : 
               [
-                -1060.179199218750,
-                -1095.146118164062,
+                -1055.805541992188,
+                -1087.786621093750,
                 -1083.217041015625,
                 -1078.991943359375,
                 -1073.904541015625,
@@ -1775,13 +1816,13 @@
                 -966.8455810546875,
                 -966.5243530273438,
                 -966.2119750976562,
-                -967.0567626953125,
-                -1015.061889648438
+                -966.0119018554688,
+                -984.0238037109375
               ],
               "y" : 
               [
-                -427.6727905273438,
-                -420.6480712890625,
+                -450.7185363769531,
+                -448.3812561035156,
                 -382.3227233886719,
                 -379.4825134277344,
                 -376.1538696289062,
@@ -1821,17 +1862,25 @@
                 -353.401855468750,
                 -353.3376159667969,
                 -353.3000183105469,
-                -405.4705505371094,
-                -423.9512329101562
+                -420.7946472167969,
+                -433.3824462890625
               ]
             }
           },
           
           {
+            "customProperties" : 
+            [
+              
+              {
+                "name" : "surfaceType",
+                "string" : "snow"
+              }
+            ],
             "density" : 1,
             "friction" : 0.5,
             "id" : 17,
-            "name" : "fixture8",
+            "name" : "TerrainChunk09",
             "shapes" : 
             [
               
@@ -1844,7 +1893,7 @@
               "x" : 
               [
                 -1229.636596679688,
-                -1298.888793945312,
+                -1308.256225585938,
                 -1329.639892578125,
                 -1290.030029296875,
                 -1291.359985351562,
@@ -1939,13 +1988,13 @@
                 -1097.726928710938,
                 -1090.768798828125,
                 -1083.217041015625,
-                -1088.380249023438,
-                -1127.10253906250
+                -1083.677856445312,
+                -1113.235595703125
               ],
               "y" : 
               [
                 -473.354980468750,
-                -452.9753417968750,
+                -455.3171997070312,
                 -379.7768859863281,
                 -380.6109924316406,
                 -382.2170104980469,
@@ -2040,15 +2089,15 @@
                 -391.4036560058594,
                 -387.5003051757812,
                 -382.3227233886719,
-                -429.9691162109375,
-                -450.3712463378906
+                -448.3279113769531,
+                -460.8087768554688
               ]
             }
           }
         ],
         "id" : 37,
         "linearVelocity" : 0,
-        "name" : "body3",
+        "name" : "Terrain",
         "position" : 0,
         "type" : "static"
       }
@@ -2075,7 +2124,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 1,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : 12.0,
         "scale" : 5.666649818420410
@@ -2100,7 +2149,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 2,
-        "name" : "image11",
+        "name" : "House",
         "opacity" : 1,
         "renderOrder" : -20.0,
         "scale" : 7.7
@@ -2125,7 +2174,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 3,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -105.0,
         "scale" : 5.037354946136475
@@ -2150,7 +2199,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 7,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 6
@@ -2176,7 +2225,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 8,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 5.319893836975098
@@ -2202,7 +2251,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 9,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 5.319893836975098
@@ -2228,7 +2277,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 10,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : 11.0,
         "scale" : 5.694165706634521
@@ -2254,7 +2303,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 11,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2280,7 +2329,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 12,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -99.0,
         "scale" : 5.694165706634521
@@ -2306,7 +2355,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 13,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 5.319893836975098
@@ -2332,7 +2381,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 14,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2358,7 +2407,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 15,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2384,7 +2433,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 16,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.098063468933105
@@ -2410,7 +2459,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 17,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2436,7 +2485,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 18,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -99.0,
         "scale" : 4.562173366546631
@@ -2462,7 +2511,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 19,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2488,7 +2537,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 20,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2514,7 +2563,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 21,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 5.516757011413574
@@ -2540,7 +2589,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 22,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2566,7 +2615,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 23,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.098063468933105
@@ -2592,7 +2641,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 24,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2617,7 +2666,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 25,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : 11.0,
         "scale" : 5.751840591430664
@@ -2643,7 +2692,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 26,
-        "name" : "image7",
+        "name" : "Tree",
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 4.562173366546631
@@ -2668,7 +2717,7 @@
         "filter" : 1,
         "flip" : false,
         "id" : 183,
-        "name" : "image11",
+        "name" : "House",
         "opacity" : 1,
         "renderOrder" : -40.0,
         "scale" : 7.7

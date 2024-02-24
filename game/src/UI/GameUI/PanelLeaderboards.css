@@ -1,9 +1,0 @@
-#panel-leaderboards {
-  @apply w-[600px];
-}
-.leaderboard-scrollable {
-  @apply max-h-[350px];
-}
-.your-own-score::after {
-  @apply content-['You'] text-[white] bg-[color:var(--blue-800)] text-xs ml-[0.4rem] px-[0.4rem] py-[0.2rem] rounded-[3px];
-}

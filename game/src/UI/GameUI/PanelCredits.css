@@ -1,6 +1,0 @@
-#panel-credits {
-  @apply w-[600px] leading-normal text-[color:var(--grey-700)];
-}
-#panel-credits .scrollbar {
-  @apply max-h-[400px] text-xs px-0 py-4;
-}

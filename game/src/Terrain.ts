@@ -10,21 +10,24 @@ export class Terrain {
   constructor(private scene: Phaser.Scene, private rubeScene: LoadedScene) { }
 
   draw() {
-    const {worldEntity: {pixelsPerMeter}} = this.rubeScene;
-    const terrainBodyEntities = this.rubeScene.bodies.filter(body => body.customProps.surfaceType === 'snow');
-    if (!terrainBodyEntities.length) return; // There may be levels where no terrain is present
+    const ppm = this.rubeScene.worldEntity.pixelsPerMeter;
 
-    for (const {body} of terrainBodyEntities) {
-      const bodyPos = body.GetPosition();
-      // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
-      const edgeShape = new b2.b2EdgeShape();
-      for (const fixture of iterBodyFixtures(body)) {
-        const shape = b2.castObject(fixture.GetShape(), b2.b2ChainShape);
+    for (const body of this.rubeScene.bodies) {
+      if (!body.fixtures) continue;
+      for (const fixture of body.fixtures) {
+        const surfaceType = fixture.customProps['surfaceType'];
+        if (!surfaceType) continue;
+        if (surfaceType !== 'snow') throw new Error('Only snow terrain is expected as terrain surfaceType for now');
+
+        const bodyPos = body.body.GetPosition();
+        // Using reifyArray() was problematic for the "control points" but maybe it could work. needs investigation
+        const edgeShape = new b2.b2EdgeShape();
+        const shape = b2.castObject(fixture.fixture.GetShape(), b2.b2ChainShape);
         const chunkPoints: XY[] = [];
         for (let i = 0; i < shape.get_m_count() - 1; i++) {
           shape.GetChildEdge(edgeShape, i);
-          const vert1 = {x: (edgeShape.m_vertex1.x + bodyPos.x) * pixelsPerMeter, y: -(edgeShape.m_vertex1.y + bodyPos.y) * pixelsPerMeter};
-          const vert2 = {x: (edgeShape.m_vertex2.x + bodyPos.x) * pixelsPerMeter, y: -(edgeShape.m_vertex2.y + bodyPos.y) * pixelsPerMeter};
+          const vert1 = {x: (edgeShape.m_vertex1.x + bodyPos.x) * ppm, y: -(edgeShape.m_vertex1.y + bodyPos.y) * ppm};
+          const vert2 = {x: (edgeShape.m_vertex2.x + bodyPos.x) * ppm, y: -(edgeShape.m_vertex2.y + bodyPos.y) * ppm};
           chunkPoints.push(vert1, vert2);
         }
         this.drawChunk(chunkPoints);

@@ -1,4 +1,4 @@
-import {SCENE_EDITOR} from '..';
+import {SCENE_EDITOR, SCENE_GAME, rootGame} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
@@ -9,8 +9,9 @@ import {EditorController} from '../controllers/EditorController';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
 import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
-import {EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
+import {EDITOR_EXIT, EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
+import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
@@ -22,18 +23,31 @@ export class EditorScene extends Phaser.Scene {
   private backdropGrid: BackdropGrid;
   private controller: EditorController;
   private ready: boolean;
+  private level: ILevel | null = null;
 
   constructor() {
     super({key: SCENE_EDITOR});
+  }
+
+  private init(data: {level: ILevel | null}) {
+    // this.data = data;
+    this.level = data.level;
+    this.ready = false;
   }
 
   private preload() {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
     this.load.json('level_new.rube', 'assets/levels/level_new.rube');
+    if (this.level?.number) {
+      const filename = `level_${String(this.level.number).padStart(3, '0')}.rube`;
+      this.load.json(filename, `assets/levels/${filename}`);
+    }
+    this.load.json('level_new.rube', 'assets/levels/level_new.rube');
   }
 
   private create() {
+    this.data;
     if (GameInfo.observer) GameInfo.observer.destroy();
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     EditorInfo.observer = new Phaser.Events.EventEmitter();
@@ -45,7 +59,13 @@ export class EditorScene extends Phaser.Scene {
 
     drawCoordZeroPoint(this);
     initSolidUI('root-ui');
-    EditorInfo.observer.emit(EDITOR_OPEN);
+    EditorInfo.observer.emit(EDITOR_OPEN, null);
+
+    EditorInfo.observer.on(EDITOR_EXIT, () => {
+      document.body.appendChild(rootGame);
+      this.scene.stop(SCENE_EDITOR);
+      this.scene.start(SCENE_GAME);
+    });
 
     EditorInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
       const position = item.getPosition();
@@ -56,7 +76,12 @@ export class EditorScene extends Phaser.Scene {
     // pb.level.get(Settings.currentLevel()).then(async level => {
     // GameInfo.currentLevel = level;
     // const scene = await pb.level.getRubeScene(level);
-    const scene: RubeFile = this.cache.json.get('level_new.rube');
+    // const scene: RubeFile = this.cache.json.get('level_new.rube');
+    const filename = this.level?.number ? `level_${String(this.level.number).padStart(3, '0')}.rube` : 'level_new.rube';
+    const scene: RubeFile = this.cache.json.get(filename);
+
+    console.log('---------scene', scene, filename);
+
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(scene);
     // const metaSerializer = new RubeMetaSerializer(this);

@@ -1,7 +1,6 @@
 import {Component, onCleanup, onMount} from 'solid-js';
+import {rootGame} from '../..';
 import {Pane, ResizeProps} from './Pane';
-
-const rootGame = document.querySelector('#root-game');
 
 export const Canvas: Component<ResizeProps> = props => {
   let wrapperRef: HTMLDivElement;

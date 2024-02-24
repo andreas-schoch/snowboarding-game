@@ -2,7 +2,7 @@ import {LocalLevelKeys} from './levels';
 import {IScore} from './pocketbase/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
-export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen';
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen' | 'fps';
 export type CharacterKeys = 'character_v01' | 'character_v02';
 export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
@@ -41,6 +41,10 @@ export class Settings {
 
   static debug(): boolean {
     return Settings.getRaw('debug') === 'true';
+  }
+
+  static fps(): boolean {
+    return Settings.getRaw('fps') === 'true';
   }
 
   static volumeMusic(): number {

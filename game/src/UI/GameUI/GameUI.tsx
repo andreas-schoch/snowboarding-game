@@ -13,7 +13,7 @@ import {PanelYourScore} from './PanelYourScore';
 
 export const GameUI: Component = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
-  const [score, setScore] = createSignal<IScoreNew>(GameInfo.score);
+  const [score, setScore] = createSignal<IScoreNew>(GameInfo.score!);
 
   // const [selectedItems, setSelectedItems] = createSignal();
 

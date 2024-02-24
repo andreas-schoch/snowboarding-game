@@ -74,7 +74,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
   };
 
   return (
-    <BasePanel id='panel-your-score' title='Your Score' scroll={false} backBtn={false} setPanel={props.setPanel}>
+    <BasePanel id='panel-your-score' title='Your Score' backBtn={false} setPanel={props.setPanel} class="!pb-4">
 
       <TrickScoreSummary score={props.score} />
 

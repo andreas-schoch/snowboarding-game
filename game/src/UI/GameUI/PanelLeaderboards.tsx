@@ -1,4 +1,3 @@
-import './PanelLeaderboards.css';
 import {Component, For, Show, createSignal, onMount} from 'solid-js';
 import {pb} from '../..';
 import {Settings} from '../../Settings';
@@ -8,6 +7,7 @@ import {PanelId} from './GameUI';
 
 export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = props => {
   const [scores, setScores] = createSignal<IScore[]>([]);
+  const ownScorePseudoStyles = 'after:content-["You"] after:text-[white] after:bg-blue-900 after:text-xs after:ml-2 after:px-2 after:py-1 after:rounded-md';
 
   onMount(async () => {
     const scores: IScore[] = await pb.leaderboard.scoresFromLogs(Settings.currentLevel(), 1, 200);
@@ -21,7 +21,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   };
 
   return (
-    <BasePanel id='panel-leaderboards' title='Leaderboards' scroll={false} backBtn={true} setPanel={props.setPanel} >
+    <BasePanel id='panel-leaderboards' title='Leaderboards' backBtn={true} setPanel={props.setPanel} class="!w-[600px]">
 
       <Show when={!pb.auth.loggedInUser()}>
         <div class="row">
@@ -38,12 +38,12 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
         <span class="col col-3 bolder flex-right">Score</span>
       </div>
 
-      <div class="leaderboard-scrollable scrollbar" id="leaderboard-item-container">
+      <div class="scrollbar max-h-[350px]" id="leaderboard-item-container">
         <For each={scores()} fallback={<div>Loading...</div>}>
           {(score, index) => (
             <div class="row pr-2 text-sm">
               <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
-              <span class={(pb.auth.loggedInUser()?.id === score.user ? 'your-own-score ' : '') + 'col col-7 overflow-hidden text-ellipsis'}>{getUsername(score)}</span>
+              <span classList={{[ownScorePseudoStyles]: pb.auth.loggedInUser()?.id === score.user}} class="col col-7 overflow-hidden text-ellipsis">{getUsername(score)}</span>
               <span class="col col-3 flex-right" id="leaderboard-item-score">{score.pointsTotal}</span>
             </div>
           )}

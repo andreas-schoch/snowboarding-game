@@ -62,7 +62,7 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
     comboWrapperRef.style.visibility = 'hidden';
     setTimeout(() => {
       const {x, y} = scoreTextRef.getBoundingClientRect();
-      comboMoveTextRef.style.transition = 'all 1s linear'; // Adjust duration as needed
+      comboMoveTextRef.style.transition = 'all 1500ms ease-in';
       comboMoveTextRef.style.left = x + 'px';
       comboMoveTextRef.style.top = y + 'px';
       comboMoveTextRef.style.opacity = '0';
@@ -80,7 +80,7 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
     setCombo('');
     comboWrapperRef.style.visibility = 'hidden';
     setTimeout(() => {
-      comboMoveTextRef.style.transition = 'all 1250ms linear'; // Adjust duration as needed
+      comboMoveTextRef.style.transition = 'all 1500ms linear';
       comboMoveTextRef.style.top = (y + 500) + 'px';
       comboMoveTextRef.style.opacity = '0';
     }, 0);

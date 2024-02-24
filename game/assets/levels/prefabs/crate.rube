@@ -117,31 +117,9 @@
     },
     
     {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
       "type" : "bool"
     },
     
@@ -154,28 +132,9 @@
     
     {
       "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     },
     
     {
@@ -271,10 +230,51 @@
     },
     
     {
-      "class" : "body",
-      "displayName" : "light",
-      "name" : "light",
-      "type" : "bool"
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
     }
   ],
   "metaworld" : 
@@ -304,53 +304,39 @@
       
       {
         "angle" : 0,
+        "angularDamping" : 0.1,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "bool" : true,
-            "name" : "light"
-          }
-        ],
         "fixture" : 
         [
           
           {
-            "customProperties" : 
-            [
-              
-              {
-                "name" : "phaserSensorType",
-                "string" : "pickup_present"
-              }
-            ],
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 30,
-            "name" : "Coin",
-            "sensor" : true,
+            "density" : 23.43749809265137,
+            "friction" : 0.8,
+            "id" : 1,
+            "name" : "Crate",
             "shapes" : 
             [
               
               {
-                "radius" : 0.5,
-                "type" : "circle"
+                "type" : "polygon"
               }
             ],
             "vertices" : 
             {
-              "x" : [ 0.0 ],
-              "y" : [ 0.0 ]
+              "x" : [ -0.4, -0.4, 0.4, 0.4 ],
+              "y" : [ 0.4, -0.4, -0.4, 0.4 ]
             }
           }
         ],
-        "id" : 24,
+        "id" : 1,
+        "linearDamping" : 0.1,
         "linearVelocity" : 0,
-        "name" : "Coin",
+        "massData-I" : 1.6,
+        "massData-mass" : 15.0,
+        "name" : "Crate",
         "position" : 0,
-        "type" : "static"
+        "type" : "dynamic"
       }
     ],
     "metaimage" : 
@@ -358,7 +344,7 @@
       
       {
         "aspectScale" : 1,
-        "body" : 24,
+        "body" : 1,
         "center" : 0,
         "customProperties" : 
         [
@@ -368,13 +354,13 @@
             "string" : "atlas_environment"
           }
         ],
-        "file" : "../../img/present_temp.png",
+        "file" : "../../img/obstacles/wooden_crate.png",
         "filter" : 1,
         "flip" : false,
-        "id" : 4,
-        "name" : "Coin",
+        "id" : 1,
+        "name" : "Crate",
         "opacity" : 1,
-        "scale" : 1
+        "scale" : 0.8
       }
     ],
     "positionIterations" : 12,

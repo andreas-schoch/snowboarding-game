@@ -1,5 +1,8 @@
 import {Component, ParentComponent, Show, createEffect, createSignal} from 'solid-js';
 import {Dynamic, Portal} from 'solid-js/web';
+import {EditorInfo} from '../../EditorInfo';
+import {Settings} from '../../Settings';
+import {EDITOR_EXIT} from '../../eventTypes';
 
 type MenuName = 'File' | 'Edit' | 'View' | 'Actions' | 'Help';
 type DialogName = 'Help' | 'About' | 'Settings';
@@ -17,13 +20,18 @@ export const Actionbar: Component = () => {
     if (activeDialog() !== null) setActiveMenu(null);
   });
 
+  const handleOpenGame = () => {
+    EditorInfo.observer.emit(EDITOR_EXIT);
+    Settings.set('editorOpen', 'false');
+  };
+
   // TODO how can I dynamically do this?
   // EditorInfo.observer.on('open_dialog', (content: Component) => dialogRef.innerHTML = dialogContent());
 
   return <>
     <header class="absolute inset-x-0 top-0 flex h-[76px] items-center border-b border-stone-600 bg-stone-900 text-white">
 
-      <div class="ml-2 mr-4 size-14 cursor-pointer rounded-full border border-stone-600 bg-stone-800 hover:bg-stone-700">
+      <div class="ml-2 mr-4 size-14 cursor-pointer rounded-full border border-stone-600 bg-stone-800 hover:bg-stone-700" onClick={handleOpenGame}>
         <img src="/assets/img/logo.png" class="size-full  hover:scale-105" alt='logo goto main menu' />
       </div>
 

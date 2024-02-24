@@ -11,6 +11,7 @@ import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {downloadBlob} from '../helpers/binaryTransform';
 import {Physics} from '../physics/Physics';
+import {MetaObject, RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
 import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeDefaults';
 import {IScoreNew} from '../pocketbase/types';
@@ -39,8 +40,9 @@ export class GameScene extends Phaser.Scene {
     const character = Settings.selectedCharacter();
     this.load.json(character, `assets/levels/export/${character}.json`);
 
-    const levels = ['level_001'];
+    const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
     for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
+    for (const level of levels) this.load.json(level + '.rube', `assets/levels/${level}.rube`);
   }
 
   private create() {
@@ -59,9 +61,9 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(Settings.currentLevel()).then(async level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
+      const rubeFile = await pb.level.getRubeScene(level);
       GameInfo.currentLevel = level;
-      const levelScene = await pb.level.getRubeScene(level);
-      const loadedLevelScene = this.b2Physics.load(levelScene);
+      const loadedLevelScene = this.b2Physics.load(rubeFile);
       new Terrain(this, loadedLevelScene).draw();
       this.playerController = new CharacterController(this);
       const characterScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
@@ -74,6 +76,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     GameInfo.observer.on(EDITOR_OPEN, () => {
+      const currentLevel = GameInfo.currentLevel;
       this.b2Physics.loader.cleanup();
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';
@@ -83,7 +86,7 @@ export class GameScene extends Phaser.Scene {
       freeLeaked();
       this.sound.stopAll();
       this.scene.stop(SCENE_GAME);
-      this.scene.start(SCENE_EDITOR);
+      this.scene.start(SCENE_EDITOR, {level: currentLevel});
     });
 
     GameInfo.observer.on(RESTART_GAME, () => {
@@ -99,14 +102,14 @@ export class GameScene extends Phaser.Scene {
 
     initSolidUI('root-ui');
 
-    if (Settings.debug()) {
+    if (true) {
       // TODO remove. Temporary to serialize open level
       this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
       this.input.keyboard!.on('keydown-TWO', () => {
         // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
         //  Can be removed once we have the editor in place to do that properly
         // TODO make this possible via cli script
-        const levels = ['level_001'];
+        const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
         for (const level of levels) {
           const parsed: RubeScene = this.cache.json.get(level);
           const sanitized = sanitizeRubeDefaults(parsed);
@@ -114,6 +117,46 @@ export class GameScene extends Phaser.Scene {
           downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
         }
       });
+
+      this.input.keyboard!.on('keydown-THREE', () => {
+        console.log('migrate level');
+        const level = 'level_004.rube';
+        const rubeFile: RubeFile = this.cache.json.get(level);
+        const coinTODO = rubeFile.metaworld.metabody!.filter(e => e.name === 'coinTODO');
+        console.log('number of coinTODOs', coinTODO.length);
+
+        const coinObjTemp: MetaObject = {
+          angle : 0,
+          file : 'prefabs/coin.rube',
+          flip : false,
+          id : 1,
+          name : 'coinObjTemplate',
+          position :
+          {x : 0, y : 0},
+          scale : 1
+        };
+
+        rubeFile.metaworld.metaobject = rubeFile.metaworld.metaobject || [];
+
+        let i = coinObjTemp.id + 1;
+        const objects = rubeFile.metaworld.metaobject!;
+        for (const todo of coinTODO) {
+          const position = todo.position;
+          const obj = {...coinObjTemp};
+          obj.position = position;
+          obj.name = 'Coin';
+          obj.id = i++;
+          objects.push(obj);
+
+          rubeFile.metaworld.metabody = rubeFile.metaworld.metabody!.filter(e => e.name !== 'coinTODO');
+          rubeFile.metaworld.metaimage = rubeFile.metaworld.metaimage!.filter(e => !e.file.includes('present_temp.png'));
+        }
+
+        // download as json dont use my custom helper methods
+        downloadBlob(JSON.stringify(rubeFile), level, 'application/json');
+
+      });
+
     }
   }
 }

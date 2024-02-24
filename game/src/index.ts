@@ -36,7 +36,7 @@ export const DEFAULT_HEIGHT = 720;
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '2.0.0',
+  version: '2.0.1',
   type: Phaser.WEBGL,
   backgroundColor: Settings.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
@@ -59,6 +59,9 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   },
 };
 
+export const rootGame = document.querySelector('#root-game') as HTMLElement;
+if (!rootGame) throw new Error('Root game element not found');
+
 export let game: Phaser.Game;
 export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
@@ -80,10 +83,10 @@ window.onload = async () => {
 
   game = new Phaser.Game(gameConfig);
 
-  if (navigator.onLine) {
+  if (navigator.onLine && Settings.fps()) {
     // Display fps and memory usage
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    // (function () { const script = document.createElement('script'); script.onload = function () { const stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop); }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })();
+    (function () { const script = document.createElement('script'); script.onload = function () { const stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop); }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })();
   }
 };

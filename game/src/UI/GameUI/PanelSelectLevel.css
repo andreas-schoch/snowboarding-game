@@ -1,6 +1,0 @@
-#panel-select-level {
-  /* @apply w-[770px]; */
-}
-#panel-select-level .scrollbar {
-  @apply max-h-[500px];
-}

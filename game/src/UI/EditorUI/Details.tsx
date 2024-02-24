@@ -100,7 +100,7 @@ export const Details: Component<{selected: EditorItem | null, updateSelected: (u
                   min={-1000}
                   max={1000}
                   step={1}
-                  value={(localProps.selected as EditorImage).getDepth()}
+                  value={(localProps.selected as EditorImage).signal().getDepth()}
                   onChange={onDepthChange}
                   class=""
                 />

@@ -1,4 +1,3 @@
-import './PanelSettings.css';
 import {Component, onMount} from 'solid-js';
 import {Settings} from '../../Settings';
 import {ButtonPrimary} from '../general/Button';
@@ -20,13 +19,15 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
     Settings.set('volumeMusic', submitForm.volumeMusic.value);
     Settings.set('volumeSfx', submitForm.volumeSfx.value);
     Settings.set('darkmodeEnabled', String(submitForm.darkmodeEnabled.checked));
+    Settings.set('fps', String(submitForm.fpsCounter.checked));
+    Settings.set('betaFeaturesEnabled', String(submitForm.betaFeaturesEnabled.checked));
     location.reload();
   };
 
   return (
-    <BasePanel id='panel-settings' title='Settings' scroll={false} backBtn={true} setPanel={props.setPanel}>
+    <BasePanel id='panel-settings' title='Settings' backBtn={true} setPanel={props.setPanel} class="!w-[600px] !text-[10px]">
 
-      <form name="settings-form" id="settings-form"class="leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
+      <form name="settings-form" id="settings-form"class="mb-[-10px] leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
         {/* <!-- RESOLUTION --> */}
         <div class="row">
           <span class="col col-3">Resolution</span>
@@ -70,6 +71,30 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
             <div class="switch">
               <label>
                 <input type="checkbox" name="darkmodeEnabled" aria-label="darkmode toggle" checked={Settings.darkmodeEnabled()} />
+                <span class="lever" />
+              </label>
+            </div>
+          </span>
+        </div>
+        {/* <!-- FPS Display --> */}
+        <div class="row">
+          <span class="col col-3">Show FPS</span>
+          <span class="col col-9">
+            <div class="switch">
+              <label>
+                <input type="checkbox" name="fpsCounter" aria-label="show fps toggle" checked={Settings.fps()} />
+                <span class="lever" />
+              </label>
+            </div>
+          </span>
+        </div>
+        {/* <!-- BETA FEATURES --> */}
+        <div class="row">
+          <span class="col col-3">Beta Features</span>
+          <span class="col col-9">
+            <div class="switch">
+              <label>
+                <input type="checkbox" name="betaFeaturesEnabled" aria-label="enable beta features" checked={Settings.betaFeaturesEnabled()} />
                 <span class="lever" />
               </label>
             </div>

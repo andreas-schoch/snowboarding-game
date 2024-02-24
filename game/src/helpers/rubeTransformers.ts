@@ -32,12 +32,12 @@ export function XYToRubeVectorArray(vertices?: XY[]): RubeVectorArray {
   return vecArray;
 }
 
-export function RubeVectorArrayToXY(vertices?: RubeVectorArray): XY[] {
+export function RubeVectorArrayToXY(vertices?: RubeVectorArray, offsetX = 0, offsetY = 0): XY[] {
   if (!vertices) return [];
   const verts: XY[] = [];
   for (let i = 0; i < vertices.x.length; i++) verts.push({
-    x: vertices.x[i],
-    y: -vertices.y[i], // In RUBE Editor the Y coordinates are upside down when compared to Phaser3
+    x: vertices.x[i] + offsetX,
+    y: -vertices.y[i] + offsetY, // In RUBE Editor the Y coordinates are upside down when compared to Phaser3
   });
   return verts;
 }

@@ -42,20 +42,28 @@
   [
     
     {
-      "class" : "image",
+      "class" : "fixture",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "atlas_santa"
+          "entry" : "snow"
         },
         
         {
-          "entry" : "atlas_environment"
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
         }
       ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
       "type" : "string"
     },
     
@@ -107,6 +115,42 @@
       "displayName" : "phaserBoardSegmentIndex",
       "name" : "phaserBoardSegmentIndex",
       "type" : "int"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     },
     
     {
@@ -230,65 +274,21 @@
     },
     
     {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
-    },
-    
-    {
       "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "pickup_present"
+          "entry" : "atlas_santa"
         },
         
         {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
+          "entry" : "atlas_environment"
         }
       ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
       "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -363,7 +363,7 @@
             [
               
               {
-                "type" : "line"
+                "type" : "loop"
               }
             ],
             "vertices" : 
