@@ -295,6 +295,27 @@
       "displayName" : "jumpForce",
       "name" : "jumpForce",
       "type" : "float"
+    },
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
+      "type" : "string"
     }
   ],
   "metaworld" : 

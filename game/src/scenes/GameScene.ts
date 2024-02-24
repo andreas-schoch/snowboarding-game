@@ -110,24 +110,25 @@ export class GameScene extends Phaser.Scene {
         //  Can be removed once we have the editor in place to do that properly
         // TODO make this possible via cli script
         const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-        for (const level of levels) {
-          const parsed: RubeScene = this.cache.json.get(level);
-          const sanitized = sanitizeRubeDefaults(parsed);
-          const encoded = rubeSceneSerializer.encode(sanitized);
-          downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
-        }
+        // for (const level of levels) {
+        const level = 'level_004';
+        const parsed: RubeScene = this.cache.json.get(level);
+        const sanitized = sanitizeRubeDefaults(parsed);
+        const encoded = rubeSceneSerializer.encode(sanitized);
+        downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+        // }
       });
 
       this.input.keyboard!.on('keydown-THREE', () => {
         console.log('migrate level');
         const level = 'level_004.rube';
         const rubeFile: RubeFile = this.cache.json.get(level);
-        const coinTODO = rubeFile.metaworld.metabody!.filter(e => e.name === 'coinTODO');
-        console.log('number of coinTODOs', coinTODO.length);
+        const rockTODO = rubeFile.metaworld.metabody!.filter(e => e.name === 'rockTODO');
+        console.log('number of rockTODOs', rockTODO.length);
 
         const coinObjTemp: MetaObject = {
           angle : 0,
-          file : 'prefabs/coin.rube',
+          file : 'prefabs/rock.rube',
           flip : false,
           id : 1,
           name : 'coinObjTemplate',
@@ -140,16 +141,17 @@ export class GameScene extends Phaser.Scene {
 
         let i = coinObjTemp.id + 1;
         const objects = rubeFile.metaworld.metaobject!;
-        for (const todo of coinTODO) {
+        for (const todo of rockTODO) {
           const position = todo.position;
           const obj = {...coinObjTemp};
+          obj.angle = todo.angle;
           obj.position = position;
-          obj.name = 'Coin';
+          obj.name = 'Rock';
           obj.id = i++;
           objects.push(obj);
 
-          rubeFile.metaworld.metabody = rubeFile.metaworld.metabody!.filter(e => e.name !== 'coinTODO');
-          rubeFile.metaworld.metaimage = rubeFile.metaworld.metaimage!.filter(e => !e.file.includes('present_temp.png'));
+          rubeFile.metaworld.metabody = rubeFile.metaworld.metabody!.filter(e => e.name !== 'rockTODO');
+          rubeFile.metaworld.metaimage = rubeFile.metaworld.metaimage!.filter(e => !e.file.includes('snowy_rock.png'));
         }
 
         // download as json dont use my custom helper methods

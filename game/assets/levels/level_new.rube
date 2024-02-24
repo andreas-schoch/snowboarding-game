@@ -289,6 +289,27 @@
       "displayName" : "phaserTexture",
       "name" : "phaserTexture",
       "type" : "string"
+    },
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
+      "type" : "string"
     }
   ],
   "metaworld" : 

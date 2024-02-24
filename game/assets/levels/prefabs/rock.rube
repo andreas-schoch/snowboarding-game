@@ -275,6 +275,27 @@
       "displayName" : "phaserPlayerCharacterSpring",
       "name" : "phaserPlayerCharacterSpring",
       "type" : "string"
+    },
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
+      "type" : "string"
     }
   ],
   "metaworld" : 

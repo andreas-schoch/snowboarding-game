@@ -17,6 +17,7 @@ export interface RubeScene {
   body?: RubeBody[];
   joint?: RubeJoint[];
   image?: RubeImage[];
+  object?: RubeObject[];
 }
 
 export interface RubeBody {
@@ -229,4 +230,20 @@ export interface RubeImage {
   // glTexCoordPointer: number[];
   // /** Vertex positions for use with glVertexPointer */
   // glVertexPointer: number[];
+}
+
+export interface RubeObject {
+  //   "angle" : 4.396453380584717,
+  //   "name" : "Cane",
+  //   "position" : 
+  //   {
+  //     "x" : -11.78859138488770,
+  //     "y" : 3.913610458374023
+  //   },
+  //   "scale" : 1
+  angle: number;
+  name: string;
+  position: RubeVector;
+  scale: number;
+  customProperties?: RubeCustomProperty[];
 }

@@ -42,35 +42,59 @@
   [
     
     {
-      "class" : "fixture",
+      "class" : "body",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "snow"
+          "entry" : "0"
         },
         
         {
-          "entry" : "ice"
+          "entry" : "1"
         },
         
         {
-          "entry" : "metal"
+          "entry" : "2"
         },
         
         {
-          "entry" : "rock"
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
         }
       ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
     },
     
     {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
       "type" : "bool"
     },
     
@@ -104,50 +128,42 @@
     },
     
     {
-      "class" : "body",
-      "displayName" : "light",
-      "name" : "light",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "joint",
+      "class" : "image",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "distanceLegLeft"
+          "entry" : "atlas_santa"
         },
         
         {
-          "entry" : "distanceLegRight"
-        },
-        
-        {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
+          "entry" : "atlas_environment"
         }
       ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
       "type" : "string"
     },
     
@@ -210,70 +226,76 @@
     },
     
     {
-      "class" : "body",
+      "class" : "joint",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "0"
+          "entry" : "distanceLegLeft"
         },
         
         {
-          "entry" : "1"
+          "entry" : "distanceLegRight"
         },
         
         {
-          "entry" : "2"
+          "entry" : "weldCenter"
         },
         
         {
-          "entry" : "3"
+          "entry" : "bindingLeft"
         },
         
         {
-          "entry" : "4"
+          "entry" : "bindingRight"
         },
         
         {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
+          "entry" : "prismatic"
         }
       ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
     },
     
     {
-      "class" : "image",
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "fixture",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "atlas_santa"
+          "entry" : "snow"
         },
         
         {
-          "entry" : "atlas_environment"
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
         }
       ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
       "type" : "string"
     }
   ],
@@ -1659,156 +1681,6 @@
       },
       
       {
-        "angle" : -0.08815023303031921,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 139,
-            "name" : "fixture6",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -2.892479896545410,
-                -2.802880048751831,
-                -2.793699979782104,
-                -2.825180053710938,
-                -2.904939889907837,
-                -3.034219980239868,
-                -3.156069993972778,
-                -3.258909940719604,
-                -3.322350025177002,
-                -3.319930076599121,
-                -3.212699890136719,
-                -3.015980005264282,
-                3.190809965133667,
-                3.259449958801270,
-                3.315229892730713,
-                3.311630010604858,
-                3.271919965744019,
-                3.190809965133667
-              ],
-              "y" : 
-              [
-                -0.01308470033109188,
-                0.1182760000228882,
-                0.1947650015354156,
-                0.2778039872646332,
-                0.3432550132274628,
-                0.3510940074920654,
-                0.2983430027961731,
-                0.2114650011062622,
-                0.07427290081977844,
-                -0.09938990324735641,
-                -0.2704499959945679,
-                -0.3551439940929413,
-                -0.3521029949188232,
-                -0.3165520131587982,
-                -0.2495359927415848,
-                -0.1239290013909340,
-                -0.05865750089287758,
-                -0.01093079987913370
-              ]
-            }
-          }
-        ],
-        "id" : 133,
-        "linearVelocity" : 0,
-        "name" : "caneTODO",
-        "position" : 
-        {
-          "x" : 536.4547729492188,
-          "y" : -109.9140014648438
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : -0.07142228633165359,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 144,
-            "name" : "fixture12",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -0.5555450916290283,
-                -0.5649068355560303,
-                -0.8618392348289490,
-                -0.8608699440956116,
-                -0.9242342710494995,
-                -0.9021375775337219,
-                0.9244644641876221,
-                0.9288961887359619,
-                0.8877446651458740,
-                0.9041969180107117,
-                0.7286390662193298,
-                0.5132570266723633,
-                0.2812157273292542,
-                0.03008621186017990,
-                -0.2367396354675293,
-                -0.4293934702873230
-              ],
-              "y" : 
-              [
-                0.3926344513893127,
-                0.2947454154491425,
-                -0.06513902544975281,
-                -0.2015968263149261,
-                -0.4241499900817871,
-                -0.6705237627029419,
-                -0.6705119609832764,
-                -0.3745877444744110,
-                -0.2367147058248520,
-                -0.08688864856958389,
-                0.3400855958461761,
-                0.5378294587135315,
-                0.5486389398574829,
-                0.6576544046401978,
-                0.6388839483261108,
-                0.5282092690467834
-              ]
-            }
-          }
-        ],
-        "id" : 138,
-        "linearVelocity" : 0,
-        "name" : "rockTODO",
-        "position" : 
-        {
-          "x" : 867.6887817382812,
-          "y" : -172.9748535156250
-        },
-        "type" : "static"
-      },
-      
-      {
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
@@ -1862,238 +1734,6 @@
         {
           "x" : 1299.641967773438,
           "y" : -245.9217224121094
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : 3.143013954162598,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 173,
-            "name" : "fixture6",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -2.892484664916992,
-                -2.802882432937622,
-                -2.793701648712158,
-                -2.825178384780884,
-                -2.904941797256470,
-                -3.034217357635498,
-                -3.156070470809937,
-                -3.258907318115234,
-                -3.322350740432739,
-                -3.319932699203491,
-                -3.212698936462402,
-                -3.015984535217285,
-                3.190814495086670,
-                3.259448528289795,
-                3.315230846405029,
-                3.311625003814697,
-                3.271916151046753,
-                3.190814018249512
-              ],
-              "y" : 
-              [
-                -0.01308470591902733,
-                0.1182759553194046,
-                0.1947645545005798,
-                0.2778035402297974,
-                0.3432552218437195,
-                0.3510941267013550,
-                0.2983430922031403,
-                0.2114651501178741,
-                0.07427291572093964,
-                -0.09938988089561462,
-                -0.2704495191574097,
-                -0.3551436066627502,
-                -0.3521027565002441,
-                -0.3165517449378967,
-                -0.2495357692241669,
-                -0.1239292249083519,
-                -0.05865753442049026,
-                -0.01093083620071411
-              ]
-            }
-          }
-        ],
-        "id" : 171,
-        "linearVelocity" : 0,
-        "name" : "caneTODO",
-        "position" : 
-        {
-          "x" : 950.2232055664062,
-          "y" : -224.5756378173828
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : 3.284641504287720,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.2,
-            "id" : 174,
-            "name" : "fixture6",
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -2.892484664916992,
-                -2.802882432937622,
-                -2.793701648712158,
-                -2.825178384780884,
-                -2.904941797256470,
-                -3.034217357635498,
-                -3.156070470809937,
-                -3.258907318115234,
-                -3.322350740432739,
-                -3.319932699203491,
-                -3.212698936462402,
-                -3.015984535217285,
-                3.190814495086670,
-                3.259448528289795,
-                3.315230846405029,
-                3.311625003814697,
-                3.271916151046753,
-                3.190814018249512
-              ],
-              "y" : 
-              [
-                -0.01308470591902733,
-                0.1182759553194046,
-                0.1947645545005798,
-                0.2778035402297974,
-                0.3432552218437195,
-                0.3510941267013550,
-                0.2983430922031403,
-                0.2114651501178741,
-                0.07427291572093964,
-                -0.09938988089561462,
-                -0.2704495191574097,
-                -0.3551436066627502,
-                -0.3521027565002441,
-                -0.3165517449378967,
-                -0.2495357692241669,
-                -0.1239292249083519,
-                -0.05865753442049026,
-                -0.01093083620071411
-              ]
-            }
-          }
-        ],
-        "id" : 172,
-        "linearVelocity" : 0,
-        "name" : "caneTODO",
-        "position" : 
-        {
-          "x" : 1027.739135742188,
-          "y" : -243.9933776855469
-        },
-        "type" : "static"
-      },
-      
-      {
-        "angle" : 3.213335752487183,
-        "angularVelocity" : 0,
-        "awake" : true,
-        "fixture" : 
-        [
-          
-          {
-            "density" : 1,
-            "friction" : 0.1,
-            "id" : 178,
-            "name" : "fixture6",
-            "restitution" : 0.5,
-            "shapes" : 
-            [
-              
-              {
-                "type" : "polygon"
-              }
-            ],
-            "vertices" : 
-            {
-              "x" : 
-              [
-                -2.892484664916992,
-                -2.802882432937622,
-                -2.793701648712158,
-                -2.825178384780884,
-                -2.904941797256470,
-                -3.034217357635498,
-                -3.156070470809937,
-                -3.258907318115234,
-                -3.322350740432739,
-                -3.319932699203491,
-                -3.212698936462402,
-                -3.015984535217285,
-                3.190814495086670,
-                3.259448528289795,
-                3.315230846405029,
-                3.311625003814697,
-                3.271916151046753,
-                3.190814018249512
-              ],
-              "y" : 
-              [
-                -0.01308470591902733,
-                0.1182759553194046,
-                0.1947645545005798,
-                0.2778035402297974,
-                0.3432552218437195,
-                0.3510941267013550,
-                0.2983430922031403,
-                0.2114651501178741,
-                0.07427291572093964,
-                -0.09938988089561462,
-                -0.2704495191574097,
-                -0.3551436066627502,
-                -0.3521027565002441,
-                -0.3165517449378967,
-                -0.2495357692241669,
-                -0.1239292249083519,
-                -0.05865753442049026,
-                -0.01093083620071411
-              ]
-            }
-          }
-        ],
-        "id" : 176,
-        "linearVelocity" : 0,
-        "name" : "caneTODO",
-        "position" : 
-        {
-          "x" : 353.3074951171875,
-          "y" : -77.32118988037109
         },
         "type" : "static"
       }
@@ -2326,54 +1966,6 @@
         "opacity" : 1,
         "renderOrder" : -100.0,
         "scale" : 6
-      },
-      
-      {
-        "angle" : 3.141590118408203,
-        "aspectScale" : 1,
-        "body" : 133,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/cane.png",
-        "filter" : 1,
-        "flip" : true,
-        "id" : 120,
-        "name" : "image10",
-        "opacity" : 1,
-        "scale" : -0.7
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 138,
-        "center" : 
-        {
-          "x" : -6.081476385588758e-05,
-          "y" : -5.182163022254827e-06
-        },
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/obstacles/snowy_rock.png",
-        "filter" : 1,
-        "flip" : false,
-        "id" : 125,
-        "name" : "image9",
-        "opacity" : 1,
-        "renderOrder" : -50.0,
-        "scale" : 1.336717128753662
       },
       
       {
@@ -3165,50 +2757,6 @@
       },
       
       {
-        "angle" : 3.141592741012573,
-        "aspectScale" : 1,
-        "body" : 171,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/cane.png",
-        "filter" : 1,
-        "flip" : true,
-        "id" : 209,
-        "name" : "image10",
-        "opacity" : 1,
-        "scale" : -0.7
-      },
-      
-      {
-        "angle" : 3.141592741012573,
-        "aspectScale" : 1,
-        "body" : 172,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/cane.png",
-        "filter" : 1,
-        "flip" : true,
-        "id" : 210,
-        "name" : "image10",
-        "opacity" : 1,
-        "scale" : -0.7
-      },
-      
-      {
         "angle" : -0.2962321043014526,
         "aspectScale" : 1,
         "center" : 
@@ -3258,28 +2806,6 @@
         "opacity" : 1,
         "renderOrder" : 20.0,
         "scale" : 6.873549938201904
-      },
-      
-      {
-        "angle" : 3.141592741012573,
-        "aspectScale" : 1,
-        "body" : 176,
-        "center" : 0,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "phaserTexture",
-            "string" : "atlas_environment"
-          }
-        ],
-        "file" : "../img/cane.png",
-        "filter" : 1,
-        "flip" : true,
-        "id" : 218,
-        "name" : "image10",
-        "opacity" : 1,
-        "scale" : -0.7
       }
     ],
     "metaobject" : 
@@ -6053,6 +5579,76 @@
         {
           "x" : 870.4539794921875,
           "y" : -159.7839965820312
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 3.213342905044556,
+        "file" : "prefabs/cane.rube",
+        "flip" : false,
+        "id" : 199,
+        "name" : "Cane",
+        "position" : 
+        {
+          "x" : 353.3074951171875,
+          "y" : -77.32118988037109
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.08815030008554459,
+        "file" : "prefabs/cane.rube",
+        "flip" : false,
+        "id" : 200,
+        "name" : "object0",
+        "position" : 
+        {
+          "x" : 536.4550170898438,
+          "y" : -109.9140014648438
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.07142236083745956,
+        "file" : "prefabs/rock.rube",
+        "flip" : false,
+        "id" : 201,
+        "name" : "Rock",
+        "position" : 
+        {
+          "x" : 867.6887817382812,
+          "y" : -172.9748535156250
+        },
+        "scale" : 1.336719989776611
+      },
+      
+      {
+        "angle" : 3.141592741012573,
+        "file" : "prefabs/cane.rube",
+        "flip" : false,
+        "id" : 202,
+        "name" : "Cane",
+        "position" : 
+        {
+          "x" : 950.2232055664062,
+          "y" : -224.5756378173828
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 3.284639835357666,
+        "file" : "prefabs/cane.rube",
+        "flip" : false,
+        "id" : 203,
+        "name" : "Cane",
+        "position" : 
+        {
+          "x" : 1027.739135742188,
+          "y" : -243.9933776855469
         },
         "scale" : 1
       }

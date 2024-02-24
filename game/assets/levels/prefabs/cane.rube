@@ -275,6 +275,27 @@
       "displayName" : "phaserTextureFrame",
       "name" : "phaserTextureFrame",
       "type" : "string"
+    },
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
+      "type" : "string"
     }
   ],
   "metaworld" : 
