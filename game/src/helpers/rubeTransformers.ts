@@ -2,7 +2,7 @@ import {recordLeak, b2} from '..';
 import {XY} from '../Terrain';
 import {RubeCustomPropsMap} from '../physics/RUBE/EntityTypes';
 import {RubeVectorArray,RubeVector, RubeCustomProperty} from '../physics/RUBE/RubeFile';
-import {customPropertyDefs} from '../physics/RUBE/customPropertyDefs';
+import {customPropertyDefsByName} from '../physics/RUBE/RubeFileConstants';
 
 // IMPORTANt: It is assumed that this transformer is used for phaser stuff, so we already negate the Y axis here (RUBE uses a different coordinate system)
 export function rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
@@ -59,7 +59,7 @@ export function customPropsArrayToMap(customProperties?: RubeCustomProperty[]): 
 
 export function customPropsMapToArray(customProps: RubeCustomPropsMap): RubeCustomProperty[] {
   return Object.entries(customProps).map(([key, value]) => {
-    const propDef = customPropertyDefs[key];
+    const propDef = customPropertyDefsByName[key];
     // Since we don't dynamically create custom properties, we know which keys are available
     if (!propDef) throw new Error(`No custom property definition found for key: ${key}`);
 

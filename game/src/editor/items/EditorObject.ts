@@ -69,7 +69,6 @@ export class EditorObject implements BaseEditorItem {
   }
 
   setAngle(angle: number) {
-    console.log('setAngle', angle);
     this.meta.angle = angle;
     this.signalUpdate();
   }

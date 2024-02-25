@@ -1,20 +1,20 @@
-import {CustomPropertyDef} from './RubeFile';
+import {CustomPropertyDef, CustomPropertyDefNames, MetaWorld} from './RubeFile';
 
-const phaserBoardEdge: CustomPropertyDef = {
+const phaserBoardEdge: CustomPropertyDef = Object.freeze({
   class: 'fixture',
   type: 'bool',
   name: 'phaserBoardEdge',
   displayName: 'phaserBoardEdge',
-};
+});
 
-const phaserCameraFollow: CustomPropertyDef = {
+const phaserCameraFollow: CustomPropertyDef = Object.freeze({
   class: 'body',
   type: 'bool',
   name: 'phaserCameraFollow',
   displayName: 'phaserCameraFollow',
-};
+});
 
-const surfaceType: CustomPropertyDef = {
+const surfaceType: CustomPropertyDef = Object.freeze({
   class: 'fixture',
   type: 'string',
   name: 'surfaceType',
@@ -25,16 +25,16 @@ const surfaceType: CustomPropertyDef = {
     {entry: 'metal'},
     {entry: 'rock'}
   ]
-};
+});
 
-const phaserTextureFrame: CustomPropertyDef = {
+const phaserTextureFrame: CustomPropertyDef = Object.freeze({
   class: 'image',
   type: 'string',
   name: 'phaserTextureFrame',
   displayName: 'phaserTextureFrame',
-};
+});
 
-const phaserSensorType: CustomPropertyDef = {
+const phaserSensorType: CustomPropertyDef = Object.freeze({
   class: 'fixture',
   type: 'string',
   name: 'phaserSensorType',
@@ -44,9 +44,9 @@ const phaserSensorType: CustomPropertyDef = {
     {entry: 'level_finish'},
     {entry: 'level_deathzone'}
   ],
-};
+});
 
-const phaserTexture: CustomPropertyDef = {
+const phaserTexture: CustomPropertyDef = Object.freeze({
   class: 'image',
   type: 'string',
   name: 'phaserTexture',
@@ -55,9 +55,9 @@ const phaserTexture: CustomPropertyDef = {
     {entry: 'atlas_santa'},
     {entry: 'atlas_environment'}
   ],
-};
+});
 
-const phaserBoardSegmentIndex: CustomPropertyDef = {
+const phaserBoardSegmentIndex: CustomPropertyDef = Object.freeze({
   class: 'body',
   type: 'int',
   name: 'phaserBoardSegmentIndex',
@@ -74,9 +74,9 @@ const phaserBoardSegmentIndex: CustomPropertyDef = {
     {entry: '8'},
     {entry: '9'}
   ],
-};
+});
 
-const phaserPlayerCharacterSpring: CustomPropertyDef = {
+const phaserPlayerCharacterSpring: CustomPropertyDef = Object.freeze({
   class: 'joint',
   type: 'string',
   name: 'phaserPlayerCharacterSpring',
@@ -89,9 +89,9 @@ const phaserPlayerCharacterSpring: CustomPropertyDef = {
     {entry: 'bindingRight'},
     {entry: 'prismatic'}
   ],
-};
+});
 
-const phaserPlayerCharacterPart: CustomPropertyDef = {
+const phaserPlayerCharacterPart: CustomPropertyDef = Object.freeze({
   class: 'body',
   type: 'string',
   name: 'phaserPlayerCharacterPart',
@@ -110,17 +110,28 @@ const phaserPlayerCharacterPart: CustomPropertyDef = {
     {entry: 'boardSegment'},
     {entry: 'boardSegmentNose'}
   ],
-};
+});
 
-const light: CustomPropertyDef = {
+const light: CustomPropertyDef = Object.freeze({
   class: 'body',
   type: 'bool',
   name: 'light',
   displayName: 'light',
-};
+});
 
-// TODO think about wheather to use this or the ones from the RubeFile
-export const customPropertyDefs: Record<string, CustomPropertyDef> = {
+const modBodyType: CustomPropertyDef = Object.freeze({
+  class : 'object',
+  type : 'string',
+  name : 'modBodyType',
+  displayName : 'modBodyType',
+  comboboxEntries: [
+    {entry : 'static'},
+    {entry : 'dynamic'},
+    {entry : 'kinematic'}
+  ],
+});
+
+export const customPropertyDefs: Readonly<CustomPropertyDef[]> = Object.freeze([
   phaserBoardEdge,
   phaserCameraFollow,
   surfaceType,
@@ -130,5 +141,36 @@ export const customPropertyDefs: Record<string, CustomPropertyDef> = {
   phaserBoardSegmentIndex,
   phaserPlayerCharacterSpring,
   phaserPlayerCharacterPart,
-  light
-};
+  light,
+  modBodyType
+]);
+
+export const customPropertyDefsByName: Readonly<Record<CustomPropertyDefNames, CustomPropertyDef>> = Object.freeze(customPropertyDefs.reduce((acc, def) => {
+  acc[def.name] = def;
+  return acc;
+}, {} as Record<CustomPropertyDefNames, CustomPropertyDef>));
+
+export const metaWorld: Readonly<MetaWorld> = Object.freeze({
+  gravity: Object.freeze({x: 0, y: -10}),
+  positionIterations: 12,
+  velocityIterations: 12,
+  stepsPerSecond: 60,
+
+  allowSleep: true,
+  autoClearForces: true,
+  continuousPhysics: true,
+  subStepping: true,
+  warmStarting: true,
+
+  exportOptions: Object.freeze({
+    compactCommonFloats: true,
+    compactZeroVecs: false,
+    saveFullPathForImages: false,
+    saveFullPathForSamplerOutput: false,
+    saveImagePathsRelativeToRUBEFile: false,
+    saveSamplerOutputPathsRelativeToRUBEFile: false,
+    useGsonFormat: false,
+    useHumanReadableFloats: true,
+    usePrettyPrint: true
+  }),
+});

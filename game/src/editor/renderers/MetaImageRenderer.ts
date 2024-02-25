@@ -15,7 +15,6 @@ export class MetaImageRenderer {
   constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
 
   render(images: EditorImage[], offsetX = 0, offsetY = 0, offsetAngle = 0) {
-    console.log('rendering images', images, offsetX, offsetY, offsetAngle);
     const ppm = this.pixelsPerMeter;
 
     for (const editorImage of images) {

@@ -3,7 +3,7 @@ import {Accessor, Setter, createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToVec2, rubeToXY} from '../../helpers/rubeTransformers';
+import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaFixture} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, RubeMetaLoader, Bounds} from '../../physics/RUBE/RubeMetaLoader';

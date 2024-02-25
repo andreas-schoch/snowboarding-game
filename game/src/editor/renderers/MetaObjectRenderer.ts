@@ -30,8 +30,6 @@ export class MetaObjectRenderer {
     if (angle > twoPI) angle -= twoPI;
     if (angle < 0) angle += twoPI;
 
-    console.log('rendering object', object, x, y, angle);
-
     this.terrainRenderer.render(object.items.terrainChunks, x, y, angle);
     this.imageRenderer.render(object.items.images, x, y, angle);
     for (const subObject of object.items.objects) {

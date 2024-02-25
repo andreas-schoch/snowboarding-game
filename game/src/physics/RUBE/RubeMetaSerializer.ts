@@ -1,25 +1,23 @@
 import {RubeFile} from './RubeFile';
+import {customPropertyDefs, metaWorld} from './RubeFileConstants';
 import {EditorItems} from './RubeMetaLoader';
 
 export class RubeMetaSerializer {
   constructor(private scene: Phaser.Scene) { }
 
   serialize(items: EditorItems): RubeFile {
-    // Apart from the meta properties
-    const {customPropertyDefs, metaworld}: RubeFile = this.scene.cache.json.get('level_new.rube');
-
     const rubeFile: RubeFile = {
-      customPropertyDefs,
+      customPropertyDefs: [...customPropertyDefs],
       metaworld: {
-        ...metaworld,
+        ...metaWorld,
         metaobject: items.objects.map(o => o.meta),
         metaimage: items.images.map(i => i.meta),
         metabody: items.terrainChunks.map(t => t.metaBody),
-      },
-
+        metajoint: [] // TODO although the way the editor works, it won't be required
+      }
     };
 
-    console.log('serialized back rubefile', rubeFile);
+    console.debug('RubeMetaSerializer.serialize', rubeFile);
     return rubeFile;
   }
 }

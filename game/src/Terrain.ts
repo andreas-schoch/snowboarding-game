@@ -1,5 +1,4 @@
 import {Settings} from './Settings';
-import {iterBodyFixtures} from './helpers/B2Iterators';
 import {LoadedScene} from './physics/RUBE/EntityTypes';
 import {b2} from './index';
 

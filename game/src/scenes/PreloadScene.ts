@@ -19,6 +19,9 @@ export class PreloadScene extends Phaser.Scene {
     this.loadImg();
 
     this.load.json('coin.rube', 'assets/levels/prefabs/coin.rube');
+    this.load.json('cane.rube', 'assets/levels/prefabs/cane.rube');
+    this.load.json('rock.rube', 'assets/levels/prefabs/rock.rube');
+    this.load.json('crate.rube', 'assets/levels/prefabs/crate.rube');
   }
 
   create() {
