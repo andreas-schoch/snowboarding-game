@@ -31,7 +31,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
     return this.metaFixture.name || '';
   }
 
-  getPosition() {
+  getPosition(options = {local: false}) {
     // We treat a fixture as it's own entity but only the body of the fixture has a position (body assumed to be at 0,0)
     // The position of the fixture is the avg position of all its vertices.
 
@@ -40,7 +40,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
     // const bounds = this.getBounds();
     // return {x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2};
 
-    const vertices = this.getVertices();
+    const vertices = this.getVertices(options);
     const x = vertices.reduce((sum, v) => sum + v.x, 0) / vertices.length;
     const y = vertices.reduce((sum, v) => sum + v.y, 0) / vertices.length;
     return {x, y};
@@ -52,8 +52,8 @@ export class EditorTerrainChunk implements BaseEditorItem {
     return this.pseudoAngle;
   }
 
-  getVertices() {
-    const {x, y} = rubeToXY(this.metaBody.position);
+  getVertices(options = {local: false}) {
+    const {x, y} = options.local ? {x: 0, y: 0} : rubeToXY(this.metaBody.position);
     return RubeVectorArrayToXY(this.metaFixture.vertices, x, y);
   }
 
@@ -79,7 +79,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
   // TODO add ability to change between world and local coordinates when translating items in the editor)
   setPosition(position: XY) {
     // get the difference of the current avg position and the new position then add that difference to all vertices
-    const vertices = this.getVertices();
+    const vertices = this.getVertices({local: true});
     const oldPosition = this.getPosition();
     const diff = {x: position.x - oldPosition.x, y: position.y - oldPosition.y};
     const newVertices = vertices.map(v => ({x: v.x + diff.x, y: v.y + diff.y}));
@@ -95,9 +95,9 @@ export class EditorTerrainChunk implements BaseEditorItem {
     // Fixtures itself have no angle, so we change the position of each vertex instead.
     // We take the avg vertex position as the pivot point and rotate each vertex around that pivot point
     // Later on we can make it work with arbitrary pivot points like the RUBE Editor where you can set a "cursor" by pressing "c"
-    const vertices = this.getVertices();
-    const pivot = this.getPosition();
-    const angleDiff = angle - this.getAngle();
+    const vertices = this.getVertices({local: true});
+    const pivot = this.getPosition({local: true});
+    const angleDiff = angle - this.getAngle(); // TODO verify if this works when parent body is rotated
 
     const newVertices = vertices.map(v => {
       const x = pivot.x + (v.x - pivot.x) * Math.cos(angleDiff) - (v.y - pivot.y) * Math.sin(angleDiff);
