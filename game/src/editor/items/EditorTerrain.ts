@@ -2,6 +2,7 @@
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
+import {EDITOR_SCENE_CHANGED} from '../../eventTypes';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
@@ -40,9 +41,9 @@ export class EditorTerrainChunk implements BaseEditorItem {
     // return {x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2};
 
     const vertices = this.getVertices();
-    const avgX = vertices.reduce((sum, v) => sum + v.x, 0) / vertices.length;
-    const avgY = vertices.reduce((sum, v) => sum + v.y, 0) / vertices.length;
-    return {x: avgX, y: avgY};
+    const x = vertices.reduce((sum, v) => sum + v.x, 0) / vertices.length;
+    const y = vertices.reduce((sum, v) => sum + v.y, 0) / vertices.length;
+    return {x, y};
   }
 
   getAngle() {
@@ -86,7 +87,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
     this.setSignal(this as EditorTerrainChunk);
     // TODO can be optimized by passing which properties changed. If only pos or rot change, we can just translate or rotate the graphics
     //  Only when the vertices change due to user editing them (well excluding rotation which also changes then) we need to redraw the graphics for terrain
-    EditorInfo.observer.emit('editor_scene_changed', this);
+    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
   }
 
   setAngle(angle: number) {
@@ -115,6 +116,6 @@ export class EditorTerrainChunk implements BaseEditorItem {
 
   private signalUpdate() {
     this.setSignal(this as EditorTerrainChunk);
-    EditorInfo.observer.emit('editor_scene_changed', this);
+    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
   }
 }

@@ -9,7 +9,7 @@ import {EditorController} from '../controllers/EditorController';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
 import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
-import {EDITOR_EXIT, EDITOR_OPEN, RUBE_SCENE_LOADED} from '../eventTypes';
+import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_OPEN, EDITOR_SCENE_CHANGED, RUBE_SCENE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
@@ -67,7 +67,7 @@ export class EditorScene extends Phaser.Scene {
       this.scene.start(SCENE_GAME);
     });
 
-    EditorInfo.observer.on('item_selected', (item: EditorItem, centerOn: boolean) => {
+    EditorInfo.observer.on(EDITOR_ITEM_SELECTED, (item: EditorItem, centerOn: boolean) => {
       const position = item.getPosition();
       const ppm = this.b2Physics.worldEntity.pixelsPerMeter;
       if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
@@ -79,8 +79,6 @@ export class EditorScene extends Phaser.Scene {
     // const scene: RubeFile = this.cache.json.get('level_new.rube');
     const filename = this.level?.number ? `level_${String(this.level.number).padStart(3, '0')}.rube` : 'level_new.rube';
     const scene: RubeFile = this.cache.json.get(filename);
-
-    console.log('---------scene', scene, filename);
 
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(scene);
@@ -96,7 +94,7 @@ export class EditorScene extends Phaser.Scene {
     metaImageRenderer.renderThrottled(items.images);
     metaObjectRenderer.renderThrottled(items.objects);
 
-    EditorInfo.observer.on('editor_scene_changed', (item: EditorItem) => {
+    EditorInfo.observer.on(EDITOR_SCENE_CHANGED, (item: EditorItem) => {
       switch (item.type) {
       case 'terrain':
         return metaTerrainRenderer.renderThrottled([item]);

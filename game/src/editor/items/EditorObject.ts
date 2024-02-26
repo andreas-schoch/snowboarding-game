@@ -2,6 +2,7 @@
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
+import {EDITOR_SCENE_CHANGED} from '../../eventTypes';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
@@ -53,7 +54,7 @@ export class EditorObject implements BaseEditorItem {
 
   setCustomProps(props: RubeCustomPropsMap) {
     this.meta.customProperties = customPropsMapToArray(props);
-    EditorInfo.observer.emit('editor_scene_changed', this);
+    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
   }
 
   setName(name: string) {
@@ -75,6 +76,6 @@ export class EditorObject implements BaseEditorItem {
 
   private signalUpdate() {
     this.setSignal(this as EditorObject);
-    EditorInfo.observer.emit('editor_scene_changed', this);
+    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
   }
 }

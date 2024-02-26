@@ -21,4 +21,6 @@ export const RESTART_GAME = 'restart_game';
 
 export const EDITOR_OPEN = 'editor_open';
 export const EDITOR_EXIT = 'editor_exit';
+export const EDITOR_SCENE_CHANGED = 'editor_scene_changed';
+export const EDITOR_ITEM_SELECTED = 'editor_item_selected';
 export const RUBE_SCENE_LOADED = 'rube_scene_loaded';

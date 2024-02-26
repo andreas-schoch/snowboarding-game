@@ -25,9 +25,6 @@ export const Actionbar: Component = () => {
     Settings.set('editorOpen', 'false');
   };
 
-  // TODO how can I dynamically do this?
-  // EditorInfo.observer.on('open_dialog', (content: Component) => dialogRef.innerHTML = dialogContent());
-
   return <>
     <header class="absolute inset-x-0 top-0 flex h-[76px] items-center border-b border-stone-600 bg-stone-900 text-white">
 

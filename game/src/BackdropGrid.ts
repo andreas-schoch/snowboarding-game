@@ -28,5 +28,8 @@ export class BackdropGrid {
     // FIXME this works for regular full window size but a bit off whenever resizing and restarting
     this.grid.x = -Phaser.Math.Wrap(scrollX, 0, scaledCellSize) + (scaledCellSize * 2);
     this.grid.y = -Phaser.Math.Wrap(scrollY, 0, scaledCellSize) + (scaledCellSize * 1);
+
+    // grid won't be able to fit the screen if zoomed more than this.
+    this.grid.setVisible(this.scene.cameras.main.zoom > 0.2);
   }
 }

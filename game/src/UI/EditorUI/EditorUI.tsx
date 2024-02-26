@@ -1,5 +1,6 @@
 import {Component, createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
+import {EDITOR_ITEM_SELECTED} from '../../eventTypes';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {Actionbar} from './Actionbar';
 import {Browser} from './Browser';
@@ -12,7 +13,7 @@ export const EditorUI: Component = () => {
 
   const select = (item: EditorItem) => {
     setSelected(item);
-    EditorInfo.observer.emit('item_selected', item, true);
+    EditorInfo.observer.emit(EDITOR_ITEM_SELECTED, item, true);
   };
   const onUpdateSelected = (updated: EditorItem) => {
     setSelected(updated);

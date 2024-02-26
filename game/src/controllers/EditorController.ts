@@ -17,6 +17,7 @@ export class EditorController {
   }
 
   update(time: number, delta: number) {
+    this.scaleControlsSpeed();
     this.controls.update(delta);
   }
 
@@ -42,8 +43,16 @@ export class EditorController {
       drag: 0.1,
       maxSpeed: 1,
       maxZoom: 4,
-      minZoom: 0.2, // whenever this is adjusted, BackdropGrid also needs to be adjusted for now 
-      zoomSpeed: 0.02,
+      minZoom: 0.015,
+      zoomSpeed: 0.015,
     });
+  }
+
+  private scaleControlsSpeed() {
+    const mod = 1 / this.scene.cameras.main.zoom;
+    this.controls.maxSpeedX = mod;
+    this.controls.maxSpeedY = mod;
+    this.controls.dragX = 0.1 * mod;
+    this.controls.dragY = 0.1 * mod;
   }
 }
