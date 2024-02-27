@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME, rootGame} from '..';
+import {SCENE_EDITOR, SCENE_GAME, rootGame, rubeFileSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
@@ -77,6 +77,9 @@ export class EditorScene extends Phaser.Scene {
     // const scene = await pb.level.getRubeScene(level);
     // const scene: RubeFile = this.cache.json.get('level_new.rube');
     const rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
+
+    const encoded = rubeFileSerializer.encode(rubefile);
+    console.log('encoded rube file', encoded, encoded.length);
 
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(rubefile);

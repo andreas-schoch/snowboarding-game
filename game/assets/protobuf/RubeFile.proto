@@ -1,0 +1,161 @@
+syntax = "proto3";
+package rube;
+
+
+message Vector {
+  double x = 1;
+  double y = 2;
+}
+
+message VectorArray {
+  repeated double x = 1;
+  repeated double y = 2;
+}
+
+message CustomProperty {
+  string name = 1;
+
+  oneof value {
+    int32 int = 2;
+    double float = 3;
+    string string = 4;
+    string color = 5; 
+    bool bool = 6;
+    Vector vec2 = 7;
+  }
+}
+
+message ComboBoxEntry {
+  string entry = 1;
+}
+
+message CustomPropertyDef {
+  string class = 1;
+  string type = 2;
+  string name = 3;
+  string displayName = 4;
+  repeated ComboBoxEntry comboboxEntries = 5;
+}
+ 
+/////////////////////////////////////////////////////////////////7
+
+// Merged shape types into one for easier handling
+message Shape {
+  string type = 1;
+  optional double radius = 2; // Part of MetaCircleShape
+  optional bool hasNextVertex = 3; // Part of MetaLoopShape
+  optional bool hasPrevVertex = 4; // Part of MetaLoopShape
+  optional Vector nextVertex = 5; // Part of MetaLoopShape
+  optional Vector prevVertex = 6; // Part of MetaLoopShape
+}
+
+message MetaFixture {
+  optional string name = 1;
+  optional double density = 2;
+  optional int32 filterCategoryBits = 3;
+  optional int32 filterMaskBits = 4;
+  optional int32 filterGroupIndex = 5;
+  optional double friction = 6;
+  optional double restitution = 7;
+  optional bool sensor = 8;
+  // repeated CustomProperty customProperties = 9;
+  VectorArray vertices = 10;
+  repeated Shape shapes = 11;
+  int32 id = 12;
+}
+
+//////////////////////////////////////
+
+message MetaBody {
+  optional string name = 1;
+  optional bool active = 2;
+  optional bool awake = 3;
+  optional bool bullet = 4;
+  optional bool fixedRotation = 5;
+  optional bool sleepingAllowed = 6;
+  optional string type = 7;
+  optional Vector position = 8;
+  optional double angle = 9;
+  optional double angularDamping = 10;
+  optional double angularVelocity = 11;
+  optional double linearDamping = 12;
+  // optional Vector linearVelocity = 13;
+  optional double massDataMass = 14;
+  optional Vector massDataCenter = 15;
+  optional double massDataI = 16;
+  // repeated CustomProperty customProperties = 17;
+  repeated MetaFixture metafixture = 18;
+  int32 id = 19;
+}
+
+///////////////////////////////////
+
+message MetaImage {
+  optional double angle = 1;
+  optional int32 body = 2;
+  optional Vector center = 3;
+  // optional repeated CustomProperty customProperties = 4;
+  optional string file = 5;
+  optional int32 filter = 6;
+  optional bool flip = 7;
+  optional int32 id = 8;
+  optional string name = 9;
+  optional double opacity = 10;
+  optional double renderOrder = 11;
+  optional double aspectScale = 12;
+  optional double scale = 13;
+}
+
+///////////////////////////////////
+
+message ExportOptions {
+  bool compactCommonFloats = 1;
+  bool compactZeroVecs = 2;
+  bool saveFullPathForImages = 3;
+  bool saveFullPathForSamplerOutput = 4;
+  bool saveImagePathsRelativeToRUBEFile = 5;
+  bool saveSamplerOutputPathsRelativeToRUBEFile = 6;
+  bool useGsonFormat = 7;
+  bool useHumanReadableFloats = 8;
+  bool usePrettyPrint = 9;
+}
+
+//////////////////////////////////
+
+message MetaObject {
+  string name = 1;
+  string file = 2;
+  string path = 3;
+  bool flip = 4;
+  int32 id = 5;
+  double angle = 6;
+  double scale = 7;
+  Vector position = 8;
+  // repeated CustomProperty customProperties = 9;
+}
+
+//////////////////////////////////
+
+message MetaWorld {
+  Vector gravity = 1;
+  bool allowSleep = 2;
+  bool autoClearForces = 3;
+  int32 positionIterations = 4;
+  int32 velocityIterations = 5;
+  int32 stepsPerSecond = 6;
+  bool warmStarting = 7;
+  bool continuousPhysics = 8;
+  bool subStepping = 9;
+
+  // repeated MetaBody metabody = 10;
+  // repeated MetaImage metaimage = 11;
+  // repeated MetaJoint metajoint = 12;
+  // repeated MetaObject metaobject = 13;
+
+  ExportOptions exportOptions = 14;
+}
+
+message RubeFile {
+  repeated CustomPropertyDef customPropertyDefs = 1;
+  MetaWorld metaworld = 2;
+}

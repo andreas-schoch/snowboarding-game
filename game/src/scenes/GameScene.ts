@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeSceneSerializer} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeExportSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
@@ -112,7 +112,7 @@ export class GameScene extends Phaser.Scene {
         for (const level of levels) {
           const parsed: RubeScene = this.cache.json.get(level);
           const sanitized = sanitizeRubeDefaults(parsed);
-          const encoded = rubeSceneSerializer.encode(sanitized);
+          const encoded = rubeExportSerializer.encode(sanitized);
           downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
         }
       });

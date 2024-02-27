@@ -2,6 +2,7 @@ import 'phaser';
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {Settings} from './Settings';
+import {RubeFile} from './physics/RUBE/RubeFile';
 import {RubeScene} from './physics/RUBE/RubeFileExport';
 import {PocketbaseService} from './pocketbase/pocketbase';
 import {TrickScore} from './pocketbase/types';
@@ -67,7 +68,8 @@ export let b2: typeof Box2D & EmscriptenModule;
 export let freeLeaked: () => void;
 export let recordLeak: <Instance extends Box2D.WrapperObject>(instance: Instance, b2Class?: typeof Box2D.WrapperObject | undefined) => Instance;
 
-export let rubeSceneSerializer: {encode: (rubeScene: RubeScene) => string, decode: (encoded: string) => RubeScene};
+export let rubeFileSerializer: {encode: (rubefile: RubeFile) => string, decode: (encoded: string) => RubeFile};
+export let rubeExportSerializer: {encode: (rubeScene: RubeScene) => string, decode: (encoded: string) => RubeScene};
 export let scoreLogSerializer: {encode: (tsl: TrickScore[]) => string, decode: (base64: string) => TrickScore[]};
 
 window.onload = async () => {
@@ -78,7 +80,8 @@ window.onload = async () => {
   freeLeaked = LeakMitigator.freeLeaked;
   recordLeak = LeakMitigator.recordLeak;
 
-  rubeSceneSerializer = await ProtobufSerializer<RubeScene, RubeScene>({schema: 'assets/protobuf/RubeScene.proto', type: 'Scene'});
+  rubeFileSerializer = await ProtobufSerializer<RubeFile, RubeFile>({schema: 'assets/protobuf/RubeFile.proto', type: 'RubeFile'});
+  rubeExportSerializer = await ProtobufSerializer<RubeScene, RubeScene>({schema: 'assets/protobuf/RubeScene.proto', type: 'Scene'});
   scoreLogSerializer = await ScoreLogSerializer();
 
   game = new Phaser.Game(gameConfig);

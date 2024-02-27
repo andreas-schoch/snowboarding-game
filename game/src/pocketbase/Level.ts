@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import {rubeSceneSerializer} from '..';
+import {rubeExportSerializer} from '..';
 import {blobToString} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
@@ -23,7 +23,7 @@ export class Level {
     const response = await fetch(url);
     const blob = await response.blob();
     const binaryString = await blobToString(blob);
-    const scene = rubeSceneSerializer.decode(binaryString);
+    const scene = rubeExportSerializer.decode(binaryString);
     console.debug(`fetched RubeScene for level ${level}`, scene);
     return scene;
   }
