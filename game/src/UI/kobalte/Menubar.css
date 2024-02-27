@@ -1,0 +1,66 @@
+/* https://kobalte.dev/docs/core/components/menubar */
+.menubar__root {
+  @apply flex justify-center items-center;
+}
+.menubar__trigger {
+  @apply appearance-none flex justify-center items-center h-10 text-stone-400 text-[12px] gap-x-3 leading-[0] transition px-2 py-0;
+  /* @apply flex items-center cursor-pointer hover:underline w-full leading-[0] justify-start p-2 text-sm gap-x-3 text-stone-400 transition; */
+  outline: none;
+}
+.menubar__trigger[data-highlighted="true"] {
+  @apply underline;
+}
+.menubar__content,
+.menubar__sub-content {
+  @apply min-w-[220px] bg-stone-900 border border-stone-600 origin-[var(--kb-menu-content-transform-origin)] p-2 rounded-md border-solid text-sm;
+  outline: none;
+}
+.menubar__content {
+  @apply top-[-3px] border-t-0 rounded-t-none;
+}
+.menubar__item,
+.menubar__checkbox-item,
+.menubar__radio-item,
+.menubar__sub-trigger {
+  @apply text-sm leading-none text-stone-400 rounded flex items-center h-8 relative select-none pl-6 pr-2 py-0;
+  outline: none;
+}
+.menubar__sub-trigger[data-expanded] {
+  @apply bg-stone-800;
+}
+.menubar__item[data-disabled],
+.menubar__checkbox-item[data-disabled],
+.menubar__radio-item[data-disabled],
+.menubar__sub-trigger[data-disabled] {
+  @apply text-zinc-400 opacity-50 pointer-events-none;
+}
+.menubar__item[data-highlighted],
+.menubar__checkbox-item[data-highlighted],
+.menubar__radio-item[data-highlighted],
+.menubar__sub-trigger[data-highlighted] {
+  @apply bg-stone-600 text-white;
+  outline: none;
+}
+.menubar__group-label {
+  @apply text-sm leading-8 text-zinc-500 px-6 py-0;
+}
+.menubar__separator {
+  @apply h-px border-t-stone-600 m-1.5 border-t border-solid;
+}
+.menubar__item-indicator {
+  @apply absolute h-5 w-5 inline-flex items-center justify-center left-0;
+}
+.menubar__item-right-slot {
+  @apply text-[12px] text-stone-600 ml-auto pl-5 flex;
+  font-family: 'Courier New', Courier, monospace;
+}
+[data-highlighted] > .menubar__item-right-slot {
+  @apply text-stone-600;
+}
+[data-disabled] .menubar__item-right-slot {
+  @apply text-zinc-700 opacity-50;
+}
+
+kbd {
+  @apply text-stone-600 inline-block leading-none whitespace-nowrap my-auto px-0.5;
+}

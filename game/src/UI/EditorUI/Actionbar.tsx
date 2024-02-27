@@ -1,24 +1,17 @@
-import {Component, ParentComponent, Show, createEffect, createSignal} from 'solid-js';
+import {Menubar} from '@kobalte/core';
+import {Component, Show, createSignal} from 'solid-js';
 import {Dynamic, Portal} from 'solid-js/web';
 import {EditorInfo} from '../../EditorInfo';
 import {Settings} from '../../Settings';
+import {EditorItemTracker} from '../../editor/items/ItemTracker';
 import {EDITOR_EXIT} from '../../eventTypes';
+import {downloadBlob} from '../../helpers/binaryTransform';
+import {RubeMetaSerializer} from '../../physics/RUBE/RubeMetaSerializer';
 
-type MenuName = 'File' | 'Edit' | 'View' | 'Actions' | 'Help';
 type DialogName = 'Help' | 'About' | 'Settings';
 const [activeDialog, setActiveDialog] = createSignal<DialogName | null>(null);
 
 export const Actionbar: Component = () => {
-  const [activeMenu, setActiveMenu] = createSignal<MenuName | null>(null);
-
-  function setMenu(menu: MenuName | null) {
-    if (activeMenu() === menu) setActiveMenu(null); // toggle when clicking and already open
-    else setActiveMenu(menu); // open when none or another menu is open
-  }
-
-  createEffect(() => {
-    if (activeDialog() !== null) setActiveMenu(null);
-  });
 
   const handleOpenGame = () => {
     EditorInfo.observer.emit(EDITOR_EXIT);
@@ -33,15 +26,23 @@ export const Actionbar: Component = () => {
       </div>
 
       <div class="flex h-full flex-col pt-2">
-        <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">Dummy Level Name"</div>
+        <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">Dummy Level Name</div>
 
-        <ul class="mt-auto flex items-center gap-x-6 pr-5">
+        {/* <ul class="mt-auto flex items-center gap-x-6 pr-5">
           <Menu name="File" activeName={activeMenu()} setActive={setMenu}><MenuFile /></Menu>
           <Menu name="Edit" activeName={activeMenu()} setActive={setMenu}><MenuEdit /></Menu>
           <Menu name="View" activeName={activeMenu()} setActive={setMenu}><MenuView /></Menu>
           <Menu name="Actions" activeName={activeMenu()} setActive={setMenu}><MenuActions /></Menu>
           <Menu name="Help" activeName={activeMenu()} setActive={setMenu}><MenuHelp /></Menu>
-        </ul>
+        </ul> */}
+
+        <Menubar.Root class="menubar__root mt-auto flex items-center gap-x-6 pr-5">
+          <MenuFile />
+          <MenuEdit />
+          <MenuView />
+          <MenuActions />
+          <MenuHelp />
+        </Menubar.Root>
 
       </div>
 
@@ -51,7 +52,6 @@ export const Actionbar: Component = () => {
     </header>
 
     <Portal>
-      <div class="absolute inset-0 z-[2000]" classList={{hidden: activeMenu() === null}} onClick={() => setMenu(null)} />
 
       <Show when={activeDialog() !== null}>
         <div class="absolute inset-0 z-[3000] bg-stone-950 opacity-75" onClick={() => setActiveDialog(null)} />
@@ -61,139 +61,184 @@ export const Actionbar: Component = () => {
       </Show>
     </Portal>
   </>;
-
-};
-
-const Menu: ParentComponent<{name: MenuName, activeName: MenuName | null, setActive: (name: MenuName | null) => void}> = props => {
-  const isOpen = () => props.activeName === props.name;
-  return <>
-    <li class="btn-menu z-[2002]" tabIndex={-1}>
-      <button class="btn-menu" classList={{underline: isOpen()}} onClick={() => props.setActive(props.name)}>{props.name}</button>
-      <div classList={{hidden: !isOpen()}} class="absolute left-[-10px] top-[32px] z-[2001] flex min-h-fit w-[350px] grow flex-col gap-y-1 overflow-y-auto rounded-b-lg border border-t-0 border-stone-600 bg-stone-900 p-3" >
-        {props.children}
-      </div>
-    </li>
-
-  </>;
 };
 
 const MenuFile: Component = () => {
-  const [recentOpen, setRecentOpen] = createSignal(false);
-  const [exportOpen, setExportOpen] = createSignal(false);
-  const [importOpen, setImportOpen] = createSignal(false);
+  const metaSerializer = new RubeMetaSerializer();
+
+  function exportAsRube() {
+    const items = EditorItemTracker.editorItems;
+    const rubefile = metaSerializer.serialize(items);
+    downloadBlob(JSON.stringify(rubefile), 'level.rube', 'application/json');
+  }
 
   return <>
-    {/* NEW */}
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">folder_open</i>New
-    </button>
+    <Menubar.Menu>
+      <Menubar.Trigger class="menubar__trigger">File</Menubar.Trigger>
 
-    {/* OPEN */}
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">folder_open</i>Open
-    </button>
+      <Menubar.Portal>
+        <Menubar.Content class="menubar__content">
 
-    {/* OPEN  RECENT*/}
-    <div>
-      <button onClick={() => setRecentOpen(!recentOpen())} class="btn-menu-item">
-        <i class="material-icons text-stone-600">folder_open</i>Open Recent
-        <i class="material-icons ml-auto size-5 shrink-0 text-gray-400" >{recentOpen() ? 'expand_less' : 'expand_more'}</i>
-      </button>
-      <ul classList={{hidden: !recentOpen()}} class="mt-1 px-2" id="sub-menu-2">
-        <li><div class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">Level 001</div></li>
-        <li><div class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">Level 002</div></li>
-        <li><div class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">Level 003</div></li>
-        <li><div class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">Level 004</div></li>
-      </ul>
-    </div>
+          <Menubar.Item class="menubar__item">
+            New <div class="menubar__item-right-slot"><kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>N</kbd></div>
+          </Menubar.Item>
 
-    <div class='my-2 h-[1px] bg-stone-500' />
+          <Menubar.Item class="menubar__item">
+            Open <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>O</kbd></div>
+          </Menubar.Item>
 
-    {/* SAVE */}
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">save</i>Save
-    </button>
+          <Menubar.Sub overlap gutter={4} shift={-8}>
+            <Menubar.SubTrigger class="menubar__sub-trigger">
+              Open Recent
+              <div class="menubar__item-right-slot">
+                <i class="material-icons size-5 text-gray-400" >chevron_right</i>
+              </div>
+            </Menubar.SubTrigger>
+            <Menubar.Portal>
+              <Menubar.SubContent class="menubar__sub-content">
+                <Menubar.Item class="menubar__item">Level 001</Menubar.Item>
+                <Menubar.Item class="menubar__item">Level 002</Menubar.Item>
+                <Menubar.Item class="menubar__item">Level 003</Menubar.Item>
+                <Menubar.Item class="menubar__item">Level 004</Menubar.Item>
+                <Menubar.Item class="menubar__item">Level 005</Menubar.Item>
+              </Menubar.SubContent>
+            </Menubar.Portal>
+          </Menubar.Sub>
 
-    {/* SAVE AS NEW */}
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">save</i>Save as New
-    </button>
+          <Menubar.Separator class="menubar__separator" />
 
-    <div class='my-2 h-[1px] bg-stone-500' />
+          <Menubar.Item class="menubar__item">
+            Save <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>S</kbd></div>
+          </Menubar.Item>
 
-    {/* IMPORT */}
-    <div>
-      <button onClick={() => setImportOpen(!importOpen())} class="btn-menu-item">
-        <i class="material-icons text-stone-600">folder_open</i>Import
-        <i class="material-icons ml-auto size-5 shrink-0 text-gray-400" >{importOpen() ? 'expand_less' : 'expand_more'}</i>
-      </button>
-      <ul classList={{hidden: !importOpen()}} class="mt-1 px-2" id="sub-menu-2">
-        <li><a href="#" class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">from Binary</a></li>
-        <li><a href="#" class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">from RUBE</a></li>
-      </ul>
-    </div>
+          <Menubar.Item class="menubar__item">
+            Save as new
+          </Menubar.Item>
 
-    {/* EXPORT */}
-    <div>
-      <button onClick={() => setExportOpen(!exportOpen())} class="btn-menu-item">
-        <i class="material-icons text-stone-600">folder_open</i>Export
-        <i class="material-icons ml-auto size-5 shrink-0 text-gray-400" >{exportOpen() ? 'expand_less' : 'expand_more'}</i>
-      </button>
-      <ul classList={{hidden: !exportOpen()}} class="mt-1 px-2" id="sub-menu-2">
-        <li><a href="#" class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">as Binary</a></li>
-        <li><a href="#" class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-400 hover:bg-gray-50">as RUBE</a></li>
-      </ul>
-    </div>
+          <Menubar.Separator class="menubar__separator" />
 
-    <div class='my-2 h-[1px] bg-stone-500' />
+          <Menubar.Sub overlap gutter={4} shift={-8}>
+            <Menubar.SubTrigger class="menubar__sub-trigger">
+              Import <div class="menubar__item-right-slot"><i class="material-icons size-5 text-gray-400" >chevron_right</i></div>
+            </Menubar.SubTrigger>
+            <Menubar.Portal>
+              <Menubar.SubContent class="menubar__sub-content">
+                <Menubar.Item class="menubar__item">from .bin</Menubar.Item>
+                <Menubar.Item class="menubar__item">from .rube</Menubar.Item>
+              </Menubar.SubContent>
+            </Menubar.Portal>
+          </Menubar.Sub>
 
-    {/* EXIT */}
-    <button class="btn-menu-item mb-4 mt-auto">
-      <i class="material-icons text-stone-600">exit_to_app</i>Exit
-    </button>
+          <Menubar.Sub overlap gutter={4} shift={-8}>
+            <Menubar.SubTrigger class="menubar__sub-trigger">
+            Export <div class="menubar__item-right-slot"><i class="material-icons size-5 text-gray-400" >chevron_right</i></div>
+            </Menubar.SubTrigger>
+            <Menubar.Portal>
+              <Menubar.SubContent class="menubar__sub-content">
+                <Menubar.Item class="menubar__item">as .bin</Menubar.Item>
+                <Menubar.Item class="menubar__item" onSelect={exportAsRube}>as .rube</Menubar.Item>
+              </Menubar.SubContent>
+            </Menubar.Portal>
+          </Menubar.Sub>
+
+          <Menubar.Separator class="menubar__separator" />
+
+          <Menubar.Item class="menubar__item">
+            Exit <div class="menubar__item-right-slot">⇧+⌘+K</div>
+          </Menubar.Item>
+
+        </Menubar.Content>
+      </Menubar.Portal>
+    </Menubar.Menu>
   </>;
 };
 
 const MenuEdit: Component = () => {
   return <>
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">undo</i>Undo
-    </button>
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">redo</i>Redo
-    </button>
+    <Menubar.Menu>
+      <Menubar.Trigger class="menubar__trigger">Edit</Menubar.Trigger>
 
-    <div class='my-2 h-[1px] bg-stone-500' />
+      <Menubar.Portal>
+        <Menubar.Content class="menubar__content">
 
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">content_copy</i>Copy
-    </button>
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">content_paste</i>Paste
-    </button>
+          <Menubar.Item class="menubar__item">
+          undo <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Z</kbd></div>
+          </Menubar.Item>
 
+          <Menubar.Item class="menubar__item">
+          redo <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Y</kbd></div>
+          </Menubar.Item>
+
+          <Menubar.Separator class="menubar__separator" />
+
+          <Menubar.Item class="menubar__item">
+          copy <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>C</kbd></div>
+          </Menubar.Item>
+
+          <Menubar.Item class="menubar__item">
+          paste<div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>V</kbd></div>
+          </Menubar.Item>
+
+        </Menubar.Content>
+      </Menubar.Portal>
+    </Menubar.Menu>
   </>;
 };
 
 const MenuView: Component = () => {
-  return <div>View</div>;
+  return <>
+    <Menubar.Menu>
+      <Menubar.Trigger class="menubar__trigger">View</Menubar.Trigger>
+
+      <Menubar.Portal>
+        <Menubar.Content class="menubar__content">
+
+          TODO
+
+        </Menubar.Content>
+      </Menubar.Portal>
+    </Menubar.Menu>
+  </>;
 };
 
 const MenuActions: Component = () => {
-  return <div>Actions</div>;
+  return <>
+    <Menubar.Menu>
+      <Menubar.Trigger class="menubar__trigger">Actions</Menubar.Trigger>
+
+      <Menubar.Portal>
+        <Menubar.Content class="menubar__content">
+
+          TODO
+
+        </Menubar.Content>
+      </Menubar.Portal>
+    </Menubar.Menu>
+  </>;
 };
 
 const MenuHelp: Component = () => {
   return <>
-    <button class="btn-menu-item" onClick={() => setActiveDialog('Help')}>
-      <i class="material-icons text-stone-600">help_outline</i>Open Help Docs
-    </button>
-    <a class="btn-menu-item" href='https://github.com/andreas-schoch/snowboarding-game/discussions' target="_blank" rel='noopener'>
-      <i class="material-icons text-stone-600">forum</i>Forum
-    </a>
-    <button class="btn-menu-item">
-      <i class="material-icons text-stone-600">info</i>About
-    </button>
+    <Menubar.Menu>
+      <Menubar.Trigger class="menubar__trigger">Help</Menubar.Trigger>
+
+      <Menubar.Portal>
+        <Menubar.Content class="menubar__content">
+
+          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialog('Help')}>
+            Open Help Docs<div class="menubar__item-right-slot"><kbd>F1</kbd></div>
+          </Menubar.Item>
+
+          <Menubar.Item class="menubar__item" onSelect={() => window.open('https://github.com/andreas-schoch/snowboarding-game/discussions','_newtab')}>
+            Forum
+          </Menubar.Item>
+
+          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialog('About')}>
+            About
+          </Menubar.Item>
+        </Menubar.Content>
+      </Menubar.Portal>
+    </Menubar.Menu>
   </>;
 };
 

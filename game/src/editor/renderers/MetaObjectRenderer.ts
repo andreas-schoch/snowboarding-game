@@ -30,9 +30,9 @@ export class MetaObjectRenderer {
     if (angle > twoPI) angle -= twoPI;
     if (angle < 0) angle += twoPI;
 
-    this.terrainRenderer.render(object.items.terrainChunks, x, y, angle);
-    this.imageRenderer.render(object.items.images, x, y, angle);
-    for (const subObject of object.items.objects) {
+    this.terrainRenderer.render(Object.values(object.items.terrain), x, y, angle);
+    this.imageRenderer.render(Object.values(object.items.image), x, y, angle);
+    for (const subObject of Object.values(object.items.object)) {
       this.renderObject(subObject, x, y, angle);
     }
   }

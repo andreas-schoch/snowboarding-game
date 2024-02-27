@@ -7,10 +7,10 @@ import {RubeCustomPropsMap} from './EntityTypes';
 import {RubeFile} from './RubeFile';
 
 export interface EditorItems {
-  objects: EditorObject[];
-  terrainChunks: EditorTerrainChunk[];
-  sensors: EditorSensor[];
-  images: EditorImage[];
+  object: Record<EditorItem['id'], EditorObject>;
+  terrain: Record<EditorItem['id'], EditorTerrainChunk>;
+  sensor: Record<EditorItem['id'], EditorSensor>;
+  image: Record<EditorItem['id'], EditorImage>;
 }
 
 export type Bounds = {x: number, y: number, width: number, height: number};
@@ -39,32 +39,35 @@ export class RubeMetaLoader {
 
   load(rubeFile: RubeFile): EditorItems {
     return {
-      objects: this.loadObjects(rubeFile),
-      terrainChunks: this.loadTerrainChunks(rubeFile),
-      sensors: this.loadSensors(rubeFile),
-      images: this.loadImages(rubeFile)
+      object: this.loadObjects(rubeFile),
+      terrain: this.loadTerrainChunks(rubeFile),
+      sensor: this.loadSensors(rubeFile),
+      image: this.loadImages(rubeFile),
     };
   }
 
-  private loadObjects(rubeFile: RubeFile): EditorObject[] {
+  private loadObjects(rubeFile: RubeFile) {
     const metaObjects = rubeFile.metaworld?.metaobject || [];
-    const objects: EditorObject[] = [];
-    for (const metaObject of metaObjects) objects.push(new EditorObject(this, metaObject));
+    const objects: Record<EditorObject['id'], EditorObject> = {};
+    for (const metaObject of metaObjects) {
+      const object = new EditorObject(this, metaObject);
+      objects[object.id] = object;
+    }
     return objects;
   }
 
-  // loadObjectItems(metaObject: MetaObject): EditorItems {
-  //   return this.load(rubeFile);
-  // }
-
-  private loadImages(rubeFile: RubeFile): EditorImage[] {
+  private loadImages(rubeFile: RubeFile) {
     const metaImages = rubeFile.metaworld?.metaimage || [];
-    const images = metaImages.map(metaImage => new EditorImage(this, metaImage));
+    const images: Record<EditorImage['id'], EditorImage> = {};
+    for (const metaImage of metaImages) {
+      const image = new EditorImage(this, metaImage);
+      images[image.id] = image;
+    }
     return images;
   }
 
-  private loadTerrainChunks(rubeFile: RubeFile): EditorTerrainChunk[] {
-    const terrainChunks: EditorTerrainChunk[] = [];
+  private loadTerrainChunks(rubeFile: RubeFile) {
+    const terrainChunks: Record<EditorTerrainChunk['id'], EditorTerrainChunk> = {};
     if (!rubeFile.metaworld?.metabody) return terrainChunks;
 
     for (const metaBody of rubeFile.metaworld.metabody) {
@@ -77,23 +80,25 @@ export class RubeMetaLoader {
         if (metaFixture.shapes.length > 1) throw new Error('Multiple shapes found in the fixture');
         const metaFixtureShape = metaFixture.shapes[0];
         if (metaFixtureShape.type !== 'line' && metaFixtureShape.type !== 'loop') throw new Error('Only polygon shapes are supported for terrain chunks');
-        terrainChunks.push(new EditorTerrainChunk(this, metaBody, metaFixture));
+        const chunk = new EditorTerrainChunk(this, metaBody, metaFixture);
+        terrainChunks[chunk.id] = chunk;
       }
     }
 
     return terrainChunks;
   }
 
-  private loadSensors(rubeFile: RubeFile): EditorSensor[] {
+  private loadSensors(rubeFile: RubeFile) {
     const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0].customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
-    const sensors: EditorSensor[] = []; // TODO
+    const sensors: Record<EditorSensor['id'], EditorSensor> = {};
     for (const body of sensorBodies) {
       const sensorFixture = body.fixture?.[0];
       if (!sensorFixture) throw new Error('No fixture found in the sensor body');
       const sensorType = sensorFixture.customProperties?.find(prop => prop.name === 'phaserSensorType')?.string;
       if (!sensorType) throw new Error('Sensor type not defined on the sensor body');
       if (sensorType !== 'level_finish' && sensorType !== 'level_deathzone' && sensorType !== 'pickup_present') throw new Error('Invalid sensor type');
-      sensors.push(new EditorSensor(this, body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present'));
+      const sensor = new EditorSensor(this, body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present');
+      sensors[sensor.id] = sensor;
     }
 
     return sensors;

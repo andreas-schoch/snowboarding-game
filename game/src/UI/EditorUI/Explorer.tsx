@@ -1,20 +1,15 @@
-import {Component, For, createSignal, splitProps} from 'solid-js';
-import {EditorInfo} from '../../EditorInfo';
-import {RUBE_SCENE_LOADED} from '../../eventTypes';
+import {Component, For, splitProps} from 'solid-js';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
 import {Pane, ResizeProps} from './Pane';
 
-type ItemExplorerProps = {selected: EditorItem | null, setSelected: (item: EditorItem) => void};
+type ItemExplorerProps = {rube: EditorItems | null, selected: EditorItem | null, setSelected: (item: EditorItem) => void};
 export const Explorer: Component<ItemExplorerProps & ResizeProps> = props => {
-  const [rube, setRube] = createSignal<EditorItems | null>(null);
-  const objects = () => rube()?.objects || [];
-  const terrainChunks = () => rube()?.terrainChunks || [];
-  const images = () => rube()?.images || [];
+  const objects = () => props.rube ? Object.values(props.rube.object) : [];
+  const terrainChunks = () => props.rube ? Object.values(props.rube.terrain) : [];
+  const images = () => props.rube ? Object.values(props.rube.image) : [];
   const items = () => ([...objects(), ...terrainChunks(), ...images()]);
 
   const [localProps, resizeProps] = splitProps(props, ['selected', 'setSelected']);
-
-  EditorInfo.observer.on(RUBE_SCENE_LOADED, (items: EditorItems) => setRube(items));
 
   const iconMap: Record<EditorItem['type'], string> = {
     object: 'view_in_ar',

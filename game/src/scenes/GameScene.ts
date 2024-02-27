@@ -10,6 +10,7 @@ import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {downloadBlob} from '../helpers/binaryTransform';
+import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {RubeScene} from '../physics/RUBE/RubeFileExport';
 import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeDefaults';
@@ -74,8 +75,7 @@ export class GameScene extends Phaser.Scene {
       this.ready = true;
     });
 
-    GameInfo.observer.on(EDITOR_OPEN, () => {
-      const currentLevel = GameInfo.currentLevel;
+    GameInfo.observer.on(EDITOR_OPEN, (level: ILevel) => {
       this.b2Physics.loader.cleanup();
       GameInfo.crashed = false;
       GameInfo.possessedCharacterId = '';
@@ -85,7 +85,7 @@ export class GameScene extends Phaser.Scene {
       freeLeaked();
       this.sound.stopAll();
       this.scene.stop(SCENE_GAME);
-      this.scene.start(SCENE_EDITOR, {level: currentLevel});
+      this.scene.start(SCENE_EDITOR, {level});
     });
 
     GameInfo.observer.on(RESTART_GAME, () => {

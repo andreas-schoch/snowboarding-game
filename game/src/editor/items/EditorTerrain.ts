@@ -1,15 +1,16 @@
+/* eslint-disable no-case-declarations */
 
 import {Accessor, Setter, createSignal} from 'solid-js';
-import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
-import {EDITOR_SCENE_CHANGED} from '../../eventTypes';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaFixture} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, RubeMetaLoader, Bounds} from '../../physics/RUBE/RubeMetaLoader';
+import {EditorItemTracker} from './ItemTracker';
 
 export class EditorTerrainChunk implements BaseEditorItem {
+
   readonly id: string;
   readonly type = 'terrain';
   readonly signal: Accessor<EditorTerrainChunk>;
@@ -87,7 +88,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
     this.setSignal(this as EditorTerrainChunk);
     // TODO can be optimized by passing which properties changed. If only pos or rot change, we can just translate or rotate the graphics
     //  Only when the vertices change due to user editing them (well excluding rotation which also changes then) we need to redraw the graphics for terrain
-    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
+    EditorItemTracker.trackChange(this);
   }
 
   setAngle(angle: number) {
@@ -116,6 +117,6 @@ export class EditorTerrainChunk implements BaseEditorItem {
 
   private signalUpdate() {
     this.setSignal(this as EditorTerrainChunk);
-    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, this);
+    EditorItemTracker.trackChange(this);
   }
 }

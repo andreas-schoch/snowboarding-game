@@ -6,10 +6,11 @@ import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {initSolidUI} from '../UI';
 import {EditorController} from '../controllers/EditorController';
+import {EditorItemTracker} from '../editor/items/ItemTracker';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
 import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
-import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_OPEN, EDITOR_SCENE_CHANGED, RUBE_SCENE_LOADED} from '../eventTypes';
+import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED} from '../eventTypes';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
@@ -43,14 +44,13 @@ export class EditorScene extends Phaser.Scene {
       const filename = `level_${String(this.level.number).padStart(3, '0')}.rube`;
       this.load.json(filename, `assets/levels/${filename}`);
     }
-    this.load.json('level_new.rube', 'assets/levels/level_new.rube');
   }
 
   private create() {
-    this.data;
     if (GameInfo.observer) GameInfo.observer.destroy();
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     EditorInfo.observer = new Phaser.Events.EventEmitter();
+    EditorInfo.filename = this.level?.number ? `level_${String(this.level.number).padStart(3, '0')}.rube` : 'level_new.rube';
 
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
@@ -59,7 +59,6 @@ export class EditorScene extends Phaser.Scene {
 
     drawCoordZeroPoint(this);
     initSolidUI('root-ui');
-    EditorInfo.observer.emit(EDITOR_OPEN, null);
 
     EditorInfo.observer.on(EDITOR_EXIT, () => {
       document.body.appendChild(rootGame);
@@ -77,31 +76,30 @@ export class EditorScene extends Phaser.Scene {
     // GameInfo.currentLevel = level;
     // const scene = await pb.level.getRubeScene(level);
     // const scene: RubeFile = this.cache.json.get('level_new.rube');
-    const filename = this.level?.number ? `level_${String(this.level.number).padStart(3, '0')}.rube` : 'level_new.rube';
-    const scene: RubeFile = this.cache.json.get(filename);
+    const rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
 
     const metaLoader = new RubeMetaLoader(this);
-    const items = metaLoader.load(scene);
-    // const metaSerializer = new RubeMetaSerializer(this);
+    const items = metaLoader.load(rubefile);
+    EditorItemTracker.editorItems = items;
     // const reserialized = metaSerializer.serialize(metaLoader.load(scene));
     // const items = metaLoader.load(reserialized);
-    EditorInfo.observer.emit(RUBE_SCENE_LOADED, items);
+    EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
     // const loadedScene = this.b2Physics.load(scene);
     const metaTerrainRenderer = new MetaTerrainRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaImageRenderer = new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaObjectRenderer = new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
-    metaTerrainRenderer.renderThrottled(items.terrainChunks);
-    metaImageRenderer.renderThrottled(items.images);
-    metaObjectRenderer.renderThrottled(items.objects);
+    metaTerrainRenderer.renderThrottled(Object.values(items.terrain));
+    metaImageRenderer.renderThrottled(Object.values(items.image));
+    metaObjectRenderer.renderThrottled(Object.values(items.object));
 
-    EditorInfo.observer.on(EDITOR_SCENE_CHANGED, (item: EditorItem) => {
-      switch (item.type) {
+    EditorInfo.observer.on(EDITOR_SCENE_CHANGED, (changed: EditorItem) => {
+      switch (changed.type) {
       case 'terrain':
-        return metaTerrainRenderer.renderThrottled([item]);
+        return metaTerrainRenderer.renderThrottled([changed]);
       case 'image':
-        return metaImageRenderer.renderThrottled([item]);
+        return metaImageRenderer.renderThrottled([changed]);
       case 'object':
-        return metaObjectRenderer.renderThrottled([item]);
+        return metaObjectRenderer.renderThrottled([changed]);
       }
     });
 
