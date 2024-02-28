@@ -20,6 +20,9 @@ dependencies:
   pocketbase:
     specifier: ^0.20.3
     version: 0.20.3
+  poly-decomp-es:
+    specifier: ^0.4.2
+    version: 0.4.2
   protobufjs:
     specifier: ^7.2.6
     version: 7.2.6
@@ -5356,6 +5359,10 @@ packages:
 
   /pocketbase@0.20.3:
     resolution: {integrity: sha512-qembHhE7HumDBZpxWgFIbhJPeaCoUIdwhW59xF/VlMR79pDTYz/LaQ4q89y7GczKo4X9actFgFN8hs4dTl0spQ==}
+    dev: false
+
+  /poly-decomp-es@0.4.2:
+    resolution: {integrity: sha512-akjZkaTeyfECMNkMqv0g9gFiU2HjpZ5ubJA/aczw1ILdgWQbv1OPwCi05/9JbY2GnGpjm9k85Jdbd/j/p/lg/g==}
     dev: false
 
   /postcss-attribute-case-insensitive@6.0.2(postcss@8.4.33):
