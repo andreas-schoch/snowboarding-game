@@ -4,9 +4,12 @@ import {RubeCustomPropsMap} from '../physics/RUBE/EntityTypes';
 import {RubeVectorArray,RubeVector, RubeCustomProperty} from '../physics/RUBE/RubeFile';
 import {customPropertyDefsByName} from '../physics/RUBE/RubeFileConstants';
 
+export function isXY(val: unknown): val is XY {
+  return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
+}
 // IMPORTANt: It is assumed that this transformer is used for phaser stuff, so we already negate the Y axis here (RUBE uses a different coordinate system)
 export function rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
-  if (val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y')) return {x: val.x + offsetX, y: -(val.y + offsetY)};
+  if (isXY(val)) return {x: val.x + offsetX, y: -(val.y + offsetY)};
   // Non-compacted scenes seem to be around 5-10% larger in character size but it's negligible for the moment.
   // While the app can handle compact zero vectors, protobuf does not seem to support conditional types like that.
   // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
@@ -15,7 +18,7 @@ export function rubeToXY(val?: RubeVector, offsetX = 0, offsetY = 0): XY {
 
 // IMPORTANt: It is assumed that this transformer is used primarily for Box2D stuff, so we don't negate the Y axis here
 export function rubeToVec2(val?: RubeVector, offsetX = 0, offsetY = 0): Box2D.b2Vec2 {
-  if (val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y')) return recordLeak(new b2.b2Vec2(val.x + offsetX, val.y + offsetY));
+  if (isXY(val)) return recordLeak(new b2.b2Vec2(val.x + offsetX, val.y + offsetY));
   // Non-compacted scenes seem to be around 5-10% larger in character size but it's negligible for the moment.
   // While the app can handle compact zero vectors, protobuf does not seem to support conditional types like that.
   // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');

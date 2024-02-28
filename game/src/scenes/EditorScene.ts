@@ -14,9 +14,10 @@ import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADE
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
+import {RubeExport} from '../physics/RUBE/RubeExport';
 import {RubeFile} from '../physics/RUBE/RubeFile';
-import {RubeScene} from '../physics/RUBE/RubeFileExport';
 import {EditorItem, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
+import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 
 export class EditorScene extends Phaser.Scene {
   b2Physics: Physics;
@@ -77,17 +78,16 @@ export class EditorScene extends Phaser.Scene {
     // const scene = await pb.level.getRubeScene(level);
     // const scene: RubeFile = this.cache.json.get('level_new.rube');
     const rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
-
-    const encoded = rubeFileSerializer.encode(rubefile);
-    console.log('encoded rube file', encoded, encoded.length);
+    const sanitized = sanitizeRubeFile(rubefile);
+    const encoded = rubeFileSerializer.encode(sanitized);
+    console.debug('sanitized rube file', sanitized, JSON.stringify(sanitized).length);
+    console.debug('encoded rube file', encoded, encoded.length);
 
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(rubefile);
     EditorItemTracker.editorItems = items;
-    // const reserialized = metaSerializer.serialize(metaLoader.load(scene));
-    // const items = metaLoader.load(reserialized);
     EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
-    // const loadedScene = this.b2Physics.load(scene);
+
     const metaTerrainRenderer = new MetaTerrainRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaImageRenderer = new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
     const metaObjectRenderer = new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
@@ -106,13 +106,9 @@ export class EditorScene extends Phaser.Scene {
       }
     });
 
-    const rubeScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+    const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
     this.b2Physics.load(rubeScene, 0, 0);
     this.ready = true;
-    // });
-
-    // TODO ability to load individual RubeScenes and treat them as an Object Entity similar like in RUBE
-    //  An object may contain many Bodies, Joints, Fixtures, etc. but will be displayed as a single entity
   }
 
   update(time: number, delta: number) {

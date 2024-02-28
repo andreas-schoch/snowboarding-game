@@ -1,7 +1,7 @@
 import {RubeCustomProperty, RubeVectorArray,RubeVector} from './RubeFile';
 
 // Typings corresponding to the R.U.B.E. JSON export format described here: https://www.iforce2d.net/rube/json-structure
-export interface RubeScene {
+export interface RubeExport {
   gravity: RubeVector;
   allowSleep: boolean;
   autoClearForces: boolean;

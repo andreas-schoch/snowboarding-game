@@ -15,10 +15,10 @@ export class EditorItemTracker {
     const exists = items.object[item.id] || items.terrain[item.id] || items.sensor[item.id] || items.image[item.id];
 
     if (exists) {
-      console.log('Item already exists, updating it', item);
+      console.debug('Item already exists, updating it', item);
       items[item.type][item.id] = item;
     } else {
-      console.log('Item does not exist, adding it', item);
+      console.debug('Item does not exist, adding it', item);
       items[item.type][item.id] = item;
     }
 

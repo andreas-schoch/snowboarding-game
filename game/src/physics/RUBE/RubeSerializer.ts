@@ -1,8 +1,8 @@
 import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
 import {Entity, WorldEntityData} from './EntityTypes';
+import {RubeExport, RubeBody, RubeJoint, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeJointType} from './RubeExport';
 import {RubeVectorArray, RubeCustomProperty, CustomPropertyDefNames, CustomPropertyValue,RubeVector} from './RubeFile';
-import {RubeScene, RubeBody, RubeJoint, RubeFixture, RubeJointBase, RubeFixtureShapeChain, RubeFixtureShapeCircle, RubeFixtureShapePolygon, RubeImage, RubeJointType} from './RubeFileExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {RubeLoader} from './RubeLoader';
 import {vec2Util} from './Vec2Math';
@@ -30,9 +30,9 @@ export class RubeSerializer {
 
   constructor(private worldEntity: WorldEntityData, private adapter: IBaseAdapter, private loader: RubeLoader) { }
 
-  serialize(): RubeScene {
+  serialize(): RubeExport {
     console.time('RubeSerializer.serialize');
-    const scene: RubeScene = {
+    const scene: RubeExport = {
       gravity: this.serializeVector(this.worldEntity.world.GetGravity()),
       allowSleep: this.worldEntity.world.GetAllowSleeping(),
       autoClearForces: this.worldEntity.world.GetAutoClearForces(),

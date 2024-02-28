@@ -12,8 +12,8 @@ import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {RubeScene} from '../physics/RUBE/RubeFileExport';
-import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeDefaults';
+import {RubeExport} from '../physics/RUBE/RubeExport';
+import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeExport';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -66,7 +66,7 @@ export class GameScene extends Phaser.Scene {
       const loadedLevelScene = this.b2Physics.load(rubeFile);
       new Terrain(this, loadedLevelScene).draw();
       this.playerController = new CharacterController(this);
-      const characterScene: RubeScene = this.cache.json.get(Settings.selectedCharacter());
+      const characterScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
       // const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
       // if (!spawnStart) throw new Error('No spawn point found in level');
       // const {x, y} = spawnStart.body.GetPosition();
@@ -110,7 +110,7 @@ export class GameScene extends Phaser.Scene {
         // TODO make this possible via cli script
         const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
         for (const level of levels) {
-          const parsed: RubeScene = this.cache.json.get(level);
+          const parsed: RubeExport = this.cache.json.get(level);
           const sanitized = sanitizeRubeDefaults(parsed);
           const encoded = rubeExportSerializer.encode(sanitized);
           downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');

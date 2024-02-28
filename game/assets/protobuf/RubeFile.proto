@@ -50,60 +50,74 @@ message Shape {
 }
 
 message MetaFixture {
-  optional string name = 1;
-  optional double density = 2;
-  optional int32 filterCategoryBits = 3;
-  optional int32 filterMaskBits = 4;
-  optional int32 filterGroupIndex = 5;
-  optional double friction = 6;
-  optional double restitution = 7;
-  optional bool sensor = 8;
-  // repeated CustomProperty customProperties = 9;
+  int32 id = 1;
+  optional string name = 2;
+  optional double density = 3;
+  optional int32 filterCategoryBits = 4;
+  optional int32 filterMaskBits = 5;
+  optional int32 filterGroupIndex = 6;
+  optional double friction = 7;
+  optional double restitution = 8;
+  optional bool sensor = 9;
   VectorArray vertices = 10;
   repeated Shape shapes = 11;
-  int32 id = 12;
+  repeated CustomProperty customProperties = 12;
 }
 
 //////////////////////////////////////
 
 message MetaBody {
-  optional string name = 1;
-  optional bool active = 2;
-  optional bool awake = 3;
-  optional bool bullet = 4;
-  optional bool fixedRotation = 5;
-  optional bool sleepingAllowed = 6;
-  optional string type = 7;
-  optional Vector position = 8;
-  optional double angle = 9;
-  optional double angularDamping = 10;
-  optional double angularVelocity = 11;
-  optional double linearDamping = 12;
-  // optional Vector linearVelocity = 13;
-  optional double massDataMass = 14;
-  optional Vector massDataCenter = 15;
-  optional double massDataI = 16;
-  // repeated CustomProperty customProperties = 17;
+  int32 id = 1;
+  string name = 2;
+  optional bool active = 3;
+  optional bool awake = 4;
+  optional bool bullet = 5;
+  optional bool fixedRotation = 6;
+  optional bool sleepingAllowed = 7;
+  optional string type = 8;
+  optional Vector position = 9;
+  optional double angle = 10;
+  optional double angularDamping = 11;
+  optional double angularVelocity = 12;
+  optional double linearDamping = 13;
+  optional Vector linearVelocity = 14;
+  optional double massDataMass = 15;
+  optional Vector massDataCenter = 16;
+  optional double massDataI = 17;
   repeated MetaFixture metafixture = 18;
-  int32 id = 19;
+  repeated CustomProperty customProperties = 19;
 }
 
 ///////////////////////////////////
 
 message MetaImage {
-  optional double angle = 1;
-  optional int32 body = 2;
-  optional Vector center = 3;
-  // optional repeated CustomProperty customProperties = 4;
-  optional string file = 5;
-  optional int32 filter = 6;
-  optional bool flip = 7;
-  optional int32 id = 8;
-  optional string name = 9;
-  optional double opacity = 10;
-  optional double renderOrder = 11;
-  optional double aspectScale = 12;
-  optional double scale = 13;
+  int32 id = 1;
+  string name = 2;
+  optional double angle = 3;
+  optional int32 body = 4;
+  optional Vector center = 5;
+  optional string file = 6;
+  optional int32 filter = 7;
+  optional bool flip = 8;
+  optional double opacity = 9;
+  optional double renderOrder = 10;
+  optional double aspectScale = 11;
+  optional double scale = 12;
+  repeated CustomProperty customProperties = 13;
+}
+
+///////////////////////////////////
+
+message MetaObject {
+  int32 id = 1;
+  string file = 2;
+  optional string name = 3;
+  optional string path = 4;
+  optional bool flip = 5;
+  optional double angle = 6;
+  optional double scale = 7;
+  optional Vector position = 8;
+  repeated CustomProperty customProperties = 9;
 }
 
 ///////////////////////////////////
@@ -122,20 +136,6 @@ message ExportOptions {
 
 //////////////////////////////////
 
-message MetaObject {
-  string name = 1;
-  string file = 2;
-  string path = 3;
-  bool flip = 4;
-  int32 id = 5;
-  double angle = 6;
-  double scale = 7;
-  Vector position = 8;
-  // repeated CustomProperty customProperties = 9;
-}
-
-//////////////////////////////////
-
 message MetaWorld {
   Vector gravity = 1;
   bool allowSleep = 2;
@@ -147,10 +147,10 @@ message MetaWorld {
   bool continuousPhysics = 8;
   bool subStepping = 9;
 
-  // repeated MetaBody metabody = 10;
-  // repeated MetaImage metaimage = 11;
+  repeated MetaBody metabody = 10;
+  repeated MetaImage metaimage = 11;
   // repeated MetaJoint metajoint = 12;
-  // repeated MetaObject metaobject = 13;
+  repeated MetaObject metaobject = 13;
 
   ExportOptions exportOptions = 14;
 }

@@ -143,7 +143,7 @@ export interface MetaImage {
   center: RubeVector;
   customProperties?: RubeCustomProperty[];
   file: string;
-  filter: number;
+  filter: 0 | 1; // nearest = 0, linear = 1 - (default is 1)
   flip: boolean;
   id: number;
   name: string;

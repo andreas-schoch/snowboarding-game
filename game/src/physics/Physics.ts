@@ -4,7 +4,7 @@ import {iterBodies} from '../helpers/B2Iterators';
 import {b2} from '../index';
 import {DebugDrawer} from './DebugDraw';
 import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
-import {RubeScene} from './RUBE/RubeFileExport';
+import {RubeExport} from './RUBE/RubeExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
 import {RubeSerializer} from './RUBE/RubeSerializer';
@@ -45,7 +45,7 @@ export class Physics {
     // this.debugDrawer.instance.SetFlags(enabled ? 1 : 0);
   }
 
-  load(rubeScene: RubeScene, offsetX: number = 0, offsetY: number = 0) {
+  load(rubeScene: RubeExport, offsetX: number = 0, offsetY: number = 0) {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
     const loadedScene = this.loader.load(rubeScene, offsetX, offsetY);
     if (this.worldEntity.debugDrawEnabled) this.worldEntity.world.DebugDraw();

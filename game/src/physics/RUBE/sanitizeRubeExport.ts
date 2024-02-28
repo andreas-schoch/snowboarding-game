@@ -1,12 +1,13 @@
-import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeScene} from './RubeFileExport';
+import {isXY} from '../../helpers/rubeTransformers';
+import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeExport} from './RubeExport';
 
 // TODO eventually we can simplify the loader which checks the defaults for each optional property and just use this
 //  It will require a bit more memory but probably negligible. Protobuf encoded size is almost the same even with optional fields included
 //  For now this stays like this until I continue work on my own level editor and decide wheather to stay compatible with RUBE or not.
 
 // TODO consider overriding the existing objects/arrays instead of creating new ones
-export function sanitizeRubeDefaults(scene: RubeScene) {
-  const sanitizedScene: Partial<RubeScene> = {
+export function sanitizeRubeDefaults(scene: RubeExport) {
+  const sanitizedScene: Partial<RubeExport> = {
     gravity: isXY(scene.gravity) ? scene.gravity : {x: 0, y: 0},
     allowSleep: scene.allowSleep,
     autoClearForces: scene.autoClearForces,
@@ -24,7 +25,7 @@ export function sanitizeRubeDefaults(scene: RubeScene) {
   if (scene.joint) sanitizedScene.joint = scene.joint.map(sanitizeJoint);
   if (scene.image) sanitizedScene.image = scene.image.map(sanitizeImage);
 
-  return sanitizedScene as RubeScene;
+  return sanitizedScene as RubeExport;
 }
 
 function sanitizeBody(body: RubeBody): RubeBody {
@@ -83,16 +84,13 @@ function sanitizeFixture(fixture: RubeFixture): RubeFixture {
 }
 
 function sanitizeJoint(joint: RubeJoint): RubeJoint {
-  // Assuming joint is a union type of all joint types, use a type guard if necessary
-  const sanitizedJoint = {
+  return {
     ...joint,
     anchorA: isXY(joint.anchorA) ? joint.anchorA : {x: 0, y: 0},
     anchorB: isXY(joint.anchorB) ? joint.anchorB : {x: 0, y: 0},
     collideConnected: joint.collideConnected || false,
     customProperties: joint.customProperties || []
   };
-  // Further sanitize based on specific joint type, if necessary
-  return sanitizedJoint;
 }
 
 function sanitizeImage(image: RubeImage): RubeImage {
@@ -115,8 +113,4 @@ function sanitizeImage(image: RubeImage): RubeImage {
     // glTexCoordPointer: image.glTexCoordPointer || [],
     // glVertexPointer: image.glVertexPointer || [],
   };
-}
-
-function isXY(val: unknown): val is {x: number, y: number}{
-  return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
 }
