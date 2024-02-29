@@ -84,7 +84,7 @@ message MetaBody {
   optional double massDataMass = 15;
   optional Vector massDataCenter = 16;
   optional double massDataI = 17;
-  repeated MetaFixture metafixture = 18;
+  repeated MetaFixture fixture = 18;
   repeated CustomProperty customProperties = 19;
 }
 
