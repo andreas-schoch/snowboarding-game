@@ -1,4 +1,3 @@
-import {GameInfo} from '../GameInfo';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {iterBodies} from '../helpers/B2Iterators';
 import {b2} from '../index';
@@ -27,15 +26,16 @@ export interface IPostSolveEvent {
 }
 
 export class Physics {
+  static instance: Physics;
   worldEntity: WorldEntityData;
   serializer: RubeSerializer;
   loader: RubeLoader;
 
   constructor(private scene: Phaser.Scene, config: WorldEntityConfig) {
-    GameInfo.physics = this;
+    Physics.instance = this;
     this.worldEntity = this.initWorld(config);
 
-    const adapter = new PhaserImageAdapter(scene, this);
+    const adapter = new PhaserImageAdapter(scene);
     this.loader = new RubeLoader(this.worldEntity, adapter);
     this.serializer = new RubeSerializer(this.worldEntity, adapter, this.loader);
   }

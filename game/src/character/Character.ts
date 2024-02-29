@@ -1,7 +1,7 @@
 import {b2, rubeFileSerializer} from '..';
-import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {arrayBufferToString} from '../helpers/binaryTransform';
+import {Physics} from '../physics/Physics';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
@@ -137,7 +137,7 @@ export class Character {
     let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
     characterRubeFile = sanitizeRubeFile(characterRubeFile);
     const characterExport = RubeFileToExport(characterRubeFile);
-    return GameInfo.physics.load(characterExport, x, y);
+    return Physics.instance.load(characterExport, x, y);
   }
 
   private setLegLength(left: number, right: number) {

@@ -61,10 +61,10 @@ export class GameScene extends Phaser.Scene {
 
       const loadedLevelScene = this.b2Physics.load(rubeExport);
       new Terrain(this, loadedLevelScene).draw();
-      this.playerController = new CharacterController(this);
       const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
       const {x, y} = spawnStart ? spawnStart.body.GetPosition() : {x: 0, y: 0};
       const character = new Character(this, x, y); // TODO spawn at spawn point once all levels are updated
+      this.playerController = new CharacterController(this);
       this.playerController.possessCharacter(character);
       this.ready = true;
     });

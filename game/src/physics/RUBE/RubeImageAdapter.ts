@@ -9,7 +9,7 @@ import {RubeImage} from './RubeExport';
 export class RubeImageAdapter implements IBaseAdapter {
   readonly images: Phaser.GameObjects.Image[] = [];
 
-  constructor(private scene: Phaser.Scene, private physics: Physics) { }
+  constructor(private scene: Phaser.Scene) { }
 
   loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | undefined, imageCustomProps: RubeCustomPropsMap): Phaser.GameObjects.Image | null {
     const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
@@ -24,7 +24,7 @@ export class RubeImageAdapter implements IBaseAdapter {
     const textureFrame = (file || '').split('/').reverse()[0];
     const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : imageCustomProps['phaserTexture'] as string;
 
-    const pixelsPerMeter = this.physics.worldEntity.pixelsPerMeter;
+    const pixelsPerMeter = Physics.instance.worldEntity.pixelsPerMeter;
     const img: Phaser.GameObjects.Image = this.scene.add.image(
       pos.x * pixelsPerMeter,
       -pos.y * pixelsPerMeter,
@@ -55,7 +55,7 @@ export class RubeImageAdapter implements IBaseAdapter {
   }
 
   serializeImage(image: Phaser.GameObjects.Image): RubeImage {
-    const imageEntityData = this.physics.worldEntity.entityData.get(image);
+    const imageEntityData = Physics.instance.worldEntity.entityData.get(image);
     return {
       name: imageEntityData?.name || 'image',
       opacity: image.alpha,
@@ -67,7 +67,7 @@ export class RubeImageAdapter implements IBaseAdapter {
       center: {x: 0, y: 0},
       file: image.texture.firstFrame,
       flip: image.flipX,
-      customProperties: this.physics.serializer.serializeCustomProperties(image)
+      customProperties: Physics.instance.serializer.serializeCustomProperties(image)
     };
   }
 }

@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME, rootGame, rubeFileSerializer} from '..';
+import {SCENE_EDITOR, SCENE_GAME, rootGame} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
@@ -9,15 +9,13 @@ import {EditorController} from '../controllers/EditorController';
 import {EditorItemTracker} from '../editor/items/ItemTracker';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
-import {MetaTerrainRenderer, XY} from '../editor/renderers/MetaTerrainRenderer';
+import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
 import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED} from '../eventTypes';
-import {decomposePolygon} from '../helpers/decomposePolygon';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {RubeExport} from '../physics/RUBE/RubeExport';
-import {RubeFile, RubeVectorArray} from '../physics/RUBE/RubeFile';
-import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
+import {RubeFile} from '../physics/RUBE/RubeFile';
 import {EditorItem, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 
@@ -73,17 +71,8 @@ export class EditorScene extends Phaser.Scene {
       if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
     });
 
-    // pb.level.get(Settings.currentLevel()).then(async level => {
-    // GameInfo.currentLevel = level;
-    // const scene = await pb.level.getRubeScene(level);
-    // const scene: RubeFile = this.cache.json.get('level_new.rube');
-    const rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
-    const sanitized = sanitizeRubeFile(rubefile);
-    const jsonExport = RubeFileToExport(sanitized);
-    const encoded = rubeFileSerializer.encode(sanitized);
-    console.debug('sanitized rube file', sanitized, JSON.stringify(sanitized).length);
-    console.debug('encoded rube file', encoded, encoded.length);
-    console.log('----------jsonExport', jsonExport);
+    let rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
+    rubefile = sanitizeRubeFile(rubefile);
 
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(rubefile);
