@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
@@ -9,10 +9,8 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
-import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
@@ -39,19 +37,13 @@ export class GameScene extends Phaser.Scene {
 
   private preload() {
     const character = Settings.selectedCharacter();
-    this.load.json(character, `assets/levels/${character}.rube`);
-
-    const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005', 'character_v01', 'character_v02', 'cane', 'coin', 'crate', 'rock'];
-    for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
-    for (const level of levels) this.load.json(level + '.rube', `assets/levels/${level}.rube`);
+    this.load.binary(character, `assets/levels/${character}.bin`);
+    // const levels = ['level_003', 'character_v01', 'character_v02'];
+    // for (const level of levels) this.load.json(level, `assets/levels/${level}.rube`);
+    // for (const level of levels) this.load.binary(level + '.bin', `assets/levels/${level}.bin`);
   }
 
   private create() {
-    if (Settings.darkmodeEnabled()) {
-      // this.lights.enable();
-      // this.lights.setAmbientColor(0x555555);
-    }
-
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
@@ -72,11 +64,7 @@ export class GameScene extends Phaser.Scene {
       this.playerController = new CharacterController(this);
       const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
       const {x, y} = spawnStart ? spawnStart.body.GetPosition() : {x: 0, y: 0};
-
-      let characterRubeFile: RubeFile = this.cache.json.get(Settings.selectedCharacter());
-      characterRubeFile = sanitizeRubeFile(characterRubeFile);
-      const characterExport = RubeFileToExport(characterRubeFile);
-      const character = new Character(this, this.b2Physics.load(characterExport, x, y)); // TODO spawn at spawn point once all levels are updated
+      const character = new Character(this, x, y); // TODO spawn at spawn point once all levels are updated
       this.playerController.possessCharacter(character);
       this.ready = true;
     });
@@ -107,61 +95,20 @@ export class GameScene extends Phaser.Scene {
 
     initSolidUI('root-ui');
 
-    if (Settings.debug()) {
-      // TODO remove. Temporary to serialize open level
-      this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
-      this.input.keyboard!.on('keydown-TWO', () => {
-        // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
-        //  Can be removed once we have the editor in place to do that properly
-        // TODO make this possible via cli script
-        const levels = ['cane', 'coin', 'crate', 'rock'];
-        for (const level of levels) {
-          const parsed: RubeFile = this.cache.json.get(level + '.rube');
-          const sanitized = sanitizeRubeFile(parsed);
-          const encoded = rubeFileSerializer.encode(sanitized);
-          downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
-        }
-      });
-
-      // this.input.keyboard!.on('keydown-THREE', () => {
-      //   console.log('migrate level');
-      //   const level = 'level_004.rube';
-      //   const rubeFile: RubeFile = this.cache.json.get(level);
-      //   const rockTODO = rubeFile.metaworld.metabody!.filter(e => e.name === 'rockTODO');
-      //   console.log('number of rockTODOs', rockTODO.length);
-
-      //   const coinObjTemp: MetaObject = {
-      //     angle : 0,
-      //     file : 'prefabs/rock.rube',
-      //     flip : false,
-      //     id : 1,
-      //     name : 'coinObjTemplate',
-      //     position :
-      //     {x : 0, y : 0},
-      //     scale : 1
-      //   };
-
-      //   rubeFile.metaworld.metaobject = rubeFile.metaworld.metaobject || [];
-
-      //   let i = coinObjTemp.id + 1;
-      //   const objects = rubeFile.metaworld.metaobject!;
-      //   for (const todo of rockTODO) {
-      //     const position = todo.position;
-      //     const obj = {...coinObjTemp};
-      //     obj.angle = todo.angle;
-      //     obj.position = position;
-      //     obj.name = 'Rock';
-      //     obj.id = i++;
-      //     objects.push(obj);
-
-      //     rubeFile.metaworld.metabody = rubeFile.metaworld.metabody!.filter(e => e.name !== 'rockTODO');
-      //     rubeFile.metaworld.metaimage = rubeFile.metaworld.metaimage!.filter(e => !e.file.includes('snowy_rock.png'));
-      //   }
-
-      //   downloadBlob(JSON.stringify(rubeFile), level, 'application/json');
-      // });
-
-    }
+    // // TODO remove. Temporary to serialize open level
+    // this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
+    // this.input.keyboard!.on('keydown-TWO', () => {
+    //   // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
+    //   //  Can be removed once we have the editor in place to do that properly
+    //   // TODO make this possible via cli script
+    //   const levels = ['level_003', 'character_v01', 'character_v02'];
+    //   for (const level of levels) {
+    //     const parsed: RubeFile = this.cache.json.get(level);
+    //     const sanitized = sanitizeRubeFile(parsed);
+    //     const encoded = rubeFileSerializer.encode(sanitized);
+    //     downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+    //   }
+    // });
   }
 }
 

@@ -1,6 +1,12 @@
-import {b2} from '..';
+import {b2, rubeFileSerializer} from '..';
+import {GameInfo} from '../GameInfo';
+import {Settings} from '../Settings';
+import {arrayBufferToString} from '../helpers/binaryTransform';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
+import {RubeFile} from '../physics/RUBE/RubeFile';
+import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
+import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
 
@@ -41,16 +47,19 @@ export class Character {
   leanForce: number;
 
   id: string;
+  rubeScene: LoadedScene;
   board: Snowboard;
   state: State;
+
   private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
   private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
   private readonly UP: Box2D.b2Vec2 = new b2.b2Vec2(0, 1);
   private alreadyDetached: boolean = false;
   private currentBodyFlipDot: number = 1;
 
-  constructor(public scene: Phaser.Scene, public rubeScene: LoadedScene) {
-    this.id = rubeScene.id;
+  constructor(public scene: Phaser.Scene, x = 0, y = 0) {
+    this.rubeScene = this.loadCharacter(x, y);
+    this.id = this.rubeScene.id;
     this.initBodyParts();
     this.state = new State(this);
     this.board = new Snowboard(this);
@@ -120,6 +129,15 @@ export class Character {
 
   isPartOfMe(body: Box2D.b2Body): boolean {
     return Boolean(this.rubeScene.entityData.get(body));
+  }
+
+  private loadCharacter(x: number, y: number): LoadedScene {
+    const buffer = this.scene.cache.binary.get(Settings.selectedCharacter());
+    const encoded = arrayBufferToString(buffer);
+    let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
+    characterRubeFile = sanitizeRubeFile(characterRubeFile);
+    const characterExport = RubeFileToExport(characterRubeFile);
+    return GameInfo.physics.load(characterExport, x, y);
   }
 
   private setLegLength(left: number, right: number) {
