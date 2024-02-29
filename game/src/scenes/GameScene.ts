@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeExportSerializer} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
@@ -12,8 +12,9 @@ import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
 import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {RubeExport} from '../physics/RUBE/RubeExport';
-import {sanitizeRubeDefaults} from '../physics/RUBE/sanitizeRubeExport';
+import {RubeFile} from '../physics/RUBE/RubeFile';
+import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
+import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -28,19 +29,19 @@ export class GameScene extends Phaser.Scene {
 
   update() {
     if (!this.ready) return;
-    console.time('update');
+    // console.time('update');
     this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
     Character.instances.forEach(character => character.update());
     this.playerController.update();
     this.backdrop.update();
-    console.timeEnd('update');
+    // console.timeEnd('update');
   }
 
   private preload() {
     const character = Settings.selectedCharacter();
-    this.load.json(character, `assets/levels/export/${character}.json`);
+    this.load.json(character, `assets/levels/${character}.rube`);
 
-    const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+    const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005', 'character_v01', 'character_v02', 'cane', 'coin', 'crate', 'rock'];
     for (const level of levels) this.load.json(level, `assets/levels/export/${level}.json`);
     for (const level of levels) this.load.json(level + '.rube', `assets/levels/${level}.rube`);
   }
@@ -61,16 +62,21 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(Settings.currentLevel()).then(async level => {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
-      const rubeFile = await pb.level.getRubeScene(level);
+      let rubeFile = await pb.level.getRubeFile(level);
+      rubeFile = sanitizeRubeFile(rubeFile);
+      const rubeExport = RubeFileToExport(rubeFile);
       GameInfo.currentLevel = level;
-      const loadedLevelScene = this.b2Physics.load(rubeFile);
+
+      const loadedLevelScene = this.b2Physics.load(rubeExport);
       new Terrain(this, loadedLevelScene).draw();
       this.playerController = new CharacterController(this);
-      const characterScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
-      // const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
-      // if (!spawnStart) throw new Error('No spawn point found in level');
-      // const {x, y} = spawnStart.body.GetPosition();
-      const character = new Character(this, this.b2Physics.load(characterScene, 0, 0)); // TODO spawn at spawn point once all levels are updated
+      const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
+      const {x, y} = spawnStart ? spawnStart.body.GetPosition() : {x: 0, y: 0};
+
+      let characterRubeFile: RubeFile = this.cache.json.get(Settings.selectedCharacter());
+      characterRubeFile = sanitizeRubeFile(characterRubeFile);
+      const characterExport = RubeFileToExport(characterRubeFile);
+      const character = new Character(this, this.b2Physics.load(characterExport, x, y)); // TODO spawn at spawn point once all levels are updated
       this.playerController.possessCharacter(character);
       this.ready = true;
     });
@@ -108,11 +114,11 @@ export class GameScene extends Phaser.Scene {
         // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
         //  Can be removed once we have the editor in place to do that properly
         // TODO make this possible via cli script
-        const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+        const levels = ['cane', 'coin', 'crate', 'rock'];
         for (const level of levels) {
-          const parsed: RubeExport = this.cache.json.get(level);
-          const sanitized = sanitizeRubeDefaults(parsed);
-          const encoded = rubeExportSerializer.encode(sanitized);
+          const parsed: RubeFile = this.cache.json.get(level + '.rube');
+          const sanitized = sanitizeRubeFile(parsed);
+          const encoded = rubeFileSerializer.encode(sanitized);
           downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
         }
       });

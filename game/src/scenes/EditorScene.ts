@@ -9,13 +9,15 @@ import {EditorController} from '../controllers/EditorController';
 import {EditorItemTracker} from '../editor/items/ItemTracker';
 import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
-import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
+import {MetaTerrainRenderer, XY} from '../editor/renderers/MetaTerrainRenderer';
 import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED} from '../eventTypes';
+import {decomposePolygon} from '../helpers/decomposePolygon';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {RubeExport} from '../physics/RUBE/RubeExport';
-import {RubeFile} from '../physics/RUBE/RubeFile';
+import {RubeFile, RubeVectorArray} from '../physics/RUBE/RubeFile';
+import { RubeFileToExport } from '../physics/RUBE/RubeFileToExport';
 import {EditorItem, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 
@@ -61,6 +63,150 @@ export class EditorScene extends Phaser.Scene {
     drawCoordZeroPoint(this);
     initSolidUI('root-ui');
 
+    /////////////////////////////////////////////////////////////////7
+
+    const rubeVecArray: RubeVectorArray = {
+      x :
+      [
+        0.5,
+        0.3535529971122742,
+        0.215586781501770,
+        -2.185569947243948e-08,
+        -0.1315781027078629,
+        -0.3361012637615204,
+        -0.5506259799003601,
+        -0.6399946212768555,
+        -0.7207240462303162,
+        -0.7611986398696899,
+        -0.7669696211814880,
+        -0.7343879938125610,
+        -0.7059382796287537,
+        -0.6593312621116638,
+        -0.6909815669059753,
+        -0.7007053494453430,
+        -0.6903861761093140,
+        -0.6717327833175659,
+        -0.5975423455238342,
+        -0.4929342865943909,
+        -0.7250875234603882,
+        -1.006091833114624,
+        -1.059871912002563,
+        -0.9356896281242371,
+        -0.5,
+        -0.7987096309661865,
+        -0.7155374884605408,
+        -0.6472271680831909,
+        -0.4684544205665588,
+        -0.1929901987314224,
+        5.962439875162318e-09,
+        0.2249274104833603,
+        0.2567968070507050,
+        0.2784064114093781,
+        0.3537681102752686,
+        0.7811901569366455,
+        0.9154679775238037,
+        1.024560928344727,
+        1.034868717193604,
+        1.130254626274109,
+        1.245498180389404,
+        1.217666625976562,
+        1.132608652114868,
+        1.060717821121216,
+        0.9164497852325439,
+        0.7930280566215515,
+        0.6923287510871887,
+        0.6920139789581299,
+        0.7382264733314514,
+        0.8317661285400391,
+        0.9494246244430542,
+        0.3886514008045197,
+        0.4058951735496521,
+        0.3290123641490936
+      ],
+      y :
+      [
+        0.0,
+        0.3535529971122742,
+        0.4753211140632629,
+        0.5,
+        0.5141767859458923,
+        0.5146940946578979,
+        0.6832293868064880,
+        0.719593882560730,
+        0.7286999225616455,
+        0.6616541147232056,
+        0.6183973550796509,
+        0.5720059871673584,
+        0.5533577203750610,
+        0.5815785527229309,
+        0.5854197740554810,
+        0.6127966046333313,
+        0.6329299211502075,
+        0.6409077644348145,
+        0.6101993322372437,
+        0.5124871730804443,
+        0.4119075536727905,
+        0.2386015355587006,
+        0.1595349907875061,
+        0.09624360501766205,
+        -4.371139894487897e-08,
+        -0.3111850023269653,
+        -0.4551549851894379,
+        -0.2575103938579559,
+        -0.2309914231300354,
+        -0.3070929348468781,
+        -0.5,
+        -0.3971499502658844,
+        -0.3936311900615692,
+        -0.4113028943538666,
+        -0.6155840754508972,
+        -0.7675529718399048,
+        -0.7363286614418030,
+        -0.2944563031196594,
+        -0.1798244714736938,
+        -0.08899474143981934,
+        0.1067938953638077,
+        0.4049117565155029,
+        0.5786545872688293,
+        0.7225071191787720,
+        0.7890956401824951,
+        0.6788933277130127,
+        0.5835910439491272,
+        0.4451115727424622,
+        0.2775663137435913,
+        0.08084143698215485,
+        -0.1328427493572235,
+        -0.2688201665878296,
+        -0.2271898984909058,
+        -0.1083750873804092
+      ]
+    };
+
+    const polygons = decomposePolygon(rubeVecArray);
+
+    const graphics = this.add.graphics().setDepth(10000000000000000000);
+    const ppm = 500;
+    graphics.lineStyle(1, 0x00ff00, 1);
+    for (const polygon of polygons) {
+      const polygonScaled: XY[] = polygon.x.map((x, i) => ({x: x * ppm, y: -polygon.y[i] * ppm}));
+      console.log('--- draw polygonScaled', polygonScaled);
+      graphics.beginPath();
+      graphics.moveTo(polygonScaled[0].x, polygonScaled[0].y);
+      for (let i = 1; i < polygonScaled.length; i++) {
+        graphics.lineTo(polygonScaled[i].x, polygonScaled[i].y);
+      }
+      graphics.closePath();
+      graphics.strokePath();
+
+      graphics.fillStyle(0xff0000, 1);
+      for (const point of polygonScaled) {
+        graphics.fillCircle(point.x, point.y, 2);
+      }
+
+    }
+
+    /////////////////////////////////////////////////////////////////7
+
     EditorInfo.observer.on(EDITOR_EXIT, () => {
       document.body.appendChild(rootGame);
       this.scene.stop(SCENE_EDITOR);
@@ -79,9 +225,11 @@ export class EditorScene extends Phaser.Scene {
     // const scene: RubeFile = this.cache.json.get('level_new.rube');
     const rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
     const sanitized = sanitizeRubeFile(rubefile);
+    const jsonExport = RubeFileToExport(sanitized);
     const encoded = rubeFileSerializer.encode(sanitized);
     console.debug('sanitized rube file', sanitized, JSON.stringify(sanitized).length);
     console.debug('encoded rube file', encoded, encoded.length);
+    console.log('----------jsonExport', jsonExport);
 
     const metaLoader = new RubeMetaLoader(this);
     const items = metaLoader.load(rubefile);

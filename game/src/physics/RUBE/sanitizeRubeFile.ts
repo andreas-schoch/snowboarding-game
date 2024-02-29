@@ -90,7 +90,7 @@ function sanitizeMetaJoint(metaJoint: MetaJointBase): MetaJointBase {
 
 function sanitizeMetaImage(image: MetaImage): MetaImage {
   if (!image.id) throw new Error('Image must have an id');
-  if (image.file.search(/^\.\.\/img\/([\w/_-]+)\.png$/) !== 0) throw new Error(`Invalid image file path "${image.file}". Ensure "Save full path for images" is unchecked in RUBE Editor.`);
+  if (image.file.search(/[\w_-]+\.png$/) === -1) throw new Error(`Invalid image file path "${image.file}". Filename must be alphanumeric and end with .png`);
 
   const sanitized: MetaImage = {
     id: image.id,
