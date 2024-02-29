@@ -3201,14 +3201,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
@@ -5264,14 +5256,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
@@ -5423,14 +5407,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
@@ -5684,14 +5660,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
@@ -5949,14 +5917,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
@@ -6138,14 +6098,6 @@
         "angle" : 0,
         "angularVelocity" : 0,
         "awake" : true,
-        "customProperties" : 
-        [
-          
-          {
-            "name" : "surfaceType",
-            "string" : "snow"
-          }
-        ],
         "fixture" : 
         [
           
