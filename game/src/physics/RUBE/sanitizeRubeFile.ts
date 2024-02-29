@@ -92,7 +92,7 @@ function sanitizeMetaImage(image: MetaImage): MetaImage {
   if (!image.id) throw new Error('Image must have an id');
   if (image.file.search(/^\.\.\/img\/([\w/_-]+)\.png$/) !== 0) throw new Error(`Invalid image file path "${image.file}". Ensure "Save full path for images" is unchecked in RUBE Editor.`);
 
-  return {
+  const sanitized: MetaImage = {
     id: image.id,
     name: image.name || 'Image',
     filter: image.filter || 1,
@@ -101,13 +101,14 @@ function sanitizeMetaImage(image: MetaImage): MetaImage {
     scale: image.scale !== undefined ? image.scale : 1,
     aspectScale: image.aspectScale !== undefined ? image.aspectScale : 1,
     angle: image.angle || 0,
-    body: image.body !== undefined ? image.body : 0,
     center: isXY(image.center) ? image.center : {x: 0, y: 0},
     file: image.file || '',
     flip: image.flip || false,
     customProperties: image.customProperties || []
   };
 
+  if (Number.isInteger(image.body)) sanitized.body = image.body; // don't want key to be present if not attached to a body
+  return sanitized;
 }
 
 function sanitizeMetaObject(metaObject: MetaObject): MetaObject {

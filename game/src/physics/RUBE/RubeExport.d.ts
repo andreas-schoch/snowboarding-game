@@ -209,8 +209,8 @@ export interface RubeImage {
   aspectScale: number;
   /** angle in radians */
   angle?: number;
-  /** zero-based index of body in RubeScene.body array */
-  body?: number;
+  /** zero-based index of body in RubeScene.body array. -1 if not attached to body (ATTENTION: "body" field omitted in .rube if not attached) */
+  body: number;
   /** center position in body local coordinates */
   center: RubeVector;
   /** Path to image. Absolute or relative to exported file (e.g. '../img/whatever.png') */

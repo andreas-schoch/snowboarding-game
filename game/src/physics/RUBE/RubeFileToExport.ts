@@ -246,9 +246,8 @@ function metaJointToJoint(metaJoint: MetaJoint, bodyIndexByMetaId: BodyIndexByMe
 }
 
 function metaImageToImage(metaImage: MetaImage, bodyIndexByMetaId: BodyIndexByMetaId): RubeImage {
-  const attachedToBody = metaImage.body !== undefined;
-  const bodyIndex = metaImage.body !== undefined ? bodyIndexByMetaId[metaImage.body] : undefined;
-  if (attachedToBody && bodyIndex === undefined) throw new Error(`Image references body with id ${metaImage.body} not found in map`);
+  const bodyIndex = metaImage.body !== undefined ? bodyIndexByMetaId[metaImage.body] : -1;
+  if (bodyIndex !== -1 && bodyIndex === undefined) throw new Error(`Image with id "${metaImage.id}" references body with id "${metaImage.body}" not found in map`);
 
   const {name, opacity, renderOrder, scale, aspectScale, angle, center, file, flip, customProperties} = metaImage;
   return {

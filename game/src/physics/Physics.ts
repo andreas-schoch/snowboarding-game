@@ -45,9 +45,9 @@ export class Physics {
     // this.debugDrawer.instance.SetFlags(enabled ? 1 : 0);
   }
 
-  load(rubeScene: RubeExport, offsetX: number = 0, offsetY: number = 0) {
+  load(rubeExport: RubeExport, offsetX: number = 0, offsetY: number = 0) {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
-    const loadedScene = this.loader.load(rubeScene, offsetX, offsetY);
+    const loadedScene = this.loader.load(rubeExport, offsetX, offsetY);
     if (this.worldEntity.debugDrawEnabled) this.worldEntity.world.DebugDraw();
     // GameInfo.observer.emit(RUBE_SCENE_LOADED, loadedScene); // Ensure editor open emitted before this, so scene explorer is already in the DOM
     return loadedScene;

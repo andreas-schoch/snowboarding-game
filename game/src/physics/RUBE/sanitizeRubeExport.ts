@@ -6,24 +6,24 @@ import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeExport} from './RubeExp
 //  For now this stays like this until I continue work on my own level editor and decide wheather to stay compatible with RUBE or not.
 
 // TODO consider overriding the existing objects/arrays instead of creating new ones
-export function sanitizeRubeDefaults(scene: RubeExport) {
+export function sanitizeRubeExport(rubeExport: RubeExport) {
   const sanitizedScene: Partial<RubeExport> = {
-    gravity: isXY(scene.gravity) ? scene.gravity : {x: 0, y: 0},
-    allowSleep: scene.allowSleep,
-    autoClearForces: scene.autoClearForces,
-    positionIterations: scene.positionIterations,
-    velocityIterations: scene.velocityIterations,
-    stepsPerSecond: scene.stepsPerSecond,
-    warmStarting: scene.warmStarting,
-    continuousPhysics: scene.continuousPhysics,
-    subStepping: scene.subStepping,
+    gravity: isXY(rubeExport.gravity) ? rubeExport.gravity : {x: 0, y: 0},
+    allowSleep: rubeExport.allowSleep,
+    autoClearForces: rubeExport.autoClearForces,
+    positionIterations: rubeExport.positionIterations,
+    velocityIterations: rubeExport.velocityIterations,
+    stepsPerSecond: rubeExport.stepsPerSecond,
+    warmStarting: rubeExport.warmStarting,
+    continuousPhysics: rubeExport.continuousPhysics,
+    subStepping: rubeExport.subStepping,
   };
 
-  if (scene.customProperties) sanitizedScene.customProperties = scene.customProperties;
-  if (scene.collisionbitplanes) sanitizedScene.collisionbitplanes = scene.collisionbitplanes;
-  if (scene.body) sanitizedScene.body = scene.body.map(sanitizeBody);
-  if (scene.joint) sanitizedScene.joint = scene.joint.map(sanitizeJoint);
-  if (scene.image) sanitizedScene.image = scene.image.map(sanitizeImage);
+  if (rubeExport.customProperties) sanitizedScene.customProperties = rubeExport.customProperties;
+  if (rubeExport.collisionbitplanes) sanitizedScene.collisionbitplanes = rubeExport.collisionbitplanes;
+  if (rubeExport.body) sanitizedScene.body = rubeExport.body.map(sanitizeBody);
+  if (rubeExport.joint) sanitizedScene.joint = rubeExport.joint.map(sanitizeJoint);
+  if (rubeExport.image) sanitizedScene.image = rubeExport.image.map(sanitizeImage);
 
   return sanitizedScene as RubeExport;
 }

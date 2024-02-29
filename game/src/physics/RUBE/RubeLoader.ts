@@ -12,7 +12,7 @@ import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, Imag
 import {RubeBody, RubeFixture, RubeExport, RubeJoint, RubeImage} from './RubeExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
-import {sanitizeRubeDefaults} from './sanitizeRubeExport';
+import {sanitizeRubeExport} from './sanitizeRubeExport';
 
 export class RubeLoader {
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
@@ -25,19 +25,19 @@ export class RubeLoader {
 
   constructor(private worldEntity: WorldEntityData, private adapter: IBaseAdapter) { }
 
-  load(scene: RubeExport, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
+  load(rubeExport: RubeExport, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
     // Note that all the defaults should already have been set within sanitizeRubeDefaults()
     // But for now we keep setting defaults in this loader as well until continuing work on my own level editor
     console.time('RubeLoader.load');
     this.loadingSceneId = idOverride || pseudoRandomId();
     this.loadingSceneEntityData = new Map();
-    scene = sanitizeRubeDefaults(scene);
+    rubeExport = sanitizeRubeExport(rubeExport);
     console.timeLog('RubeLoader.load', 'scene sanitized');
-    this.loadingBodies = (scene.body || []).map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY));
+    this.loadingBodies = (rubeExport.body || []).map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY));
     console.timeLog('RubeLoader.load', 'bodies loaded');
-    this.loadingJoints = (scene.joint || []).map(jointJson => this.loadJoint(jointJson));
+    this.loadingJoints = (rubeExport.joint || []).map(jointJson => this.loadJoint(jointJson));
     console.timeLog('RubeLoader.load', 'joints loaded');
-    this.loadingImages = (scene.image || []).map(imageJson => this.loadImage(imageJson));
+    this.loadingImages = (rubeExport.image || []).map(imageJson => this.loadImage(imageJson));
     console.timeLog('RubeLoader.load', 'images loaded');
 
     const success = this.loadingBodies.every(b => b) && this.loadingJoints.every(j => j) && this.loadingImages.every(i => i);
@@ -50,7 +50,7 @@ export class RubeLoader {
       joints: this.loadingJoints,
       images: this.loadingImages,
       entityData: this.loadingSceneEntityData,
-      customProps: customPropsArrayToMap(scene.customProperties || []),
+      customProps: customPropsArrayToMap(rubeExport.customProperties || []),
       worldEntity: this.worldEntity,
     };
 
