@@ -330,7 +330,7 @@ export class RubeLoader {
 
   private loadImage(imageJson: RubeImage): ImageEntityData {
     const {body, customProperties} = imageJson;
-    const bodyEntityData = this.loadingBodies[body];
+    const bodyEntityData = body !== undefined ? this.loadingBodies[body] : undefined;
     const customProps = customPropsArrayToMap(customProperties || []);
     const img = this.adapter.loadImage(imageJson, bodyEntityData, customProps);
     if (!img) throw new Error(`Image could not be loaded. ImageName: ${imageJson.name}, ImageFile: ${imageJson.file}, ImageBody: ${imageJson.body}`);

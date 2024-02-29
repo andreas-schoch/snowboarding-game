@@ -1,5 +1,5 @@
 import {isXY} from '../../helpers/rubeTransformers';
-import {RubeFile, MetaBody, MetaFixture, MetaJoint, MetaImage, MetaObject} from './RubeFile';
+import {RubeFile, MetaBody, MetaFixture, MetaJointBase, MetaImage, MetaObject} from './RubeFile';
 import {customPropertyDefs, metaWorld} from './RubeFileConstants';
 
 export function sanitizeRubeFile(rubeFile: RubeFile): RubeFile {
@@ -74,7 +74,7 @@ function sanitizeMetaFixture(metaFixture: MetaFixture): MetaFixture {
   };
 }
 
-function sanitizeMetaJoint(metaJoint: MetaJoint): MetaJoint {
+function sanitizeMetaJoint(metaJoint: MetaJointBase): MetaJointBase {
   if (!metaJoint.id) throw new Error('Joint must have an id');
   if (!metaJoint.bodyA) throw new Error('Joint must have a bodyA');
   if (!metaJoint.bodyB) throw new Error('Joint must have a bodyB');

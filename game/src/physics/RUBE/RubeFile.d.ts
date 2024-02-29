@@ -37,7 +37,7 @@ export interface MetaWorld {
   subStepping: boolean;
 
   metabody?: MetaBody[]; // body in export
-  metajoint?: MetaJoint[]; // joint in export
+  metajoint?: MetaJointBase[]; // joint in export
   metaimage?: MetaImage[]; // image in export
   metaobject?: MetaObject[]; // Not in export, it get's inlined
 
@@ -57,6 +57,7 @@ export interface ExportOptions {
 }
 
 export interface MetaBody {
+  id: number; // not in export
   name: string;
   active?: boolean; // Only present if false. Absence means true.
   awake: boolean;
@@ -67,7 +68,7 @@ export interface MetaBody {
   position: RubeVector;
   angle: number;
   angularDamping: number;
-  angularVelocity: number;
+  angularVelocity: number; // radians per second
   linearDamping: number;
   linearVelocity: RubeVector;
 
@@ -83,13 +84,12 @@ export interface MetaBody {
   customProperties?: RubeCustomProperty[];
   fixture?: MetaFixture[]; // omitted when no fixtures
 
-  id: number; // not in export
 }
 
 export interface MetaFixture {
+  id: number; // not in export
   name: string;
   density: number;
-
   'filter-categoryBits'?: number; // if not present; interpret as 1
   'filter-maskBits'?: number; // if not present; interpret as 65535
   'filter-groupIndex'?: number;
@@ -106,7 +106,6 @@ export interface MetaFixture {
 
   vertices: RubeVectorArray; // not in export (at least in this form)
   shapes: Shape[]; // in export it is turned into individual props: circle, polygon, chain
-  id: number; // not in export
 }
 
 export interface MetaCircleShape {
@@ -128,7 +127,8 @@ export interface MetaLineShape {
 export interface MetaLoopShape {
   type: 'loop';
   // vertices: RubeVectorArray; // take from parent fixture.vertices
-  // I have no idea how rube handles these or when they are used in rube
+  // RUBE seems to only include these for the JSON export when chain shape is "loop", but not in the .rube file format
+  // It seems that: vertices[1] is nextVertex and vertices[vertices.length - 2] is prevVertex when RUBE exports it
   // hasNextVertex?: boolean;
   // hasPrevVertex?: boolean;
   // nextVertex?: RubeVector
@@ -138,14 +138,14 @@ export interface MetaLoopShape {
 export type Shape = MetaCircleShape | MetaPolygonShape | MetaLineShape | MetaLoopShape;
 
 export interface MetaImage {
+  id: number; // not in export
   angle?: number;
-  body: number; // reference to metabody id
+  body?: number; // reference to metabody id only if attached to a body (in export it references the body index)
   center: RubeVector;
   customProperties?: RubeCustomProperty[];
   file: string;
   filter: 0 | 1; // nearest = 0, linear = 1 - (default is 1)
   flip: boolean;
-  id: number;
   name: string;
   opacity: number;
   renderOrder: number;
@@ -154,33 +154,94 @@ export interface MetaImage {
   // Additional properties can be added based on the image types
 }
 
-export interface MetaJoint {
+export type MetaJoint = MetaJointRevolute | MetaJointDistance | MetaJointPrismatic | MetaJointWheel | MetaJointRope | MetaJointMotor | MetaJointWeld | MetaJointFriction;
+
+export interface MetaJointBase {
+  // Common properties
+  id: number; // not in export
+  type: 'revolute' | 'distance' | 'prismatic' | 'wheel' | 'rope' | 'motor' | 'weld' | 'friction';
+  name: string;
   anchorA: RubeVector;
   anchorB: RubeVector;
-  bodyA: number; // reference to metabody id
-  bodyB: number; // reference to metabody id
+  bodyA: number; // reference to metabody id (in export it references the body index)
+  bodyB: number; // reference to metabody id (in export it references the body index)
   collideConnected: boolean;
   customProperties?: RubeCustomProperty[];
-  dampingRatio?: number;
-  frequency?: number;
-  id: number;
-  length?: number;
+}
+
+export interface MetaJointRevolute extends MetaJointBase {
+  type: 'revolute';
+  enableLimit?: boolean;
+  enableMotor?: boolean;
+  jointSpeed?: number;
   lowerLimit?: number;
-  maxMotorForce?: number;
+  upperLimit?: number;
   maxMotorTorque?: number;
   motorSpeed?: number;
-  name: string;
-  referenceAngle: number;
-  type: 'revolute' | 'distance' | 'prismatic' | 'wheel' | 'rope' | 'motor' | 'weld' | 'friction';
+  referenceAngle?: number; // ATTENTION: referenceAngle in .rube for revolute joint turned into refAngle in .json
+}
+
+export interface MetaJointDistance extends MetaJointBase {
+  type: 'distance';
+  dampingRatio?: number;
+  frequency?: number;
+  length?: number;
+}
+
+export interface MetaJointPrismatic extends MetaJointBase {
+  type: 'prismatic';
+  enableLimit?: boolean;
+  enableMotor?: boolean;
+  localAxisA?: RubeVector;
+  lowerLimit?: number;
   upperLimit?: number;
+  maxMotorForce?: number;
+  motorSpeed?: number;
+  referenceAngle?: number; // ATTENTION: referenceAngle in .rube for prismatic joint turned into refAngle in .json
+}
+
+export interface MetaJointWheel extends MetaJointBase {
+  type: 'wheel';
+  enableMotor?: boolean;
+  localAxisA?: RubeVector;
+  maxMotorTorque?: number;
+  motorSpeed?: number;
+  springDampingRatio?: number;
+  springFrequency?: number;
+}
+
+export interface MetaJointRope extends MetaJointBase {
+  type: 'rope';
+  maxLength?: number;
+}
+
+export interface MetaJointMotor extends MetaJointBase {
+  // AnchorA is the 'linear offset', anchorB is ignored
+  type: 'motor';
+  maxForce?: number;
+  maxTorque?: number;
+  correctionFactor?: number;
+}
+
+export interface MetaJointWeld extends MetaJointBase {
+  type: 'weld';
+  referenceAngle?: number; // ATTENTION: referenceAngle in .rube for weld joint turned into refAngle in .json
+  dampingRatio?: number;
+  frequency?: number;
+}
+
+export interface MetaJointFriction extends MetaJointBase {
+  type: 'friction';
+  maxForce?: number;
+  maxTorque?: number;
 }
 
 export interface MetaObject {
+  id: number; // not in export
   name: string;
   file: string;
   path?: string; // listed as a prop but not sure when it is there
   flip: boolean;
-  id: number;
   angle: number;
   scale: number;
   position: RubeVector;

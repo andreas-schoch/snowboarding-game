@@ -11,7 +11,7 @@ export class RubeImageAdapter implements IBaseAdapter {
 
   constructor(private scene: Phaser.Scene, private physics: Physics) { }
 
-  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: RubeCustomPropsMap): Phaser.GameObjects.Image | null {
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | undefined, imageCustomProps: RubeCustomPropsMap): Phaser.GameObjects.Image | null {
     const {file, center, angle, aspectScale, scale, flip, renderOrder} = imageJson;
     const pos = bodyEntityData?.body ? bodyEntityData.body.GetPosition() : rubeToVec2(center);
 
@@ -74,6 +74,6 @@ export class RubeImageAdapter implements IBaseAdapter {
 
 export interface IBaseAdapter {
   images: unknown[];
-  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | null, imageCustomProps: RubeCustomPropsMap): unknown | null;
+  loadImage(imageJson: RubeImage, bodyEntityData: BodyEntityData | undefined, imageCustomProps: RubeCustomPropsMap): unknown | null;
   serializeImage(image: unknown): RubeImage;
 }

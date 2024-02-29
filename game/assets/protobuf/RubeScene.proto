@@ -99,26 +99,26 @@ message Joint {
   optional bool collideConnected = 7;
   repeated CustomProperty customProperties = 8;
 
-  // Fields common to multiple joint types (listed only once)
-  optional bool enableLimit = 9;
-  optional bool enableMotor = 10;
-  optional double jointSpeed = 11;
-  optional double lowerLimit = 12;
-  optional double upperLimit = 13;
-  optional double maxMotorTorque = 14;
-  optional double motorSpeed = 15;
-  optional double refAngle = 16;
-  optional double dampingRatio = 17;  // Common to Distance and Weld
-  optional double frequency = 18;     // Common to Distance and Weld
-  optional double length = 19;        // Specific to Distance
-  optional Vector localAxisA = 20;    // Common to Prismatic and Wheel
-  optional double maxMotorForce = 21; // Specific to Prismatic
-  optional double springDampingRatio = 22; // Specific to Wheel
-  optional double springFrequency = 23;    // Specific to Wheel
-  optional double maxLength = 24;          // Specific to Rope
-  optional double maxForce = 25;           // Common to Motor and Friction
-  optional double maxTorque = 26;          // Common to Motor and Friction
-  optional double correctionFactor = 27;   // Specific to Motor
+  // Fields common to multiple joint types (See comment on each line to see which ones exactly use these)
+  optional bool enableLimit = 9; // +Revolute, +Prismatic
+  optional bool enableMotor = 10; // +Revolute, +Prismatic, +Wheel
+  optional double jointSpeed = 11; // +Revolute
+  optional double lowerLimit = 12; // +Revolute, +Prismatic
+  optional double upperLimit = 13; // +Revolute, +Prismatic
+  optional double maxMotorTorque = 14; // +Revolute, +Wheel
+  optional double motorSpeed = 15; // +Revolute, +Prismatic, +Wheel
+  optional double refAngle = 16; //  +Revolute, +Prismatic, +Weld   (ATTENTION: referenceAngle in .rube turned into refAngle in .json)
+  optional double dampingRatio = 17;  // +Distance, +Weld
+  optional double frequency = 18;     // +Distance, +Weld
+  optional double length = 19;        // +Distance
+  optional Vector localAxisA = 20;    // +Prismatic, +Wheel
+  optional double maxMotorForce = 21; // +Prismatic
+  optional double springDampingRatio = 22; // +Wheel
+  optional double springFrequency = 23;    // +Wheel
+  optional double maxLength = 24;          // +Rope
+  optional double maxForce = 25;           // +Motor, +Friction
+  optional double maxTorque = 26;          // +Motor, +Friction
+  optional double correctionFactor = 27;   // +Motor
 }
 
 ////////////////////////////////////////////////////////////////////////////

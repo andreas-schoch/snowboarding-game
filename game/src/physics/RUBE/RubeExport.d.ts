@@ -89,10 +89,12 @@ export interface RubeFixtureShapeChain {
   vertices: RubeVectorArray;
   // If the following properties are not present, the shape is an open-ended
   // chain shape. If they are present, the shape is a closed loop shape.
+  // RUBE seems to only include these for the JSON export when chain shape is "loop", but not in the .rube file format
+  // It seems that: vertices[1] is nextVertex and vertices[vertices.length - 2] is prevVertex when RUBE exports it
   hasNextVertex?: boolean;
   hasPrevVertex?: boolean;
-  nextVertex?: RubeVector
-  prevVertex?: RubeVector
+  nextVertex?: RubeVector;
+  prevVertex?: RubeVector;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -136,7 +138,7 @@ export interface RubeJointRevolute extends RubeJointBase {
   upperLimit?: number;
   maxMotorTorque?: number;
   motorSpeed?: number;
-  refAngle?: number;
+  refAngle?: number; // ATTENTION: referenceAngle in .rube for revolute joint turned into refAngle in .json
 }
 
 export interface RubeJointDistance extends RubeJointBase {
@@ -155,7 +157,7 @@ export interface RubeJointPrismatic extends RubeJointBase {
   upperLimit?: number;
   maxMotorForce?: number;
   motorSpeed?: number;
-  refAngle?: number;
+  refAngle?: number; // ATTENTION: referenceAngle in .rube for prismatic joint turned into refAngle in .json
 }
 
 export interface RubeJointWheel extends RubeJointBase {
@@ -183,7 +185,7 @@ export interface RubeJointMotor extends RubeJointBase {
 
 export interface RubeJointWeld extends RubeJointBase {
   type: 'weld';
-  refAngle?: number;
+  refAngle?: number; // ATTENTION: referenceAngle in .rube for weld joint turned into refAngle in .json
   dampingRatio?: number;
   frequency?: number;
 }
@@ -206,9 +208,9 @@ export interface RubeImage {
   /** the ratio of width to height; e.g. scale: 1 and aspecScale: 0.5 results in 0.5m width */
   aspectScale: number;
   /** angle in radians */
-  angle: number;
+  angle?: number;
   /** zero-based index of body in RubeScene.body array */
-  body: number;
+  body?: number;
   /** center position in body local coordinates */
   center: RubeVector;
   /** Path to image. Absolute or relative to exported file (e.g. '../img/whatever.png') */
