@@ -1,10 +1,13 @@
+import {rubeFileSerializer} from '../..';
+import {arrayBufferToString} from '../../helpers/binaryTransform';
 import {decomposePolygon, isSelfIntersecting} from '../../helpers/decomposePolygon';
 import {RubeBody, RubeExport, RubeFixture, RubeImage, RubeJoint, RubeJointBase} from './RubeExport';
-import {MetaBody, MetaFixture, MetaImage, MetaJoint, RubeFile, RubeVector} from './RubeFile';
+import {MetaBody, MetaFixture, MetaImage, MetaJoint, MetaWorld, RubeFile, RubeVector} from './RubeFile';
+import {sanitizeRubeFile} from './sanitizeRubeFile';
 
 type BodyIndexByMetaId = Record<MetaBody['id'], number>;
 
-export function RubeFileToExport(rubeFile: RubeFile): RubeExport {
+export function RubeFileToExport(scene: Phaser.Scene, rubeFile: RubeFile): RubeExport {
   const bodyIndexByMetaId: BodyIndexByMetaId= {};
   const metaBodies: MetaBody[] = rubeFile.metaworld.metabody || [];
   const body: RubeBody[] = [];
@@ -16,6 +19,8 @@ export function RubeFileToExport(rubeFile: RubeFile): RubeExport {
 
   const joint: RubeJoint[] = (rubeFile.metaworld.metajoint || []).map(el => metaJointToJoint(el, bodyIndexByMetaId));
   const image: RubeImage[] = (rubeFile.metaworld.metaimage || []).map(el => metaImageToImage(el, bodyIndexByMetaId));
+
+  deconstructMetaObjects(scene, rubeFile.metaworld.metaobject, body, joint, image);
 
   const {gravity, allowSleep, autoClearForces, positionIterations, velocityIterations, stepsPerSecond, warmStarting, continuousPhysics, subStepping} = rubeFile.metaworld;
   return {
@@ -41,10 +46,14 @@ const typeMap = {
   dynamic: 2
 };
 
-function metaBodyToBody(metaBody: MetaBody): RubeBody {
+function metaBodyToBody(metaBody: MetaBody, offsetX = 0, offsetY = 0, offsetAngle = 0): RubeBody {
   const massDataMass = metaBody['massData-mass'];
   const massDataCenter = metaBody['massData-center'];
   const massDataI = metaBody['massData-I'];
+
+  const positionX = metaBody.position? metaBody.position.x + offsetX : offsetX;
+  const positionY = metaBody.position? metaBody.position.y + offsetY : offsetY;
+
   return {
     name: metaBody.name,
     active: metaBody.active,
@@ -53,8 +62,8 @@ function metaBodyToBody(metaBody: MetaBody): RubeBody {
     fixedRotation: metaBody.fixedRotation,
     sleepingAllowed: metaBody.sleepingAllowed,
     type: typeMap[metaBody.type] as 0 | 1 | 2,
-    position: metaBody.position,
-    angle: metaBody.angle,
+    position: {x: positionX, y: positionY},
+    angle: metaBody.angle + offsetAngle,
     angularDamping: metaBody.angularDamping,
     angularVelocity: metaBody.angularVelocity,
     linearDamping: metaBody.linearDamping,
@@ -122,11 +131,11 @@ function metaFixtureToFixture(metaFixture: MetaFixture): RubeFixture[] {
     return [{
       ...base,
       chain: {
-        vertices,
         hasNextVertex: true,
         hasPrevVertex: true,
         nextVertex,
         prevVertex,
+        vertices,
       }
     }];
   }}
@@ -245,22 +254,67 @@ function metaJointToJoint(metaJoint: MetaJoint, bodyIndexByMetaId: BodyIndexByMe
   }}
 }
 
-function metaImageToImage(metaImage: MetaImage, bodyIndexByMetaId: BodyIndexByMetaId): RubeImage {
+function metaImageToImage(metaImage: MetaImage, bodyIndexByMetaId: BodyIndexByMetaId, offsetX = 0, offsetY = 0): RubeImage {
   const bodyIndex = metaImage.body !== undefined ? bodyIndexByMetaId[metaImage.body] : -1;
   if (bodyIndex !== -1 && bodyIndex === undefined) throw new Error(`Image with id "${metaImage.id}" references body with id "${metaImage.body}" not found in map`);
 
   const {name, opacity, renderOrder, scale, aspectScale, angle, center, file, flip, customProperties} = metaImage;
+  const realCenter = center ? {x: center.x + offsetX, y: center.y + offsetY} : {x: 0, y: 0};
+
   return {
     body: bodyIndex,
+    center: realCenter,
+    angle: angle,
     name,
     opacity,
     renderOrder,
     scale,
     aspectScale,
-    angle,
-    center,
     file,
     flip,
     customProperties,
   };
+}
+
+// TODO this works for now but only if we don't have nested objects
+function deconstructMetaObjects(scene: Phaser.Scene, metaObjects: MetaWorld['metaobject'], body: RubeBody[], joint: RubeJoint[], image: RubeImage[]): void {
+  if (!metaObjects) return;
+
+  const cachedRubeFiles: Record<string, RubeFile> = {};
+
+  for (const metaObject of metaObjects) {
+    const offsetX = metaObject.position ? metaObject.position.x : 0;
+    const offsetY = metaObject.position ? metaObject.position.y : 0;
+    const offsetAngle = metaObject.angle === undefined ? 0 : metaObject.angle;
+
+    const key = (metaObject.file || '').split('/').reverse()[0];
+    const alreadySeen = cachedRubeFiles[key];
+
+    let objectRubeFile: RubeFile;
+    if (alreadySeen) {
+      objectRubeFile = alreadySeen;
+    } else {
+      const buffer = scene.cache.binary.get(key);
+      const encoded = arrayBufferToString(buffer);
+      let file = rubeFileSerializer.decode(encoded);
+      file = sanitizeRubeFile(file);
+      objectRubeFile = file;
+    }
+
+    const bodyIndexByMetaId: BodyIndexByMetaId= {};
+    const metaBodies: MetaBody[] = objectRubeFile.metaworld.metabody || [];
+    const objectBody: RubeBody[] = [];
+    for (let i = 0; i < metaBodies.length; i++) {
+      const metaBody = metaBodies[i];
+      objectBody.push(metaBodyToBody(metaBody, offsetX, offsetY, offsetAngle));
+      bodyIndexByMetaId[metaBody.id] = body.length + i;
+    }
+
+    const objectJoint: RubeJoint[] = (objectRubeFile.metaworld.metajoint || []).map(el => metaJointToJoint(el, bodyIndexByMetaId));
+    const objectImage: RubeImage[] = (objectRubeFile.metaworld.metaimage || []).map(el => metaImageToImage(el, bodyIndexByMetaId, offsetX, offsetY));
+
+    body.push(...objectBody);
+    joint.push(...objectJoint);
+    image.push(...objectImage);
+  }
 }

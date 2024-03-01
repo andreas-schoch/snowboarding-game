@@ -2,10 +2,10 @@
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, Bounds, RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
+import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../physics/RUBE/rubeTransformers';
 import {EditorItemTracker} from './ItemTracker';
 
 export class EditorSensor implements BaseEditorItem {

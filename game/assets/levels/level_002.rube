@@ -42,50 +42,6 @@
   [
     
     {
-      "class" : "image",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "atlas_santa"
-        },
-        
-        {
-          "entry" : "atlas_environment"
-        }
-      ],
-      "displayName" : "phaserTexture",
-      "name" : "phaserTexture",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
-    },
-    
-    {
       "class" : "body",
       "comboboxEntries" : 
       [
@@ -289,6 +245,50 @@
       ],
       "displayName" : "modBodyType",
       "name" : "modBodyType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
       "type" : "string"
     }
   ],
@@ -1987,6 +1987,16 @@
     ],
     "metaobject" : 
     [
+      
+      {
+        "angle" : 0,
+        "file" : "character_v02.rube",
+        "flip" : false,
+        "id" : 1,
+        "name" : "Character",
+        "position" : 0,
+        "scale" : 1
+      },
       
       {
         "angle" : 0,

@@ -7,11 +7,11 @@
 import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {customPropsArrayToMap, rubeToVec2} from '../../helpers/rubeTransformers';
 import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './EntityTypes';
 import {RubeBody, RubeFixture, RubeExport, RubeJoint, RubeImage} from './RubeExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
+import {customPropsArrayToMap, rubeToVec2} from './rubeTransformers';
 import {sanitizeRubeExport} from './sanitizeRubeExport';
 
 export class RubeLoader {

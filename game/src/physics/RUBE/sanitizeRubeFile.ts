@@ -1,6 +1,6 @@
-import {isXY} from '../../helpers/rubeTransformers';
 import {RubeFile, MetaBody, MetaFixture, MetaJointBase, MetaImage, MetaObject} from './RubeFile';
 import {customPropertyDefs, metaWorld} from './RubeFileConstants';
+import {isXY} from './rubeTransformers';
 
 export function sanitizeRubeFile(rubeFile: RubeFile): RubeFile {
   return {
@@ -113,8 +113,6 @@ function sanitizeMetaImage(image: MetaImage): MetaImage {
 
 function sanitizeMetaObject(metaObject: MetaObject): MetaObject {
   if (!metaObject.id) throw new Error('Object must have an id');
-  if (metaObject.file.search(/^prefabs\/[\w-]+\.rube$/) !== 0) throw new Error(`Invalid object file path "${metaObject.file}". Ensure "Save full path for objects" is unchecked in RUBE Editor.`);
-
   return {
     id: metaObject.id,
     file: metaObject.file,

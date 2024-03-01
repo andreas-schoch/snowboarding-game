@@ -1,8 +1,8 @@
-import {recordLeak, b2} from '..';
-import {XY} from '../Terrain';
-import {RubeCustomPropsMap} from '../physics/RUBE/EntityTypes';
-import {RubeVectorArray,RubeVector, RubeCustomProperty} from '../physics/RUBE/RubeFile';
-import {customPropertyDefsByName} from '../physics/RUBE/RubeFileConstants';
+import {recordLeak, b2} from '../..';
+import {XY} from '../../Terrain';
+import {RubeCustomPropsMap} from './EntityTypes';
+import {RubeVectorArray,RubeVector, RubeCustomProperty} from './RubeFile';
+import {customPropertyDefsByName} from './RubeFileConstants';
 
 export function isXY(val: unknown): val is XY {
   return Boolean(val && typeof val === 'object' && val.hasOwnProperty('x') && val.hasOwnProperty('y'));
@@ -23,6 +23,11 @@ export function rubeToVec2(val?: RubeVector, offsetX = 0, offsetY = 0): Box2D.b2
   // While the app can handle compact zero vectors, protobuf does not seem to support conditional types like that.
   // else if (val === 0) throw new Error('Ensure the option "Compact zero vectors" is disabled for the loaded rube scene.');
   else return recordLeak(new b2.b2Vec2(0, 0));
+}
+
+export function XYToRube(vec: Box2D.b2Vec2): RubeVector {
+  if (vec.x === 0 && vec.y === 0) return 0;
+  return {x: vec.x, y: vec.y};
 }
 
 export function XYToRubeVectorArray(vertices?: XY[]): RubeVectorArray {

@@ -1,5 +1,5 @@
-import {isXY} from '../../helpers/rubeTransformers';
 import {RubeBody, RubeFixture, RubeImage, RubeJoint, RubeExport} from './RubeExport';
+import {isXY} from './rubeTransformers';
 
 // TODO eventually we can simplify the loader which checks the defaults for each optional property and just use this
 //  It will require a bit more memory but probably negligible. Protobuf encoded size is almost the same even with optional fields included

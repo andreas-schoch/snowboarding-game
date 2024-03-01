@@ -42,6 +42,62 @@
   [
     
     {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
       "class" : "body",
       "comboboxEntries" : 
       [
@@ -190,59 +246,24 @@
     },
     
     {
-      "class" : "joint",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "distanceLegLeft"
-        },
-        
-        {
-          "entry" : "distanceLegRight"
-        },
-        
-        {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
-        }
-      ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
       "type" : "string"
     },
     
     {
       "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "pickup_present"
-        },
-        
-        {
-          "entry" : "level_finish"
-        },
-        
-        {
-          "entry" : "level_deathzone"
-        }
-      ],
-      "displayName" : "phaserSensorType",
-      "name" : "phaserSensorType",
-      "type" : "string"
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
     },
     
     {
@@ -269,27 +290,6 @@
       "displayName" : "surfaceType",
       "name" : "surfaceType",
       "type" : "string"
-    },
-    
-    {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -7735,6 +7735,16 @@
           "x" : 541.6325683593750,
           "y" : -115.8557891845703
         },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "character_v02.rube",
+        "flip" : false,
+        "id" : 396,
+        "name" : "Character",
+        "position" : 0,
         "scale" : 1
       }
     ],

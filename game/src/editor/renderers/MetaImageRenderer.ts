@@ -22,7 +22,11 @@ export class MetaImageRenderer {
       const customProps = editorImage.getCustomProps();
       const {file, scale, aspectScale, flip, renderOrder, opacity} = editorImage.meta;
       const textureFrame = (file || '').split('/').reverse()[0];
-      const textureAtlas = customProps['phaserTexture'] as string;
+      let textureAtlas = customProps['phaserTexture'] as string;
+
+      if (textureAtlas.includes('atlas_character')) textureAtlas = Settings.selectedCharacterSkin();
+
+      console.log('rendering image frame and atlas', textureFrame, textureAtlas, editorImage);
 
       const position = editorImage.getPosition();
       const angle = editorImage.getAngle();

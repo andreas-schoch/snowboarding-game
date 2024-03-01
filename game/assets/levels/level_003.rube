@@ -42,10 +42,10 @@
   [
     
     {
-      "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
     },
     
     {
@@ -67,13 +67,6 @@
       ],
       "displayName" : "phaserSensorType",
       "name" : "phaserSensorType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
       "type" : "string"
     },
     
@@ -290,6 +283,13 @@
       "displayName" : "modBodyType",
       "name" : "modBodyType",
       "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
     }
   ],
   "metaworld" : 
@@ -17741,6 +17741,16 @@
           "x" : 450.2169189453125,
           "y" : -115.5984725952148
         },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "character_v02.rube",
+        "flip" : false,
+        "id" : 256,
+        "name" : "Character",
+        "position" : 0,
         "scale" : 1
       }
     ],

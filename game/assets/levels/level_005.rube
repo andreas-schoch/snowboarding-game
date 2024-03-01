@@ -47,111 +47,6 @@
       [
         
         {
-          "entry" : "0"
-        },
-        
-        {
-          "entry" : "1"
-        },
-        
-        {
-          "entry" : "2"
-        },
-        
-        {
-          "entry" : "3"
-        },
-        
-        {
-          "entry" : "4"
-        },
-        
-        {
-          "entry" : "5"
-        },
-        
-        {
-          "entry" : "6"
-        },
-        
-        {
-          "entry" : "7"
-        },
-        
-        {
-          "entry" : "8"
-        },
-        
-        {
-          "entry" : "9"
-        }
-      ],
-      "displayName" : "phaserBoardSegmentIndex",
-      "name" : "phaserBoardSegmentIndex",
-      "type" : "int"
-    },
-    
-    {
-      "class" : "fixture",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "snow"
-        },
-        
-        {
-          "entry" : "ice"
-        },
-        
-        {
-          "entry" : "metal"
-        },
-        
-        {
-          "entry" : "rock"
-        }
-      ],
-      "displayName" : "surfaceType",
-      "name" : "surfaceType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "object",
-      "comboboxEntries" : 
-      [
-        
-        {
-          "entry" : "static"
-        },
-        
-        {
-          "entry" : "dynamic"
-        },
-        
-        {
-          "entry" : "kinematic"
-        }
-      ],
-      "displayName" : "modBodyType",
-      "name" : "modBodyType",
-      "type" : "string"
-    },
-    
-    {
-      "class" : "body",
-      "displayName" : "phaserCameraFollow",
-      "name" : "phaserCameraFollow",
-      "type" : "bool"
-    },
-    
-    {
-      "class" : "body",
-      "comboboxEntries" : 
-      [
-        
-        {
           "entry" : "body"
         },
         
@@ -206,15 +101,111 @@
     
     {
       "class" : "fixture",
-      "displayName" : "phaserBoardEdge",
-      "name" : "phaserBoardEdge",
-      "type" : "bool"
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
     },
     
     {
-      "class" : "image",
-      "displayName" : "phaserTextureFrame",
-      "name" : "phaserTextureFrame",
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
       "type" : "string"
     },
     
@@ -259,36 +250,45 @@
     },
     
     {
-      "class" : "joint",
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "object",
       "comboboxEntries" : 
       [
         
         {
-          "entry" : "distanceLegLeft"
+          "entry" : "static"
         },
         
         {
-          "entry" : "distanceLegRight"
+          "entry" : "dynamic"
         },
         
         {
-          "entry" : "weldCenter"
-        },
-        
-        {
-          "entry" : "bindingLeft"
-        },
-        
-        {
-          "entry" : "bindingRight"
-        },
-        
-        {
-          "entry" : "prismatic"
+          "entry" : "kinematic"
         }
       ],
-      "displayName" : "phaserPlayerCharacterSpring",
-      "name" : "phaserPlayerCharacterSpring",
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
       "type" : "string"
     }
   ],
@@ -2825,6 +2825,19 @@
         "opacity" : 1,
         "renderOrder" : -40.0,
         "scale" : 7.7
+      }
+    ],
+    "metaobject" : 
+    [
+      
+      {
+        "angle" : 0,
+        "file" : "character_v02.rube",
+        "flip" : false,
+        "id" : 1,
+        "name" : "Character",
+        "position" : 0,
+        "scale" : 1
       }
     ],
     "positionIterations" : 12,

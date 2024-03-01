@@ -1,8 +1,8 @@
 import {Settings} from '../../Settings';
-import {rubeToVec2} from '../../helpers/rubeTransformers';
 import {Physics} from '../Physics';
 import {BodyEntityData, RubeCustomPropsMap} from './EntityTypes';
 import {RubeImage} from './RubeExport';
+import {customPropsMapToArray, rubeToVec2} from './rubeTransformers';
 
 // The loader and serializer classes themselves should not concern themselves with anything Phaser specific.
 // They should not care about how we decide to render the images. That is the job of the adapter.
@@ -67,7 +67,7 @@ export class RubeImageAdapter implements IBaseAdapter {
       center: {x: 0, y: 0},
       file: image.texture.firstFrame,
       flip: image.flipX,
-      customProperties: Physics.instance.serializer.serializeCustomProperties(image)
+      customProperties: customPropsMapToArray(imageEntityData?.customProps || {} as RubeCustomPropsMap),
     };
   }
 }

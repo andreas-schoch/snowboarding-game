@@ -60,7 +60,8 @@ export class RubeMetaLoader {
     const metaImages = rubeFile.metaworld?.metaimage || [];
     const images: Record<EditorImage['id'], EditorImage> = {};
     for (const metaImage of metaImages) {
-      const image = new EditorImage(this, metaImage);
+      const body = rubeFile.metaworld?.metabody?.find(b => b.id === metaImage.body);
+      const image = new EditorImage(this, metaImage, body);
       images[image.id] = image;
     }
     return images;

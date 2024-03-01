@@ -3,10 +3,10 @@
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../helpers/rubeTransformers';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaFixture} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, RubeMetaLoader, Bounds} from '../../physics/RUBE/RubeMetaLoader';
+import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../physics/RUBE/rubeTransformers';
 import {EditorItemTracker} from './ItemTracker';
 
 export class EditorTerrainChunk implements BaseEditorItem {

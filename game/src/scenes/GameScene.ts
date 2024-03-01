@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
@@ -9,8 +9,10 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
+import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
+import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
@@ -36,14 +38,24 @@ export class GameScene extends Phaser.Scene {
   }
 
   private preload() {
-    const character = Settings.selectedCharacter();
-    this.load.binary(character, `assets/levels/${character}.bin`);
-    // const levels = ['level_003', 'character_v01', 'character_v02'];
-    // for (const level of levels) this.load.json(level, `assets/levels/${level}.rube`);
-    // for (const level of levels) this.load.binary(level + '.bin', `assets/levels/${level}.bin`);
+    // this.load.json('level_001.rube', 'assets/levels/level_001.rube');
+    // this.load.json('level_002.rube', 'assets/levels/level_002.rube');
+    // this.load.json('level_003.rube', 'assets/levels/level_003.rube');
+    // this.load.json('level_004.rube', 'assets/levels/level_004.rube');
+    // this.load.json('level_005.rube', 'assets/levels/level_005.rube');
   }
 
   private create() {
+    // TODO make a node script to automatically convert .rube into .bin (and maybe upload to pocketbase)
+    //  Now I just uncomment this whenever I need to update the levels then upload via pocketbase admin UI
+    // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+    // for (const level of levels) {
+    //   const parsed: RubeFile = this.cache.json.get(level + '.rube');
+    //   const sanitized = sanitizeRubeFile(parsed);
+    //   const encoded = rubeFileSerializer.encode(sanitized);
+    //   downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+    // }
+
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
@@ -56,14 +68,12 @@ export class GameScene extends Phaser.Scene {
       if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
       let rubeFile = await pb.level.getRubeFile(level);
       rubeFile = sanitizeRubeFile(rubeFile);
-      const rubeExport = RubeFileToExport(rubeFile);
+      const rubeExport = RubeFileToExport(this, rubeFile);
       GameInfo.currentLevel = level;
 
       const loadedLevelScene = this.b2Physics.load(rubeExport);
       new Terrain(this, loadedLevelScene).draw();
-      const spawnStart = loadedLevelScene.bodies.find(e => e.customProps['spawn'] === 'character_start');
-      const {x, y} = spawnStart ? spawnStart.body.GetPosition() : {x: 0, y: 0};
-      const character = new Character(this, x, y); // TODO spawn at spawn point once all levels are updated
+      const character = new Character(this, loadedLevelScene);
       this.playerController = new CharacterController(this);
       this.playerController.possessCharacter(character);
       this.ready = true;
@@ -95,20 +105,19 @@ export class GameScene extends Phaser.Scene {
 
     initSolidUI('root-ui');
 
-    // // TODO remove. Temporary to serialize open level
-    // this.input.keyboard!.on('keydown-ONE', () => this.b2Physics.serializer.serialize());
-    // this.input.keyboard!.on('keydown-TWO', () => {
-    //   // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
-    //   //  Can be removed once we have the editor in place to do that properly
-    //   // TODO make this possible via cli script
-    //   const levels = ['level_003', 'character_v01', 'character_v02'];
-    //   for (const level of levels) {
-    //     const parsed: RubeFile = this.cache.json.get(level);
-    //     const sanitized = sanitizeRubeFile(parsed);
-    //     const encoded = rubeFileSerializer.encode(sanitized);
-    //     downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
-    //   }
-    // });
+    // TODO remove. Temporary to serialize open level
+    this.input.keyboard!.on('keydown-SEVEN', () => {
+      // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
+      //  Can be removed once we have the editor in place to do that properly
+      // TODO make this possible via cli script
+      const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+      for (const level of levels) {
+        const parsed: RubeFile = this.cache.json.get(level);
+        const sanitized = sanitizeRubeFile(parsed);
+        const encoded = rubeFileSerializer.encode(sanitized);
+        downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+      }
+    });
   }
 }
 

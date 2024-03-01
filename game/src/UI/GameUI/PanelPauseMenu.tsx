@@ -16,6 +16,7 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
     props.setPanel('none');
     const level = GameInfo.currentLevel;
     if (!level) throw new Error('Current level not set');
+    Settings.addEditorRecentLevel(level);
     GameInfo.observer.emit(EDITOR_OPEN, level);
     Settings.set('editorOpen', 'true');
   };

@@ -6,7 +6,6 @@ import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
 import {RubeExport} from './RUBE/RubeExport';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
-import {RubeSerializer} from './RUBE/RubeSerializer';
 
 export interface IBeginContactEvent {
   contact: Box2D.b2Contact;
@@ -28,7 +27,6 @@ export interface IPostSolveEvent {
 export class Physics {
   static instance: Physics;
   worldEntity: WorldEntityData;
-  serializer: RubeSerializer;
   loader: RubeLoader;
 
   constructor(private scene: Phaser.Scene, config: WorldEntityConfig) {
@@ -37,7 +35,6 @@ export class Physics {
 
     const adapter = new PhaserImageAdapter(scene);
     this.loader = new RubeLoader(this.worldEntity, adapter);
-    this.serializer = new RubeSerializer(this.worldEntity, adapter, this.loader);
   }
 
   setDebugDraw(enabled: boolean) {

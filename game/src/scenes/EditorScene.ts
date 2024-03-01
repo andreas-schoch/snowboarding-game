@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME, rootGame} from '..';
+import {SCENE_EDITOR, SCENE_GAME, pb, rootGame, rubeFileSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
@@ -11,13 +11,13 @@ import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
 import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
 import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
 import {EDITOR_EXIT, EDITOR_ITEM_SELECTED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED} from '../eventTypes';
+import {arrayBufferToString, downloadBlob} from '../helpers/binaryTransform';
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {RubeExport} from '../physics/RUBE/RubeExport';
-import {RubeFile} from '../physics/RUBE/RubeFile';
-import {EditorItem, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
-import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
+import {EditorItem, EditorItems, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
+import { generateEmptyRubeFile } from '../physics/RUBE/generateEmptyRubeFile';
+import { sanitizeRubeFile } from '../physics/RUBE/sanitizeRubeFile';
 
 export class EditorScene extends Phaser.Scene {
   private b2Physics: Physics;
@@ -31,60 +31,46 @@ export class EditorScene extends Phaser.Scene {
   }
 
   private init(data: {level: ILevel | null}) {
-    // this.data = data;
     this.level = data.level;
   }
 
   private preload() {
-    const character = Settings.selectedCharacter();
-    this.load.json(character, `assets/levels/export/${character}.json`);
-    this.load.json('level_new.rube', 'assets/levels/level_new.rube');
-    if (this.level?.number) {
-      const filename = `level_${String(this.level.number).padStart(3, '0')}.rube`;
-      this.load.json(filename, `assets/levels/${filename}`);
-    }
   }
 
   private create() {
     if (GameInfo.observer) GameInfo.observer.destroy();
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     EditorInfo.observer = new Phaser.Events.EventEmitter();
-    EditorInfo.filename = this.level?.number ? `level_${String(this.level.number).padStart(3, '0')}.rube` : 'level_new.rube';
+    EditorInfo.filename = 'level_001';
 
+    const ppm = 40;
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
-    this.b2Physics = new Physics(this, {pixelsPerMeter: 40, gravityX: 0, gravityY: -10, debugDrawEnabled: true});
+    this.b2Physics = new Physics(this, {pixelsPerMeter: ppm, gravityX: 0, gravityY: -10, debugDrawEnabled: true});
     this.controller = new EditorController(this);
 
     drawCoordZeroPoint(this);
     initSolidUI('root-ui');
 
-    EditorInfo.observer.on(EDITOR_EXIT, () => {
-      document.body.appendChild(rootGame);
-      this.scene.stop(SCENE_EDITOR);
-      this.scene.start(SCENE_GAME);
+    const recentLevels = Settings.editorRecentLevels();
+    const mostRecent: ILevel | undefined = recentLevels[0];
+
+    pb.level.getRubeFile(mostRecent, generateEmptyRubeFile()).then(rubeFile => {
+      const metaLoader = new RubeMetaLoader(this);
+      const items = metaLoader.load(rubeFile);
+      EditorItemTracker.editorItems = items;
+      EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
     });
 
-    EditorInfo.observer.on(EDITOR_ITEM_SELECTED, (item: EditorItem, centerOn: boolean) => {
-      const position = item.getPosition();
-      const ppm = this.b2Physics.worldEntity.pixelsPerMeter;
-      if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
+    const metaTerrainRenderer = new MetaTerrainRenderer(this, ppm);
+    const metaImageRenderer = new MetaImageRenderer(this, ppm);
+    const metaObjectRenderer = new MetaObjectRenderer(this, ppm);
+
+    EditorInfo.observer.on(RUBE_FILE_LOADED, (items: EditorItems) => {
+      metaTerrainRenderer.renderThrottled(Object.values(items.terrain));
+      metaImageRenderer.renderThrottled(Object.values(items.image));
+      metaObjectRenderer.renderThrottled(Object.values(items.object));
     });
-
-    let rubefile: RubeFile = this.cache.json.get(EditorInfo.filename);
-    rubefile = sanitizeRubeFile(rubefile);
-
-    const metaLoader = new RubeMetaLoader(this);
-    const items = metaLoader.load(rubefile);
-    EditorItemTracker.editorItems = items;
-    EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
-
-    const metaTerrainRenderer = new MetaTerrainRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
-    const metaImageRenderer = new MetaImageRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
-    const metaObjectRenderer = new MetaObjectRenderer(this, this.b2Physics.worldEntity.pixelsPerMeter);
-    metaTerrainRenderer.renderThrottled(Object.values(items.terrain));
-    metaImageRenderer.renderThrottled(Object.values(items.image));
-    metaObjectRenderer.renderThrottled(Object.values(items.object));
 
     EditorInfo.observer.on(EDITOR_SCENE_CHANGED, (changed: EditorItem) => {
       switch (changed.type) {
@@ -97,8 +83,19 @@ export class EditorScene extends Phaser.Scene {
       }
     });
 
-    const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
-    this.b2Physics.load(rubeScene, 0, 0);
+    EditorInfo.observer.on(EDITOR_ITEM_SELECTED, (item: EditorItem, centerOn: boolean) => {
+      const position = item.getPosition();
+      if (centerOn) this.cameras.main.pan(position.x * ppm, position.y * ppm, 300, 'Power2', true);
+    });
+
+    EditorInfo.observer.on(EDITOR_EXIT, () => {
+      document.body.appendChild(rootGame);
+      this.scene.stop(SCENE_EDITOR);
+      this.scene.start(SCENE_GAME);
+    });
+
+    // const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
+    // this.b2Physics.load(rubeScene, 0, 0);
   }
 
   update(time: number, delta: number) {

@@ -5698,7 +5698,7 @@
         "file" : "prefabs/cane.rube",
         "flip" : false,
         "id" : 200,
-        "name" : "object0",
+        "name" : "Cane",
         "position" : 
         {
           "x" : 536.4550170898438,
@@ -5746,6 +5746,16 @@
           "x" : 1027.739135742188,
           "y" : -243.9933776855469
         },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "character_v02.rube",
+        "flip" : false,
+        "id" : 204,
+        "name" : "Character",
+        "position" : 0,
         "scale" : 1
       }
     ],

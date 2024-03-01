@@ -25,12 +25,13 @@ export class MetaObjectRenderer {
     const y = position.y + offsetY;
 
     // the angle is in radians and clamped to 6.28 (2 * PI). I need to make sure it overflows  correctly. When 7.28, it should be 1.0
-    const twoPI = 6.28;
+    const twoPI = Math.PI * 2;
     let angle = object.getAngle() + offsetAngle;
     if (angle > twoPI) angle -= twoPI;
     if (angle < 0) angle += twoPI;
 
     this.terrainRenderer.render(Object.values(object.items.terrain), x, y, angle);
+
     this.imageRenderer.render(Object.values(object.items.image), x, y, angle);
     for (const subObject of Object.values(object.items.object)) {
       this.renderObject(subObject, x, y, angle);

@@ -1,8 +1,8 @@
-import {LocalLevelKeys} from './levels';
+import {ILevel, LocalLevelKeys} from './levels';
 import {IScore} from './pocketbase/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from '.';
 
-export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen' | 'fps';
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen' | 'editorRecentLevels' | 'fps';
 export type CharacterKeys = 'character_v01' | 'character_v02';
 export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
@@ -33,6 +33,27 @@ export class Settings {
 
   static editorOpen(): boolean {
     return Settings.getRaw('editorOpen') === 'true';
+  }
+
+  static editorRecentLevels(): ILevel[] {
+    const str = Settings.getRaw('editorRecentLevels');
+    if (!str) return [];
+    try {
+      const recent: ILevel[] = JSON.parse(str);
+      return recent;
+    } catch (e) {
+      console.error('Error parsing recent levels:', e);
+      Settings.set('editorRecentLevels', '');
+      return [];
+    }
+  }
+
+  static addEditorRecentLevel(level: ILevel) {
+    let recent = Settings.editorRecentLevels();
+    recent = recent.filter(r => r.id !== level.id); // remove existing
+    recent.unshift(level); // Add to front
+    recent = recent.slice(0, 10); // Limit to 10
+    Settings.set('editorRecentLevels', JSON.stringify(recent));
   }
 
   static darkmodeEnabled(): boolean {

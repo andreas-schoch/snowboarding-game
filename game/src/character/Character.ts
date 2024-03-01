@@ -47,7 +47,6 @@ export class Character {
   leanForce: number;
 
   id: string;
-  rubeScene: LoadedScene;
   board: Snowboard;
   state: State;
 
@@ -57,9 +56,8 @@ export class Character {
   private alreadyDetached: boolean = false;
   private currentBodyFlipDot: number = 1;
 
-  constructor(public scene: Phaser.Scene, x = 0, y = 0) {
-    this.rubeScene = this.loadCharacter(x, y);
-    this.id = this.rubeScene.id;
+  constructor(public scene: Phaser.Scene, public rubeScene: LoadedScene) {
+    this.id = rubeScene.id;
     this.initBodyParts();
     this.state = new State(this);
     this.board = new Snowboard(this);
@@ -136,7 +134,7 @@ export class Character {
     const encoded = arrayBufferToString(buffer);
     let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
     characterRubeFile = sanitizeRubeFile(characterRubeFile);
-    const characterExport = RubeFileToExport(characterRubeFile);
+    const characterExport = RubeFileToExport(this.scene, characterRubeFile);
     return Physics.instance.load(characterExport, x, y);
   }
 
