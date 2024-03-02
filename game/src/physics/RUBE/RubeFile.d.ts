@@ -83,7 +83,6 @@ export interface MetaBody {
 
   customProperties?: RubeCustomProperty[];
   fixture?: MetaFixture[]; // omitted when no fixtures
-
 }
 
 export interface MetaFixture {

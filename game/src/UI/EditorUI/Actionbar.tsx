@@ -1,6 +1,7 @@
 import {Menubar} from '@kobalte/core';
 import {Component, Show, createSignal} from 'solid-js';
 import {Dynamic, Portal} from 'solid-js/web';
+import {rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
 import {Settings} from '../../Settings';
 import {EditorItemTracker} from '../../editor/items/ItemTracker';
@@ -27,14 +28,6 @@ export const Actionbar: Component = () => {
 
       <div class="flex h-full flex-col pt-2">
         <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">Dummy Level Name</div>
-
-        {/* <ul class="mt-auto flex items-center gap-x-6 pr-5">
-          <Menu name="File" activeName={activeMenu()} setActive={setMenu}><MenuFile /></Menu>
-          <Menu name="Edit" activeName={activeMenu()} setActive={setMenu}><MenuEdit /></Menu>
-          <Menu name="View" activeName={activeMenu()} setActive={setMenu}><MenuView /></Menu>
-          <Menu name="Actions" activeName={activeMenu()} setActive={setMenu}><MenuActions /></Menu>
-          <Menu name="Help" activeName={activeMenu()} setActive={setMenu}><MenuHelp /></Menu>
-        </ul> */}
 
         <Menubar.Root class="menubar__root mt-auto flex items-center gap-x-6 pr-5">
           <MenuFile />
@@ -70,6 +63,13 @@ const MenuFile: Component = () => {
     const items = EditorItemTracker.editorItems;
     const rubefile = metaSerializer.serialize(items);
     downloadBlob(JSON.stringify(rubefile), 'level.rube', 'application/json');
+  }
+
+  function exportAsBinary() {
+    const items = EditorItemTracker.editorItems;
+    const rubefile = metaSerializer.serialize(items);
+    const binary = rubeFileSerializer.encode(rubefile);
+    downloadBlob(binary, 'level.bin', 'application/octet-stream');
   }
 
   return <>
@@ -135,7 +135,7 @@ const MenuFile: Component = () => {
             </Menubar.SubTrigger>
             <Menubar.Portal>
               <Menubar.SubContent class="menubar__sub-content">
-                <Menubar.Item class="menubar__item">as .bin</Menubar.Item>
+                <Menubar.Item class="menubar__item" onSelect={exportAsBinary}>as .bin</Menubar.Item>
                 <Menubar.Item class="menubar__item" onSelect={exportAsRube}>as .rube</Menubar.Item>
               </Menubar.SubContent>
             </Menubar.Portal>

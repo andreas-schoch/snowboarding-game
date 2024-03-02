@@ -1,6 +1,6 @@
 import {Settings} from './Settings';
 import {LoadedScene} from './physics/RUBE/EntityTypes';
-import {b2} from './index';
+import {b2, ppm} from './index';
 
 export type XY = {x: number, y: number};
 
@@ -9,7 +9,6 @@ export class Terrain {
   constructor(private scene: Phaser.Scene, private rubeScene: LoadedScene) { }
 
   draw() {
-    const ppm = this.rubeScene.worldEntity.pixelsPerMeter;
 
     for (const body of this.rubeScene.bodies) {
       if (!body.fixtures) continue;

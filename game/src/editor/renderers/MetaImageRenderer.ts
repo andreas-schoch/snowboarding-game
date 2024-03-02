@@ -1,3 +1,4 @@
+import {ppm} from '../..';
 import {Settings} from '../../Settings';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
@@ -12,10 +13,9 @@ export class MetaImageRenderer {
   renderThrottled = throttle(this.render.bind(this), 100);
   private contextMap: Map<string, ImageContext> = new Map();
 
-  constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
+  constructor(private scene: Phaser.Scene) { }
 
   render(images: EditorImage[], offsetX = 0, offsetY = 0, offsetAngle = 0) {
-    const ppm = this.pixelsPerMeter;
 
     for (const editorImage of images) {
       const context = this.getContext(editorImage.id);
@@ -25,8 +25,6 @@ export class MetaImageRenderer {
       let textureAtlas = customProps['phaserTexture'] as string;
 
       if (textureAtlas.includes('atlas_character')) textureAtlas = Settings.selectedCharacterSkin();
-
-      console.log('rendering image frame and atlas', textureFrame, textureAtlas, editorImage);
 
       const position = editorImage.getPosition();
       const angle = editorImage.getAngle();

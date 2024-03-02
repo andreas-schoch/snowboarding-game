@@ -7,7 +7,6 @@ export interface WorldEntityData {
   debugDrawer: DebugDrawer;
   debugDrawEnabled: boolean;
   isPaused: boolean;
-  pixelsPerMeter: number;
   gravityX: number;
   gravityY: number;
   stepsPerSecond: number;
@@ -16,7 +15,7 @@ export interface WorldEntityData {
   entityData: Map<Entity, EntityData>;
 }
 
-export type WorldEntityConfig = Pick<WorldEntityData, 'pixelsPerMeter' | 'gravityX' | 'gravityY' | 'debugDrawEnabled'>;
+export type WorldEntityConfig = Pick<WorldEntityData, 'gravityX' | 'gravityY' | 'debugDrawEnabled'>;
 
 ////////////////////////////
 // ENTITY AND ENTITY DATA //

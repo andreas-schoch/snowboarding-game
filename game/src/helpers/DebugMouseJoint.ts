@@ -1,4 +1,4 @@
-import {b2, recordLeak} from '..';
+import {b2, ppm, recordLeak} from '..';
 import {XY} from '../Terrain';
 import {Physics} from '../physics/Physics';
 
@@ -7,11 +7,10 @@ export class MouseJoint {
   private mouseJoint: Box2D.b2MouseJoint | null;
 
   constructor(private scene: Phaser.Scene, private b2Physics: Physics) {
-    const {pixelsPerMeter} = b2Physics.worldEntity;
     const {worldX, worldY} = scene.input.activePointer;
-    addEventListener('pointerdown', () => this.MouseDown({x: worldX / pixelsPerMeter, y: -worldY / pixelsPerMeter}));
+    addEventListener('pointerdown', () => this.MouseDown({x: worldX / ppm, y: -worldY / ppm}));
     addEventListener('pointerup', () => this.MouseUp());
-    addEventListener('pointermove', () => this.MouseMove({x: worldX / pixelsPerMeter, y: -worldY / pixelsPerMeter}, true));
+    addEventListener('pointermove', () => this.MouseMove({x: worldX / ppm, y: -worldY / ppm}, true));
 
   }
 

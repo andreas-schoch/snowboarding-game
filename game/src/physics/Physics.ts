@@ -1,6 +1,6 @@
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE} from '../eventTypes';
 import {iterBodies} from '../helpers/B2Iterators';
-import {b2} from '../index';
+import {b2, ppm} from '../index';
 import {DebugDrawer} from './DebugDraw';
 import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
 import {RubeExport} from './RUBE/RubeExport';
@@ -51,7 +51,7 @@ export class Physics {
   }
 
   update() {
-    const {isPaused, debugDrawEnabled, world, stepsPerSecond, velocityIterations, positionIterations, pixelsPerMeter, entityData} = this.worldEntity;
+    const {isPaused, debugDrawEnabled, world, stepsPerSecond, velocityIterations, positionIterations, entityData} = this.worldEntity;
     if (isPaused) return;
     world.Step(1 / stepsPerSecond, velocityIterations, positionIterations);
     if (debugDrawEnabled) world.DebugDraw();
@@ -64,8 +64,8 @@ export class Physics {
       if (body.IsEnabled()) {
         const pos = body.GetPosition();
         image.setVisible(true);
-        image.x = pos.x * pixelsPerMeter;
-        image.y = -pos.y * pixelsPerMeter;
+        image.x = pos.x * ppm;
+        image.y = -pos.y * ppm;
         image.rotation = -body.GetAngle() + (image.data.get('angle_offset') || 0); // in radians;
       } else {
         image.visible = false;
@@ -82,7 +82,7 @@ export class Physics {
       ...config,
       type: 'world',
       world:  new b2.b2World(gravityVec),
-      debugDrawer: new DebugDrawer(this.scene, config.pixelsPerMeter, 1),
+      debugDrawer: new DebugDrawer(this.scene, 1),
       observer: new Phaser.Events.EventEmitter(), // TODO get rid of phaser dependency
       entityData: new Map(),
       stepsPerSecond: 60,
@@ -93,6 +93,7 @@ export class Physics {
 
     worldEntity.world.SetAutoClearForces(true);
     worldEntity.world.SetDebugDraw(worldEntity.debugDrawer.instance);
+    worldEntity.world.SetContinuousPhysics(true);
     this.initContactListeners(worldEntity);
 
     b2.destroy(gravityVec);

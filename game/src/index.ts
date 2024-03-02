@@ -11,15 +11,6 @@ import {PreloadScene} from './scenes/PreloadScene';
 import {ScoreLogSerializer} from './serializers/ScoreLogSerializer';
 import {ProtobufSerializer} from './serializers/protobufSerializer';
 
-export const DEBUG_LOGS = Settings.debugLogs();
-if (!DEBUG_LOGS) {
-  const noop = () => {};
-  console.debug = noop;
-  console.time = noop;
-  console.timeLog = noop;
-  console.timeEnd = noop;
-}
-
 export const pb = new PocketbaseService();
 
 export const SCENE_PRELOAD = 'PreloadScene';
@@ -30,6 +21,8 @@ export const POINTS_PER_COIN = 100;
 export const BASE_FLIP_POINTS = 400;
 export const TRICK_POINTS_COMBO_FRACTION = 0.1;
 export const HEAD_MAX_IMPULSE = 8;
+
+export const ppm = 40; // (P)ixels (p)er (m)eter
 
 export const DEFAULT_WIDTH = 1280;
 export const DEFAULT_HEIGHT = 720;
@@ -90,3 +83,12 @@ window.onload = async () => {
     (function () { const script = document.createElement('script'); script.onload = function () { const stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop); }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })();
   }
 };
+
+export const DEBUG_LOGS = Settings.debugLogs();
+if (!DEBUG_LOGS) {
+  const noop = () => {};
+  console.debug = noop;
+  console.time = noop;
+  console.timeLog = noop;
+  console.timeEnd = noop;
+}

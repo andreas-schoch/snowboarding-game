@@ -1,3 +1,4 @@
+import {ppm} from '../..';
 import {Settings} from '../../Settings';
 import {throttle} from '../../helpers/debounce';
 import {EditorTerrainChunk} from '../items/EditorTerrain';
@@ -15,12 +16,11 @@ export class MetaTerrainRenderer {
   renderThrottled = throttle(this.render.bind(this), 100);
   private contextMap: Map<string, TerrainChunkContext> = new Map();
 
-  constructor(private scene: Phaser.Scene, private pixelsPerMeter: number) { }
+  constructor(private scene: Phaser.Scene) { }
 
   // TODO take offsetAngle into account
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(chunks: EditorTerrainChunk[], offsetX = 0, offsetY = 0, offsetAngle = 0) {
-    const ppm = this.pixelsPerMeter;
     for (const chunk of chunks) {
       const context = this.getContext(chunk.id);
 

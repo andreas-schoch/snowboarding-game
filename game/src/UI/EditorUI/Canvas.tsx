@@ -10,7 +10,6 @@ export const Canvas: Component<ResizeProps> = props => {
     // Need to ensure it cannot get accidentally removed from the DOM due to unwanted re-renders
     if (!rootGame) return;
     wrapperRef.innerHTML = '';
-    console.log('appending root game to wrapper ', rootGame, wrapperRef);
     wrapperRef.append(rootGame);
   });
 
@@ -20,7 +19,7 @@ export const Canvas: Component<ResizeProps> = props => {
   });
 
   return <>
-    <Pane title="" class="" {...props}>
+    <Pane title="" class="" {...props} >
 
       <div class="absolute inset-0 overflow-hidden rounded-md" ref={el => wrapperRef = el} />
     </Pane>

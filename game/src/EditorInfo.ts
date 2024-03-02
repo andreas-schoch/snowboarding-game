@@ -10,6 +10,7 @@ export class EditorInfo {
   static filename: string | null = null;
   static readonly cursor: XY = {x: 0, y: 0};
   static readonly selectedEntityIds: string[] = [];
+  static camera: Phaser.Cameras.Scene2D.Camera;
 
   static selectedBodyA() {
     return this.selectedEntityIds[0];

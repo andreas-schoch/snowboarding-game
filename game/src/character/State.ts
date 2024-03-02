@@ -1,4 +1,4 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb, ppm} from '..';
 import {GameInfo} from '../GameInfo';
 import {ComboState} from '../UI/GameUI/HUD';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
@@ -244,7 +244,7 @@ export class State {
   }
 
   private getDistanceInMeters(): number {
-    return Math.floor(this.distancePixels / this.character.rubeScene.worldEntity.pixelsPerMeter);
+    return Math.floor(this.distancePixels / ppm);
   }
 
   private pushStartLog() {

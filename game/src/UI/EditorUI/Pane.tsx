@@ -11,7 +11,6 @@ export const Pane: ParentComponent<PaneProps> = props => {
   let cleanupResize: () => void = () => noop;
 
   onMount(() => {
-    console.log('Pane onMount', paneRef);
     paneRef.style.cssText = `
     grid-column-start: ${props.colStart};
     grid-row-start: ${props.rowStart};
@@ -24,54 +23,6 @@ export const Pane: ParentComponent<PaneProps> = props => {
     cleanupMove();
     cleanupResize();
   });
-
-  // TODO rethink how to handle moving panes. I could simply it by allowing panes to be attached to each side
-  // But I may also want to add "tabs" to the top of the panes for things which don't have to be displayed all the time
-  // To support tabs I need to make the panes work in a smarter way that allows drag and drop without much complexity
-  // Also when we have a side based anchor layout, I need to either generate css-grid areas dynamically or not use css-grid at all
-  // const onMove = (e: MouseEvent) => {
-  //   const posStart = {x: e.clientX, y: e.clientY};
-
-  //   const onMouseMove = (e: MouseEvent) => {
-  //     // const dragRefBounds = dragRef.getBoundingClientRect();
-  //     // paneRef.style.left = (e.pageX - dragRefBounds.width / 2) + 'px';
-  //     // paneRef.style.top = (e.pageY - dragRefBounds.height / 2) + 'px';
-  //     const gridCompStyle = getComputedStyle(paneRef.parentElement as HTMLElement);
-  //     const cellSizeX = parseInt(gridCompStyle.getPropertyValue('grid-template-columns').split('px ')[0]);
-  //     const cellSizeY = parseInt(gridCompStyle.getPropertyValue('grid-template-rows').split('px ')[0]);
-  //     const changeX = Math.round((e.clientX - posStart.x) / cellSizeX);
-  //     const changeY = Math.round((e.clientY - posStart.y) / cellSizeY);
-
-  //     console.log('move change', changeX, changeY, 'cellsize', cellSizeX, cellSizeY);
-
-  //     const paneCompStyle = getComputedStyle(paneRef as HTMLElement);
-  //     const colStart = parseInt(paneCompStyle.getPropertyValue('grid-column-start'));
-  //     const colEnd = parseInt(paneCompStyle.getPropertyValue('grid-column-end'));
-  //     const rowStart = parseInt(paneCompStyle.getPropertyValue('grid-row-start'));
-  //     const rowEnd = parseInt(paneCompStyle.getPropertyValue('grid-row-end'));
-
-  //     paneRef.style.cssText = `
-  //     grid-column-start: ${colStart + changeX};
-  //     grid-row-start: ${rowStart + changeY};
-  //     grid-column-end: ${colEnd + changeX};
-  //     grid-row-end: ${rowEnd + changeY};
-  //     position: relative;`;
-  //   };
-
-  //   const onMouseUp = () => {
-  //     document.removeEventListener('mousemove', onMouseMove);
-  //     document.removeEventListener('mouseup', onMouseUp);
-  //     document.exitPointerLock();
-  //   };
-
-  //   document.addEventListener('mousemove', onMouseMove);
-  //   document.addEventListener('mouseup', onMouseUp);
-
-  //   cleanupMove = () => {
-  //     document.removeEventListener('mousemove', onMouseMove);
-  //     document.removeEventListener('mouseup', onMouseUp);
-  //   };
-  // };
 
   const resizeStart = (e: PointerEvent) => {
     console.debug('resizeStart', e);

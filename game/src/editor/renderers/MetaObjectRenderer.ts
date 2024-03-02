@@ -8,9 +8,9 @@ export class MetaObjectRenderer {
   private imageRenderer: MetaImageRenderer;
   private terrainRenderer: MetaTerrainRenderer;
 
-  constructor(scene: Phaser.Scene, pixelsPerMeter: number) {
-    this.imageRenderer = new MetaImageRenderer(scene, pixelsPerMeter);
-    this.terrainRenderer = new MetaTerrainRenderer(scene, pixelsPerMeter);
+  constructor(scene: Phaser.Scene) {
+    this.imageRenderer = new MetaImageRenderer(scene);
+    this.terrainRenderer = new MetaTerrainRenderer(scene);
   }
 
   render(objects: EditorObject[]) {

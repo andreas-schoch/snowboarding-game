@@ -1,7 +1,7 @@
 import {GameInfo} from '../GameInfo';
 import {Settings} from '../Settings';
 import {B2_POST_SOLVE, SURFACE_IMPACT} from '../eventTypes';
-import {b2} from '../index';
+import {b2, ppm} from '../index';
 import {IPostSolveEvent} from '../physics/Physics';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {Character} from './Character';
@@ -35,7 +35,7 @@ export class Snowboard {
     this.scene = character.scene;
     this.ZERO = new b2.b2Vec2(0, 0);
 
-    this.initRays(this.character.rubeScene.worldEntity.pixelsPerMeter / 4);
+    this.initRays(ppm / 4);
     this.particles = this.initParticles();
 
     const {entityData, observer} = this.character.rubeScene.worldEntity;
@@ -48,11 +48,10 @@ export class Snowboard {
       const nonSurfaceBody = propsFA && propsFA['surfaceType'] !== 'snow' ? bodyA : bodyB;
       const velocityLength = nonSurfaceBody.GetLinearVelocity().Length();
 
-      const pixelsPerMeter = this.character.rubeScene.worldEntity.pixelsPerMeter;
       const manifold = new b2.b2WorldManifold();
       contact.GetWorldManifold(manifold);
       for (let i = 0; i < impulse.get_count(); i++) {
-        const point = vec2Util.Scale(manifold.get_points(i), pixelsPerMeter, -pixelsPerMeter);
+        const point = vec2Util.Scale(manifold.get_points(i), ppm, -ppm);
         const normalImpulse = impulse.get_normalImpulses(i);
         if (!this.scene.cameras.main.worldView.contains(point.x, point.y)) continue;
         if (normalImpulse < 4 || velocityLength < 0.5) continue;
@@ -105,7 +104,7 @@ export class Snowboard {
       return aIndex - bIndex;
     });
 
-    const groundRayDirection = new b2.b2Vec2(0, -rayLength / this.character.rubeScene.worldEntity.pixelsPerMeter);
+    const groundRayDirection = new b2.b2Vec2(0, -rayLength / ppm);
     for (const {body} of segmentBodyEntityData) {
       const groundRayResult: IRayCastResult = {hit: false, point: new b2.b2Vec2(0, 0), normal: new b2.b2Vec2(0, 0), fraction: -1, lastHitFrame: -1};
 

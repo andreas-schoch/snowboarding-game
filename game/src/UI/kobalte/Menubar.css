@@ -12,7 +12,7 @@
 }
 .menubar__content,
 .menubar__sub-content {
-  @apply min-w-[220px] bg-stone-900 border border-stone-600 origin-[var(--kb-menu-content-transform-origin)] p-2 rounded-md border-solid text-sm;
+  @apply z-[1000] min-w-[220px] bg-stone-900 border border-stone-600 origin-[var(--kb-menu-content-transform-origin)] p-2 rounded-md border-solid text-sm;
   outline: none;
 }
 .menubar__content {

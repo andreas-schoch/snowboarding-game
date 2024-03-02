@@ -1,3 +1,4 @@
+import {ppm} from '../..';
 import {Settings} from '../../Settings';
 import {Physics} from '../Physics';
 import {BodyEntityData, RubeCustomPropsMap} from './EntityTypes';
@@ -24,16 +25,15 @@ export class RubeImageAdapter implements IBaseAdapter {
     const textureFrame = (file || '').split('/').reverse()[0];
     const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : imageCustomProps['phaserTexture'] as string;
 
-    const pixelsPerMeter = Physics.instance.worldEntity.pixelsPerMeter;
     const img: Phaser.GameObjects.Image = this.scene.add.image(
-      pos.x * pixelsPerMeter,
-      -pos.y * pixelsPerMeter,
+      pos.x * ppm,
+      -pos.y * ppm,
       textureAtlas || textureFrame,
       textureFrame
     );
 
     img.rotation = bodyEntityData?.body ? -bodyEntityData.body.GetAngle() + -(angle || 0) : -(angle || 0);
-    img.scaleY = (pixelsPerMeter / img.height) * scale;
+    img.scaleY = (ppm / img.height) * scale;
     img.scaleX = img.scaleY * aspectScale;
     img.alpha = imageJson.opacity || 1;
     img.flipX = flip;
