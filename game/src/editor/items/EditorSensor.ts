@@ -6,6 +6,7 @@ import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, Bounds, RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
 import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../physics/RUBE/rubeTransformers';
+import {EditorObject} from './EditorObject';
 import {EditorItemTracker} from './ItemTracker';
 
 export class EditorSensor implements BaseEditorItem {
@@ -15,7 +16,7 @@ export class EditorSensor implements BaseEditorItem {
   readonly signal: Accessor<EditorSensor>;
   private readonly setSignal: Setter<EditorSensor>;
 
-  constructor(private loader: RubeMetaLoader, public meta: MetaBody, public sensorType: 'level_finish' | 'level_deathzone' | 'pickup_present') {
+  constructor(private loader: RubeMetaLoader, public meta: MetaBody, public sensorType: 'level_finish' | 'level_deathzone' | 'pickup_present', public parent?: EditorObject) {
     this.id = pseudoRandomId();
     this.meta = meta;
     this.sensorType = sensorType;

@@ -43,13 +43,14 @@ export class GameScene extends Phaser.Scene {
     // this.load.json('level_003.rube', 'assets/levels/level_003.rube');
     // this.load.json('level_004.rube', 'assets/levels/level_004.rube');
     // this.load.json('level_005.rube', 'assets/levels/level_005.rube');
+    // this.load.json('plank.rube', 'assets/levels/prefabs/plank.rube');
   }
 
   private create() {
     // TODO make a node script to automatically convert .rube into .bin (and maybe upload to pocketbase)
     //  Now I just uncomment this whenever I need to update the levels then upload via pocketbase admin UI
     // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-    // for (const level of levels) {
+    // for (const level of ['level_004']) {
     //   const parsed: RubeFile = this.cache.json.get(level + '.rube');
     //   const sanitized = sanitizeRubeFile(parsed);
     //   const encoded = rubeFileSerializer.encode(sanitized);

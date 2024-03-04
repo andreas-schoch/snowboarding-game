@@ -119,18 +119,6 @@ const light: CustomPropertyDef = Object.freeze({
   displayName: 'light',
 });
 
-const modBodyType: CustomPropertyDef = Object.freeze({
-  class : 'object',
-  type : 'string',
-  name : 'modBodyType',
-  displayName : 'modBodyType',
-  comboboxEntries: [
-    {entry : 'static'},
-    {entry : 'dynamic'},
-    {entry : 'kinematic'}
-  ],
-});
-
 export const customPropertyDefs: Readonly<CustomPropertyDef[]> = Object.freeze([
   phaserBoardEdge,
   phaserCameraFollow,
@@ -142,7 +130,6 @@ export const customPropertyDefs: Readonly<CustomPropertyDef[]> = Object.freeze([
   phaserPlayerCharacterSpring,
   phaserPlayerCharacterPart,
   light,
-  modBodyType
 ]);
 
 export const customPropertyDefsByName: Readonly<Record<CustomPropertyDefNames, CustomPropertyDef>> = Object.freeze(customPropertyDefs.reduce((acc, def) => {

@@ -54,14 +54,15 @@ export const Browser: Component<ResizeProps> = props => {
   // TODO load from backend maybe so I can introduce new items without changing the frontend
   //  And in the future users could create their own prefabs which they can use in the editor
   const items: BrowserItem[] = [
+    {id: 'item_0000', name: 'Character', type: 'object', file: 'character_v02.rube'},
     {id: 'item_0001', name: 'Terrain', type: 'terrain'},
     {id: 'item_0002', name: 'House', type: 'image', texture: 'atlas_environment', frame: 'cottage.png', scale: 7.7, aspectScale: 1},
     {id: 'item_0003', name: 'Tree', type: 'image', texture: 'atlas_environment', frame: 'tree_01.png', scale: 6, aspectScale: 1},
     {id: 'item_0004', name: 'Rock', type: 'object', file: 'rock.rube'},
     {id: 'item_0005', name: 'Crate', type: 'object', file: 'crate.rube'},
     {id: 'item_0006', name: 'Cane', type: 'object', file: 'cane.rube'},
-    {id: 'item_0007', name: 'Coin', type: 'object', file: 'coin.rube'},
-    {id: 'item_0008', name: 'Character', type: 'object', file: 'character_v02.rube'},
+    {id: 'item_0007', name: 'Plank', type: 'object', file: 'plank.rube'},
+    {id: 'item_0008', name: 'Coin', type: 'object', file: 'coin.rube'},
   ];
 
   return <>

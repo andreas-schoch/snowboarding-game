@@ -18,7 +18,7 @@ export class EditorObject implements BaseEditorItem {
   readonly signal: Accessor<EditorObject>;
   private readonly setSignal: Setter<EditorObject>;
 
-  constructor(private loader: RubeMetaLoader, public meta: MetaObject) {
+  constructor(private loader: RubeMetaLoader, public meta: MetaObject, public parent?: EditorObject) {
     this.id = pseudoRandomId();
     const fileName = meta.file.split('/').reverse()[0];
     if (!this.loader.scene.cache.binary.has(fileName)) throw new Error(`RUBE file "${fileName}" not found in the cache`);
@@ -26,7 +26,7 @@ export class EditorObject implements BaseEditorItem {
     const encoded = arrayBufferToString(buffer);
     let rubeFile = rubeFileSerializer.decode(encoded);
     rubeFile = sanitizeRubeFile(rubeFile);
-    this.items = loader.load(rubeFile);
+    this.items = loader.load(rubeFile, this);
 
     const [signal, setSignal] = createSignal<EditorObject>(this, {equals: false});
     this.signal = signal;
@@ -46,7 +46,7 @@ export class EditorObject implements BaseEditorItem {
   }
 
   getAngle() {
-    return this.meta.angle || 0;
+    return -this.meta.angle || 0;
   }
 
   getBounds() {
@@ -75,7 +75,7 @@ export class EditorObject implements BaseEditorItem {
   }
 
   setAngle(angle: number) {
-    this.meta.angle = angle;
+    this.meta.angle = -angle;
     this.signalUpdate();
   }
 

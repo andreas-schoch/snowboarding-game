@@ -1,17 +1,20 @@
 import {createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
+import {BrowserItem} from '../../UI/EditorUI/Browser';
 import {EDITOR_SCENE_CHANGED} from '../../eventTypes';
 import {MetaObject} from '../../physics/RUBE/RubeFile';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
-import { BrowserItem } from '../../UI/EditorUI/Browser';
+import {generateEmptyRubeFile} from '../../physics/RUBE/generateEmptyRubeFile';
 
 export class EditorItemTracker {
 
   static editorItems: EditorItems = {
+    rubefile: generateEmptyRubeFile(),
     object: {},
     terrain: {},
     sensor: {},
     image: {},
+    // fixture: {},
   };
 
   static getNextMetaObjectId(): MetaObject['id'] {

@@ -71,9 +71,9 @@ function metaBodyToBody(metaBody: MetaBody, offsetX = 0, offsetY = 0, offsetAngl
     'massData-mass': massDataMass,
     'massData-center': massDataCenter,
     'massData-I': massDataI,
-    massDataMass: massDataMass,
-    massDataCenter: massDataCenter,
-    massDataI: massDataI,
+    massDataMass,
+    massDataCenter,
+    massDataI,
     customProperties: metaBody.customProperties,
     fixture: (metaBody.fixture || []).flatMap(mf => metaFixtureToFixture(mf)),
   };

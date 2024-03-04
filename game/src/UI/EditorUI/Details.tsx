@@ -35,6 +35,13 @@ export const Details: Component<ResizeProps> = props => {
     item.setDepth(newDepth);
   };
 
+  const onNameChange = (e: Event) => {
+    const item = selected();
+    if (!item) throw new Error('It should never be possible to update name when nothing is selected');
+    const target = e.target as HTMLInputElement;
+    item.setName(target.value);
+  };
+
   return <>
     <Pane title="Details" class="" {...props}>
       <Show when={selected()} fallback={<div class="p-4">Nothing selected</div>}>
@@ -45,7 +52,14 @@ export const Details: Component<ResizeProps> = props => {
           <div class="row">
             <div class="col col-5">Name</div>
             <div class="col col-7">
-              <input type="text" class="form-text-input text-black" id="property-name" placeholder="enter body name" value={selected()!.getName()} />
+              <input
+                type="text"
+                class="form-text-input text-black"
+                id="property-name"
+                placeholder="enter body name"
+                value={selected()!.signal().getName()}
+                onInput={onNameChange}
+              />
             </div>
           </div>
           {/* <!-- POSITION --> */}

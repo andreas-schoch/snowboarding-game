@@ -6,6 +6,7 @@ import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaImage} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
 import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../physics/RUBE/rubeTransformers';
+import {EditorObject} from './EditorObject';
 import {EditorItemTracker} from './ItemTracker';
 
 export class EditorImage implements BaseEditorItem {
@@ -15,7 +16,7 @@ export class EditorImage implements BaseEditorItem {
   readonly signal: Accessor<EditorImage>;
   private readonly setSignal: Setter<EditorImage>;
 
-  constructor(private loader: RubeMetaLoader, public meta: MetaImage, private metaBody?: MetaBody) {
+  constructor(private loader: RubeMetaLoader, public meta: MetaImage, private metaBody?: MetaBody, public parent?: EditorObject) {
     this.id = pseudoRandomId();
     const [signal, setSignal] = createSignal<EditorImage>(this, {equals: false});
     this.signal = signal;
@@ -31,9 +32,9 @@ export class EditorImage implements BaseEditorItem {
   }
 
   getPosition() {
-    const offset = this.metaBody ? rubeToXY(this.metaBody.position) : {x: 0, y: 0};
+    const offsetBody = this.metaBody ? rubeToXY(this.metaBody.position) : {x: 0, y: 0};
     const center = rubeToXY(this.meta.center);
-    return {x: center.x + offset.x,y: center.y + offset.y};
+    return {x: center.x + offsetBody.x, y: center.y + offsetBody.y};
   }
 
   getAngle() {

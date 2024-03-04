@@ -22,6 +22,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.binary('cane.rube', 'assets/levels/prefabs/cane.bin');
     this.load.binary('rock.rube', 'assets/levels/prefabs/rock.bin');
     this.load.binary('crate.rube', 'assets/levels/prefabs/crate.bin');
+    this.load.binary('plank.rube', 'assets/levels/prefabs/plank.bin');
     this.load.binary('character_v02.rube', 'assets/levels/character_v02.bin');
   }
 

@@ -7,10 +7,13 @@ export class MetaObjectRenderer {
   renderThrottled = throttle(this.render.bind(this), 100);
   private imageRenderer: MetaImageRenderer;
   private terrainRenderer: MetaTerrainRenderer;
+  // private fixtureRenderer: MetaFixtureRenderer;
 
   constructor(scene: Phaser.Scene) {
     this.imageRenderer = new MetaImageRenderer(scene);
     this.terrainRenderer = new MetaTerrainRenderer(scene);
+    // this.fixtureRenderer = new MetaFixtureRenderer(scene);
+
   }
 
   render(objects: EditorObject[]) {
@@ -31,6 +34,8 @@ export class MetaObjectRenderer {
     if (angle < 0) angle += twoPI;
 
     this.terrainRenderer.render(Object.values(object.items.terrain), x, y, angle);
+
+    // this.fixtureRenderer.render(Object.values(object.items.fixture), x, y, angle);
 
     this.imageRenderer.render(Object.values(object.items.image), x, y, angle);
     for (const subObject of Object.values(object.items.object)) {

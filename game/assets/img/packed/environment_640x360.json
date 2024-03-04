@@ -4,7 +4,7 @@
 			"image": "environment_640x360.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 370,
+				"w": 340,
 				"h": 165
 			},
 			"scale": 0.125,
@@ -31,65 +31,23 @@
 					}
 				},
 				{
-					"filename": "bridgeSegmentTwoCap.png",
+					"filename": "plank.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 31,
+						"w": 156,
 						"h": 8
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 31,
+						"w": 156,
 						"h": 8
 					},
 					"frame": {
 						"x": 3,
 						"y": 151,
-						"w": 31,
-						"h": 8
-					}
-				},
-				{
-					"filename": "bridgeSegmentOneCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 31,
-						"h": 8
-					},
-					"spriteSourceSize": {
-						"x": 3,
-						"y": 0,
-						"w": 28,
-						"h": 8
-					},
-					"frame": {
-						"x": 38,
-						"y": 151,
-						"w": 28,
-						"h": 8
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 31,
-						"h": 8
-					},
-					"spriteSourceSize": {
-						"x": 3,
-						"y": 0,
-						"w": 25,
-						"h": 8
-					},
-					"frame": {
-						"x": 70,
-						"y": 151,
-						"w": 25,
+						"w": 156,
 						"h": 8
 					}
 				},
@@ -129,31 +87,10 @@
 						"h": 17
 					},
 					"frame": {
-						"x": 145,
+						"x": 163,
 						"y": 145,
 						"w": 156,
 						"h": 17
-					}
-				},
-				{
-					"filename": "lightbulb.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 36,
-						"h": 128
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 36,
-						"h": 128
-					},
-					"frame": {
-						"x": 265,
-						"y": 3,
-						"w": 36,
-						"h": 128
 					}
 				},
 				{
@@ -171,10 +108,73 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 305,
+						"x": 265,
 						"y": 3,
 						"w": 39,
 						"h": 31
+					}
+				},
+				{
+					"filename": "bridgeSegmentOneCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 31,
+						"h": 8
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 0,
+						"w": 28,
+						"h": 8
+					},
+					"frame": {
+						"x": 308,
+						"y": 3,
+						"w": 28,
+						"h": 8
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 31,
+						"h": 8
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 0,
+						"w": 25,
+						"h": 8
+					},
+					"frame": {
+						"x": 308,
+						"y": 15,
+						"w": 25,
+						"h": 8
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 25,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 24,
+						"h": 25
+					},
+					"frame": {
+						"x": 308,
+						"y": 27,
+						"w": 24,
+						"h": 25
 					}
 				},
 				{
@@ -192,7 +192,7 @@
 						"h": 28
 					},
 					"frame": {
-						"x": 305,
+						"x": 265,
 						"y": 38,
 						"w": 39,
 						"h": 28
@@ -213,31 +213,10 @@
 						"h": 34
 					},
 					"frame": {
-						"x": 305,
+						"x": 265,
 						"y": 70,
 						"w": 34,
 						"h": 34
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 25,
-						"h": 25
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 24,
-						"h": 25
-					},
-					"frame": {
-						"x": 343,
-						"y": 70,
-						"w": 24,
-						"h": 25
 					}
 				},
 				{
@@ -255,10 +234,31 @@
 						"h": 34
 					},
 					"frame": {
-						"x": 305,
-						"y": 108,
+						"x": 303,
+						"y": 70,
 						"w": 34,
 						"h": 34
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 31,
+						"h": 8
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 31,
+						"h": 8
+					},
+					"frame": {
+						"x": 265,
+						"y": 108,
+						"w": 31,
+						"h": 8
 					}
 				}
 			]
@@ -267,6 +267,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:926bb5addb5da5b45bf89caa366b1ff0:2e344c3a931c0a07db93cd232dd09749:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e17d340df662eb053073c3d99a235354:5844fa4887c5275b8b497fb1d5ca657b:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

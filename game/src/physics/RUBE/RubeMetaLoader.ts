@@ -11,13 +11,15 @@ export interface EditorItems {
   terrain: Record<EditorItem['id'], EditorTerrainChunk>;
   sensor: Record<EditorItem['id'], EditorSensor>;
   image: Record<EditorItem['id'], EditorImage>;
+  // fixture: Record<EditorItem['id'], EditorFixture>;
+  rubefile: RubeFile;
 }
 
 export type Bounds = {x: number, y: number, width: number, height: number};
 
 export interface BaseEditorItem {
   id: string;
-  type: 'object' | 'terrain' | 'image' | 'sensor';
+  type: 'object' | 'terrain' | 'image' | 'sensor' | 'fixture';
 
   getCustomProps(): RubeCustomPropsMap;
   getPosition(): XY;
@@ -31,18 +33,20 @@ export interface BaseEditorItem {
   setAngle(angle: number): void;
 }
 
-export type EditorItem = EditorObject | EditorTerrainChunk | EditorImage | EditorSensor;
+export type EditorItem = EditorObject | EditorTerrainChunk | EditorImage | EditorSensor; // | EditorFixture;
 
 export class RubeMetaLoader {
 
   constructor(public scene: Phaser.Scene) { }
 
-  load(rubeFile: RubeFile): EditorItems {
+  load(rubefile: RubeFile, parent?: EditorObject): EditorItems {
     return {
-      object: this.loadObjects(rubeFile),
-      terrain: this.loadTerrainChunks(rubeFile),
-      sensor: this.loadSensors(rubeFile),
-      image: this.loadImages(rubeFile),
+      rubefile,
+      object: this.loadObjects(rubefile),
+      terrain: this.loadTerrainChunks(rubefile, parent),
+      sensor: this.loadSensors(rubefile, parent),
+      image: this.loadImages(rubefile, parent),
+      // fixture: this.loadFixtures(rubefile, parent),
     };
   }
 
@@ -56,18 +60,18 @@ export class RubeMetaLoader {
     return objects;
   }
 
-  private loadImages(rubeFile: RubeFile) {
+  private loadImages(rubeFile: RubeFile, parent?: EditorObject) {
     const metaImages = rubeFile.metaworld?.metaimage || [];
     const images: Record<EditorImage['id'], EditorImage> = {};
     for (const metaImage of metaImages) {
       const body = rubeFile.metaworld?.metabody?.find(b => b.id === metaImage.body);
-      const image = new EditorImage(this, metaImage, body);
+      const image = new EditorImage(this, metaImage, body, parent);
       images[image.id] = image;
     }
     return images;
   }
 
-  private loadTerrainChunks(rubeFile: RubeFile) {
+  private loadTerrainChunks(rubeFile: RubeFile, parent?: EditorObject) {
     const terrainChunks: Record<EditorTerrainChunk['id'], EditorTerrainChunk> = {};
     if (!rubeFile.metaworld?.metabody) return terrainChunks;
 
@@ -81,7 +85,7 @@ export class RubeMetaLoader {
         if (metaFixture.shapes.length > 1) throw new Error('Multiple shapes found in the fixture');
         const metaFixtureShape = metaFixture.shapes[0];
         if (metaFixtureShape.type !== 'line' && metaFixtureShape.type !== 'loop') throw new Error('Only polygon shapes are supported for terrain chunks');
-        const chunk = new EditorTerrainChunk(this, metaBody, metaFixture);
+        const chunk = new EditorTerrainChunk(this, metaBody, metaFixture, parent);
         terrainChunks[chunk.id] = chunk;
       }
     }
@@ -89,7 +93,20 @@ export class RubeMetaLoader {
     return terrainChunks;
   }
 
-  private loadSensors(rubeFile: RubeFile) {
+  // private loadFixtures(rubeFile: RubeFile, parent?: EditorObject) {
+  //   const fixtureBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.length) || [];
+  //   const fixtures: Record<EditorFixture['id'], EditorFixture> = {};
+  //   for (const body of fixtureBodies) {
+  //     for (const fixture of body.fixture || []) {
+  //       const editorFixture = new EditorFixture(this, body, fixture, parent);
+  //       fixtures[editorFixture.id] = editorFixture;
+  //     }
+  //   }
+
+  //   return fixtures;
+  // }
+
+  private loadSensors(rubeFile: RubeFile, parent?: EditorObject) {
     const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0].customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
     const sensors: Record<EditorSensor['id'], EditorSensor> = {};
     for (const body of sensorBodies) {
@@ -98,7 +115,7 @@ export class RubeMetaLoader {
       const sensorType = sensorFixture.customProperties?.find(prop => prop.name === 'phaserSensorType')?.string;
       if (!sensorType) throw new Error('Sensor type not defined on the sensor body');
       if (sensorType !== 'level_finish' && sensorType !== 'level_deathzone' && sensorType !== 'pickup_present') throw new Error('Invalid sensor type');
-      const sensor = new EditorSensor(this, body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present');
+      const sensor = new EditorSensor(this, body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present', parent);
       sensors[sensor.id] = sensor;
     }
 

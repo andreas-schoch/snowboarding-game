@@ -2,6 +2,8 @@ import {ppm} from '../..';
 import {Settings} from '../../Settings';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
+import {EditorObject} from '../items/EditorObject';
+import {selected, setSelected} from '../items/ItemTracker';
 
 type ImageContext = {
   imageId: string;
@@ -45,6 +47,12 @@ export class MetaImageRenderer {
       image.flipX = flip;
       image.setDepth(renderOrder);
       image.setDataEnabled();
+      image.setInteractive();
+      image.on('pointerdown', () => {
+        const root = this.getRootItem(editorImage);
+        if (root === selected()) return;
+        setSelected(root);
+      });
 
       // TODO deduplicate this code and RubeImageAdapter
       const isPlayerCharacterPart = customProps['playerCharacterPart'] === true;
@@ -82,5 +90,13 @@ export class MetaImageRenderer {
       this.contextMap.set(imageId, context);
     }
     return context;
+  }
+
+  private getRootItem(editorImage: EditorImage): EditorImage | EditorObject {
+    let potentialRoot: EditorImage | EditorObject = editorImage;
+    while (potentialRoot.parent) {
+      potentialRoot = potentialRoot.parent;
+    }
+    return potentialRoot;
   }
 }

@@ -4,7 +4,7 @@
 			"image": "environment_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 716,
+				"w": 655,
 				"h": 318
 			},
 			"scale": 0.25,
@@ -31,65 +31,23 @@
 					}
 				},
 				{
-					"filename": "bridgeSegmentTwoCap.png",
+					"filename": "plank.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 61,
+						"w": 313,
 						"h": 16
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 61,
+						"w": 313,
 						"h": 16
 					},
 					"frame": {
 						"x": 3,
 						"y": 295,
-						"w": 61,
-						"h": 16
-					}
-				},
-				{
-					"filename": "bridgeSegmentOneCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 61,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 8,
-						"y": 0,
-						"w": 53,
-						"h": 16
-					},
-					"frame": {
-						"x": 68,
-						"y": 295,
-						"w": 53,
-						"h": 16
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 61,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 8,
-						"y": 0,
-						"w": 45,
-						"h": 16
-					},
-					"frame": {
-						"x": 125,
-						"y": 295,
-						"w": 45,
+						"w": 313,
 						"h": 16
 					}
 				},
@@ -129,31 +87,10 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 282,
+						"x": 320,
 						"y": 282,
 						"w": 313,
 						"h": 33
-					}
-				},
-				{
-					"filename": "lightbulb.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 72,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 72,
-						"h": 256
-					},
-					"frame": {
-						"x": 518,
-						"y": 3,
-						"w": 72,
-						"h": 256
 					}
 				},
 				{
@@ -171,10 +108,52 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 599,
+						"x": 518,
 						"y": 3,
 						"w": 78,
 						"h": 63
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 46,
+						"h": 50
+					},
+					"frame": {
+						"x": 600,
+						"y": 3,
+						"w": 46,
+						"h": 50
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 45,
+						"h": 16
+					},
+					"frame": {
+						"x": 600,
+						"y": 57,
+						"w": 45,
+						"h": 16
 					}
 				},
 				{
@@ -192,7 +171,7 @@
 						"h": 56
 					},
 					"frame": {
-						"x": 599,
+						"x": 518,
 						"y": 70,
 						"w": 78,
 						"h": 56
@@ -213,10 +192,31 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 599,
+						"x": 518,
 						"y": 130,
 						"w": 69,
 						"h": 69
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 61,
+						"h": 16
+					},
+					"frame": {
+						"x": 591,
+						"y": 130,
+						"w": 61,
+						"h": 16
 					}
 				},
 				{
@@ -234,31 +234,31 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 594,
+						"x": 518,
 						"y": 203,
 						"w": 69,
 						"h": 69
 					}
 				},
 				{
-					"filename": "present_temp.png",
+					"filename": "bridgeSegmentOneCap.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 50,
-						"h": 50
+						"w": 61,
+						"h": 16
 					},
 					"spriteSourceSize": {
-						"x": 1,
+						"x": 8,
 						"y": 0,
-						"w": 46,
-						"h": 50
+						"w": 53,
+						"h": 16
 					},
 					"frame": {
-						"x": 667,
-						"y": 203,
-						"w": 46,
-						"h": 50
+						"x": 591,
+						"y": 150,
+						"w": 53,
+						"h": 16
 					}
 				}
 			]
@@ -267,6 +267,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:926bb5addb5da5b45bf89caa366b1ff0:2e344c3a931c0a07db93cd232dd09749:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e17d340df662eb053073c3d99a235354:5844fa4887c5275b8b497fb1d5ca657b:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

@@ -252,7 +252,7 @@ export interface MetaObject {
 export type RubeVector = {x: number; y: number;} | 0;
 
 // This game doesn't require dynamic custom property names (yet), so we can use a union of all known names
-export type CustomPropertyDefNames = 'phaserBoardEdge' | 'phaserCameraFollow' | 'surfaceType' | 'phaserTextureFrame' | 'phaserSensorType' | 'phaserTexture' | 'phaserBoardSegmentIndex' | 'phaserPlayerCharacterSpring' | 'phaserPlayerCharacterPart' | 'light' | 'modBodyType';
+export type CustomPropertyDefNames = 'phaserBoardEdge' | 'phaserCameraFollow' | 'surfaceType' | 'phaserTextureFrame' | 'phaserSensorType' | 'phaserTexture' | 'phaserBoardSegmentIndex' | 'phaserPlayerCharacterSpring' | 'phaserPlayerCharacterPart' | 'light';
 export type CustomPropertyValue = number | string | boolean | RubeVector;
 // These will have a "name" property, and EXACTLY one of the optional properties depending on desired type as the value.
 // TODO We could type these as standalone interfaces and then use a union type

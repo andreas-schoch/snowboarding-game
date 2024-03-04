@@ -17,7 +17,7 @@ import {EDITOR_EXIT, EDITOR_ITEM_PLACED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED}
 import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {MetaBody, MetaImage, MetaObject} from '../physics/RUBE/RubeFile';
+import {MetaImage, MetaObject} from '../physics/RUBE/RubeFile';
 import {EditorItem, EditorItems, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 import {generateEmptyRubeFile} from '../physics/RUBE/generateEmptyRubeFile';
 

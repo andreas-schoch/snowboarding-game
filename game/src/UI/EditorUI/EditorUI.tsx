@@ -9,6 +9,7 @@ import {Details} from './Details';
 import {Explorer} from './Explorer';
 
 export const EditorUI: Component = () => {
+
   createEffect(() => {
     const item = selected();
     if (item) {

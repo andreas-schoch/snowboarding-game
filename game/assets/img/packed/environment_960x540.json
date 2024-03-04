@@ -4,8 +4,8 @@
 			"image": "environment_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 510,
-				"h": 251
+				"w": 496,
+				"h": 241
 			},
 			"scale": 0.1875,
 			"frames": [
@@ -31,24 +31,24 @@
 					}
 				},
 				{
-					"filename": "cane.png",
+					"filename": "plank.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 234,
-						"h": 25
+						"h": 12
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 234,
-						"h": 25
+						"h": 12
 					},
 					"frame": {
 						"x": 3,
 						"y": 223,
 						"w": 234,
-						"h": 25
+						"h": 12
 					}
 				},
 				{
@@ -73,87 +73,24 @@
 					}
 				},
 				{
-					"filename": "bridgeSegmentTwoCap.png",
+					"filename": "cane.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 46,
-						"h": 12
+						"w": 234,
+						"h": 25
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 46,
-						"h": 12
+						"w": 234,
+						"h": 25
 					},
 					"frame": {
 						"x": 241,
 						"y": 213,
-						"w": 46,
-						"h": 12
-					}
-				},
-				{
-					"filename": "bridgeSegmentOneCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 46,
-						"h": 12
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 0,
-						"w": 41,
-						"h": 12
-					},
-					"frame": {
-						"x": 241,
-						"y": 229,
-						"w": 41,
-						"h": 12
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 46,
-						"h": 12
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 0,
-						"w": 36,
-						"h": 12
-					},
-					"frame": {
-						"x": 286,
-						"y": 229,
-						"w": 36,
-						"h": 12
-					}
-				},
-				{
-					"filename": "lightbulb.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 54,
-						"h": 192
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 54,
-						"h": 192
-					},
-					"frame": {
-						"x": 391,
-						"y": 3,
-						"w": 54,
-						"h": 192
+						"w": 234,
+						"h": 25
 					}
 				},
 				{
@@ -171,10 +108,52 @@
 						"h": 47
 					},
 					"frame": {
-						"x": 449,
+						"x": 391,
 						"y": 3,
 						"w": 58,
 						"h": 47
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 38,
+						"h": 38
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 38
+					},
+					"frame": {
+						"x": 453,
+						"y": 3,
+						"w": 36,
+						"h": 38
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 36,
+						"h": 12
+					},
+					"frame": {
+						"x": 453,
+						"y": 45,
+						"w": 36,
+						"h": 12
 					}
 				},
 				{
@@ -192,7 +171,7 @@
 						"h": 42
 					},
 					"frame": {
-						"x": 449,
+						"x": 391,
 						"y": 54,
 						"w": 58,
 						"h": 42
@@ -213,10 +192,31 @@
 						"h": 52
 					},
 					"frame": {
-						"x": 449,
+						"x": 391,
 						"y": 100,
 						"w": 52,
 						"h": 52
+					}
+				},
+				{
+					"filename": "bridgeSegmentTwoCap.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 46,
+						"h": 12
+					},
+					"frame": {
+						"x": 447,
+						"y": 100,
+						"w": 46,
+						"h": 12
 					}
 				},
 				{
@@ -234,31 +234,31 @@
 						"h": 52
 					},
 					"frame": {
-						"x": 449,
+						"x": 391,
 						"y": 156,
 						"w": 52,
 						"h": 52
 					}
 				},
 				{
-					"filename": "present_temp.png",
+					"filename": "bridgeSegmentOneCap.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 38,
-						"h": 38
+						"w": 46,
+						"h": 12
 					},
 					"spriteSourceSize": {
-						"x": 0,
+						"x": 5,
 						"y": 0,
-						"w": 36,
-						"h": 38
+						"w": 41,
+						"h": 12
 					},
 					"frame": {
-						"x": 391,
-						"y": 199,
-						"w": 36,
-						"h": 38
+						"x": 447,
+						"y": 116,
+						"w": 41,
+						"h": 12
 					}
 				}
 			]
@@ -267,6 +267,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:926bb5addb5da5b45bf89caa366b1ff0:2e344c3a931c0a07db93cd232dd09749:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e17d340df662eb053073c3d99a235354:5844fa4887c5275b8b497fb1d5ca657b:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }
