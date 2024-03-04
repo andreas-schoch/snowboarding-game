@@ -4,7 +4,7 @@ import {Dynamic, Portal} from 'solid-js/web';
 import {rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
 import {Settings} from '../../Settings';
-import {EditorItemTracker} from '../../editor/items/ItemTracker';
+import {editorItems} from '../../editor/items/ItemTracker';
 import {EDITOR_EXIT} from '../../eventTypes';
 import {downloadBlob} from '../../helpers/binaryTransform';
 import {RubeMetaSerializer} from '../../physics/RUBE/RubeMetaSerializer';
@@ -60,13 +60,13 @@ const MenuFile: Component = () => {
   const metaSerializer = new RubeMetaSerializer();
 
   function exportAsRube() {
-    const items = EditorItemTracker.editorItems;
+    const items = editorItems();
     const rubefile = metaSerializer.serialize(items);
     downloadBlob(JSON.stringify(rubefile), 'level.rube', 'application/json');
   }
 
   function exportAsBinary() {
-    const items = EditorItemTracker.editorItems;
+    const items = editorItems();
     const rubefile = metaSerializer.serialize(items);
     const binary = rubeFileSerializer.encode(rubefile);
     downloadBlob(binary, 'level.bin', 'application/octet-stream');

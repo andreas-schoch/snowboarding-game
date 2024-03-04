@@ -19,6 +19,10 @@ export class Level {
     return await this.pb.collection(this.collectionName).getOne<ILevel>(id, {expand: 'owner'}).catch(() => null);
   }
 
+  async create(level: ILevel): Promise<ILevel> {
+    return await this.pb.collection(this.collectionName).create(level);
+  }
+
   async getRubeFile(level?: ILevel, fallback?: RubeFile): Promise<RubeFile> {
     if (!level && fallback) return fallback;
     else if (!level) throw new Error('no level provided');

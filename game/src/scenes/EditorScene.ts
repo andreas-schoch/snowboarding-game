@@ -60,7 +60,6 @@ export class EditorScene extends Phaser.Scene {
 
     pb.level.getRubeFile(mostRecent, generateEmptyRubeFile()).then(rubeFile => {
       const items = metaLoader.load(rubeFile);
-      EditorItemTracker.editorItems = items;
       setEditorItems(items);
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
     });
