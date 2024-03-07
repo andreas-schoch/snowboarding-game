@@ -1,6 +1,6 @@
 import {DEFAULT_WIDTH} from '..';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {PanelId} from '../UI/GameUI/GameUI';
 import {Character} from '../character/Character';
 import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
@@ -39,7 +39,7 @@ export class CharacterController {
     const camera = this.scene.cameras.main;
     this.resolutionMod = camera.width / DEFAULT_WIDTH;
     camera.setDeadzone(0, 125);
-    camera.setZoom(Settings.defaultZoom() * this.resolutionMod * 1.5);
+    camera.setZoom(PersistedStore.defaultZoom() * this.resolutionMod * 1.5);
     camera.scrollX -= camera.width;
     camera.scrollY -= camera.height;
 
@@ -77,7 +77,7 @@ export class CharacterController {
     const speed = character.state.getCurrentSpeed();
     const maxSpeed = 40; // replace with your game's max speed
     const minZoom = 0.5; // zoomed out
-    const maxZoom = Settings.defaultZoom(); // zoomed in
+    const maxZoom = PersistedStore.defaultZoom(); // zoomed in
     const normalizedSpeed = Math.min(Math.max(speed / maxSpeed, 0), 1);
     const targetZoom = (maxZoom - normalizedSpeed * (maxZoom - minZoom)) * this.resolutionMod;
     const lerpFactor = 0.02;

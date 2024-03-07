@@ -1,9 +1,11 @@
 
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {rubeFileSerializer} from '../..';
+import {EditorInfo} from '../../EditorInfo';
 import {XY} from '../../Terrain';
 import {arrayBufferToString} from '../../helpers/binaryTransform';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
+import {ILevel, ILevelNew} from '../../levels';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaObject} from '../../physics/RUBE/RubeFile';
 import {BaseEditorItem, EditorItems, RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
@@ -18,15 +20,15 @@ export class EditorObject implements BaseEditorItem {
   readonly signal: Accessor<EditorObject>;
   private readonly setSignal: Setter<EditorObject>;
 
-  constructor(private loader: RubeMetaLoader, public meta: MetaObject, public parent?: EditorObject) {
+  constructor(level: ILevel | ILevelNew, public meta: MetaObject, public parent?: EditorObject) {
     this.id = pseudoRandomId();
     const fileName = meta.file.split('/').reverse()[0];
-    if (!this.loader.scene.cache.binary.has(fileName)) throw new Error(`RUBE file "${fileName}" not found in the cache`);
-    const buffer = this.loader.scene.cache.binary.get(fileName);
+    if (!EditorInfo.phaserScene.cache.binary.has(fileName)) throw new Error(`RUBE file "${fileName}" not found in the cache`);
+    const buffer = EditorInfo.phaserScene.cache.binary.get(fileName);
     const encoded = arrayBufferToString(buffer);
     let rubeFile = rubeFileSerializer.decode(encoded);
     rubeFile = sanitizeRubeFile(rubeFile);
-    this.items = loader.load(rubeFile, this);
+    this.items = RubeMetaLoader.load(level, rubeFile, this);
 
     const [signal, setSignal] = createSignal<EditorObject>(this, {equals: false});
     this.signal = signal;

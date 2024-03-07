@@ -1,6 +1,6 @@
 
 import PocketBase from 'pocketbase';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {pseudoRandomId} from '../helpers/pseudoRandomId';
 import {IUser} from './types';
 
@@ -27,8 +27,8 @@ export class Auth {
       await this.registerAnonymousUser();
     }
 
-    const uid = Settings.anonymousUID();
-    const username = Settings.username();
+    const uid = PersistedStore.anonymousUID();
+    const username = PersistedStore.username();
     if (!username || !uid) throw new Error('Failed to refresh or register user');
 
     await this.pb.collection('users').authWithPassword<IUser>(username, uid).catch(() => console.error('failed to login:' + username));
@@ -46,8 +46,8 @@ export class Auth {
       usernameChanged: false,
     });
 
-    Settings.set('userName', newUser.username);
-    Settings.set('anonymous_uid', uid);
+    PersistedStore.set('userName', newUser.username);
+    PersistedStore.set('anonymous_uid', uid);
     return [newUser.username, uid];
   }
 }

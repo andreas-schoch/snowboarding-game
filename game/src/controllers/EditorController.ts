@@ -1,5 +1,5 @@
 import {DEFAULT_WIDTH} from '..';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {EditorScene} from '../scenes/EditorScene';
 
 export class EditorController {
@@ -24,7 +24,7 @@ export class EditorController {
   private setupCameraAndInput() {
     const camera = this.scene.cameras.main;
     this.resolutionMod = camera.width / DEFAULT_WIDTH;
-    camera.setZoom(Settings.defaultZoom() * this.resolutionMod);
+    camera.setZoom(PersistedStore.defaultZoom() * this.resolutionMod);
     camera.setBackgroundColor(0x333333);
     camera.centerOnX(0);
     camera.centerOnY(0);

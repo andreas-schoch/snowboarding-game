@@ -1,7 +1,7 @@
 import {Component, createSignal, onMount} from 'solid-js';
 import {pb} from '../..';
 import {GameInfo} from '../../GameInfo';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {RESTART_GAME} from '../../eventTypes';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {IScoreNew} from '../../pocketbase/types';
@@ -26,7 +26,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
 
     if (!loggedInUser) {
       // When leaderboard is disabled;
-      if (!Settings.username()) {
+      if (!PersistedStore.username()) {
         usernameInput.value = `Player_${pseudoRandomId()}`;
         usernameInput.setAttribute('value', usernameInput.value); // to make floating label move up
       } else {
@@ -52,7 +52,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     // Unless we limit the scores per level to less than e.g. 200 and if it is lower than lowest, player remains unranked
     const loggedInUser = pb.auth.loggedInUser();
     if (!loggedInUser) return;
-    const scores = await pb.leaderboard.scoresFromLogs(Settings.currentLevel(), 1, 200);
+    const scores = await pb.leaderboard.scoresFromLogs(PersistedStore.currentLevel(), 1, 200);
     const yourRank = scores.findIndex(s => s.user === loggedInUser.id);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);

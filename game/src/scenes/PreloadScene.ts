@@ -5,7 +5,7 @@ import sfxGameOverDemon from '../../assets/audio/sfx/game_over_demon/game_over_d
 import sfxSnowboardSlide04 from '../../assets/audio/sfx/nox_sound/snowboard_slide_loop_04.mp3';
 import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
 import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {BackgroundMusicKeys} from '../SoundManager';
 import {SCENE_EDITOR, SCENE_GAME, SCENE_PRELOAD} from '../index';
 
@@ -27,7 +27,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    const editorOpen = Settings.editorOpen();
+    const editorOpen = PersistedStore.editorOpen();
     this.scene.start(editorOpen ? SCENE_EDITOR : SCENE_GAME);
   }
 
@@ -43,12 +43,12 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   private loadImg() {
-    const height = Settings.heightScaled();
+    const height = PersistedStore.heightScaled();
     const closestSize = [360, 540, 720].reduce((prev, curr) => Math.abs(curr - height) < Math.abs(prev - height) ? curr : prev);
     const size = {360: '640x360', 540: '960x540', 720: '1280x720'}[closestSize];
     this.load.atlas('atlas_environment', `assets/img/packed/environment_${size}.png`, `assets/img/packed/environment_${size}.json`);
     this.load.atlas('bg_space_pack', `assets/img/packed/bg_space_${size}.png`, `assets/img/packed/bg_space_${size}.json`);
-    const characterSkin = Settings.selectedCharacterSkin();
+    const characterSkin = PersistedStore.selectedCharacterSkin();
     this.load.atlas(characterSkin, `assets/img/packed/${characterSkin}_${size}.png`, `assets/img/packed/${characterSkin}_${size}.json`);
   }
 }

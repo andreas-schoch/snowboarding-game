@@ -1,5 +1,5 @@
 import {ppm} from '../..';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
 import {EditorObject} from '../items/EditorObject';
@@ -26,7 +26,10 @@ export class MetaImageRenderer {
       const textureFrame = (file || '').split('/').reverse()[0];
       let textureAtlas = customProps['phaserTexture'] as string;
 
-      if (textureAtlas.includes('atlas_character')) textureAtlas = Settings.selectedCharacterSkin();
+      const bodyProps = editorImage.getBodyCustomProps();
+      const isPlayerCharacterPart = Boolean(bodyProps && bodyProps['phaserPlayerCharacterPart']);
+
+      if (isPlayerCharacterPart) textureAtlas = PersistedStore.selectedCharacterSkin();
 
       const position = editorImage.getPosition();
       const angle = editorImage.getAngle();
@@ -55,8 +58,7 @@ export class MetaImageRenderer {
       });
 
       // TODO deduplicate this code and RubeImageAdapter
-      const isPlayerCharacterPart = customProps['playerCharacterPart'] === true;
-      if (Settings.darkmodeEnabled()) {
+      if (PersistedStore.darkmodeEnabled()) {
         const isLight = customProps['light'] === true || textureFrame === 'present_temp.png';
         if (isPlayerCharacterPart) image.setTintFill(0x000000);
         else if (isLight) image.setTintFill(0xbbbbbb);
@@ -81,7 +83,15 @@ export class MetaImageRenderer {
     }
   }
 
-  getContext(imageId: string): ImageContext {
+  resetAll() {
+    for (const context of this.contextMap.values()) {
+      context.image.destroy();
+      context.gizmo.destroy();
+    }
+    this.contextMap.clear();
+  }
+
+  private getContext(imageId: string): ImageContext {
     let context = this.contextMap.get(imageId);
     if (!context) {
       const image: Phaser.GameObjects.Image = this.scene.add.image(0, 0, 'missing');

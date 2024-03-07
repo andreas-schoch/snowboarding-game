@@ -1,4 +1,4 @@
-import {Settings} from './Settings';
+import {PersistedStore} from './PersistedStore';
 import {LoadedScene} from './physics/RUBE/EntityTypes';
 import {b2, ppm} from './index';
 
@@ -39,7 +39,7 @@ export class Terrain {
     const graphics = this.scene.add.graphics().setDepth(10);
     graphics.setPosition(minX, minY);
     const pointsLocal: XY[] = pointsWorld.map(point => ({x: point.x - minX, y: point.y - minY}));
-    graphics.fillStyle(Settings.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);
+    graphics.fillStyle(PersistedStore.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);
     graphics.fillPoints(pointsLocal, true, false);
     // The terrain within RUBE is represented as chunks of non-loopped edge fixtures
     // We remove these points as they are not part of the surface and therefore doesn't need contouring

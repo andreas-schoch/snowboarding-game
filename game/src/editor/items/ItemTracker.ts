@@ -1,10 +1,12 @@
 import {createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
+import {PersistedStore} from '../../PersistedStore';
 import {BrowserItem} from '../../UI/EditorUI/Browser';
-import {EDITOR_SCENE_CHANGED} from '../../eventTypes';
+import {EDITOR_RENDER_CHANGE} from '../../eventTypes';
 import {MetaObject} from '../../physics/RUBE/RubeFile';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
-import {generateEmptyRubeFile} from '../../physics/RUBE/generateEmptyRubeFile';
+import {editorItemsToRubefile} from '../../physics/RUBE/RubeMetaSerializer';
+import {generateEmptyRubeFile, generateNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
 
 export class EditorItemTracker {
 
@@ -12,34 +14,35 @@ export class EditorItemTracker {
     const items = editorItems();
     const ids = Object.values(items.object).map(item => item.meta.id);
     const max = Math.max(...ids);
-    return max + 1;
+    return Number.isFinite(max) ? max + 1 : 1;
   }
 
   static getNextMetaImageId(): MetaObject['id'] {
     const items = editorItems();
     const ids = Object.values(items.image).map(item => item.meta.id);
     const max = Math.max(...ids);
-    return max + 1;
+    return Number.isFinite(max) ? max + 1 : 1;
   }
 
   static getNextMetaSensorId(): MetaObject['id'] {
     const items = editorItems();
     const ids = Object.values(items.sensor).map(item => item.meta.id);
     const max = Math.max(...ids);
-    return max + 1;
+    return Number.isFinite(max) ? max + 1 : 1;
   }
 
   static getNextMetaTerrainId(): MetaObject['id'] {
     const items = editorItems();
     const ids = Object.values(items.terrain).map(item => item.metaBody.id);
     const max = Math.max(...ids);
-    return max + 1;
+    return Number.isFinite(max) ? max + 1 : 1;
   }
 
   static add(item: EditorItem) {
-    const items = editorItems();
-    items[item.type][item.id] = item;
-    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, item, items);
+    // const items = editorItems();
+    // items[item.type][item.id] = item;
+    // EditorInfo.observer.emit(EDITOR_RENDER_CHANGE, item, items);
+    EditorItemTracker.trackChange(item);
   }
 
   static trackChange(item: EditorItem) {
@@ -54,13 +57,18 @@ export class EditorItemTracker {
       items[item.type][item.id] = item;
     }
 
+    const updatedRubefile = editorItemsToRubefile(items);
+    PersistedStore.addEditorRubefile(items.level, updatedRubefile);
+    items.rubefile = updatedRubefile;
+
     setEditorItems(items);
-    EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, item, items);
+    EditorInfo.observer.emit(EDITOR_RENDER_CHANGE, item, items);
   }
 }
 
 const initial: EditorItems = {
-  rubefile: generateEmptyRubeFile(),
+  rubefile: generateEmptyRubeFile(), // TODO maybe bettet to already use registerNewLevel() here?
+  level: generateNewLevel(),
   object: {},
   terrain: {},
   sensor: {},

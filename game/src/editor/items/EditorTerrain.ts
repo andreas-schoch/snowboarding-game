@@ -3,7 +3,7 @@ import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaFixture} from '../../physics/RUBE/RubeFile';
-import {BaseEditorItem, RubeMetaLoader, Bounds} from '../../physics/RUBE/RubeMetaLoader';
+import {BaseEditorItem, Bounds} from '../../physics/RUBE/RubeMetaLoader';
 import {customPropsArrayToMap, RubeVectorArrayToXY, customPropsMapToArray, XYToRubeVectorArray, rubeToXY} from '../../physics/RUBE/rubeTransformers';
 import {EditorObject} from './EditorObject';
 import {EditorItemTracker} from './ItemTracker';
@@ -16,7 +16,7 @@ export class EditorTerrainChunk implements BaseEditorItem {
   private readonly setSignal: Setter<EditorTerrainChunk>;
   private pseudoAngle: number = 0;
 
-  constructor(private loader: RubeMetaLoader, public metaBody: MetaBody, private metaFixture: MetaFixture, public parent?: EditorObject) {
+  constructor(public metaBody: MetaBody, private metaFixture: MetaFixture, public parent?: EditorObject) {
     this.id = pseudoRandomId();
     const [signal, setSignal] = createSignal<EditorTerrainChunk>(this, {equals: false});
     this.signal = signal;

@@ -1,4 +1,4 @@
-import {Settings} from './Settings';
+import {PersistedStore} from './PersistedStore';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH} from './index';
 
 export class Backdrop {
@@ -13,14 +13,14 @@ export class Backdrop {
     this.resolutionMod = this.scene.cameras.main.width / DEFAULT_WIDTH;
 
     const g = this.scene.add.graphics();
-    g.fillStyle(Settings.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
+    g.fillStyle(PersistedStore.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
     g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.generateTexture('bg_sky', DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
     g.destroy();
 
     this.bgSky = this.registerLayer('bg_sky', '');
 
-    if (Settings.darkmodeEnabled()) {
+    if (PersistedStore.darkmodeEnabled()) {
       this.bgSpaceMid = this.registerLayer('bg_space_pack', 'bg_space_mid.png');
       this.bgSpaceFront = this.registerLayer('bg_space_pack', 'bg_space_front.png');
     }
@@ -28,7 +28,7 @@ export class Backdrop {
 
   update() {
     const {scrollX, scrollY, zoomX, zoomY} = this.scene.cameras.main;
-    if (Settings.darkmodeEnabled() && this.bgSpaceMid && this.bgSpaceFront) {
+    if (PersistedStore.darkmodeEnabled() && this.bgSpaceMid && this.bgSpaceFront) {
       this.bgSpaceMid.setTilePosition(scrollX * 0.01 * 0.2, scrollY * 0.01 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY));
       this.bgSpaceFront.setTilePosition(scrollX * 0.025 * 0.2, scrollY * 0.025 * 0.2).setScale(1 * (1 / zoomX), 1 * (1 / zoomY));
     }

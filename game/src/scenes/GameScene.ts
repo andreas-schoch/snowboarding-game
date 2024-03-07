@@ -2,7 +2,7 @@ import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..'
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {SoundManager} from '../SoundManager';
 import {Terrain} from '../Terrain';
 import {initSolidUI} from '../UI';
@@ -65,12 +65,14 @@ export class GameScene extends Phaser.Scene {
     new SoundManager(this);
     this.backdrop = new Backdrop(this);
 
-    pb.level.get(Settings.currentLevel()).then(async level => {
-      if (!level) throw new Error('Level not found: ' + Settings.currentLevel());
+    pb.level.get(PersistedStore.currentLevel()).then(async level => {
+      if (!level) throw new Error('Level not found: ' + PersistedStore.currentLevel());
       let rubeFile = await pb.level.getRubeFile(level);
+      if (!rubeFile) throw new Error('RubeFile not found for level: ' + PersistedStore.currentLevel());
       rubeFile = sanitizeRubeFile(rubeFile);
       const rubeExport = RubeFileToExport(this, rubeFile);
       GameInfo.currentLevel = level;
+      GameInfo.currentLevelScene = rubeFile;
 
       const loadedLevelScene = this.b2Physics.load(rubeExport);
       new Terrain(this, loadedLevelScene).draw();
@@ -87,6 +89,7 @@ export class GameScene extends Phaser.Scene {
       GameInfo.score = dummyScore;
       GameInfo.tsl.length = 0;
       GameInfo.currentLevel = null;
+      GameInfo.currentLevelScene = null;
       freeLeaked();
       this.sound.stopAll();
       this.scene.stop(SCENE_GAME);
@@ -100,6 +103,7 @@ export class GameScene extends Phaser.Scene {
       GameInfo.score = dummyScore;
       GameInfo.tsl.length = 0;
       GameInfo.currentLevel = null;
+      GameInfo.currentLevelScene = null;
       freeLeaked();
       this.scene.restart();
     });
@@ -124,7 +128,7 @@ export class GameScene extends Phaser.Scene {
 
 const dummyScore: IScoreNew = {
   user: '',
-  level: Settings.currentLevel(),
+  level: PersistedStore.currentLevel(),
   crashed: false,
   finishedLevel: false,
   tsl: '',

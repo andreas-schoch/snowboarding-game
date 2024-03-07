@@ -22,6 +22,12 @@ export class MetaObjectRenderer {
     }
   }
 
+  resetAll() {
+    // this.fixtureRenderer.resetAll();
+    this.terrainRenderer.resetAll();
+    this.imageRenderer.resetAll();
+  }
+
   private renderObject(object: EditorObject, offsetX = 0, offsetY = 0, offsetAngle = 0) {
     const position = object.getPosition();
     const x = position.x + offsetX;

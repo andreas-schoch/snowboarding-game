@@ -1,15 +1,16 @@
 import './base.css';
 import './index.css';
 import './kobalte/Menubar.css';
+import './kobalte/Tabs.css';
 import {Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {EditorUI} from './EditorUI/EditorUI';
 import {GameUI} from './GameUI/GameUI';
 import {UnsupportedBrowserNotice} from './UnsupportedBrowserNotice';
 
 const SolidUI = () => {
-  const editorOpen = Settings.editorOpen();
+  const editorOpen = PersistedStore.editorOpen();
 
   return <>
     <Switch>

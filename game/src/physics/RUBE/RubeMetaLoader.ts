@@ -3,6 +3,7 @@ import {EditorImage} from '../../editor/items/EditorImage';
 import {EditorObject} from '../../editor/items/EditorObject';
 import {EditorSensor} from '../../editor/items/EditorSensor';
 import {EditorTerrainChunk} from '../../editor/items/EditorTerrain';
+import {ILevel, ILevelNew} from '../../levels';
 import {RubeCustomPropsMap} from './EntityTypes';
 import {RubeFile} from './RubeFile';
 
@@ -13,6 +14,7 @@ export interface EditorItems {
   image: Record<EditorItem['id'], EditorImage>;
   // fixture: Record<EditorItem['id'], EditorFixture>;
   rubefile: RubeFile;
+  level: ILevel | ILevelNew;
 }
 
 export type Bounds = {x: number, y: number, width: number, height: number};
@@ -37,41 +39,42 @@ export type EditorItem = EditorObject | EditorTerrainChunk | EditorImage | Edito
 
 export class RubeMetaLoader {
 
-  constructor(public scene: Phaser.Scene) { }
+  constructor() { }
 
-  load(rubefile: RubeFile, parent?: EditorObject): EditorItems {
+  static load(level: ILevel | ILevelNew, rubefile: RubeFile, parent?: EditorObject): EditorItems {
     return {
       rubefile,
-      object: this.loadObjects(rubefile),
-      terrain: this.loadTerrainChunks(rubefile, parent),
-      sensor: this.loadSensors(rubefile, parent),
-      image: this.loadImages(rubefile, parent),
+      level,
+      object: RubeMetaLoader.loadObjects(level, rubefile),
+      terrain: RubeMetaLoader.loadTerrainChunks(rubefile, parent),
+      sensor: RubeMetaLoader.loadSensors(rubefile, parent),
+      image: RubeMetaLoader.loadImages(rubefile, parent),
       // fixture: this.loadFixtures(rubefile, parent),
     };
   }
 
-  private loadObjects(rubeFile: RubeFile) {
+  private static loadObjects(level: ILevel | ILevelNew, rubeFile: RubeFile) {
     const metaObjects = rubeFile.metaworld?.metaobject || [];
     const objects: Record<EditorObject['id'], EditorObject> = {};
     for (const metaObject of metaObjects) {
-      const object = new EditorObject(this, metaObject);
+      const object = new EditorObject(level, metaObject);
       objects[object.id] = object;
     }
     return objects;
   }
 
-  private loadImages(rubeFile: RubeFile, parent?: EditorObject) {
+  private static loadImages(rubeFile: RubeFile, parent?: EditorObject) {
     const metaImages = rubeFile.metaworld?.metaimage || [];
     const images: Record<EditorImage['id'], EditorImage> = {};
     for (const metaImage of metaImages) {
       const body = rubeFile.metaworld?.metabody?.find(b => b.id === metaImage.body);
-      const image = new EditorImage(this, metaImage, body, parent);
+      const image = new EditorImage(metaImage, body, parent);
       images[image.id] = image;
     }
     return images;
   }
 
-  private loadTerrainChunks(rubeFile: RubeFile, parent?: EditorObject) {
+  private static loadTerrainChunks(rubeFile: RubeFile, parent?: EditorObject) {
     const terrainChunks: Record<EditorTerrainChunk['id'], EditorTerrainChunk> = {};
     if (!rubeFile.metaworld?.metabody) return terrainChunks;
 
@@ -85,7 +88,7 @@ export class RubeMetaLoader {
         if (metaFixture.shapes.length > 1) throw new Error('Multiple shapes found in the fixture');
         const metaFixtureShape = metaFixture.shapes[0];
         if (metaFixtureShape.type !== 'line' && metaFixtureShape.type !== 'loop') throw new Error('Only polygon shapes are supported for terrain chunks');
-        const chunk = new EditorTerrainChunk(this, metaBody, metaFixture, parent);
+        const chunk = new EditorTerrainChunk(metaBody, metaFixture, parent);
         terrainChunks[chunk.id] = chunk;
       }
     }
@@ -106,7 +109,7 @@ export class RubeMetaLoader {
   //   return fixtures;
   // }
 
-  private loadSensors(rubeFile: RubeFile, parent?: EditorObject) {
+  private static loadSensors(rubeFile: RubeFile, parent?: EditorObject) {
     const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0].customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
     const sensors: Record<EditorSensor['id'], EditorSensor> = {};
     for (const body of sensorBodies) {

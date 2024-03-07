@@ -4,7 +4,7 @@ import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaImage} from '../../physics/RUBE/RubeFile';
-import {BaseEditorItem, RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
+import {BaseEditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {customPropsArrayToMap, rubeToXY, customPropsMapToArray} from '../../physics/RUBE/rubeTransformers';
 import {EditorObject} from './EditorObject';
 import {EditorItemTracker} from './ItemTracker';
@@ -16,7 +16,7 @@ export class EditorImage implements BaseEditorItem {
   readonly signal: Accessor<EditorImage>;
   private readonly setSignal: Setter<EditorImage>;
 
-  constructor(private loader: RubeMetaLoader, public meta: MetaImage, private metaBody?: MetaBody, public parent?: EditorObject) {
+  constructor(public meta: MetaImage, public metaBody?: MetaBody, public parent?: EditorObject) {
     this.id = pseudoRandomId();
     const [signal, setSignal] = createSignal<EditorImage>(this, {equals: false});
     this.signal = signal;
@@ -25,6 +25,11 @@ export class EditorImage implements BaseEditorItem {
 
   getCustomProps() {
     return customPropsArrayToMap(this.meta.customProperties);
+  }
+
+  getBodyCustomProps(): RubeCustomPropsMap | undefined {
+    if (!this.metaBody) return;
+    return customPropsArrayToMap(this.metaBody.customProperties);
   }
 
   getName() {

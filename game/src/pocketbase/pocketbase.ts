@@ -1,6 +1,6 @@
 
 import PocketBase, {RecordModel} from 'pocketbase';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {env} from '../environment';
 import {Level} from './Level';
 import {User} from './User';
@@ -19,7 +19,7 @@ export class PocketbaseService {
     this.pb = new PocketBase(env.POCKETBASE_API);
     this.pb.authStore.onChange((token, model) => {
       console.debug('AuthStore.onChange:', {token, model});
-      if (model && Settings.username() !== model.username) Settings.set('userName', model.username);
+      if (model && PersistedStore.username() !== model.username) PersistedStore.set('userName', model.username);
     });
 
     this.pb.beforeSend = async (url, options) => {

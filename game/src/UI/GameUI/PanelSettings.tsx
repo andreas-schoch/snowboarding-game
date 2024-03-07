@@ -1,5 +1,5 @@
 import {Component, onMount} from 'solid-js';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {ButtonPrimary} from '../general/Button';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
@@ -10,17 +10,17 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
   onMount(() => {
     const radios = Array.from(document.querySelectorAll<HTMLInputElement>('#settings-form input[name="resolution"]'));
     if (!radios.length) throw new Error('resolution radio inputs not found');
-    for (const radio of radios) if (Number(radio.value) === Settings.resolutionScale()) radio.checked = true;
+    for (const radio of radios) if (Number(radio.value) === PersistedStore.resolutionScale()) radio.checked = true;
   });
 
   const handleSaveSettings = (evt: SubmitEvent) => {
     evt.preventDefault();
-    Settings.set('resolution', submitForm.resolution.value || '1');
-    Settings.set('volumeMusic', submitForm.volumeMusic.value);
-    Settings.set('volumeSfx', submitForm.volumeSfx.value);
-    Settings.set('darkmodeEnabled', String(submitForm.darkmodeEnabled.checked));
-    Settings.set('fps', String(submitForm.fpsCounter.checked));
-    Settings.set('betaFeaturesEnabled', String(submitForm.betaFeaturesEnabled.checked));
+    PersistedStore.set('resolution', submitForm.resolution.value || '1');
+    PersistedStore.set('volumeMusic', submitForm.volumeMusic.value);
+    PersistedStore.set('volumeSfx', submitForm.volumeSfx.value);
+    PersistedStore.set('darkmodeEnabled', String(submitForm.darkmodeEnabled.checked));
+    PersistedStore.set('fps', String(submitForm.fpsCounter.checked));
+    PersistedStore.set('betaFeaturesEnabled', String(submitForm.betaFeaturesEnabled.checked));
     location.reload();
   };
 
@@ -51,7 +51,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-3">Volume Music</span>
           <span class="col col-9">
             <div class="range-field">
-              <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value={Settings.volumeMusic()} aria-label="Music volume" />
+              <input type="range" id="volumeMusic" name="volumeMusic" min="0" max="100" value={PersistedStore.volumeMusic()} aria-label="Music volume" />
             </div>
           </span>
         </div>
@@ -60,7 +60,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-3">Volume SFX</span>
           <span class="col col-9">
             <div class="range-field">
-              <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value={Settings.volumeSfx()} aria-label="SFX volume" />
+              <input type="range" id="volumeSfx" name="volumeSfx" min="0" max="100" value={PersistedStore.volumeSfx()} aria-label="SFX volume" />
             </div>
           </span>
         </div>
@@ -70,7 +70,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-9">
             <div class="switch">
               <label>
-                <input type="checkbox" name="darkmodeEnabled" aria-label="darkmode toggle" checked={Settings.darkmodeEnabled()} />
+                <input type="checkbox" name="darkmodeEnabled" aria-label="darkmode toggle" checked={PersistedStore.darkmodeEnabled()} />
                 <span class="lever" />
               </label>
             </div>
@@ -82,7 +82,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-9">
             <div class="switch">
               <label>
-                <input type="checkbox" name="fpsCounter" aria-label="show fps toggle" checked={Settings.fps()} />
+                <input type="checkbox" name="fpsCounter" aria-label="show fps toggle" checked={PersistedStore.fps()} />
                 <span class="lever" />
               </label>
             </div>
@@ -94,7 +94,7 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
           <span class="col col-9">
             <div class="switch">
               <label>
-                <input type="checkbox" name="betaFeaturesEnabled" aria-label="enable beta features" checked={Settings.betaFeaturesEnabled()} />
+                <input type="checkbox" name="betaFeaturesEnabled" aria-label="enable beta features" checked={PersistedStore.betaFeaturesEnabled()} />
                 <span class="lever" />
               </label>
             </div>

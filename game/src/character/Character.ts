@@ -1,5 +1,5 @@
 import {b2, rubeFileSerializer} from '..';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {arrayBufferToString} from '../helpers/binaryTransform';
 import {Physics} from '../physics/Physics';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
@@ -130,7 +130,7 @@ export class Character {
   }
 
   private loadCharacter(x: number, y: number): LoadedScene {
-    const buffer = this.scene.cache.binary.get(Settings.selectedCharacter());
+    const buffer = this.scene.cache.binary.get(PersistedStore.selectedCharacter());
     const encoded = arrayBufferToString(buffer);
     let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
     characterRubeFile = sanitizeRubeFile(characterRubeFile);

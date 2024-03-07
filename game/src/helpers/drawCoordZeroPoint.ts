@@ -1,5 +1,7 @@
-export const drawCoordZeroPoint = (scene: Phaser.Scene) => {
-  const graphics = scene.add.graphics();
+let graphics: Phaser.GameObjects.Graphics;
+export function drawCoordZeroPoint(scene: Phaser.Scene) {
+  graphics = graphics || scene.add.graphics();
+  graphics.clear();
   graphics.lineStyle(5, 0x048708, 1.0);
   graphics.beginPath();
   graphics.moveTo(0, 0);
@@ -15,4 +17,4 @@ export const drawCoordZeroPoint = (scene: Phaser.Scene) => {
   graphics.closePath();
   graphics.setDepth(1000);
   graphics.strokePath();
-};
+}

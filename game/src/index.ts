@@ -1,7 +1,7 @@
 import 'phaser';
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
-import {Settings} from './Settings';
+import {PersistedStore} from './PersistedStore';
 import {RubeFile} from './physics/RUBE/RubeFile';
 import {PocketbaseService} from './pocketbase/pocketbase';
 import {TrickScore} from './pocketbase/types';
@@ -31,7 +31,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
   version: '2.0.1',
   type: Phaser.WEBGL,
-  backgroundColor: Settings.darkmodeEnabled() ? '0x666666' : '0x3470c6',
+  backgroundColor: PersistedStore.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
   parent: 'root-game',
   // dom: { createContainer: true }, // Not using inbuilt way to display UI as it sucks with dynamic scaling and resizing
@@ -43,8 +43,8 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: Settings.widthScaled(),
-    height: Settings.heightScaled(),
+    width: PersistedStore.widthScaled(),
+    height: PersistedStore.heightScaled(),
   },
   scene: [PreloadScene, GameScene, EditorScene],
   plugins: {
@@ -76,7 +76,7 @@ window.onload = async () => {
 
   game = new Phaser.Game(gameConfig);
 
-  if (navigator.onLine && Settings.fps()) {
+  if (navigator.onLine && PersistedStore.fps()) {
     // Display fps and memory usage
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -84,7 +84,7 @@ window.onload = async () => {
   }
 };
 
-export const DEBUG_LOGS = Settings.debugLogs();
+export const DEBUG_LOGS = PersistedStore.debugLogs();
 if (!DEBUG_LOGS) {
   const noop = () => {};
   console.debug = noop;

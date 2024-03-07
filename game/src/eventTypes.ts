@@ -21,12 +21,13 @@ export const RESTART_GAME = 'restart_game';
 
 export const EDITOR_OPEN = 'editor_open';
 export const EDITOR_EXIT = 'editor_exit';
-export const EDITOR_SCENE_CHANGED = 'editor_scene_changed';
+export const EDITOR_RENDER_CHANGE = 'editor_scene_changed';
 export const EDITOR_ITEM_SELECTED = 'editor_item_selected';
 export const EDITOR_ITEM_PLACED = 'editor_item_placed';
 export const EDITOR_ITEM_REMOVED = 'editor_item_removed';
 
 export const RUBE_FILE_LOADED = 'rube_scene_loaded';
 export const RUBE_FILE_CHANGED = 'rube_scene_changed';
+export const EDITOR_RESET_RENDERED = 'editor_reset_rendered';
 
 export const PH_DROP_BROWSER_ITEM = 'drop_browser_item';

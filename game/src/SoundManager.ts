@@ -1,5 +1,5 @@
 import {GameInfo} from './GameInfo';
-import {Settings} from './Settings';
+import {PersistedStore} from './PersistedStore';
 import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME} from './eventTypes';
 import {IScore} from './pocketbase/types';
 import {GameScene} from './scenes/GameScene';
@@ -16,11 +16,11 @@ export class SoundManager {
   private sfx_snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
   constructor(private scene: GameScene) {
-    const musicVolume = Settings.volumeMusic() / 100;
+    const musicVolume = PersistedStore.volumeMusic() / 100;
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
     this.music = this.scene.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 0.5, rate: 1, delay: 1, detune: 0});
     this.music.play();
-    const sfxVolume = Settings.volumeSfx() / 100;
+    const sfxVolume = PersistedStore.volumeSfx() / 100;
     this.sfx_pickup_present = this.scene.sound.add('pickup_present', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
     this.sfx_death = this.scene.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume * 0.8});
     this.sfx_grunt = this.scene.sound.add('grunt', {detune: 400, rate: 1.25, volume: sfxVolume * 0.5});
@@ -69,7 +69,7 @@ export class SoundManager {
       const currentDetune = this.sfx_snowboardSlide.detune;
       const newDetune = currentDetune + lerpFactor * (target - currentDetune);
       this.sfx_snowboardSlide.setDetune(newDetune);
-      const sfxVolume = Settings.volumeSfx() / 100;
+      const sfxVolume = PersistedStore.volumeSfx() / 100;
       const percentage = Math.min(impulse / maxImpulse, 1) * sfxVolume * 0.5;
       const volume = Math.max(Math.min(percentage, 1), 0.2);
       this.sfx_snowboardSlide.setVolume(volume);

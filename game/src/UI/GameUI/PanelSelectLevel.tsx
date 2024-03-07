@@ -1,7 +1,7 @@
 import {Component, For, createResource} from 'solid-js';
 import {pb} from '../..';
 import {GameInfo} from '../../GameInfo';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {RESTART_GAME} from '../../eventTypes';
 import {ILevel, LocalLevelKeys} from '../../levels';
 import {BasePanel} from './BasePanel';
@@ -13,7 +13,7 @@ export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = pr
   const [levels] = createResource<ILevel[]>(() => pb.level.list());
 
   const handleSelectLevel = (id: LocalLevelKeys) => {
-    Settings.set('levelCurrent', id);
+    PersistedStore.set('levelCurrent', id);
     GameInfo.observer.emit(RESTART_GAME);
   };
 

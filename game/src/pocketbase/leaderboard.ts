@@ -2,7 +2,7 @@
 import PocketBase, {RecordListOptions, RecordModel} from 'pocketbase';
 import {scoreLogSerializer} from '..';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {arrayBufferToString, stringToBlob} from '../helpers/binaryTransform';
 import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {ILevel, LocalLevelKeys} from '../levels';
@@ -71,7 +71,7 @@ export class Leaderboard {
 
     if (!score.tsl) throw new Error('Missing tsl');
     score.user = loggedInUser.id;
-    score.level = Settings.currentLevel();
+    score.level = PersistedStore.currentLevel();
 
     this.saveScoreLocally(score);
 
@@ -92,10 +92,10 @@ export class Leaderboard {
   }
 
   private saveScoreLocally(score: IScoreNew) {
-    const localScoresMap: Record<keyof LocalLevelKeys, IScoreNew[]> = Settings.localScores();
+    const localScoresMap: Record<keyof LocalLevelKeys, IScoreNew[]> = PersistedStore.localScores();
     const localScoresLevel = localScoresMap[score.level] || [];
     localScoresLevel.push(score);
     localScoresMap[score.level] = localScoresLevel;
-    Settings.set('userScores', JSON.stringify(localScoresMap));
+    PersistedStore.set('userScores', JSON.stringify(localScoresMap));
   }
 }

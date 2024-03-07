@@ -1,5 +1,5 @@
 import {ppm} from '../..';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {XY} from '../../Terrain';
 import {throttle} from '../../helpers/debounce';
 import {EditorObject} from '../items/EditorObject';
@@ -45,6 +45,14 @@ export class MetaTerrainRenderer {
     }
   }
 
+  resetAll() {
+    for (const context of this.contextMap.values()) {
+      context.terrain.destroy();
+      context.gizmo.destroy();
+    }
+    this.contextMap.clear();
+  }
+
   private drawChunk(context: TerrainChunkContext, pointsWorld: XY[]): void {
     const minX = Math.min(...pointsWorld.map(point => point.x));
     const minY = Math.min(...pointsWorld.map(point => point.y));
@@ -61,7 +69,7 @@ export class MetaTerrainRenderer {
       setSelected(root);
     });
 
-    graphics.fillStyle(Settings.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);
+    graphics.fillStyle(PersistedStore.darkmodeEnabled() ? 0x030203 : 0xb3cef2, 1);
     graphics.fillPoints(pointsLocal.points, true, false);
 
     // The terrain within RUBE is represented as chunks of non-loopped edge fixtures

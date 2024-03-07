@@ -1,4 +1,5 @@
 import {ILevel} from './levels';
+import {RubeFile} from './physics/RUBE/RubeFile';
 import {IScoreNew, TrickScore} from './pocketbase/types';
 
 export class GameInfo {
@@ -7,6 +8,7 @@ export class GameInfo {
   static possessedCharacterId: string;
   static score: IScoreNew | null = null;
   static currentLevel: ILevel | null = null;
+  static currentLevelScene: RubeFile | null = null;
   static crashed = false;
   static tsl: TrickScore[] = [];
 }

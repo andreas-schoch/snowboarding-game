@@ -1,13 +1,16 @@
 import {Menubar} from '@kobalte/core';
-import {Component, Show, createSignal} from 'solid-js';
+import {Component, Show, createSignal, For} from 'solid-js';
 import {Dynamic, Portal} from 'solid-js/web';
 import {rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
-import {Settings} from '../../Settings';
-import {editorItems} from '../../editor/items/ItemTracker';
-import {EDITOR_EXIT} from '../../eventTypes';
-import {downloadBlob} from '../../helpers/binaryTransform';
-import {RubeMetaSerializer} from '../../physics/RUBE/RubeMetaSerializer';
+import {PersistedStore} from '../../PersistedStore';
+import {editorItems, setEditorItems} from '../../editor/items/ItemTracker';
+import {EDITOR_EXIT, EDITOR_RESET_RENDERED, RUBE_FILE_LOADED} from '../../eventTypes';
+import {arrayBufferToString, downloadBlob} from '../../helpers/binaryTransform';
+import {openFileSelector} from '../../helpers/openFileSelector';
+import {RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
+import {editorItemsToRubefile} from '../../physics/RUBE/RubeMetaSerializer';
+import {registerNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
 
 type DialogName = 'Help' | 'About' | 'Settings';
 const [activeDialog, setActiveDialog] = createSignal<DialogName | null>(null);
@@ -16,7 +19,7 @@ export const Actionbar: Component = () => {
 
   const handleOpenGame = () => {
     EditorInfo.observer.emit(EDITOR_EXIT);
-    Settings.set('editorOpen', 'false');
+    PersistedStore.set('editorOpen', 'false');
   };
 
   return <>
@@ -27,7 +30,7 @@ export const Actionbar: Component = () => {
       </div>
 
       <div class="flex h-full flex-col pt-2">
-        <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">Dummy Level Name</div>
+        <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">{editorItems().level.name}</div>
 
         <Menubar.Root class="menubar__root mt-auto flex items-center gap-x-6 pr-5">
           <MenuFile />
@@ -57,20 +60,56 @@ export const Actionbar: Component = () => {
 };
 
 const MenuFile: Component = () => {
-  const metaSerializer = new RubeMetaSerializer();
+
+  function openEmptyLevel() {
+    const [level, rubefile] = registerNewLevel();
+    const items = RubeMetaLoader.load(level, rubefile);
+    PersistedStore.addEditorRecentLevel(level, rubefile);
+    setEditorItems(items);
+    EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
+  }
 
   function exportAsRube() {
     const items = editorItems();
-    const rubefile = metaSerializer.serialize(items);
+    const rubefile = editorItemsToRubefile(items);
     downloadBlob(JSON.stringify(rubefile), 'level.rube', 'application/json');
   }
 
   function exportAsBinary() {
     const items = editorItems();
-    const rubefile = metaSerializer.serialize(items);
+    const rubefile = editorItemsToRubefile(items);
     const binary = rubeFileSerializer.encode(rubefile);
     downloadBlob(binary, 'level.bin', 'application/octet-stream');
   }
+
+  async function importFromRube() {
+    const file = await openFileSelector('.rube');
+    if (file) {
+      const text = await file.text();
+      const [level, rubefile] = registerNewLevel(JSON.parse(text));
+      const items = RubeMetaLoader.load(level, rubefile);
+      PersistedStore.addEditorRecentLevel(level, rubefile);
+      setEditorItems(items);
+      EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
+      EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+    }
+  }
+
+  async function importFromBin() {
+    const file = await openFileSelector('.bin');
+    if (file) {
+      const buffer = await file.arrayBuffer();
+      const binaryString = arrayBufferToString(buffer);
+      const [level, rubefile] = registerNewLevel(rubeFileSerializer.decode(binaryString));
+      const items = RubeMetaLoader.load(level, rubefile);
+      PersistedStore.addEditorRecentLevel(level, rubefile);
+      setEditorItems(items);
+      EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
+      EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+    }
+  }
+
+  const recent = PersistedStore.editorRecentLevels();
 
   return <>
     <Menubar.Menu>
@@ -79,7 +118,7 @@ const MenuFile: Component = () => {
       <Menubar.Portal>
         <Menubar.Content class="menubar__content">
 
-          <Menubar.Item class="menubar__item">
+          <Menubar.Item class="menubar__item" onSelect={() => openEmptyLevel()}>
             New <div class="menubar__item-right-slot"><kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>N</kbd></div>
           </Menubar.Item>
 
@@ -96,11 +135,11 @@ const MenuFile: Component = () => {
             </Menubar.SubTrigger>
             <Menubar.Portal>
               <Menubar.SubContent class="menubar__sub-content">
-                <Menubar.Item class="menubar__item">Level 001</Menubar.Item>
-                <Menubar.Item class="menubar__item">Level 002</Menubar.Item>
-                <Menubar.Item class="menubar__item">Level 003</Menubar.Item>
-                <Menubar.Item class="menubar__item">Level 004</Menubar.Item>
-                <Menubar.Item class="menubar__item">Level 005</Menubar.Item>
+                <For each={recent} fallback={<div>No recent</div>}>
+                  {(item) => (
+                    <Menubar.Item class="menubar__item">{item.name}</Menubar.Item>
+                  )}
+                </For>
               </Menubar.SubContent>
             </Menubar.Portal>
           </Menubar.Sub>
@@ -123,8 +162,8 @@ const MenuFile: Component = () => {
             </Menubar.SubTrigger>
             <Menubar.Portal>
               <Menubar.SubContent class="menubar__sub-content">
-                <Menubar.Item class="menubar__item">from .bin</Menubar.Item>
-                <Menubar.Item class="menubar__item">from .rube</Menubar.Item>
+                <Menubar.Item class="menubar__item" onSelect={importFromBin}>from .bin</Menubar.Item>
+                <Menubar.Item class="menubar__item" onSelect={importFromRube}>from .rube</Menubar.Item>
               </Menubar.SubContent>
             </Menubar.Portal>
           </Menubar.Sub>
@@ -162,7 +201,8 @@ const MenuEdit: Component = () => {
         <Menubar.Content class="menubar__content">
 
           <Menubar.Item class="menubar__item">
-          undo <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Z</kbd></div>
+            <span>undo</span>
+            <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Z</kbd></div>
           </Menubar.Item>
 
           <Menubar.Item class="menubar__item">

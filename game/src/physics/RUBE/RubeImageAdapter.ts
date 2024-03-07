@@ -1,5 +1,5 @@
 import {ppm} from '../..';
-import {Settings} from '../../Settings';
+import {PersistedStore} from '../../PersistedStore';
 import {Physics} from '../Physics';
 import {BodyEntityData, RubeCustomPropsMap} from './EntityTypes';
 import {RubeImage} from './RubeExport';
@@ -23,7 +23,7 @@ export class RubeImageAdapter implements IBaseAdapter {
     if (!pos) return null;
 
     const textureFrame = (file || '').split('/').reverse()[0];
-    const textureAtlas = isPlayerCharacterPart ? Settings.selectedCharacterSkin() : imageCustomProps['phaserTexture'] as string;
+    const textureAtlas = isPlayerCharacterPart ? PersistedStore.selectedCharacterSkin() : imageCustomProps['phaserTexture'] as string;
 
     const img: Phaser.GameObjects.Image = this.scene.add.image(
       pos.x * ppm,
@@ -40,7 +40,7 @@ export class RubeImageAdapter implements IBaseAdapter {
     img.setDepth(renderOrder);
     img.setDataEnabled();
 
-    if (Settings.darkmodeEnabled()) {
+    if (PersistedStore.darkmodeEnabled()) {
       const isLight = bodyEntityData?.customProps?.['light'] === true || textureFrame === 'present_temp.png';
       if (isPlayerCharacterPart) img.setTintFill(0x000000);
       else if (isLight) img.setTintFill(0xbbbbbb);

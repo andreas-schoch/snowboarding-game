@@ -3,37 +3,27 @@ import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {initSolidUI} from '../UI';
 import {PlaceItemInfo} from '../UI/EditorUI/Browser';
 import {EditorController} from '../controllers/EditorController';
 import {EditorImage} from '../editor/items/EditorImage';
 import {EditorObject} from '../editor/items/EditorObject';
-import {EditorItemTracker, setEditorItems} from '../editor/items/ItemTracker';
-import {MetaImageRenderer} from '../editor/renderers/MetaImageRenderer';
-import {MetaObjectRenderer} from '../editor/renderers/MetaObjectRenderer';
-import {MetaTerrainRenderer} from '../editor/renderers/MetaTerrainRenderer';
-import {EDITOR_EXIT, EDITOR_ITEM_PLACED, EDITOR_SCENE_CHANGED, RUBE_FILE_LOADED} from '../eventTypes';
-import {drawCoordZeroPoint} from '../helpers/drawCoordZeroPoint';
-import {ILevel} from '../levels';
-import {Physics} from '../physics/Physics';
-import {MetaImage, MetaObject} from '../physics/RUBE/RubeFile';
-import {EditorItem, EditorItems, RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
-import {generateEmptyRubeFile} from '../physics/RUBE/generateEmptyRubeFile';
+import {EditorItemTracker, editorItems, setEditorItems} from '../editor/items/ItemTracker';
+import {EditorRenderer} from '../editor/renderers/EditorRenderer';
+import {EDITOR_EXIT, EDITOR_ITEM_PLACED, RUBE_FILE_LOADED} from '../eventTypes';
+import {ILevel, ILevelNew, isLevel} from '../levels';
+import {MetaImage, MetaObject, RubeFile} from '../physics/RUBE/RubeFile';
+import {RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
+import {registerNewLevel} from '../physics/RUBE/generateEmptyRubeFile';
 
 export class EditorScene extends Phaser.Scene {
-  private b2Physics: Physics;
   private backdrop: Backdrop;
   private backdropGrid: BackdropGrid;
   private controller: EditorController;
-  private level: ILevel | null = null;
 
   constructor() {
     super({key: SCENE_EDITOR});
-  }
-
-  private init(data: {level: ILevel | null}) {
-    this.level = data.level;
   }
 
   private preload() {
@@ -45,49 +35,60 @@ export class EditorScene extends Phaser.Scene {
     EditorInfo.observer = new Phaser.Events.EventEmitter();
     EditorInfo.filename = 'level_001';
     EditorInfo.camera = this.cameras.main;
+    EditorInfo.phaserScene = this;
+    EditorInfo.metaLoader = new RubeMetaLoader();
 
     this.backdrop = new Backdrop(this);
     this.backdropGrid = new BackdropGrid(this);
-    this.b2Physics = new Physics(this, {gravityX: 0, gravityY: -10, debugDrawEnabled: true});
     this.controller = new EditorController(this);
 
-    drawCoordZeroPoint(this);
     initSolidUI('root-ui');
+    this.registerListeners();
+    new EditorRenderer(this);
 
-    const recentLevels = Settings.editorRecentLevels();
-    const mostRecent: ILevel | undefined = recentLevels[0];
-    const metaLoader = new RubeMetaLoader(this);
-
-    pb.level.getRubeFile(mostRecent, generateEmptyRubeFile()).then(rubeFile => {
-      const items = metaLoader.load(rubeFile);
+    this.getRubefile().then(([level, rubeFile]) => {
+      const items = RubeMetaLoader.load(level, rubeFile);
       setEditorItems(items);
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
     });
 
-    const metaTerrainRenderer = new MetaTerrainRenderer(this);
-    const metaImageRenderer = new MetaImageRenderer(this);
-    const metaObjectRenderer = new MetaObjectRenderer(this);
+    // const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
+    // this.b2Physics.load(rubeScene, 0, 0);
+  }
 
-    EditorInfo.observer.on(RUBE_FILE_LOADED, (items: EditorItems) => {
-      metaTerrainRenderer.renderThrottled(Object.values(items.terrain));
-      metaImageRenderer.renderThrottled(Object.values(items.image));
-      metaObjectRenderer.renderThrottled(Object.values(items.object));
-    });
+  update(time: number, delta: number) {
+    this.controller.update(time, delta);
+    this.backdrop.update();
+    this.backdropGrid.update();
+  }
 
-    // TODO maybe use createEffect within editorUI or replace events with observable pattern
-    EditorInfo.observer.on(EDITOR_SCENE_CHANGED, (changed: EditorItem) => {
-      switch (changed.type) {
-      case 'terrain':
-        return metaTerrainRenderer.renderThrottled([changed]);
-      case 'image':
-        return metaImageRenderer.renderThrottled([changed]);
-      case 'object':
-        return metaObjectRenderer.renderThrottled([changed]);
+  private async getRubefile(): Promise<[ILevel | ILevelNew, RubeFile]> {
+    const recentLevels = PersistedStore.editorRecentLevels();
+    const mostRecent: ILevel | ILevelNew | undefined = recentLevels[0];
+
+    // TODO at some point need to have a way to check the modified date and show a dialog to the user if they want to load the latest version
+    if(isLevel(mostRecent)) {
+      const rubefile = await pb.level.getRubeFile(mostRecent);
+      if (rubefile) {
+        PersistedStore.addEditorRecentLevel(mostRecent, rubefile);
+        return [mostRecent, rubefile];
       }
-    });
+    }
+
+    const mostRecentRubefileLocal = PersistedStore.getEditorRubefile(mostRecent);
+    if (mostRecentRubefileLocal) return [mostRecent, mostRecentRubefileLocal];
+
+    console.debug('No level found. Creating new one...');
+    const [level, file] = registerNewLevel();
+    PersistedStore.addEditorRecentLevel(level, file);
+    return [level, file];
+  }
+
+  private registerListeners() {
 
     EditorInfo.observer.on(EDITOR_ITEM_PLACED, (info: PlaceItemInfo) => {
       const {x, y, item} = info;
+      const items = editorItems();
 
       switch (item.type) {
       case 'object': {
@@ -103,7 +104,7 @@ export class EditorScene extends Phaser.Scene {
           customProperties: []
         };
 
-        const editorItem = new EditorObject(metaLoader, metaObject);
+        const editorItem = new EditorObject(items.level, metaObject);
         editorItem.setPosition({x: x / ppm, y: y / ppm});
         break;
       }
@@ -125,7 +126,7 @@ export class EditorScene extends Phaser.Scene {
           ]
         };
 
-        const editorItem = new EditorImage(metaLoader, metaImage, undefined);
+        const editorItem = new EditorImage(metaImage, undefined);
         editorItem.setPosition({x: x / ppm, y: y / ppm});
       }
 
@@ -140,15 +141,6 @@ export class EditorScene extends Phaser.Scene {
       this.scene.stop(SCENE_EDITOR);
       this.scene.start(SCENE_GAME);
     });
-
-    // const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
-    // this.b2Physics.load(rubeScene, 0, 0);
-  }
-
-  update(time: number, delta: number) {
-    this.controller.update(time, delta);
-    this.backdrop.update();
-    this.backdropGrid.update();
   }
 }
 

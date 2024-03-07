@@ -1,5 +1,6 @@
 import {XY} from './Terrain';
 import {RubeFile} from './physics/RUBE/RubeFile';
+import {RubeMetaLoader} from './physics/RUBE/RubeMetaLoader';
 
 // import {BackgroundImage} from './editor/BackgroundImage';
 // import {Prefab} from './editor/PrefabObject';
@@ -11,6 +12,8 @@ export class EditorInfo {
   static readonly cursor: XY = {x: 0, y: 0};
   static readonly selectedEntityIds: string[] = [];
   static camera: Phaser.Cameras.Scene2D.Camera;
+  static phaserScene: Phaser.Scene;
+  static metaLoader: RubeMetaLoader;
 
   static selectedBodyA() {
     return this.selectedEntityIds[0];

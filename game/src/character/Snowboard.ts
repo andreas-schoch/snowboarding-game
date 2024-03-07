@@ -1,5 +1,5 @@
 import {GameInfo} from '../GameInfo';
-import {Settings} from '../Settings';
+import {PersistedStore} from '../PersistedStore';
 import {B2_POST_SOLVE, SURFACE_IMPACT} from '../eventTypes';
 import {b2, ppm} from '../index';
 import {IPostSolveEvent} from '../physics/Physics';
@@ -128,7 +128,7 @@ export class Snowboard {
 
   private initParticles() {
     const graphics = this.scene.add.graphics().setDepth(10000000);
-    graphics.fillStyle(Settings.darkmodeEnabled() ? 0x222222 : 0xffffff, 1);
+    graphics.fillStyle(PersistedStore.darkmodeEnabled() ? 0x222222 : 0xffffff, 1);
     graphics.fillCircle(8, 8, 8);
     graphics.generateTexture('circle_01', 16, 16);
     graphics.destroy();
