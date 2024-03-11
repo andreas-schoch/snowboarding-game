@@ -1,10 +1,10 @@
 import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {XY} from '../../Terrain';
+import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
 import {throttle} from '../../helpers/debounce';
 import {EditorObject} from '../items/EditorObject';
 import {EditorTerrainChunk} from '../items/EditorTerrain';
-import {selected, setSelected} from '../items/ItemTracker';
 
 type TerrainChunkContext = {
   chunk: EditorTerrainChunk;
@@ -45,7 +45,16 @@ export class MetaTerrainRenderer {
     }
   }
 
-  resetAll() {
+  clear(chunk: EditorTerrainChunk) {
+    const context = this.contextMap.get(chunk.id);
+    if (context) {
+      context.terrain.destroy();
+      context.gizmo.destroy();
+      this.contextMap.delete(chunk.id);
+    }
+  }
+
+  clearAll() {
     for (const context of this.contextMap.values()) {
       context.terrain.destroy();
       context.gizmo.destroy();

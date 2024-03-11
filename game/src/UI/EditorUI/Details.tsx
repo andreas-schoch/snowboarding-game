@@ -1,45 +1,55 @@
 import './Details.css';
 import {Component, Show} from 'solid-js';
+import {Commander} from '../../editor/command/Commander';
 import {EditorImage} from '../../editor/items/EditorImage';
-import {selected} from '../../editor/items/ItemTracker';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
+import {selected} from './globalSignals';
 
 const MAX_METERS_FROM_ZERO = 512;
 // TODO add UI to change step sizes for translate and rotate like in UE4
 
 export const Details: Component<ResizeProps> = props => {
 
-  const onPositionXChange = (newX: number) => {
+  const onPositionXChange = (newX: number, startX: number, final: boolean) => {
     const item = selected();
     if (!item) throw new Error('It should never be possible to update X when nothing is selected');
-    item.setPosition({x: newX, y: item.getPosition().y});
+
+    const prevPos = item.getPosition();
+    if (final) Commander.exec({type: 'move', prevX: startX, prevY: prevPos.y, newX, newY: prevPos.y, item});
+    else item.setPosition({x: newX, y: item.getPosition().y});
   };
 
-  const onPositionYChange = (newY: number) => {
+  const onPositionYChange = (newY: number, startY: number, final: boolean) => {
     const item = selected();
     if (!item) throw new Error('It should never be possible to update Y when nothing is selected');
-    item.setPosition({x: item.getPosition().x, y: newY});
+    const prevPos = item.getPosition();
+    if (final) Commander.exec({type: 'move', prevX: prevPos.x, prevY: startY, newX: prevPos.x, newY, item});
+    else item.setPosition({x: item.getPosition().x, y: newY});
   };
 
-  const onAngleChange = (newAngle: number) => {
+  const onAngleChange = (newAngle: number, startAngle: number, final: boolean) => {
     const item = selected();
     if (!item) throw new Error('It should never be possible to update angle when nothing is selected');
-    item.setAngle(newAngle);
+    if (final) Commander.exec({type: 'rotate', prevAngle: startAngle, newAngle, item});
+    else item.setAngle(newAngle);
   };
 
-  const onDepthChange = (newDepth: number) => {
+  const onDepthChange = (newDepth: number, startDepth: number, final: boolean) => {
     const item = selected();
     if (!item) throw new Error('It should never be possible to update depth when nothing is selected');
     if (item.type !== 'image') throw new Error('It should never be possible to update depth when the selected item is not an image');
-    item.setDepth(newDepth);
+    if (final) Commander.exec({type: 'depth', prevDepth: startDepth, newDepth, item});
+    else item.setDepth(newDepth);
   };
 
+  let nameStart = '';
   const onNameChange = (e: Event) => {
     const item = selected();
     if (!item) throw new Error('It should never be possible to update name when nothing is selected');
     const target = e.target as HTMLInputElement;
-    item.setName(target.value);
+    Commander.exec({type: 'rename', prevName: nameStart, newName: target.value, item});
+    nameStart = target.value;
   };
 
   return <>
@@ -58,7 +68,8 @@ export const Details: Component<ResizeProps> = props => {
                 id="property-name"
                 placeholder="enter body name"
                 value={selected()!.signal().getName()}
-                onInput={onNameChange}
+                onFocus={(e) => nameStart = (e.target as HTMLInputElement).value}
+                onChange={onNameChange}
               />
             </div>
           </div>

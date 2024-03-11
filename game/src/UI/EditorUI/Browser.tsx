@@ -1,10 +1,10 @@
 import {Tabs} from '@kobalte/core';
 import {Component, For, createSignal} from 'solid-js';
 import {EditorInfo} from '../../EditorInfo';
-import {activeBrowserItem, setActiveBrowserItem} from '../../editor/items/ItemTracker';
-import {EDITOR_ITEM_PLACED} from '../../eventTypes';
+import {Commander} from '../../editor/command/Commander';
 import {domToPhaserCoords} from '../../helpers/domToGameCoords';
 import {Pane, ResizeProps} from './Pane';
+import {activeBrowserItem, setActiveBrowserItem} from './globalSignals';
 
 export interface PlaceItemInfo {
   x: number;
@@ -12,7 +12,7 @@ export interface PlaceItemInfo {
   item: BrowserItem;
 }
 
-export type FilterCategory = 'all' | 'terrain' | 'static' | 'collectible' | 'dynamic' | 'decoration' | 'misc';
+export type FilterCategory = 'all' | 'static' | 'collectible' | 'dynamic' | 'decoration' | 'misc';
 
 interface BaseBrowserItem {
   id: string;
@@ -46,11 +46,9 @@ export const Browser: Component<ResizeProps> = props => {
   const itemsFiltered = () => items.filter(item => item.filterCategory === activeTab() || activeTab() === 'all');
 
   function onDragEnd(e: DragEvent, item: BrowserItem) {
-    const {x, y} = domToPhaserCoords(e, EditorInfo.camera);
-    const info: PlaceItemInfo = {x, y, item};
-    EditorInfo.observer.emit(EDITOR_ITEM_PLACED, info);
+    const {x, y} = domToPhaserCoords(e.clientX, e.clientY, EditorInfo.camera);
+    Commander.exec({type: 'add', item, x, y});
   }
-
   // TODO dedupe with Explorer
   const iconMap: Record<string, string> = {
     object: 'view_in_ar',
@@ -62,7 +60,7 @@ export const Browser: Component<ResizeProps> = props => {
   //  And in the future users could create their own prefabs which they can use in the editor
   const items: BrowserItem[] = [
     {id: 'item_0000', name: 'Character', filterCategory: 'misc', type: 'object', file: 'character_v02.rube', iconOverride: 'snowboarding'},
-    {id: 'item_0001', name: 'Terrain', filterCategory: 'terrain', type: 'terrain'},
+    {id: 'item_0001', name: 'Terrain', filterCategory: 'misc', type: 'terrain'},
     {id: 'item_0002', name: 'House', filterCategory: 'decoration', type: 'image', texture: 'atlas_environment', frame: 'cottage.png', scale: 7.7, aspectScale: 1, iconOverride: 'house'},
     {id: 'item_0003', name: 'Tree', filterCategory: 'decoration', type: 'image', texture: 'atlas_environment', frame: 'tree_01.png', scale: 6, aspectScale: 1, iconOverride: 'park'},
     {id: 'item_0004', name: 'Rock', filterCategory: 'static', type: 'object', file: 'rock.rube'},
@@ -82,16 +80,15 @@ export const Browser: Component<ResizeProps> = props => {
   return <>
     <Pane title="Item Browser" class="relative pl-[200px] @container" {...props}>
 
-      <Tabs.Root orientation="vertical" onChange={(value: string) => setActiveTab(value as FilterCategory)} class="scrollbar absolute bottom-0 left-0 top-8 w-[200px]">
+      <Tabs.Root activationMode='manual' orientation="vertical" onChange={(value: string) => setActiveTab(value as FilterCategory)} class="scrollbar absolute bottom-0 left-0 top-8 w-[200px]">
         <Tabs.List class="tabs__list overflow-y-visible">
           <Tabs.Indicator class="absolute inset-x-0 bg-stone-400 opacity-20 transition-all" />
-          <Tabs.Trigger class="tabs__trigger" value="all">All</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="terrain">Terrain</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="static">Static</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="dynamic">Dynamic</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="collectible">Collectible</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="decoration">Decoration</Tabs.Trigger>
-          <Tabs.Trigger class="tabs__trigger" value="misc">Misc</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="all">All</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="static">Static</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="dynamic">Dynamic</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="collectible">Collectible</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="decoration">Decoration</Tabs.Trigger>
+          <Tabs.Trigger class="inline-block px-4 py-2 outline-none" value="misc">Misc</Tabs.Trigger>
         </Tabs.List>
       </Tabs.Root>
 

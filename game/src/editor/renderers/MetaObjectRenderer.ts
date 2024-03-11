@@ -22,10 +22,18 @@ export class MetaObjectRenderer {
     }
   }
 
-  resetAll() {
+  clear(object: EditorObject) {
+    const images = Object.values(object.items.image);
+    const terrainChunks = Object.values(object.items.terrain);
+
+    for (const image of images) this.imageRenderer.clear(image.id);
+    for (const chunk of terrainChunks) this.terrainRenderer.clear(chunk);
+  }
+
+  clearAll() {
     // this.fixtureRenderer.resetAll();
-    this.terrainRenderer.resetAll();
-    this.imageRenderer.resetAll();
+    this.terrainRenderer.clearAll();
+    this.imageRenderer.clearAll();
   }
 
   private renderObject(object: EditorObject, offsetX = 0, offsetY = 0, offsetAngle = 0) {

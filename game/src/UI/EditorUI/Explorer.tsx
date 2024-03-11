@@ -1,7 +1,7 @@
 import {Component, For, createEffect, createMemo} from 'solid-js';
-import {editorItems, selected, setSelected} from '../../editor/items/ItemTracker';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {Pane, ResizeProps} from './Pane';
+import {editorItems, selected, setSelected} from './globalSignals';
 
 // type ItemExplorerProps = {editorItems: EditorItems ,selected: EditorItem | null, setSelected: (item: EditorItem) => void};
 export const Explorer: Component<ResizeProps> = props => {

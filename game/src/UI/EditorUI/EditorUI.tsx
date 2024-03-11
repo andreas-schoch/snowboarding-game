@@ -1,12 +1,13 @@
-import {Component, createEffect} from 'solid-js';
+import {Component, createEffect, Show} from 'solid-js';
+import {Dynamic, Portal} from 'solid-js/web';
 import {ppm} from '../..';
 import {EditorInfo} from '../../EditorInfo';
-import {selected} from '../../editor/items/ItemTracker';
 import {Actionbar} from './Actionbar';
 import {Browser} from './Browser';
 import {Canvas} from './Canvas';
 import {Details} from './Details';
 import {Explorer} from './Explorer';
+import {activeDialog, selected, setActiveDialogName} from './globalSignals';
 
 export const EditorUI: Component = () => {
 
@@ -26,5 +27,14 @@ export const EditorUI: Component = () => {
       <Canvas colStart={1} rowStart={1} colEnd={27} rowEnd={19} />
       <Browser colStart={1} rowStart={19} colEnd={27} rowEnd={26} />
     </div>
+
+    <Portal>
+      <Show when={activeDialog() !== null}>
+        <div class="absolute inset-0 z-[3000] bg-stone-950 opacity-75" onClick={() => setActiveDialogName(null)} />
+        <div class="absolute left-1/2 top-1/2 z-[3001] min-h-[400px] min-w-[300px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-stone-600 bg-stone-800">
+          <Dynamic component={activeDialog()!} />
+        </div>
+      </Show>
+    </Portal>
   </>;
 };

@@ -110,6 +110,14 @@ export class EditorTerrainChunk implements BaseEditorItem {
     this.signalUpdate();
   }
 
+  delete() {
+    EditorItemTracker.delete(this);
+  }
+
+  restore() {
+    EditorItemTracker.restore(this);
+  }
+
   private setVertices(vertices: XY[]) {
     this.metaFixture.vertices = XYToRubeVectorArray(vertices);
   }

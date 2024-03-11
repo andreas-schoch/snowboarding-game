@@ -33,8 +33,11 @@ export interface BaseEditorItem {
   setPosition(position: XY): void;
   setName(name: string): void;
   setAngle(angle: number): void;
+
+  delete(): void;
 }
 
+// TODO add new type of EditorItem called "Group" with can contain any amount of other non-group items, lists members in explorer as collapsible list
 export type EditorItem = EditorObject | EditorTerrainChunk | EditorImage | EditorSensor; // | EditorFixture;
 
 export class RubeMetaLoader {

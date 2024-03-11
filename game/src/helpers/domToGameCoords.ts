@@ -1,10 +1,10 @@
 import {game} from '..';
 import {XY} from '../Terrain';
 
-export function domToPhaserCoords(e: MouseEvent, camera: Phaser.Cameras.Scene2D.Camera): XY {
+export function domToPhaserCoords(clientX: number, clientY: number, camera: Phaser.Cameras.Scene2D.Camera): XY {
   const elementRect = game.canvas.getBoundingClientRect();
-  const clickX = e.clientX - elementRect.left;
-  const clickY = e.clientY - elementRect.top;
+  const clickX = clientX - elementRect.left;
+  const clickY = clientY - elementRect.top;
 
   const ratioX = clickX / elementRect.width;
   const ratioY = clickY / elementRect.height;

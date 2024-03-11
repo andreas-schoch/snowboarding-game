@@ -1,19 +1,16 @@
-import {SCENE_EDITOR, SCENE_GAME, pb, ppm, rootGame} from '..';
+import {SCENE_EDITOR, SCENE_GAME, pb, rootGame} from '..';
 import {Backdrop} from '../Backdrop';
 import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {PersistedStore} from '../PersistedStore';
 import {initSolidUI} from '../UI';
-import {PlaceItemInfo} from '../UI/EditorUI/Browser';
+import {setEditorItems} from '../UI/EditorUI/globalSignals';
 import {EditorController} from '../controllers/EditorController';
-import {EditorImage} from '../editor/items/EditorImage';
-import {EditorObject} from '../editor/items/EditorObject';
-import {EditorItemTracker, editorItems, setEditorItems} from '../editor/items/ItemTracker';
 import {EditorRenderer} from '../editor/renderers/EditorRenderer';
-import {EDITOR_EXIT, EDITOR_ITEM_PLACED, RUBE_FILE_LOADED} from '../eventTypes';
+import {EDITOR_EXIT, RUBE_FILE_LOADED} from '../eventTypes';
 import {ILevel, ILevelNew, isLevel} from '../levels';
-import {MetaImage, MetaObject, RubeFile} from '../physics/RUBE/RubeFile';
+import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
 import {registerNewLevel} from '../physics/RUBE/generateEmptyRubeFile';
 
@@ -43,7 +40,6 @@ export class EditorScene extends Phaser.Scene {
     this.controller = new EditorController(this);
 
     initSolidUI('root-ui');
-    this.registerListeners();
     new EditorRenderer(this);
 
     this.getRubefile().then(([level, rubeFile]) => {
@@ -52,8 +48,11 @@ export class EditorScene extends Phaser.Scene {
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
     });
 
-    // const rubeScene: RubeExport = this.cache.json.get(Settings.selectedCharacter());
-    // this.b2Physics.load(rubeScene, 0, 0);
+    EditorInfo.observer.on(EDITOR_EXIT, () => {
+      document.body.appendChild(rootGame);
+      this.scene.stop(SCENE_EDITOR);
+      this.scene.start(SCENE_GAME);
+    });
   }
 
   update(time: number, delta: number) {
@@ -82,65 +81,6 @@ export class EditorScene extends Phaser.Scene {
     const [level, file] = registerNewLevel();
     PersistedStore.addEditorRecentLevel(level, file);
     return [level, file];
-  }
-
-  private registerListeners() {
-
-    EditorInfo.observer.on(EDITOR_ITEM_PLACED, (info: PlaceItemInfo) => {
-      const {x, y, item} = info;
-      const items = editorItems();
-
-      switch (item.type) {
-      case 'object': {
-        const metaObject: MetaObject = {
-          id: EditorItemTracker.getNextMetaObjectId(),
-          name: item.name,
-          file: item.file,
-          path: '',
-          flip: false,
-          angle: 0,
-          scale: 1,
-          position: {x: 0, y: 0},
-          customProperties: []
-        };
-
-        const editorItem = new EditorObject(items.level, metaObject);
-        editorItem.setPosition({x: x / ppm, y: y / ppm});
-        break;
-      }
-      case 'image': {
-        const metaImage: MetaImage = {
-          id: EditorItemTracker.getNextMetaImageId(),
-          name: item.name,
-          file: item.frame,
-          center: {x: 0, y: 0},
-          scale: item.scale || 1,
-          filter: 0,
-          opacity: 1,
-          renderOrder: 10,
-          aspectScale: item.aspectScale || 1,
-          angle: 0,
-          flip: false,
-          customProperties: [
-            {name : 'phaserTexture', string: 'atlas_environment'}
-          ]
-        };
-
-        const editorItem = new EditorImage(metaImage, undefined);
-        editorItem.setPosition({x: x / ppm, y: y / ppm});
-      }
-
-      }
-
-      // const metaItem = EditorItemTracker.add(editorItem);
-      // EditorInfo.observer.emit(EDITOR_SCENE_CHANGED, metaItem);
-    });
-
-    EditorInfo.observer.on(EDITOR_EXIT, () => {
-      document.body.appendChild(rootGame);
-      this.scene.stop(SCENE_EDITOR);
-      this.scene.start(SCENE_GAME);
-    });
   }
 }
 

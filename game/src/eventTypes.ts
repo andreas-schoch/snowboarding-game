@@ -22,6 +22,7 @@ export const RESTART_GAME = 'restart_game';
 export const EDITOR_OPEN = 'editor_open';
 export const EDITOR_EXIT = 'editor_exit';
 export const EDITOR_RENDER_CHANGE = 'editor_scene_changed';
+export const EDITOR_RENDER_DELETE = 'editor_scene_delete';
 export const EDITOR_ITEM_SELECTED = 'editor_item_selected';
 export const EDITOR_ITEM_PLACED = 'editor_item_placed';
 export const EDITOR_ITEM_REMOVED = 'editor_item_removed';

@@ -1,9 +1,9 @@
 import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
+import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
 import {EditorObject} from '../items/EditorObject';
-import {selected, setSelected} from '../items/ItemTracker';
 
 type ImageContext = {
   imageId: string;
@@ -83,12 +83,19 @@ export class MetaImageRenderer {
     }
   }
 
-  resetAll() {
-    for (const context of this.contextMap.values()) {
+  clear(imageId: EditorImage['id']) {
+    const context = this.contextMap.get(imageId);
+    if (context) {
       context.image.destroy();
       context.gizmo.destroy();
+      this.contextMap.delete(imageId);
     }
-    this.contextMap.clear();
+  }
+
+  clearAll() {
+    for (const context of this.contextMap.values()) {
+      this.clear(context.imageId);
+    }
   }
 
   private getContext(imageId: string): ImageContext {

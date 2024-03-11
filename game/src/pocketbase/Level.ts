@@ -1,18 +1,53 @@
-import PocketBase from 'pocketbase';
+import PocketBase, {ListResult} from 'pocketbase';
 import {rubeFileSerializer} from '..';
 import {blobToString} from '../helpers/binaryTransform';
 import {ILevel, ILevelNew, isLevel} from '../levels';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {Auth} from './auth';
+import {IUser} from './types';
 
 export class Level {
   private collectionName = 'levels';
 
   constructor(private pb: PocketBase, private auth: Auth) { }
 
-  async list(): Promise<ILevel[]> {
-    return await this.pb.collection<ILevel>(this.collectionName).getFullList({sort: 'number', expand: 'owner'});
+  // async list(): Promise<ListResult<ILevel>> {
+  //   return await this.pb.collection<ILevel>(this.collectionName).get({sort: 'number', expand: 'user'});
+  // }
+
+  async listCampaign(page: number): Promise<ListResult<ILevel>> {
+    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 10, {
+      filter: 'user.username="System"',
+      sort: 'number',
+      expand: 'user'
+    });
+  }
+
+  async listMine(page: number): Promise<ListResult<ILevel>> {
+    const loggedInUser = this.auth.loggedInUser();
+    if (!loggedInUser) throw new Error('No user logged in. This should never happen');
+    console.log('loggedInUser', loggedInUser, loggedInUser.username);
+    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 3, {
+      filter: `user.username="${loggedInUser.username}"`,
+      // sort: 'modified',
+      expand: 'user'
+    });
+  }
+
+  async listUserMade(page: number): Promise<ListResult<ILevel>> {
+    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 3, {
+      filter: 'user.username!="System"',
+      // sort: sort, // TODO sort by most reviews or highest rating
+      expand: 'user'
+    });
+  }
+
+  async listByUser(username: IUser['username'], sort: string, page: number, ): Promise<ListResult<ILevel>> {
+    const filter = `user.username="${username}"`;
+    // const sort = 'number';
+    const resultList = await this.pb.collection<ILevel>('levels').getList(page, 10, {filter,sort});
+    return resultList;
   }
 
   async get(id: ILevel['id']): Promise<ILevel | null> {

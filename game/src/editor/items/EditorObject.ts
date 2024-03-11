@@ -81,6 +81,14 @@ export class EditorObject implements BaseEditorItem {
     this.signalUpdate();
   }
 
+  delete() {
+    EditorItemTracker.delete(this);
+  }
+
+  restore() {
+    EditorItemTracker.restore(this);
+  }
+
   private signalUpdate() {
     this.setSignal(this as EditorObject);
     EditorItemTracker.trackChange(this);

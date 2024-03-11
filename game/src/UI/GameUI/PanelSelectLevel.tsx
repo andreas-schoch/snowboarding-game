@@ -1,3 +1,4 @@
+import {ListResult} from 'pocketbase';
 import {Component, For, createResource} from 'solid-js';
 import {pb} from '../..';
 import {GameInfo} from '../../GameInfo';
@@ -10,7 +11,9 @@ import {PanelId} from './GameUI';
 export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = props => {
   const canGoBack = !GameInfo.crashed && !GameInfo.score?.finishedLevel;
 
-  const [levels] = createResource<ILevel[]>(() => pb.level.list());
+  const [listResult] = createResource<ListResult<ILevel>>(() => pb.level.listCampaign(1));
+
+  const items = () => listResult()?.items || [];
 
   const handleSelectLevel = (id: LocalLevelKeys) => {
     PersistedStore.set('levelCurrent', id);
@@ -20,7 +23,7 @@ export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = pr
   return (
     <BasePanel id='panel-select-level' title='Select Level' backBtn={canGoBack} setPanel={props.setPanel}>
       <div class='scrollbar max-h-[500px]'>
-        <For each={levels()} fallback={<div>Loading...</div>}>
+        <For each={items()} fallback={<div>Loading...</div>}>
           {item => (
             <div onClick={() => handleSelectLevel(item.id as LocalLevelKeys)} style={{'background-image': `url("${pb.getUrl(item, item.thumbnail)}`}} class="relative mb-3 mr-3 inline-block aspect-video w-[310px] overflow-hidden rounded-lg border-2 border-black bg-cover p-2 transition hover:border-gray-200">
               <span id={item.id} class="absolute -inset-px cursor-pointer rounded-lg" />

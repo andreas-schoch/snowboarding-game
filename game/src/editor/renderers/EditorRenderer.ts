@@ -1,5 +1,5 @@
 import {EditorInfo} from '../../EditorInfo';
-import {EDITOR_RESET_RENDERED, EDITOR_RENDER_CHANGE, RUBE_FILE_LOADED} from '../../eventTypes';
+import {EDITOR_RESET_RENDERED, EDITOR_RENDER_CHANGE, RUBE_FILE_LOADED, EDITOR_RENDER_DELETE} from '../../eventTypes';
 import {drawCoordZeroPoint} from '../../helpers/drawCoordZeroPoint';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
 import {MetaImageRenderer} from './MetaImageRenderer';
@@ -30,10 +30,21 @@ export class EditorRenderer {
       }
     });
 
+    EditorInfo.observer.on(EDITOR_RENDER_DELETE, (deleted: EditorItem) => {
+      switch (deleted.type) {
+      case 'terrain':
+        return metaTerrainRenderer.clear(deleted);
+      case 'image':
+        return metaImageRenderer.clear(deleted.id);
+      case 'object':
+        return metaObjectRenderer.clear(deleted);
+      }
+    });
+
     EditorInfo.observer.on(EDITOR_RESET_RENDERED, () => {
-      metaTerrainRenderer.resetAll();
-      metaImageRenderer.resetAll();
-      metaObjectRenderer.resetAll();
+      metaTerrainRenderer.clearAll();
+      metaImageRenderer.clearAll();
+      metaObjectRenderer.clearAll();
       drawCoordZeroPoint(this.scene);
     });
 

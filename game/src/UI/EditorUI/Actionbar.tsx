@@ -1,19 +1,16 @@
 import {Menubar} from '@kobalte/core';
-import {Component, Show, createSignal, For} from 'solid-js';
-import {Dynamic, Portal} from 'solid-js/web';
+import {Component, For} from 'solid-js';
 import {rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
 import {PersistedStore} from '../../PersistedStore';
-import {editorItems, setEditorItems} from '../../editor/items/ItemTracker';
+import {Commander} from '../../editor/command/Commander';
 import {EDITOR_EXIT, EDITOR_RESET_RENDERED, RUBE_FILE_LOADED} from '../../eventTypes';
 import {arrayBufferToString, downloadBlob} from '../../helpers/binaryTransform';
 import {openFileSelector} from '../../helpers/openFileSelector';
 import {RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
 import {editorItemsToRubefile} from '../../physics/RUBE/RubeMetaSerializer';
 import {registerNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
-
-type DialogName = 'Help' | 'About' | 'Settings';
-const [activeDialog, setActiveDialog] = createSignal<DialogName | null>(null);
+import {editorItems, setActiveDialogName, setEditorItems} from './globalSignals';
 
 export const Actionbar: Component = () => {
 
@@ -46,16 +43,6 @@ export const Actionbar: Component = () => {
         <i class="material-icons text-green-600">play_arrow</i>
       </button>
     </header>
-
-    <Portal>
-
-      <Show when={activeDialog() !== null}>
-        <div class="absolute inset-0 z-[3000] bg-stone-950 opacity-75" onClick={() => setActiveDialog(null)} />
-        <div class="absolute left-1/2 top-1/2 z-[3001] size-[500px] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-stone-600 bg-stone-800">
-          <Dynamic component={dialogNameMap[activeDialog()!]} />
-        </div>
-      </Show>
-    </Portal>
   </>;
 };
 
@@ -122,7 +109,7 @@ const MenuFile: Component = () => {
             New <div class="menubar__item-right-slot"><kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>N</kbd></div>
           </Menubar.Item>
 
-          <Menubar.Item class="menubar__item">
+          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialogName('Open Level')}>
             Open <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>O</kbd></div>
           </Menubar.Item>
 
@@ -200,12 +187,12 @@ const MenuEdit: Component = () => {
       <Menubar.Portal>
         <Menubar.Content class="menubar__content">
 
-          <Menubar.Item class="menubar__item">
+          <Menubar.Item class="menubar__item" onSelect={() => Commander.undo()}>
             <span>undo</span>
             <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Z</kbd></div>
           </Menubar.Item>
 
-          <Menubar.Item class="menubar__item">
+          <Menubar.Item class="menubar__item" onSelect={() => Commander.redo()}>
           redo <div class="menubar__item-right-slot"><kbd>Ctrl</kbd>+<kbd>Y</kbd></div>
           </Menubar.Item>
 
@@ -265,7 +252,7 @@ const MenuHelp: Component = () => {
       <Menubar.Portal>
         <Menubar.Content class="menubar__content">
 
-          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialog('Help')}>
+          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialogName('Help')}>
             Open Help Docs<div class="menubar__item-right-slot"><kbd>F1</kbd></div>
           </Menubar.Item>
 
@@ -273,17 +260,11 @@ const MenuHelp: Component = () => {
             Forum
           </Menubar.Item>
 
-          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialog('About')}>
+          <Menubar.Item class="menubar__item" onSelect={() => setActiveDialogName('About')}>
             About
           </Menubar.Item>
         </Menubar.Content>
       </Menubar.Portal>
     </Menubar.Menu>
   </>;
-};
-
-const dialogNameMap: Record<DialogName, Component> = {
-  Help: () => <div>Help</div>,
-  About: () => <div>About</div>,
-  Settings: () => <div>Settings</div>,
 };
