@@ -1,9 +1,8 @@
 import {DEFAULT_WIDTH} from '..';
 import {GameInfo} from '../GameInfo';
 import {PersistedStore} from '../PersistedStore';
-import {PanelId} from '../UI/GameUI/GameUI';
 import {Character} from '../character/Character';
-import {ENTER_CRASHED, PAUSE_GAME, RESUME_GAME, TOGGLE_PAUSE, WIND_SPEED_CHANGE} from '../eventTypes';
+import {ENTER_CRASHED, SET_PAUSE_GAME, WIND_SPEED_CHANGE} from '../eventTypes';
 import {BodyEntityData} from '../physics/RUBE/EntityTypes';
 import {IScore} from '../pocketbase/types';
 import {GameScene} from '../scenes/GameScene';
@@ -26,8 +25,13 @@ export class CharacterController {
 
   constructor(private scene: GameScene) {
 
-    GameInfo.observer.on(PAUSE_GAME, () => this.pauseGame());
-    GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.worldEntity.isPaused = false);
+    GameInfo.observer.on(SET_PAUSE_GAME, (isPaused: boolean) => {
+      if (isPaused) this.pauseGame();
+      else this.scene.b2Physics.worldEntity.isPaused = false;
+    });
+
+    // GameInfo.observer.on(PAUSE_GAME, (fromHUD: boolean) => this.pauseGame());
+    // GameInfo.observer.on(RESUME_GAME, () => this.scene.b2Physics.worldEntity.isPaused = false);
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => { if (id === this.character?.id) this.scene.cameras.main.shake(200, 0.03 * (1 / this.resolutionMod)); });
 
     this.initKeyboardInputs();
@@ -112,7 +116,9 @@ export class CharacterController {
     this.keyArrowRight = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT, false);
     this.keyArrowDown = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN, false);
 
-    this.keySpace.onDown = () => this.pauseGame();
+    this.keySpace.onDown = () => {
+      if (!GameInfo.score?.crashed && !GameInfo.score?.finishedLevel) GameInfo.observer.emit(SET_PAUSE_GAME, !this.scene.b2Physics.worldEntity.isPaused);
+    };
     const onJump = () => {
       this.jumpKeyDown = true;
       if (!this.character?.board.isInAir() && !this.scene.b2Physics.worldEntity.isPaused) this.jumpKeyDownStartFrame = this.scene.game.getFrame();
@@ -123,11 +129,11 @@ export class CharacterController {
     this.keyArrowUp.onUp = () => this.jumpKeyDown = false;
   }
 
-  private pauseGame(activePanel: PanelId = 'panel-pause-menu') {
+  private pauseGame() {
     if (!this.character) return;
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.scene.b2Physics.worldEntity.isPaused = !this.scene.b2Physics.worldEntity.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.worldEntity.isPaused, activePanel);
+    // GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.worldEntity.isPaused, activePanel);
   }
 }

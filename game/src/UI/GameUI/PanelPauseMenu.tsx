@@ -2,14 +2,14 @@ import {Component, Show} from 'solid-js';
 import {gameConfig} from '../..';
 import {GameInfo} from '../../GameInfo';
 import {PersistedStore} from '../../PersistedStore';
-import {EDITOR_OPEN, RESUME_GAME} from '../../eventTypes';
+import {EDITOR_OPEN, SET_PAUSE_GAME} from '../../eventTypes';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
 
 export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = props => {
   const handleResumeGame = () => {
     props.setPanel('none');
-    GameInfo.observer.emit(RESUME_GAME);
+    GameInfo.observer.emit(SET_PAUSE_GAME, false);
   };
 
   const handleOpenEditor = () => {

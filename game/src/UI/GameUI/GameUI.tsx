@@ -1,6 +1,6 @@
 import {Component, createSignal, Match, Switch} from 'solid-js';
 import {GameInfo} from '../../GameInfo';
-import {ENTER_CRASHED, LEVEL_FINISH, TOGGLE_PAUSE} from '../../eventTypes';
+import {ENTER_CRASHED, LEVEL_FINISH, SET_PAUSE_GAME} from '../../eventTypes';
 import {IScore, IScoreNew} from '../../pocketbase/types';
 import {HUD} from './HUD';
 import {PanelCredits} from './PanelCredits';
@@ -15,14 +15,13 @@ export const GameUI: Component = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
   const [score, setScore] = createSignal<IScoreNew>(GameInfo.score!);
 
-  // const [selectedItems, setSelectedItems] = createSignal();
-
   const handleShowYourScore = (score: IScore, timeout: number) => {
     setScore(score);
     setTimeout(() => setPanel('panel-your-score'), timeout);
   };
 
-  GameInfo.observer.on(TOGGLE_PAUSE, (paused: boolean, activePanel: PanelId) => setPanel(paused ? activePanel : 'none'));
+  // eslint-disable-next-line solid/reactivity
+  GameInfo.observer.on(SET_PAUSE_GAME, (paused: boolean) => setPanel((paused && !score()?.crashed && !score()?.finishedLevel) ? 'panel-pause-menu' : 'none'));
   GameInfo.observer.on(LEVEL_FINISH, (score: IScore) => handleShowYourScore(score, 2000));
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore) => handleShowYourScore(score, 750));
 

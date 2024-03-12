@@ -1,6 +1,6 @@
 import {GameInfo} from './GameInfo';
 import {PersistedStore} from './PersistedStore';
-import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME} from './eventTypes';
+import {ENTER_CRASHED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, WIND_SPEED_CHANGE, SURFACE_IMPACT, RESTART_GAME, SET_PAUSE_GAME} from './eventTypes';
 import {IScore} from './pocketbase/types';
 import {GameScene} from './scenes/GameScene';
 
@@ -34,6 +34,24 @@ export class SoundManager {
   }
 
   private initListeners() {
+    let musicWasPlaying = true;
+    let sfxSlideWasPlaying = true;
+    let sfxWindWasPlaying = true;
+    GameInfo.observer.on(SET_PAUSE_GAME, (isPaused: boolean) => {
+      if (isPaused) {
+        musicWasPlaying = this.music.isPlaying;
+        sfxSlideWasPlaying = this.sfx_snowboardSlide.isPlaying;
+        sfxWindWasPlaying = this.sfx_windNoise.isPlaying;
+        if (musicWasPlaying) this.music.pause();
+        if (sfxSlideWasPlaying) this.sfx_snowboardSlide.pause();
+        if (sfxWindWasPlaying) this.sfx_windNoise.pause();
+      } else {
+        if (musicWasPlaying) this.music.resume();
+        if (sfxSlideWasPlaying) this.sfx_snowboardSlide.resume();
+        if (sfxWindWasPlaying) this.sfx_windNoise.resume();
+      }
+    });
+
     GameInfo.observer.on(COLLECT_COIN, () => this.sfx_pickup_present.play());
     GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => {
       if (id !== GameInfo.possessedCharacterId) return;

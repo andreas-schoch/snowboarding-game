@@ -1,7 +1,7 @@
 import './HUD.css';
 import {Component, createSignal} from 'solid-js';
 import {GameInfo} from '../../GameInfo';
-import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, PAUSE_GAME, SCORE_CHANGE, TIME_CHANGE} from '../../eventTypes';
+import {COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, LEVEL_FINISH, SCORE_CHANGE, SET_PAUSE_GAME, TIME_CHANGE} from '../../eventTypes';
 import {formatTime} from '../../helpers/formatTime';
 import {IScore} from '../../pocketbase/types';
 import {PanelId} from './GameUI';
@@ -35,7 +35,7 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
   GameInfo.observer.on(ENTER_CRASHED, (score: IScore, id: string) => id === GameInfo.possessedCharacterId && !score.finishedLevel && updateCircleLoader(0));
 
   const pauseAndSetPanel = (panel: PanelId) => {
-    GameInfo.observer.emit(PAUSE_GAME, true, panel);
+    GameInfo.observer.emit(SET_PAUSE_GAME, true);
     props.setPanel(panel);
   };
 

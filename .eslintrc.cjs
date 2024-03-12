@@ -46,6 +46,11 @@ module.exports = {
     '@stylistic',
   ],
   rules: {
+    '@typescript-eslint/no-unused-vars': ['error', {
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_'
+    }],
     '@stylistic/quote-props': ['error', 'as-needed'],
     '@stylistic/nonblock-statement-body-position': ['error', 'beside'],
     '@stylistic/no-trailing-spaces': ['error', {ignoreComments: true}],

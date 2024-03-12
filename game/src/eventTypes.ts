@@ -14,9 +14,10 @@ export const B2_POST_SOLVE = 'b2_post_solve';
 export const SURFACE_IMPACT = 'surface_impact';
 export const WIND_SPEED_CHANGE = 'speed_change';
 
-export const TOGGLE_PAUSE = 'toggle_pause';
-export const PAUSE_GAME = 'pause_game_icon_pressed';
-export const RESUME_GAME = 'resume_game';
+export const SET_PAUSE_GAME = 'set_pause_game';
+// export const TOGGLE_PAUSE = 'toggle_pause';
+// export const PAUSE_GAME = 'pause_game_icon_pressed';
+// export const RESUME_GAME = 'resume_game';
 export const RESTART_GAME = 'restart_game';
 
 export const EDITOR_OPEN = 'editor_open';
