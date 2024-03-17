@@ -1,3 +1,4 @@
+import {setRecentLevels} from './UI/EditorUI/globalSignals';
 import {ILevel, ILevelNew, LocalLevelKeys} from './levels';
 import {RubeFile} from './physics/RUBE/RubeFile';
 import {sanitizeRubeFile} from './physics/RUBE/sanitizeRubeFile';
@@ -62,6 +63,7 @@ export class PersistedStore {
     PersistedStore.addEditorRubefile(level, rubefile);
     recent = recent.slice(0, 10); // Limit to 10
     PersistedStore.set('editorRecentLevels', JSON.stringify(recent));
+    setRecentLevels(recent);
   }
 
   static addEditorLocalLevel(level: ILevelNew, rubefile: RubeFile) {

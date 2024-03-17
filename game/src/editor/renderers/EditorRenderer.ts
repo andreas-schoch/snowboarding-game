@@ -1,7 +1,11 @@
+import {GameObjects} from 'phaser';
 import {EditorInfo} from '../../EditorInfo';
+import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
 import {EDITOR_RESET_RENDERED, EDITOR_RENDER_CHANGE, RUBE_FILE_LOADED, EDITOR_RENDER_DELETE} from '../../eventTypes';
+import {clickedCanvas} from '../../helpers/canvasClicker';
 import {drawCoordZeroPoint} from '../../helpers/drawCoordZeroPoint';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
+import {EditorObject} from '../items/EditorObject';
 import {MetaImageRenderer} from './MetaImageRenderer';
 import {MetaObjectRenderer} from './MetaObjectRenderer';
 import {MetaTerrainRenderer} from './MetaTerrainRenderer';
@@ -49,4 +53,21 @@ export class EditorRenderer {
     });
 
   }
+}
+
+export function onSelectItem(object: Phaser.GameObjects.GameObject, callback: (e: Phaser.Input.Pointer) => void) {
+  let didClickDown = false; // This closure ensures that We only select when clicking down and up on the same object without moving.
+  object.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, (e: Phaser.Input.Pointer) => {
+    if (clickedCanvas(e)) didClickDown = true;
+  });
+
+  object.on(Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE, (e: Phaser.Input.Pointer) => {
+    if (clickedCanvas(e)) didClickDown = false;
+  });
+
+  object.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, (e: Phaser.Input.Pointer) => {
+    if (!didClickDown || !clickedCanvas(e)) return;
+    didClickDown = false;
+    callback(e);
+  });
 }

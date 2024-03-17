@@ -4,7 +4,7 @@ import {EditorInfo} from '../../EditorInfo';
 import {Commander} from '../../editor/command/Commander';
 import {domToPhaserCoords} from '../../helpers/domToGameCoords';
 import {Pane, ResizeProps} from './Pane';
-import {activeBrowserItem, setActiveBrowserItem} from './globalSignals';
+import {activeBrowserItem, iconMap, setActiveBrowserItem} from './globalSignals';
 
 export interface PlaceItemInfo {
   x: number;
@@ -49,12 +49,6 @@ export const Browser: Component<ResizeProps> = props => {
     const {x, y} = domToPhaserCoords(e.clientX, e.clientY, EditorInfo.camera);
     Commander.exec({type: 'add', item, x, y});
   }
-  // TODO dedupe with Explorer
-  const iconMap: Record<string, string> = {
-    object: 'view_in_ar',
-    terrain: 'terrain',
-    image: 'wallpaper'
-  };
 
   // TODO load from backend maybe so I can introduce new items without changing the frontend
   //  And in the future users could create their own prefabs which they can use in the editor

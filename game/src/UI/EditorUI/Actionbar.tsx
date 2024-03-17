@@ -1,16 +1,18 @@
 import {Menubar} from '@kobalte/core';
 import {Component, For} from 'solid-js';
-import {rubeFileSerializer} from '../..';
+import {pb, rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
 import {PersistedStore} from '../../PersistedStore';
 import {Commander} from '../../editor/command/Commander';
 import {EDITOR_EXIT, EDITOR_RESET_RENDERED, RUBE_FILE_LOADED} from '../../eventTypes';
 import {arrayBufferToString, downloadBlob} from '../../helpers/binaryTransform';
 import {openFileSelector} from '../../helpers/openFileSelector';
+import {ILevel, ILevelNew, isLevel} from '../../levels';
+import {RubeFile} from '../../physics/RUBE/RubeFile';
 import {RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
 import {editorItemsToRubefile} from '../../physics/RUBE/RubeMetaSerializer';
 import {registerNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
-import {editorItems, setActiveDialogName, setEditorItems} from './globalSignals';
+import {editorItems, recentLevels, setActiveDialogName, setEditorItems} from './globalSignals';
 
 export const Actionbar: Component = () => {
 
@@ -56,6 +58,37 @@ const MenuFile: Component = () => {
     EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
   }
 
+  function openRecent(level: ILevel | ILevelNew) {
+    getRubefile(level).then(([level, rubefile]) => {
+      const items = RubeMetaLoader.load(level, rubefile);
+      PersistedStore.addEditorRecentLevel(level, rubefile);
+      setEditorItems(items);
+      EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
+      EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+      setActiveDialogName(null);
+    });
+  }
+
+  // TODO deduplicate
+  async function getRubefile(level: ILevel | ILevelNew): Promise<[ILevel | ILevelNew, RubeFile]> {
+    // TODO at some point need to have a way to check the modified date and show a dialog to the user if they want to load the latest version
+    if(isLevel(level)) {
+      const rubefile = await pb.level.getRubeFile(level);
+      if (rubefile) {
+        PersistedStore.addEditorRecentLevel(level, rubefile);
+        return [level, rubefile];
+      }
+    }
+
+    const mostRecentRubefileLocal = PersistedStore.getEditorRubefile(level);
+    if (mostRecentRubefileLocal) return [level, mostRecentRubefileLocal];
+
+    console.debug('No level found. Creating new one...');
+    const [newLevel, file] = registerNewLevel();
+    PersistedStore.addEditorRecentLevel(newLevel, file);
+    return [newLevel, file];
+  }
+
   function exportAsRube() {
     const items = editorItems();
     const rubefile = editorItemsToRubefile(items);
@@ -96,8 +129,6 @@ const MenuFile: Component = () => {
     }
   }
 
-  const recent = PersistedStore.editorRecentLevels();
-
   return <>
     <Menubar.Menu>
       <Menubar.Trigger class="menubar__trigger">File</Menubar.Trigger>
@@ -122,9 +153,9 @@ const MenuFile: Component = () => {
             </Menubar.SubTrigger>
             <Menubar.Portal>
               <Menubar.SubContent class="menubar__sub-content">
-                <For each={recent} fallback={<div>No recent</div>}>
+                <For each={recentLevels()} fallback={<div>No recent</div>}>
                   {(item) => (
-                    <Menubar.Item class="menubar__item">{item.name}</Menubar.Item>
+                    <Menubar.Item class="menubar__item" onSelect={() => openRecent(item)}>{item.name}</Menubar.Item>
                   )}
                 </For>
               </Menubar.SubContent>

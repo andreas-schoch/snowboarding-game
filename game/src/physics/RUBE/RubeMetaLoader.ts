@@ -121,7 +121,7 @@ export class RubeMetaLoader {
       const sensorType = sensorFixture.customProperties?.find(prop => prop.name === 'phaserSensorType')?.string;
       if (!sensorType) throw new Error('Sensor type not defined on the sensor body');
       if (sensorType !== 'level_finish' && sensorType !== 'level_deathzone' && sensorType !== 'pickup_present') throw new Error('Invalid sensor type');
-      const sensor = new EditorSensor(this, body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present', parent);
+      const sensor = new EditorSensor(body, sensorType as 'level_finish' | 'level_deathzone' | 'pickup_present', parent);
       sensors[sensor.id] = sensor;
     }
 

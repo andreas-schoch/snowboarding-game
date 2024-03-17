@@ -4,7 +4,7 @@ import {Commander} from '../../editor/command/Commander';
 import {EditorImage} from '../../editor/items/EditorImage';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
-import {selected} from './globalSignals';
+import {iconMap, selected} from './globalSignals';
 
 const MAX_METERS_FROM_ZERO = 512;
 // TODO add UI to change step sizes for translate and rotate like in UE4
@@ -53,10 +53,11 @@ export const Details: Component<ResizeProps> = props => {
   };
 
   return <>
-    <Pane title="Details" class="" {...props}>
+    <Pane title="Details" class="flex flex-col" {...props}>
       <Show when={selected()} fallback={<div class="p-4">Nothing selected</div>}>
 
-        <i class="material-icons">window</i>
+        <i class="material-icons mx-auto mb-4 mt-2">{iconMap[selected()!.type]}</i>
+
         <form action="" id="form-properties">
           {/* <!-- NAME --> */}
           <div class="row">

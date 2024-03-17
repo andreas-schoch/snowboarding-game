@@ -2,9 +2,11 @@ import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {XY} from '../../Terrain';
 import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
+import {clickedCanvas} from '../../helpers/canvasClicker';
 import {throttle} from '../../helpers/debounce';
 import {EditorObject} from '../items/EditorObject';
 import {EditorTerrainChunk} from '../items/EditorTerrain';
+import {onSelectItem} from './EditorRenderer';
 
 type TerrainChunkContext = {
   chunk: EditorTerrainChunk;
@@ -68,11 +70,13 @@ export class MetaTerrainRenderer {
 
     const graphics = context.terrain;
     graphics.clear();
+    graphics.removeAllListeners();
     graphics.setPosition(minX, minY);
     const pointsLocal = new Phaser.Geom.Polygon(pointsWorld.map(point => ({x: point.x - minX, y: point.y - minY})));
-
     graphics.setInteractive(pointsLocal, Phaser.Geom.Polygon.Contains);
-    graphics.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+
+    // TODO fix select for rotated terrain (or just disable rotation for terrain?)
+    onSelectItem(graphics, () => {
       const root = this.getRootItem(context.chunk);
       if (root === selected()) return;
       setSelected(root);

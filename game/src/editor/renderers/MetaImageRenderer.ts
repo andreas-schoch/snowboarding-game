@@ -1,9 +1,11 @@
 import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
+import {clickedCanvas} from '../../helpers/canvasClicker';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
 import {EditorObject} from '../items/EditorObject';
+import {onSelectItem} from './EditorRenderer';
 
 type ImageContext = {
   imageId: string;
@@ -51,7 +53,7 @@ export class MetaImageRenderer {
       image.setDepth(renderOrder);
       image.setDataEnabled();
       image.setInteractive();
-      image.on('pointerdown', () => {
+      onSelectItem(image, () => {
         const root = this.getRootItem(editorImage);
         if (root === selected()) return;
         setSelected(root);

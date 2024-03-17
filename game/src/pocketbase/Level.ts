@@ -9,6 +9,7 @@ import {IUser} from './types';
 
 export class Level {
   private collectionName = 'levels';
+  private pageSize = 10;
 
   constructor(private pb: PocketBase, private auth: Auth) { }
 
@@ -17,7 +18,7 @@ export class Level {
   // }
 
   async listCampaign(page: number): Promise<ListResult<ILevel>> {
-    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 10, {
+    return this.pb.collection<ILevel>(this.collectionName).getList(page, this.pageSize, {
       filter: 'user.username="System"',
       sort: 'number',
       expand: 'user'
@@ -27,16 +28,11 @@ export class Level {
   async listMine(page: number): Promise<ListResult<ILevel>> {
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('No user logged in. This should never happen');
-    console.log('loggedInUser', loggedInUser, loggedInUser.username);
-    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 3, {
-      filter: `user.username="${loggedInUser.username}"`,
-      // sort: 'modified',
-      expand: 'user'
-    });
+    return this.listByUser(loggedInUser.username, 'number', page);
   }
 
   async listUserMade(page: number): Promise<ListResult<ILevel>> {
-    return await this.pb.collection<ILevel>(this.collectionName).getList(page, 3, {
+    return this.pb.collection<ILevel>(this.collectionName).getList(page, this.pageSize, {
       filter: 'user.username!="System"',
       // sort: sort, // TODO sort by most reviews or highest rating
       expand: 'user'
@@ -46,8 +42,7 @@ export class Level {
   async listByUser(username: IUser['username'], sort: string, page: number, ): Promise<ListResult<ILevel>> {
     const filter = `user.username="${username}"`;
     // const sort = 'number';
-    const resultList = await this.pb.collection<ILevel>('levels').getList(page, 10, {filter,sort});
-    return resultList;
+    return this.pb.collection<ILevel>('levels').getList(page, this.pageSize, {filter});
   }
 
   async get(id: ILevel['id']): Promise<ILevel | null> {

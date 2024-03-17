@@ -1,4 +1,5 @@
 import {Component, createSignal} from 'solid-js';
+import {ILevel, ILevelNew} from '../../levels';
 import {EditorItems, EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {generateEmptyRubeFile, generateNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
 import {BrowserItem} from './Browser';
@@ -18,6 +19,7 @@ export const initial: EditorItems = {
   // fixture: {},
 };
 
+export const [recentLevels, setRecentLevels] = createSignal<(ILevel | ILevelNew)[]>([]);
 export const [editorItems, setEditorItems] = createSignal<EditorItems>(initial, {equals: false});
 export const [selected, setSelected] = createSignal<EditorItem | null>(null, {equals: false});
 export const [activeBrowserItem, setActiveBrowserItem] = createSignal<BrowserItem | null>(null, {equals: false});
@@ -31,4 +33,12 @@ export const dialogNameMap: Record<DialogName, Component> = {
   About: () => <div>About</div>,
   Settings: () => <div>Settings</div>,
   'Open Level': () => <OpenLevel />,
+};
+
+export const iconMap: Record<EditorItem['type'], string> = {
+  object: 'view_in_ar',
+  terrain: 'terrain',
+  image: 'wallpaper',
+  sensor: 'border_clear',
+  // fixture: 'NOT_DIRECTLY_DISPLAYED_IN_UI',
 };
