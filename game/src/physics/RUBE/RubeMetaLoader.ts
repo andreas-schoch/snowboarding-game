@@ -30,7 +30,7 @@ export interface BaseEditorItem {
   getBounds(): Bounds;
 
   setCustomProps(props: RubeCustomPropsMap): void;
-  setPosition(position: XY): void;
+  setPosition(x: number, y: number): void;
   setName(name: string): void;
   setAngle(angle: number): void;
 

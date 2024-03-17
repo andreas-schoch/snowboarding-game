@@ -6,6 +6,10 @@ import {IPostSolveEvent} from '../physics/Physics';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {Character} from './Character';
 
+// TODO since switching to box2d-wasm, the snowboard joints look a bit wonkier when sliding over boxes or spikes.
+// I have no idea how to fix it and keep the weld joint "cantilever" effect. It's not a super big deal, but it's a bit annoying.
+// Think about alternative ways to simulate a flexible snowboard or render it differently to hide it better visually.
+
 interface IRayCastResult {
   hit: boolean;
   point: Box2D.b2Vec2;

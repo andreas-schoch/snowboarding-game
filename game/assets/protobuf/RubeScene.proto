@@ -51,9 +51,9 @@ message FixtureShapeChain {
 message Fixture {
   optional string name = 1;
   optional double density = 2;
-  optional uint32 filterCategoryBits = 3; // TODO
-  optional uint32 filterMaskBits = 4; // TODO
-  optional int32 filterGroupIndex = 5; // TODO
+  optional uint32 filterCategoryBits = 3;
+  optional uint32 filterMaskBits = 4;
+  optional int32 filterGroupIndex = 5;
   optional double friction = 6;
   optional double restitution = 7;
   optional bool sensor = 8;
@@ -79,9 +79,9 @@ message Body {
   optional double angularVelocity = 10;
   optional double linearDamping = 11;
   optional Vector linearVelocity = 12;
-  optional double massDataMass = 13; // TODO convert from 'massData-mass' to 'massDataMass' in ts
-  optional Vector massDataCenter = 14; // TODO convert from 'massData-center' to 'massDataCenter' in ts
-  optional double massDataI = 15; // TODO convert from 'massData-I' to 'massDataI' in ts
+  optional double massDataMass = 13;
+  optional Vector massDataCenter = 14;
+  optional double massDataI = 15;
   repeated CustomProperty customProperties = 16;
   repeated Fixture fixture = 17;
 }

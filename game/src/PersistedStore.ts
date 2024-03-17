@@ -39,7 +39,6 @@ export class PersistedStore {
     return PersistedStore.getRaw('editorOpen') === 'true';
   }
 
-  // TODO this does not belong here
   static editorRecentLevels(): (ILevel | ILevelNew)[] {
     const str = PersistedStore.getRaw('editorRecentLevels');
     if (!str) return [];
@@ -53,7 +52,6 @@ export class PersistedStore {
     }
   }
 
-  // TODO this does not belong here
   static addEditorRecentLevel(level: ILevel | ILevelNew, rubefile: RubeFile) {
     if (level.localId === undefined) throw new Error('Level must have localId set. This should never happen');
     let recent = PersistedStore.editorRecentLevels();

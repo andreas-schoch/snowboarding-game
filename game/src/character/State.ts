@@ -37,7 +37,7 @@ export class State {
   update(): void {
     if (this.isCrashed || this.isLevelFinished || this.character.rubeScene.worldEntity.isPaused) return;
     if (this.levelUnpausedFrames === 0) this.pushStartLog();
-    this.levelUnpausedFrames++; // TODO switch from leeway tween to a frame deterministic one based on levelUnpausedFrames
+    this.levelUnpausedFrames++;
     GameInfo.observer.emit(TIME_CHANGE, framesToTime(this.levelUnpausedFrames));
 
     this.processPickups();
@@ -127,7 +127,6 @@ export class State {
     this.resetComboLeewayTween();
   }
 
-  // TODO only Physics class should use Pl or Box2D types directly to make rest of code box2d port agnostic
   private handleSensor(body: Box2D.b2Body, fixture: Box2D.b2Fixture) {
     this.seenSensors.add(body);
     if (this.isCrashed || this.isLevelFinished) return;
@@ -193,11 +192,6 @@ export class State {
 
   updateComboLeeway() {
     // checking for centerGrounded allows player to prolong leeway before combo completes while riding only on nose or tail
-    // TODO In the future we may count the time on ground without center touching it and reward player points instead of just pausing the timer.
-    //  It should continue to accumulate time even if in_air when player manages to land without touching center or doing other tricks.
-    //  Also for this mechanic to not be abused, it should only allow only nose or tail press at the same time while switching is allowed.
-    //  Once center touches ground, the accumulated time is evaluated and if long enough awarded and leeway reset.
-    //  Minimum time should probably be around 2+ seconds ground time without center touching. Time is reset if player makes another trick.
     if (this.comboLeeway) {
       if (this.character.board.isInAir() || !this.character.board.isCenterGrounded || this.character.rubeScene.worldEntity.isPaused) {
         this.comboLeeway.isPlaying() && this.comboLeeway.pause();

@@ -77,11 +77,11 @@ export class EditorTerrainChunk implements BaseEditorItem {
   }
 
   // TODO add ability to change between world and local coordinates when translating items in the editor)
-  setPosition(position: XY) {
+  setPosition(x: number, y: number) {
     // get the difference of the current avg position and the new position then add that difference to all vertices
     const vertices = this.getVertices({local: true});
     const oldPosition = this.getPosition();
-    const diff = {x: position.x - oldPosition.x, y: position.y - oldPosition.y};
+    const diff = {x: x - oldPosition.x, y: y - oldPosition.y};
     const newVertices = vertices.map(v => ({x: v.x + diff.x, y: v.y + diff.y}));
     this.setVertices(newVertices);
     this.setSignal(this as EditorTerrainChunk);

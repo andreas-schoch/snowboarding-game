@@ -2,7 +2,6 @@ import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {XY} from '../../Terrain';
 import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
-import {clickedCanvas} from '../../helpers/canvasClicker';
 import {throttle} from '../../helpers/debounce';
 import {EditorObject} from '../items/EditorObject';
 import {EditorTerrainChunk} from '../items/EditorTerrain';

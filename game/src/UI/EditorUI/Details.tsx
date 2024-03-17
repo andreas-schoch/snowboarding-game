@@ -17,7 +17,7 @@ export const Details: Component<ResizeProps> = props => {
 
     const prevPos = item.getPosition();
     if (final) Commander.exec({type: 'move', prevX: startX, prevY: prevPos.y, newX, newY: prevPos.y, item});
-    else item.setPosition({x: newX, y: item.getPosition().y});
+    else item.setPosition(newX, item.getPosition().y);
   };
 
   const onPositionYChange = (newY: number, startY: number, final: boolean) => {
@@ -25,7 +25,7 @@ export const Details: Component<ResizeProps> = props => {
     if (!item) throw new Error('It should never be possible to update Y when nothing is selected');
     const prevPos = item.getPosition();
     if (final) Commander.exec({type: 'move', prevX: prevPos.x, prevY: startY, newX: prevPos.x, newY, item});
-    else item.setPosition({x: item.getPosition().x, y: newY});
+    else item.setPosition(item.getPosition().x, newY);
   };
 
   const onAngleChange = (newAngle: number, startAngle: number, final: boolean) => {

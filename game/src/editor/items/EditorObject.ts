@@ -2,7 +2,6 @@
 import {Accessor, Setter, createSignal} from 'solid-js';
 import {rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
-import {XY} from '../../Terrain';
 import {arrayBufferToString} from '../../helpers/binaryTransform';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {ILevel, ILevelNew} from '../../levels';
@@ -69,10 +68,10 @@ export class EditorObject implements BaseEditorItem {
     this.signalUpdate();
   }
 
-  setPosition(position: XY) {
+  setPosition(x: number, y: number) {
     // IMPORTANT: The Y axis is inverted here as rubeToXY will change it back to the correct orientation for phaser
     // TODO maybe consider adding a XYToRube to make it explicit that we're changing the orientation
-    this.meta.position = {x: position.x, y: -position.y};
+    this.meta.position = {x, y: -y};
     this.signalUpdate();
   }
 

@@ -1,6 +1,5 @@
 
 import {Accessor, Setter, createSignal} from 'solid-js';
-import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody} from '../../physics/RUBE/RubeFile';
@@ -60,8 +59,8 @@ export class EditorSensor implements BaseEditorItem {
     this.signalUpdate();
   }
 
-  setPosition(position: XY) {
-    this.meta.position = {x: position.x, y: position.y};
+  setPosition(x: number, y: number) {
+    this.meta.position = {x, y};
     this.signalUpdate();
   }
 

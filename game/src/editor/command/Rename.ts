@@ -13,7 +13,7 @@ export class Rename implements ICommand {
 
   execute(): void {
     console.debug('Rename.execute', this.args);
-    this.args.item.setName(this.args.newName); // TODO make setPosition work with separate x and y not object
+    this.args.item.setName(this.args.newName);
   }
 
   unExecute(): void {

@@ -1,11 +1,8 @@
-import {GameObjects} from 'phaser';
 import {EditorInfo} from '../../EditorInfo';
-import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
 import {EDITOR_RESET_RENDERED, EDITOR_RENDER_CHANGE, RUBE_FILE_LOADED, EDITOR_RENDER_DELETE} from '../../eventTypes';
 import {clickedCanvas} from '../../helpers/canvasClicker';
 import {drawCoordZeroPoint} from '../../helpers/drawCoordZeroPoint';
 import {EditorItem, EditorItems} from '../../physics/RUBE/RubeMetaLoader';
-import {EditorObject} from '../items/EditorObject';
 import {MetaImageRenderer} from './MetaImageRenderer';
 import {MetaObjectRenderer} from './MetaObjectRenderer';
 import {MetaTerrainRenderer} from './MetaTerrainRenderer';

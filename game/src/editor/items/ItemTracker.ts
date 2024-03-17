@@ -58,7 +58,7 @@ export class EditorItemTracker {
       };
 
       const editorItem = new EditorObject(items.level, metaObject);
-      editorItem.setPosition({x: x / ppm, y: y / ppm});
+      editorItem.setPosition(x / ppm, y / ppm);
       return editorItem;
     }
     case 'image': {
@@ -80,7 +80,7 @@ export class EditorItemTracker {
       };
 
       const editorItem = new EditorImage(metaImage, undefined);
-      editorItem.setPosition({x: x / ppm, y: y / ppm});
+      editorItem.setPosition(x / ppm, y / ppm);
       return editorItem;
     }
     default:

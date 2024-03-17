@@ -15,11 +15,11 @@ export class Move implements ICommand {
 
   execute(): void {
     console.debug('Move.execute', this.args);
-    this.args.item.setPosition({x: this.args.newX, y: this.args.newY}); // TODO make setPosition work with separate x and y not object
+    this.args.item.setPosition(this.args.newX, this.args.newY); // TODO make setPosition work with separate x and y not object
   }
 
   unExecute(): void {
     console.debug('Move.unExecute', this.args);
-    this.args.item.setPosition({x: this.args.prevX, y: this.args.prevY});
+    this.args.item.setPosition(this.args.prevX, this.args.prevY);
   }
 }

@@ -1,6 +1,5 @@
 
 import {Accessor, Setter, createSignal} from 'solid-js';
-import {XY} from '../../Terrain';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {RubeCustomPropsMap} from '../../physics/RUBE/EntityTypes';
 import {MetaBody, MetaImage} from '../../physics/RUBE/RubeFile';
@@ -68,10 +67,10 @@ export class EditorImage implements BaseEditorItem {
     this.signalUpdate();
   }
 
-  setPosition(position: XY) {
+  setPosition(x: number, y: number) {
     // IMPORTANT: The Y axis is inverted here as rubeToXY will change it back to the correct orientation for phaser
     // TODO maybe consider adding a XYToRube to make it explicit that we're changing the orientation
-    this.meta.center = {x: position.x, y: -position.y};
+    this.meta.center = {x, y: -y};
     this.signalUpdate();
   }
 
