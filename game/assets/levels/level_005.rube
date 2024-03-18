@@ -2838,6 +2838,4584 @@
         "name" : "Character",
         "position" : 0,
         "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/saw.rube",
+        "flip" : false,
+        "id" : 3,
+        "name" : "Saw",
+        "position" : 
+        {
+          "x" : -613.0968627929688,
+          "y" : -282.9299926757812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 5,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -158.4174652099609,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 7,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 13,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -164.0174407958984,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 14,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -42.74876403808594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 16,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -164.0174407958984,
+          "y" : -44.14875793457031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 17,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -42.74876403808594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 18,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -165.4174652099609,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 20,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 21,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -159.8174285888672,
+          "y" : -44.14875793457031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 23,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -44.14875793457031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 24,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -44.14875793457031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 25,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -159.8174285888672,
+          "y" : -45.54875183105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 27,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -49.94875335693359
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 31,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -159.8174285888672,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 34,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -158.4174652099609,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 35,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 36,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -165.4174652099609,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 37,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -159.8174285888672,
+          "y" : -48.54875946044922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 38,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -164.0174407958984,
+          "y" : -48.54875946044922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 39,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 42,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -49.94875335693359
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 43,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -164.0174407958984,
+          "y" : -47.14876556396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 44,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -162.6174774169922,
+          "y" : -48.54875946044922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 46,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -161.2174530029297,
+          "y" : -48.54875946044922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 48,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -65.1979980468750,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 49,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -72.1979980468750,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 51,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -70.79797363281250,
+          "y" : -18.68008804321289
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 54,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -14.28008651733398
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 55,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 56,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -66.59796142578125,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 58,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -70.79797363281250,
+          "y" : -14.28008651733398
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 61,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -70.79797363281250,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 62,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -66.59796142578125,
+          "y" : -18.68008804321289
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 63,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 64,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -12.88009262084961
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 65,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -20.08008193969727
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 66,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -70.79797363281250,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 68,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 69,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -18.68008804321289
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 71,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -72.1979980468750,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 74,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -65.1979980468750,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 75,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -15.68008041381836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 78,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -66.59796142578125,
+          "y" : -14.28008651733398
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 80,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -69.39801025390625,
+          "y" : -12.88009262084961
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 82,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -66.59796142578125,
+          "y" : -17.28009414672852
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 83,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -14.28008651733398
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 84,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -18.68008804321289
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 85,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -67.99798583984375,
+          "y" : -20.08008193969727
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 89,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -334.0058288574219,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 90,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -341.0058288574219,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 91,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -339.6058044433594,
+          "y" : -103.0410461425781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 92,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -98.64104461669922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 93,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 94,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -335.4057922363281,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 95,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -339.6058044433594,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 96,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -335.4057922363281,
+          "y" : -103.0410461425781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 97,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 98,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -97.24105072021484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 99,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -104.4410400390625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 100,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -339.6058044433594,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 101,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 102,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -103.0410461425781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 103,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -341.0058288574219,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 104,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -334.0058288574219,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 105,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -100.0410385131836
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 106,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -335.4057922363281,
+          "y" : -98.64104461669922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 107,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -338.2058410644531,
+          "y" : -97.24105072021484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 108,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -335.4057922363281,
+          "y" : -101.6410522460938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 109,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -98.64104461669922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 110,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -103.0410461425781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 111,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -336.8058166503906,
+          "y" : -104.4410400390625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 112,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -339.6058044433594,
+          "y" : -98.64104461669922
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 113,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -461.4919738769531,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 114,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -227.1767120361328
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 115,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -465.6919860839844,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 116,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -221.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 117,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -461.4919738769531,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 118,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -225.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 119,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -461.4919738769531,
+          "y" : -221.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 120,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -465.6919860839844,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 121,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 122,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -465.6919860839844,
+          "y" : -225.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 123,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -467.0920104980469,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 124,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -467.0920104980469,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 125,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -461.4919738769531,
+          "y" : -225.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 126,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -460.0920104980469,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 127,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -221.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 128,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 129,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -225.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 130,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -465.6919860839844,
+          "y" : -221.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 131,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -219.9767303466797
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 132,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -222.7767181396484
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 133,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -462.8919982910156,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 134,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -227.1767120361328
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 135,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -464.2920227050781,
+          "y" : -219.9767303466797
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 136,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -460.0920104980469,
+          "y" : -224.3767242431641
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2962635755538940,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 137,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -444.3585510253906,
+          "y" : -243.5137634277344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2962635755538940,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 138,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -445.7247314453125,
+          "y" : -243.9632263183594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2962635755538940,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 139,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -447.0909118652344,
+          "y" : -244.3312072753906
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2962635755538940,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 140,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -443.0874328613281,
+          "y" : -243.0099487304688
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 141,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -441.7749328613281,
+          "y" : -242.6737976074219
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 142,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -439.1229248046875,
+          "y" : -241.7754974365234
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 143,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -437.7969360351562,
+          "y" : -241.3263092041016
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 144,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -440.4489440917969,
+          "y" : -242.2246398925781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1768412590026855,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 145,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -449.9276123046875,
+          "y" : -244.9192047119141
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 146,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -451.3361511230469,
+          "y" : -244.7092590332031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1768412590026855,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 147,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -448.5494079589844,
+          "y" : -244.6728820800781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 148,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -451.9423522949219,
+          "y" : -243.5287322998047
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 149,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -433.8946228027344,
+          "y" : -239.964843750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 150,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -435.2206420898438,
+          "y" : -240.4139862060547
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 151,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -432.5686340332031,
+          "y" : -239.5156555175781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3266067504882812,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 152,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -436.5466308593750,
+          "y" : -240.8631439208984
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.07420313358306885,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 153,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -679.5134277343750,
+          "y" : -292.6995544433594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.4287018775939941,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 154,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -687.4813232421875,
+          "y" : -295.0527343750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3092795610427856,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 155,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -688.802246093750,
+          "y" : -295.6903686523438
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1861858367919922,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 156,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -680.9156494140625,
+          "y" : -292.81152343750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 157,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -676.792968750,
+          "y" : -292.6115722656250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3411883115768433,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 158,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -684.882324218750,
+          "y" : -293.8929138183594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 159,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -672.5949707031250,
+          "y" : -292.7417602539062
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.07420313358306885,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 160,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -678.1173095703125,
+          "y" : -292.5957031250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1861858367919922,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 161,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -682.2914428710938,
+          "y" : -293.0706481933594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3411883115768433,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 162,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -683.582031250,
+          "y" : -293.4387817382812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.4287018775939941,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 163,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -686.1757202148438,
+          "y" : -294.5076293945312
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 164,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -673.9943237304688,
+          "y" : -292.6984558105469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 165,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -675.3936767578125,
+          "y" : -292.6549682617188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 169,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -764.933593750,
+          "y" : -305.5488281250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 175,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -763.6803588867188,
+          "y" : -304.3594970703125
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 176,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -764.9630737304688,
+          "y" : -304.3869323730469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 177,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -763.6879272460938,
+          "y" : -305.5361938476562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 179,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -886.517089843750,
+          "y" : -339.8776245117188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 180,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -887.85449218750,
+          "y" : -339.9893798828125
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 181,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -889.2180175781250,
+          "y" : -340.1836853027344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 182,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -883.7196655273438,
+          "y" : -340.0504150390625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 183,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -885.11718750,
+          "y" : -339.8892517089844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 184,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -890.6058349609375,
+          "y" : -340.5368347167969
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 185,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -891.9921264648438,
+          "y" : -340.8193054199219
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 186,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -882.3297729492188,
+          "y" : -340.2183532714844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 187,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -884.4757080078125,
+          "y" : -338.6576538085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 188,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -888.6105346679688,
+          "y" : -338.5966186523438
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 189,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -891.3618774414062,
+          "y" : -339.1440734863281
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 190,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -883.0858154296875,
+          "y" : -338.8255920410156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 191,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -885.8732299804688,
+          "y" : -338.4964904785156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 192,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -889.9740600585938,
+          "y" : -338.7909240722656
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 193,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -892.7481689453125,
+          "y" : -339.4265441894531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 194,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -887.2731323242188,
+          "y" : -338.484863281250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 195,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -970.9324340820312,
+          "y" : -350.7459106445312
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 196,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -970.2985839843750,
+          "y" : -349.5210876464844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 197,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -975.0672607421875,
+          "y" : -350.6848754882812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 198,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -974.4859008789062,
+          "y" : -349.1803588867188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 199,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -979.96093750,
+          "y" : -350.1220397949219
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 200,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -977.8186035156250,
+          "y" : -351.2323303222656
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 201,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -978.5746459960938,
+          "y" : -349.8395690917969
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 202,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -975.8233032226562,
+          "y" : -349.2921142578125
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 203,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -969.5425415039062,
+          "y" : -350.9138488769531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 204,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -973.0859985351562,
+          "y" : -349.1919860839844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 205,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -977.1868286132812,
+          "y" : -349.4864196777344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 206,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -972.3299560546875,
+          "y" : -350.5847473144531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1467051506042480,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 207,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -976.4307861328125,
+          "y" : -350.8791809082031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.1202800273895264,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 208,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -971.68847656250,
+          "y" : -349.3531494140625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2342187166213989,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 209,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -979.2048950195312,
+          "y" : -351.5148010253906
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.008297324180603027,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 210,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -973.7298583984375,
+          "y" : -350.5731201171875
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 211,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1047.741455078125,
+          "y" : -358.6042480468750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 212,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1054.672607421875,
+          "y" : -359.6087646484375
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 213,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1049.722778320312,
+          "y" : -360.0971374511719
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 214,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1044.95410156250,
+          "y" : -358.9333496093750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 215,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1049.141357421875,
+          "y" : -358.5926208496094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 216,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1053.86035156250,
+          "y" : -360.9270629882812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 217,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1046.343994140625,
+          "y" : -358.7654113769531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 218,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1048.385375976562,
+          "y" : -359.9853820800781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 219,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1050.478759765625,
+          "y" : -358.7043762207031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 220,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1053.272827148438,
+          "y" : -359.2731323242188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 221,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1046.985473632812,
+          "y" : -359.9970092773438
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 222,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1051.086303710938,
+          "y" : -360.2914428710938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 223,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1044.197998046875,
+          "y" : -360.3261108398438
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 224,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1045.5878906250,
+          "y" : -360.1581726074219
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 225,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1051.842285156250,
+          "y" : -358.8986816406250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 226,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1052.474121093750,
+          "y" : -360.6445922851562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 227,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1060.42871093750,
+          "y" : -363.5486145019531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 228,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1060.512939453125,
+          "y" : -361.8821105957031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 229,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1056.30371093750,
+          "y" : -360.1690673828125
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 230,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1062.837036132812,
+          "y" : -363.1679992675781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 231,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1061.629516601562,
+          "y" : -364.2231750488281
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 232,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1064.027587890625,
+          "y" : -365.7461853027344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 233,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1057.95800781250,
+          "y" : -362.1868591308594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 234,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1064.003295898438,
+          "y" : -363.9993591308594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 235,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1055.332641601562,
+          "y" : -361.2607116699219
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 236,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1059.252563476562,
+          "y" : -361.2727661132812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 237,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1057.867675781250,
+          "y" : -360.7728271484375
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 238,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1059.218383789062,
+          "y" : -362.7962646484375
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 239,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1065.236206054688,
+          "y" : -364.6784362792969
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 240,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1061.662841796875,
+          "y" : -362.5539855957031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 241,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1062.794311523438,
+          "y" : -365.0241394042969
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 242,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1056.62597656250,
+          "y" : -361.6711120605469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 243,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1066.363037109375,
+          "y" : -367.1033630371094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 244,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1067.597167968750,
+          "y" : -366.1087341308594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 245,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1066.425781250,
+          "y" : -365.4368591308594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 246,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1068.771362304688,
+          "y" : -366.7227478027344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 247,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1065.152709960938,
+          "y" : -366.3510131835938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 248,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1069.937622070312,
+          "y" : -367.5541076660156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 249,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1068.728637695312,
+          "y" : -368.5788879394531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 250,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1067.563842773438,
+          "y" : -367.7779235839844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 251,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1069.919067382812,
+          "y" : -369.3438110351562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 252,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1071.127563476562,
+          "y" : -368.3189392089844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 295,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 296,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 297,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 298,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 299,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 300,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 301,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 302,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 303,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 304,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 305,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 306,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 307,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 308,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 309,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 310,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 311,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 312,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 313,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 314,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 315,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 316,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 317,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 318,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 319,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 320,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 321,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 322,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 323,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 324,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 325,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 326,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 327,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 328,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 329,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 330,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 331,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 332,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 333,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 334,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 335,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1153.419555664062,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 336,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1153.419555664062,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 337,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 338,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 339,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 340,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 341,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 342,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1153.419555664062,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 343,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 344,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1166.019653320312,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 345,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1164.619628906250,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 346,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 347,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 348,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 349,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1156.219604492188,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 350,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 351,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -377.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 352,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -377.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 353,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 354,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1153.419555664062,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 355,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1154.819702148438,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 356,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -377.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 357,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -375.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 358,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -377.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 359,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1159.019653320312,
+          "y" : -378.4232482910156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 360,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1163.219604492188,
+          "y" : -377.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 361,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -374.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 362,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1161.819702148438,
+          "y" : -378.4232482910156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 363,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 364,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -372.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 365,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 366,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -368.6232604980469
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 367,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -378.4232482910156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 368,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1157.619628906250,
+          "y" : -367.2232971191406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 369,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1160.419677734375,
+          "y" : -379.8232727050781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 370,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -371.4232788085938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 371,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -1167.419677734375,
+          "y" : -370.0232849121094
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3092795610427856,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 372,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -688.9705200195312,
+          "y" : -294.4111633300781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.4287018775939941,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 373,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -687.6495971679688,
+          "y" : -293.7735290527344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 374,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -675.5619506835938,
+          "y" : -291.3757629394531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.07420313358306885,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 375,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -679.6817016601562,
+          "y" : -291.4203491210938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3411883115768433,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 376,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -685.0505981445312,
+          "y" : -292.6137084960938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3411883115768433,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 377,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -683.7503051757812,
+          "y" : -292.1595764160156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 378,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -674.162597656250,
+          "y" : -291.4192504882812
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.4287018775939941,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 379,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -686.3439941406250,
+          "y" : -293.2284240722656
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 380,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -676.9612426757812,
+          "y" : -291.3323669433594
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1861858367919922,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 381,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -681.0839233398438,
+          "y" : -291.5323181152344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.1861858367919922,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 382,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -682.4597167968750,
+          "y" : -291.7914428710938
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.07420313358306885,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 383,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -678.2855834960938,
+          "y" : -291.3164978027344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.03101098537445068,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 384,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -672.7632446289062,
+          "y" : -291.4625549316406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.08930230140686035,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 390,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -613.6620483398438,
+          "y" : -273.9355468750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2443047761917114,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 391,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -616.32031250,
+          "y" : -274.5033264160156
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.06580030918121338,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 393,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -608.2046508789062,
+          "y" : -273.6943664550781
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.06580030918121338,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 394,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -605.4107055664062,
+          "y" : -273.8785400390625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.03941380977630615,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 395,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -610.9265136718750,
+          "y" : -273.6876831054688
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3318183422088623,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 397,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -619.0192871093750,
+          "y" : -275.3227844238281
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.06580030918121338,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 404,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -604.0136718750,
+          "y" : -273.9704895019531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.08930230140686035,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 405,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -612.2676391601562,
+          "y" : -273.8107299804688
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.06580030918121338,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 407,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -606.8076782226562,
+          "y" : -273.7864074707031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3318183422088623,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 408,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -617.6670532226562,
+          "y" : -274.9900512695312
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2443047761917114,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 409,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -614.9822387695312,
+          "y" : -274.1771240234375
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.03941380977630615,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 410,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -609.5276489257812,
+          "y" : -273.6324462890625
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.09279787540435791,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 411,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -606.7191162109375,
+          "y" : -272.4786071777344
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.09279787540435791,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 412,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -605.32519531250,
+          "y" : -272.60839843750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2173072099685669,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 413,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -616.2476806640625,
+          "y" : -272.93847656250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.06230473518371582,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 414,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -613.5750122070312,
+          "y" : -272.4426574707031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.06230473518371582,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 415,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -612.1777954101562,
+          "y" : -272.3555297851562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.01241624355316162,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 416,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -609.4339599609375,
+          "y" : -272.2512512207031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2173072099685669,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 417,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -614.9013061523438,
+          "y" : -272.6484985351562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.09279787540435791,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 418,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -608.1131591796875,
+          "y" : -272.3488769531250
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : -0.09279787540435791,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 419,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -603.931152343750,
+          "y" : -272.7380371093750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.01241624355316162,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 420,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -610.8338623046875,
+          "y" : -272.2687377929688
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3048207759857178,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 421,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -618.9700317382812,
+          "y" : -273.7682495117188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3048207759857178,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 422,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -617.6071166992188,
+          "y" : -273.3886718750
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0,
+        "file" : "prefabs/saw.rube",
+        "flip" : false,
+        "id" : 423,
+        "name" : "Saw",
+        "position" : 
+        {
+          "x" : -600.7196655273438,
+          "y" : -279.7913818359375
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3227608203887939,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 424,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -623.0686645507812,
+          "y" : -276.5586547851562
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3227608203887939,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 427,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -621.7409667968750,
+          "y" : -276.1147155761719
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2957632541656494,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 429,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -624.3389892578125,
+          "y" : -275.4553527832031
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3227608203887939,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 435,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -624.3964233398438,
+          "y" : -277.0027160644531
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.3227608203887939,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 436,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -620.4132080078125,
+          "y" : -275.6705017089844
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2957632541656494,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 437,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -620.32128906250,
+          "y" : -274.2311401367188
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2957632541656494,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 442,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -621.6605224609375,
+          "y" : -274.6393127441406
+        },
+        "scale" : 1
+      },
+      
+      {
+        "angle" : 0.2957632541656494,
+        "file" : "prefabs/coin.rube",
+        "flip" : false,
+        "id" : 445,
+        "name" : "Coin",
+        "position" : 
+        {
+          "x" : -622.9996948242188,
+          "y" : -275.0473022460938
+        },
+        "scale" : 1
       }
     ],
     "positionIterations" : 12,

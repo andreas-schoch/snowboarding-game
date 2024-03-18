@@ -4,74 +4,11 @@
 			"image": "environment_1280x720.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 655,
-				"h": 318
+				"w": 498,
+				"h": 630
 			},
 			"scale": 0.25,
 			"frames": [
-				{
-					"filename": "cottage.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 275,
-						"h": 288
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 275,
-						"h": 288
-					},
-					"frame": {
-						"x": 3,
-						"y": 3,
-						"w": 275,
-						"h": 288
-					}
-				},
-				{
-					"filename": "plank.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 313,
-						"h": 16
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 313,
-						"h": 16
-					},
-					"frame": {
-						"x": 3,
-						"y": 295,
-						"w": 313,
-						"h": 16
-					}
-				},
-				{
-					"filename": "tree_01.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 232,
-						"h": 275
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 232,
-						"h": 275
-					},
-					"frame": {
-						"x": 282,
-						"y": 3,
-						"w": 232,
-						"h": 275
-					}
-				},
 				{
 					"filename": "cane.png",
 					"rotated": false,
@@ -87,8 +24,8 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 320,
-						"y": 282,
+						"x": 3,
+						"y": 3,
 						"w": 313,
 						"h": 33
 					}
@@ -108,51 +45,30 @@
 						"h": 63
 					},
 					"frame": {
-						"x": 518,
+						"x": 320,
 						"y": 3,
 						"w": 78,
 						"h": 63
 					}
 				},
 				{
-					"filename": "present_temp.png",
+					"filename": "plank.png",
 					"rotated": false,
-					"trimmed": true,
+					"trimmed": false,
 					"sourceSize": {
-						"w": 50,
-						"h": 50
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 0,
-						"w": 46,
-						"h": 50
-					},
-					"frame": {
-						"x": 600,
-						"y": 3,
-						"w": 46,
-						"h": 50
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 61,
+						"w": 313,
 						"h": 16
 					},
 					"spriteSourceSize": {
-						"x": 8,
+						"x": 0,
 						"y": 0,
-						"w": 45,
+						"w": 313,
 						"h": 16
 					},
 					"frame": {
-						"x": 600,
-						"y": 57,
-						"w": 45,
+						"x": 3,
+						"y": 40,
+						"w": 313,
 						"h": 16
 					}
 				},
@@ -171,10 +87,31 @@
 						"h": 56
 					},
 					"frame": {
-						"x": 518,
-						"y": 70,
+						"x": 402,
+						"y": 3,
 						"w": 78,
 						"h": 56
+					}
+				},
+				{
+					"filename": "cottage.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 275,
+						"h": 288
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 275,
+						"h": 288
+					},
+					"frame": {
+						"x": 3,
+						"y": 60,
+						"w": 275,
+						"h": 288
 					}
 				},
 				{
@@ -192,8 +129,29 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 518,
-						"y": 130,
+						"x": 402,
+						"y": 63,
+						"w": 69,
+						"h": 69
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 69
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 69
+					},
+					"frame": {
+						"x": 282,
+						"y": 70,
 						"w": 69,
 						"h": 69
 					}
@@ -213,31 +171,10 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 591,
-						"y": 130,
+						"x": 355,
+						"y": 136,
 						"w": 61,
 						"h": 16
-					}
-				},
-				{
-					"filename": "wooden_crate.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 69,
-						"h": 69
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 69,
-						"h": 69
-					},
-					"frame": {
-						"x": 518,
-						"y": 203,
-						"w": 69,
-						"h": 69
 					}
 				},
 				{
@@ -255,10 +192,94 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 591,
-						"y": 150,
+						"x": 282,
+						"y": 143,
 						"w": 53,
 						"h": 16
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 50,
+						"h": 50
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 46,
+						"h": 50
+					},
+					"frame": {
+						"x": 420,
+						"y": 136,
+						"w": 46,
+						"h": 50
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 61,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 0,
+						"w": 45,
+						"h": 16
+					},
+					"frame": {
+						"x": 339,
+						"y": 156,
+						"w": 45,
+						"h": 16
+					}
+				},
+				{
+					"filename": "saw.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 3,
+						"y": 352,
+						"w": 256,
+						"h": 256
+					}
+				},
+				{
+					"filename": "tree_01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 232,
+						"h": 275
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 232,
+						"h": 275
+					},
+					"frame": {
+						"x": 263,
+						"y": 352,
+						"w": 232,
+						"h": 275
 					}
 				}
 			]
@@ -267,6 +288,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:e17d340df662eb053073c3d99a235354:5844fa4887c5275b8b497fb1d5ca657b:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d99da7bff302730ce3b603c60a0a3da3:7aa4f350422d3a4667ed70af1f2a75b3:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

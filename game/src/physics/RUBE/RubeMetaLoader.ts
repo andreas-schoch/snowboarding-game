@@ -113,7 +113,7 @@ export class RubeMetaLoader {
   // }
 
   private static loadSensors(rubeFile: RubeFile, parent?: EditorObject) {
-    const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0].customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
+    const sensorBodies = rubeFile.metaworld?.metabody?.filter(b => b.fixture?.[0]?.customProperties?.some(prop => prop.name === 'phaserSensorType')) || [];
     const sensors: Record<EditorSensor['id'], EditorSensor> = {};
     for (const body of sensorBodies) {
       const sensorFixture = body.fixture?.[0];

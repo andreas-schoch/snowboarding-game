@@ -62,6 +62,7 @@ export const Browser: Component<ResizeProps> = props => {
     {id: 'item_0006', name: 'Cane', filterCategory: 'static', type: 'object', file: 'cane.rube', iconOverride: 'horizontal_rule'},
     {id: 'item_0007', name: 'Plank', filterCategory: 'dynamic', type: 'object', file: 'plank.rube', iconOverride: 'horizontal_rule'},
     {id: 'item_0008', name: 'Coin', filterCategory: 'collectible', type: 'object', file: 'coin.rube', iconOverride: 'paid'},
+    {id: 'item_0009', name: 'Saw', filterCategory: 'static', type: 'object', file: 'saw.rube', iconOverride: 'change_circle'},
   ];
 
   // const Item: Component = (props: {item: BrowserItem}) => {

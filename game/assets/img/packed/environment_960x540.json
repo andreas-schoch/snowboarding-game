@@ -4,8 +4,8 @@
 			"image": "environment_960x540.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 496,
-				"h": 241
+				"w": 648,
+				"h": 243
 			},
 			"scale": 0.1875,
 			"frames": [
@@ -94,6 +94,27 @@
 					}
 				},
 				{
+					"filename": "saw.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 192,
+						"h": 192
+					},
+					"frame": {
+						"x": 391,
+						"y": 3,
+						"w": 192,
+						"h": 192
+					}
+				},
+				{
 					"filename": "ice_spikes.png",
 					"rotated": false,
 					"trimmed": false,
@@ -108,52 +129,10 @@
 						"h": 47
 					},
 					"frame": {
-						"x": 391,
+						"x": 587,
 						"y": 3,
 						"w": 58,
 						"h": 47
-					}
-				},
-				{
-					"filename": "present_temp.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 38,
-						"h": 38
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 36,
-						"h": 38
-					},
-					"frame": {
-						"x": 453,
-						"y": 3,
-						"w": 36,
-						"h": 38
-					}
-				},
-				{
-					"filename": "bridgeSegmentNoCap.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 46,
-						"h": 12
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 0,
-						"w": 36,
-						"h": 12
-					},
-					"frame": {
-						"x": 453,
-						"y": 45,
-						"w": 36,
-						"h": 12
 					}
 				},
 				{
@@ -171,10 +150,31 @@
 						"h": 42
 					},
 					"frame": {
-						"x": 391,
+						"x": 587,
 						"y": 54,
 						"w": 58,
 						"h": 42
+					}
+				},
+				{
+					"filename": "present_temp.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 38,
+						"h": 38
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 38
+					},
+					"frame": {
+						"x": 479,
+						"y": 199,
+						"w": 36,
+						"h": 38
 					}
 				},
 				{
@@ -192,8 +192,29 @@
 						"h": 52
 					},
 					"frame": {
-						"x": 391,
+						"x": 587,
 						"y": 100,
+						"w": 52,
+						"h": 52
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 52,
+						"h": 52
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 52,
+						"h": 52
+					},
+					"frame": {
+						"x": 587,
+						"y": 156,
 						"w": 52,
 						"h": 52
 					}
@@ -213,31 +234,10 @@
 						"h": 12
 					},
 					"frame": {
-						"x": 447,
-						"y": 100,
+						"x": 519,
+						"y": 212,
 						"w": 46,
 						"h": 12
-					}
-				},
-				{
-					"filename": "wooden_crate.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 52,
-						"h": 52
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 52,
-						"h": 52
-					},
-					"frame": {
-						"x": 391,
-						"y": 156,
-						"w": 52,
-						"h": 52
 					}
 				},
 				{
@@ -255,9 +255,30 @@
 						"h": 12
 					},
 					"frame": {
-						"x": 447,
-						"y": 116,
+						"x": 519,
+						"y": 228,
 						"w": 41,
+						"h": 12
+					}
+				},
+				{
+					"filename": "bridgeSegmentNoCap.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 46,
+						"h": 12
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 36,
+						"h": 12
+					},
+					"frame": {
+						"x": 564,
+						"y": 228,
+						"w": 36,
 						"h": 12
 					}
 				}
@@ -267,6 +288,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:e17d340df662eb053073c3d99a235354:5844fa4887c5275b8b497fb1d5ca657b:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d99da7bff302730ce3b603c60a0a3da3:7aa4f350422d3a4667ed70af1f2a75b3:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }
