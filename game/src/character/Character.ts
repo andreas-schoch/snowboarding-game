@@ -4,7 +4,6 @@ import {arrayBufferToString} from '../helpers/binaryTransform';
 import {Physics} from '../physics/Physics';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
 import {RubeFile} from '../physics/RUBE/RubeFile';
-import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {Snowboard} from './Snowboard';
@@ -134,8 +133,7 @@ export class Character {
     const encoded = arrayBufferToString(buffer);
     let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
     characterRubeFile = sanitizeRubeFile(characterRubeFile);
-    const characterExport = RubeFileToExport(this.scene, characterRubeFile);
-    return Physics.instance.load(characterExport, x, y);
+    return Physics.instance.load(characterRubeFile, x, y);
   }
 
   private setLegLength(left: number, right: number) {

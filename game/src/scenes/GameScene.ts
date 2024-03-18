@@ -13,7 +13,6 @@ import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {RubeFile} from '../physics/RUBE/RubeFile';
-import {RubeFileToExport} from '../physics/RUBE/RubeFileToExport';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
 
@@ -67,14 +66,13 @@ export class GameScene extends Phaser.Scene {
 
     pb.level.get(PersistedStore.currentLevel()).then(async level => {
       if (!level) throw new Error('Level not found: ' + PersistedStore.currentLevel());
-      let rubeFile = await pb.level.getRubeFile(level);
+      const rubeFile = await pb.level.getRubeFile(level);
       if (!rubeFile) throw new Error('RubeFile not found for level: ' + PersistedStore.currentLevel());
-      rubeFile = sanitizeRubeFile(rubeFile);
-      const rubeExport = RubeFileToExport(this, rubeFile);
+
       GameInfo.currentLevel = level;
       GameInfo.currentLevelScene = rubeFile;
 
-      const loadedLevelScene = this.b2Physics.load(rubeExport);
+      const loadedLevelScene = this.b2Physics.load(rubeFile);
       new Terrain(this, loadedLevelScene).draw();
       const character = new Character(this, loadedLevelScene);
       this.playerController = new CharacterController(this);

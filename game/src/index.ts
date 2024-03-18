@@ -3,6 +3,7 @@ import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {PersistedStore} from './PersistedStore';
 import {RubeFile} from './physics/RUBE/RubeFile';
+import {sanitizeRubeFile} from './physics/RUBE/sanitizeRubeFile';
 import {PocketbaseService} from './pocketbase/pocketbase';
 import {TrickScore} from './pocketbase/types';
 import {EditorScene} from './scenes/EditorScene';
@@ -71,7 +72,7 @@ window.onload = async () => {
   freeLeaked = LeakMitigator.freeLeaked;
   recordLeak = LeakMitigator.recordLeak;
 
-  rubeFileSerializer = await ProtobufSerializer<RubeFile, RubeFile>({schema: 'assets/protobuf/RubeFile.proto', type: 'RubeFile'});
+  rubeFileSerializer = await ProtobufSerializer<RubeFile, RubeFile>({schema: 'assets/protobuf/RubeFile.proto', type: 'RubeFile', from: sanitizeRubeFile, to: sanitizeRubeFile});
   scoreLogSerializer = await ScoreLogSerializer();
 
   game = new Phaser.Game(gameConfig);

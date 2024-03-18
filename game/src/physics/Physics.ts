@@ -3,7 +3,7 @@ import {iterBodies} from '../helpers/B2Iterators';
 import {b2, ppm} from '../index';
 import {DebugDrawer} from './DebugDraw';
 import {WorldEntityConfig, WorldEntityData} from './RUBE/EntityTypes';
-import {RubeExport} from './RUBE/RubeExport';
+import {RubeFile} from './RUBE/RubeFile';
 import {RubeImageAdapter as PhaserImageAdapter} from './RUBE/RubeImageAdapter';
 import {RubeLoader} from './RUBE/RubeLoader';
 
@@ -34,7 +34,7 @@ export class Physics {
     this.worldEntity = this.initWorld(config);
 
     const adapter = new PhaserImageAdapter(scene);
-    this.loader = new RubeLoader(this.worldEntity, adapter);
+    this.loader = new RubeLoader(scene, this.worldEntity, adapter);
   }
 
   setDebugDraw(enabled: boolean) {
@@ -42,9 +42,9 @@ export class Physics {
     // this.debugDrawer.instance.SetFlags(enabled ? 1 : 0);
   }
 
-  load(rubeExport: RubeExport, offsetX: number = 0, offsetY: number = 0) {
+  load(rubefile: RubeFile, offsetX: number = 0, offsetY: number = 0) {
     // const sceneJson: RubeScene = this.scene.cache.json.get(rubeScene);
-    const loadedScene = this.loader.load(rubeExport, offsetX, offsetY);
+    const loadedScene = this.loader.load(rubefile, offsetX, offsetY);
     if (this.worldEntity.debugDrawEnabled) this.worldEntity.world.DebugDraw();
     // GameInfo.observer.emit(RUBE_SCENE_LOADED, loadedScene); // Ensure editor open emitted before this, so scene explorer is already in the DOM
     return loadedScene;

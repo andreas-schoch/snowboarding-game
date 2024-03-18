@@ -3,6 +3,7 @@ import {arrayBufferToString} from '../../helpers/binaryTransform';
 import {decomposePolygon, isSelfIntersecting} from '../../helpers/decomposePolygon';
 import {RubeBody, RubeExport, RubeFixture, RubeImage, RubeJoint, RubeJointBase} from './RubeExport';
 import {MetaBody, MetaFixture, MetaImage, MetaJoint, MetaWorld, RubeFile, RubeVector} from './RubeFile';
+import {sanitizeRubeExport} from './sanitizeRubeExport';
 import {sanitizeRubeFile} from './sanitizeRubeFile';
 
 type BodyIndexByMetaId = Record<MetaBody['id'], number>;
@@ -23,7 +24,7 @@ export function RubeFileToExport(scene: Phaser.Scene, rubeFile: RubeFile): RubeE
   deconstructMetaObjects(scene, rubeFile.metaworld.metaobject, body, joint, image);
 
   const {gravity, allowSleep, autoClearForces, positionIterations, velocityIterations, stepsPerSecond, warmStarting, continuousPhysics, subStepping} = rubeFile.metaworld;
-  return {
+  let rubeExport: RubeExport = {
     body,
     joint,
     image,
@@ -37,6 +38,9 @@ export function RubeFileToExport(scene: Phaser.Scene, rubeFile: RubeFile): RubeE
     continuousPhysics,
     subStepping,
   };
+
+  rubeExport = sanitizeRubeExport(rubeExport);
+  return rubeExport;
 
 }
 

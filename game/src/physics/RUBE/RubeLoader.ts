@@ -8,11 +8,12 @@ import {b2} from '../..';
 import {iterBodies, iterBodyFixtures, iterJoints} from '../../helpers/B2Iterators';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {BodyEntityData, Entity, LoadedScene, EntityData, FixtureEntityData, ImageEntityData, JointEntityData, WorldEntityData} from './EntityTypes';
-import {RubeBody, RubeFixture, RubeExport, RubeJoint, RubeImage} from './RubeExport';
+import {RubeBody, RubeFixture, RubeJoint, RubeImage} from './RubeExport';
+import {RubeFile} from './RubeFile';
+import {RubeFileToExport} from './RubeFileToExport';
 import {IBaseAdapter} from './RubeImageAdapter';
 import {vec2Util} from './Vec2Math';
 import {customPropsArrayToMap, rubeToVec2} from './rubeTransformers';
-import {sanitizeRubeExport} from './sanitizeRubeExport';
 
 export class RubeLoader {
   readonly loadedScenes: Map<LoadedScene['id'], LoadedScene> = new Map();
@@ -23,15 +24,15 @@ export class RubeLoader {
   private loadingJoints: LoadedScene['joints'] = [];
   private loadingImages: LoadedScene['images'] = [];
 
-  constructor(private worldEntity: WorldEntityData, private adapter: IBaseAdapter) { }
+  constructor(private scene: Phaser.Scene, private worldEntity: WorldEntityData, private adapter: IBaseAdapter) { }
 
-  load(rubeExport: RubeExport, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
-    // Note that all the defaults should already have been set within sanitizeRubeDefaults()
-    // But for now we keep setting defaults in this loader as well until continuing work on my own level editor
+  load(rubefile: RubeFile, offsetX: number = 0, offsetY: number = 0, idOverride?: string): LoadedScene {
     console.time('RubeLoader.load');
+
+    // TODO get rid of RubeExport eventually
+    const rubeExport = RubeFileToExport(this.scene, rubefile);
     this.loadingSceneId = idOverride || pseudoRandomId();
     this.loadingSceneEntityData = new Map();
-    rubeExport = sanitizeRubeExport(rubeExport);
     console.timeLog('RubeLoader.load', 'scene sanitized');
     this.loadingBodies = (rubeExport.body || []).map(bodyJson => this.loadBody(bodyJson, offsetX, offsetY));
     console.timeLog('RubeLoader.load', 'bodies loaded');
