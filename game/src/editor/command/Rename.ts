@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {ICommand} from './Commander';
 
@@ -9,7 +10,11 @@ export type RenameCommandArgs = {
 };
 
 export class Rename implements ICommand {
-  constructor(private args: RenameCommandArgs) { }
+  id: string;
+
+  constructor(private args: RenameCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     console.debug('Rename.execute', this.args);

@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorImage} from '../items/EditorImage';
 import {ICommand} from './Commander';
 
@@ -9,7 +10,11 @@ export type DepthCommandArgs = {
 };
 
 export class Depth implements ICommand {
-  constructor(private args: DepthCommandArgs) { }
+  id: string;
+
+  constructor(private args: DepthCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     console.debug('Depth.execute', this.args);

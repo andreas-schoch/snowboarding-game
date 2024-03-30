@@ -27,6 +27,8 @@ export const EDITOR_RENDER_DELETE = 'editor_scene_delete';
 export const EDITOR_ITEM_SELECTED = 'editor_item_selected';
 export const EDITOR_ITEM_PLACED = 'editor_item_placed';
 export const EDITOR_ITEM_REMOVED = 'editor_item_removed';
+export const EDITOR_SET_GRID_VISIBLE = 'editor_set_grid_visible';
+export const EDITOR_SET_FIXTURE_OUTLINE = 'editor_set_fixture_outline';
 
 export const RUBE_FILE_LOADED = 'rube_scene_loaded';
 export const RUBE_FILE_CHANGED = 'rube_scene_changed';

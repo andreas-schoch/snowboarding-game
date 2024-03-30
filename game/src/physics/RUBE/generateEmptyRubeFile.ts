@@ -1,3 +1,4 @@
+import {pb} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {ILevelNew} from '../../levels';
@@ -29,14 +30,17 @@ export function generateNewLevel(): ILevelNew {
     thumbnail: '',
     number: -1,
     scene: localId + '.bin',
-    owner: 'temp',
-    created: new Date().toISOString(),
-    updated: new Date().toISOString()
+    user: 'temp',
+    localLastUpdated: Date.now(),
   };
 }
 
 export function registerNewLevel(rubefile?: RubeFile): [ILevelNew, RubeFile] {
+  const loggedInUser = pb.auth.loggedInUser();
+  if (!loggedInUser) throw new Error('No user logged in. This should never happen');
+
   const newLevel = generateNewLevel();
+  newLevel.user = loggedInUser.id;
 
   if (rubefile) rubefile = sanitizeRubeFile(rubefile);
   const emptyRubefile = rubefile || generateEmptyRubeFile();

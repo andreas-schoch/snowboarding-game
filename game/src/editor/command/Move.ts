@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {ICommand} from './Commander';
 
@@ -11,7 +12,11 @@ export type MoveCommandArgs = {
 };
 
 export class Move implements ICommand {
-  constructor(private args: MoveCommandArgs) { }
+  id: string;
+
+  constructor(private args: MoveCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     console.debug('Move.execute', this.args);

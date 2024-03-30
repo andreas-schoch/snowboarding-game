@@ -56,14 +56,13 @@ export const OpenLevel: Component = () => {
       EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
       setActiveDialogName(null);
-
     });
   };
 
   const cloneLevel = (levelToClone: ILevel) => {
     getRubefile(levelToClone).then(([_, rubeFileToClone]) => {
       const [newLevel, rubefile] = registerNewLevel(rubeFileToClone);
-      newLevel.name = `Clone of ${levelToClone.name}`;
+      newLevel.name = `Clone of ${levelToClone.name}`.slice(0, 32);
       // newLevel.owner = 
 
       const items = RubeMetaLoader.load(newLevel, rubefile);
@@ -72,7 +71,6 @@ export const OpenLevel: Component = () => {
       EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
       setActiveDialogName(null);
-
     });
   };
 
@@ -113,7 +111,7 @@ export const OpenLevel: Component = () => {
         <Tabs.Content class="" value="campaign">
           <div class="p-3 text-[10px] leading-4">There are made by the creator of this game. Feel free to clone and use them as a base for your own level.</div>
 
-          <div class="scrollbar grow p-5" >
+          <div class="scrollbar !max-h-[30rem] grow p-5" >
             <For each={levels()} fallback={<div>-</div>}>
               {item => (
                 <div onClick={e => handleSelectLevel(e, item)} class="mb-4 flex cursor-pointer flex-col rounded-md border border-stone-500 bg-stone-800 px-4 py-2 hover:bg-stone-700">
@@ -135,7 +133,7 @@ export const OpenLevel: Component = () => {
         <Tabs.Content class="p-3 text-[10px] leading-4" value="my_own">
           <div>These are made by yourself. Both published and unpublished drafts are listed here.</div>
 
-          <div class="scrollbar grow p-5" >
+          <div class="scrollbar max-h-[30rem] grow p-5" >
             <For each={levels()} fallback={<div>-</div>}>
               {item => (
                 <div onClick={e => handleSelectLevel(e, item)} class="mb-4 flex cursor-pointer flex-col rounded-md border border-stone-500 bg-stone-800 px-4 py-2 hover:bg-stone-700">

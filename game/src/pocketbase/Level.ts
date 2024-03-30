@@ -1,6 +1,6 @@
 import PocketBase, {ListResult} from 'pocketbase';
 import {rubeFileSerializer} from '..';
-import {blobToString} from '../helpers/binaryTransform';
+import {base64ToBlob, blobToString, stringToBlob} from '../helpers/binaryTransform';
 import {ILevel, ILevelNew, isLevel} from '../levels';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
@@ -9,7 +9,7 @@ import {IUser} from './types';
 
 export class Level {
   private collectionName = 'levels';
-  private pageSize = 10;
+  private pageSize = 5;
 
   constructor(private pb: PocketBase, private auth: Auth) { }
 
@@ -49,12 +49,39 @@ export class Level {
     return await this.pb.collection(this.collectionName).getOne<ILevel>(id, {expand: 'owner'}).catch(() => null);
   }
 
-  async create(level: ILevelNew): Promise<ILevel> {
-    if (isLevel(level)) throw new Error('Cannot call create with an existing level. Either clone or update it.');
+  async create(level: ILevelNew, rubefile: RubeFile, base64Thumbnail: string): Promise<ILevel> {
+    if (isLevel(level)) throw new Error('Cannot call create with an existing level');
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('No user logged in. This should never happen');
-    level.owner = loggedInUser.id;
-    return await this.pb.collection(this.collectionName).create(level);
+
+    const rubefileBlob = stringToBlob(rubeFileSerializer.encode(rubefile), 'application/octet-stream');
+    const thumbnailBlob = base64ToBlob(base64Thumbnail, 'image/jpeg');
+
+    const formData = new FormData();
+    formData.append('localId', level.localId);
+    formData.append('name', level.name);
+    formData.append('number', level.number.toString());
+    formData.append('user', loggedInUser.id);
+    formData.append('thumbnail', thumbnailBlob, 'thumbnail.jpg');
+    formData.append('scene', rubefileBlob, 'level.bin');
+
+    return await this.pb.collection(this.collectionName).create(formData);
+  }
+
+  async update(level: ILevel, rubefile: RubeFile, base64Thumbnail: string): Promise<ILevel> {
+    if (!isLevel(level)) throw new Error('Cannot call update with a non-existing level');
+    const loggedInUser = this.auth.loggedInUser();
+    if (!loggedInUser) throw new Error('No user logged in. This should never happen');
+
+    const rubefileBlob = stringToBlob(rubeFileSerializer.encode(rubefile), 'application/octet-stream');
+    const thumbnailBlob = base64ToBlob(base64Thumbnail, 'image/jpeg');
+
+    const formData = new FormData();
+    formData.append('name', level.name);
+    formData.append('thumbnail', thumbnailBlob, 'thumbnail.jpg');
+    formData.append('scene', rubefileBlob, 'level.bin');
+
+    return await this.pb.collection(this.collectionName).update(level.id, formData);
   }
 
   async getRubeFile(level?: ILevel): Promise<RubeFile | null> {

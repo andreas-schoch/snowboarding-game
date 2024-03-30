@@ -1,3 +1,4 @@
+import {ResizeProps} from './UI/EditorUI/Pane';
 import {setRecentLevels} from './UI/EditorUI/globalSignals';
 import {ILevel, ILevelNew, LocalLevelKeys} from './levels';
 import {RubeFile} from './physics/RUBE/RubeFile';
@@ -5,11 +6,22 @@ import {sanitizeRubeFile} from './physics/RUBE/sanitizeRubeFile';
 import {IScore} from './pocketbase/types';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH, rubeFileSerializer} from '.';
 
-export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen' | 'editorRecentLevels' | 'fps' | 'local_levels' | 'local_level_scenes';
+export type SettingKeys = 'debug' | 'debugZoom' | 'resolution' | 'volumeMusic' | 'volumeSfx' | 'darkmodeEnabled' | 'userScores' | 'userName' | 'anonymous_uid' | 'levelCurrent' | 'selectedCharacter' | 'selectedCharacterSkin' | 'debug_logs' | 'betaFeaturesEnabled' | 'editorOpen' | 'editorRecentLevels' | 'fps' | 'local_levels' | 'local_level_scenes' | 'editor_show_grid' | 'editor_show_fixture' | 'editor_grid_info_map';
 export type CharacterKeys = 'character_v01' | 'character_v02';
 export type CharacterSkinKeys = 'character_v01_neutral' | 'character_v01_santa' | 'character_v02_neutral' | 'character_v02_santa';
 
 export class PersistedStore {
+
+  static editorPaneGridInfo(title: string): ResizeProps | null {
+    const gridInfoMap: Record<string, ResizeProps> = JSON.parse(PersistedStore.getRaw('editor_grid_info_map') || '{}');
+    return gridInfoMap[title] || null;
+  }
+
+  static setEditorPaneGridInfo(title: string, gridInfo: ResizeProps) {
+    const gridInfoMap: Record<string, ResizeProps> = JSON.parse(PersistedStore.getRaw('editor_grid_info_map') || '{}');
+    gridInfoMap[title] = gridInfo;
+    PersistedStore.set('editor_grid_info_map', JSON.stringify(gridInfoMap));
+  }
 
   static set(setting: SettingKeys, value: string) {
     localStorage.setItem('snowboarding_game_' + setting, value);
@@ -73,7 +85,6 @@ export class PersistedStore {
 
   static addEditorRubefile(level: ILevel | ILevelNew, rubefile: RubeFile) {
     const localRubeFiles: Record<string, string> = JSON.parse(PersistedStore.getRaw('local_level_scenes') || '{}');
-    console.debug('Adding rubefile for level', rubefile, level);
     localRubeFiles[level.localId] = rubeFileSerializer.encode(rubefile);
     PersistedStore.set('local_level_scenes', JSON.stringify(localRubeFiles));
   }
@@ -86,6 +97,14 @@ export class PersistedStore {
     let scene = rubeFileSerializer.decode(bin);
     scene = sanitizeRubeFile(scene);
     return scene;
+  }
+
+  static editorShowGrid(): boolean {
+    return PersistedStore.getRaw('editor_show_grid') === 'true';
+  }
+
+  static editorShowFixture(): boolean {
+    return PersistedStore.getRaw('editor_show_fixture') === 'true';
   }
 
   static getEditorLocalLevel(level: ILevelNew): ILevelNew | null {

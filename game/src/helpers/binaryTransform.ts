@@ -9,6 +9,12 @@ export function downloadBlob(binaryString: string, filename: string, contentType
   document.body.removeChild(link);
 }
 
+export function base64ToBlob(base64Data: string, contentType: string = 'image/jpeg'): Blob {
+  const base64WithoutPrefix = base64Data.split(',')[1];
+  const binaryString = atob(base64WithoutPrefix);
+  return stringToBlob(binaryString, contentType);
+}
+
 export function stringToBlob(binaryString: string, contentType: string): Blob {
   const byteArray = new Uint8Array(binaryString.length);
   for (let i = 0; i < binaryString.length; i++) byteArray[i] = binaryString.charCodeAt(i);

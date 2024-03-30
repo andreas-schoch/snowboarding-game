@@ -132,7 +132,7 @@ export class Snowboard {
 
   private initParticles() {
     const graphics = this.scene.add.graphics().setDepth(10000000);
-    graphics.fillStyle(PersistedStore.darkmodeEnabled() ? 0x222222 : 0xffffff, 1);
+    graphics.fillStyle(PersistedStore.darkmodeEnabled() ? 0x000000 : 0xffffff, 1);
     graphics.fillCircle(8, 8, 8);
     graphics.generateTexture('circle_01', 16, 16);
     graphics.destroy();

@@ -3,13 +3,12 @@ import {RecordModel} from 'pocketbase';
 export interface ILevelNew {
     // id: string;
     localId: string;
+    localLastUpdated: number;
     name: string;
-    thumbnail: string;
     number: number;
+    user: string;
+    thumbnail: string;
     scene: string;
-    owner: string;
-    created: string;
-    updated: string;
 }
 
 export type LocalLevelKeys = 'level_001' | 'level_002' | 'level_003' | 'level_004' | 'level_005';

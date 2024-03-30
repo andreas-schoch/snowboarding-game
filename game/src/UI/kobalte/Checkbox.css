@@ -1,0 +1,15 @@
+.checkbox {
+  @apply inline-flex items-center cursor-pointer;
+}
+.checkbox__control {
+  @apply h-5 w-5 border border-zinc-300 bg-zinc-200 rounded-md border-solid;
+}
+.checkbox__input:focus-visible + .checkbox__control {
+  @apply outline-offset-2;
+}
+.checkbox__control[data-checked] {
+  @apply bg-stone-600 text-white;
+}
+.checkbox__label {
+  @apply text-stone-400 text-[12px] select-none ml-4 w-full cursor-pointer;
+}

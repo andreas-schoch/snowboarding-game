@@ -23,13 +23,15 @@ export const [recentLevels, setRecentLevels] = createSignal<(ILevel | ILevelNew)
 export const [editorItems, setEditorItems] = createSignal<EditorItems>(initial, {equals: false});
 export const [selected, setSelected] = createSignal<EditorItem | null>(null, {equals: false});
 export const [activeBrowserItem, setActiveBrowserItem] = createSignal<BrowserItem | null>(null, {equals: false});
+export const [resetLayout, triggerResetLayout] = createSignal<void>(void 0, {equals: false});
+export const [disableEditorInput, setDisableEditorInput] = createSignal<boolean>(false, {equals: false});
 
 export type DialogName = 'Help' | 'About' | 'Settings' | 'Open Level';
 export const [activeDialogName, setActiveDialogName] = createSignal<DialogName | null>(null);
 export const activeDialog = () => activeDialogName() && dialogNameMap[activeDialogName()!];
 
 export const dialogNameMap: Record<DialogName, Component> = {
-  Help: () => <div>Help</div>,
+  Help: () => <div>Sorry there are no Help docs yet. For now, try to open an existing level and play around.</div>,
   About: () => <div>About</div>,
   Settings: () => <div>Settings</div>,
   'Open Level': () => <OpenLevel />,

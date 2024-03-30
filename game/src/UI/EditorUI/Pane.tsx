@@ -1,4 +1,6 @@
-import {ParentComponent, onCleanup, onMount, Show} from 'solid-js';
+import {ParentComponent, onCleanup, onMount, Show, createEffect, on} from 'solid-js';
+import {PersistedStore} from '../../PersistedStore';
+import {resetLayout} from './globalSignals';
 
 const noop = () => {};
 export type ResizeProps = {colStart: number, colEnd: number, rowStart: number, rowEnd: number};
@@ -11,13 +13,31 @@ export const Pane: ParentComponent<PaneProps> = props => {
   let cleanupResize: () => void = () => noop;
 
   onMount(() => {
+    const gridInfo = PersistedStore.editorPaneGridInfo(props.title);
+    const colStart = gridInfo?.colStart || props.colStart;
+    const colEnd = gridInfo?.colEnd || props.colEnd;
+    const rowStart = gridInfo?.rowStart || props.rowStart;
+    const rowEnd = gridInfo?.rowEnd || props.rowEnd;
+
+    paneRef.style.cssText = `
+    grid-column-start: ${colStart};
+    grid-row-start: ${rowStart};
+    grid-column-end: ${colEnd};
+    grid-row-end: ${rowEnd};
+    position: relative;`;
+
+    PersistedStore.setEditorPaneGridInfo(props.title, {colStart, colEnd, rowStart, rowEnd});
+  });
+
+  createEffect(on([resetLayout], () => {
+    PersistedStore.set('editor_grid_info_map', JSON.stringify({}));
     paneRef.style.cssText = `
     grid-column-start: ${props.colStart};
     grid-row-start: ${props.rowStart};
     grid-column-end: ${props.colEnd};
     grid-row-end: ${props.rowEnd};
     position: relative;`;
-  });
+  }, {defer: true}));
 
   onCleanup(() => {
     cleanupMove();
@@ -55,6 +75,9 @@ export const Pane: ParentComponent<PaneProps> = props => {
       if (cl.contains('cursor-w-resize') || cl.contains('cursor-nw-resize') || cl.contains('cursor-sw-resize')) pes.gridColumnStart = String(gridColumnStart + changeX);
       if (cl.contains('cursor-n-resize') || cl.contains('cursor-nw-resize') || cl.contains('cursor-ne-resize')) pes.gridRowStart = String(gridRowStart + changeY);
       if (cl.contains('cursor-s-resize') || cl.contains('cursor-sw-resize') || cl.contains('cursor-se-resize')) pes.gridRowEnd = String(gridRowEnd + changeY);
+
+      const info = {colStart: parseInt(pes.gridColumnStart), colEnd: parseInt(pes.gridColumnEnd), rowStart: parseInt(pes.gridRowStart), rowEnd: parseInt(pes.gridRowEnd)};
+      PersistedStore.setEditorPaneGridInfo(props.title, info);
     };
 
     const resizeStop = () => {

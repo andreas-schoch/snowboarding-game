@@ -10,15 +10,27 @@ export class Backdrop {
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
+    this.init();
+  }
+
+  init() {
+    if (this.bgSky) this.bgSky.destroy();
+    if (this.bgSpaceMid) this.bgSpaceMid.destroy();
+    if (this.bgSpaceFront) this.bgSpaceFront.destroy();
+
     this.resolutionMod = this.scene.cameras.main.width / DEFAULT_WIDTH;
+    const darkmodeEnabled = PersistedStore.darkmodeEnabled();
+    const key = darkmodeEnabled ? 'bg_sky_dark' : 'bg_sky';
 
-    const g = this.scene.add.graphics();
-    g.fillStyle(PersistedStore.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
-    g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
-    g.generateTexture('bg_sky', DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
-    g.destroy();
+    if (!this.scene.textures.exists(key)) {
+      const g = this.scene.add.graphics();
+      g.fillStyle(PersistedStore.darkmodeEnabled() ? 0x666666 : 0x3470c6, 1);
+      g.fillRect(0, 0, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
+      g.generateTexture(key, DEFAULT_WIDTH * this.resolutionMod, DEFAULT_HEIGHT * this.resolutionMod);
+      g.destroy();
+    }
 
-    this.bgSky = this.registerLayer('bg_sky', '');
+    this.bgSky = this.registerLayer(key, '');
 
     if (PersistedStore.darkmodeEnabled()) {
       this.bgSpaceMid = this.registerLayer('bg_space_pack', 'bg_space_mid.png');

@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {ICommand} from './Commander';
 
@@ -7,7 +8,11 @@ export type DeleteCommandArgs = {
 };
 
 export class Delete implements ICommand {
-  constructor(private args: DeleteCommandArgs) { }
+  id: string;
+
+  constructor(private args: DeleteCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     this.args.item.delete();

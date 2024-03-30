@@ -14,6 +14,6 @@
 }
 
 .btn-primary {
-  @apply bg-blue-800 border-blue-800 text-stone-200 border rounded block h-10 px-4 text-sm outline-none cursor-pointer font-normal transition hover:bg-blue-900 hover:border-blue-900;
+  @apply bg-blue-800 border-blue-800 text-stone-200 border rounded block h-10 px-4 text-sm outline-none cursor-pointer font-normal transition hover:bg-blue-900 hover:border-blue-900 disabled:pointer-events-none disabled:opacity-50;
 }
 

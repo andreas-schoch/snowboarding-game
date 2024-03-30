@@ -1,6 +1,6 @@
 /* https://kobalte.dev/docs/core/components/menubar */
 .menubar__root {
-  @apply flex justify-center items-center;
+  @apply flex justify-start items-center;
 }
 .menubar__trigger {
   @apply appearance-none flex justify-center items-center h-10 text-stone-400 text-[12px] gap-x-3 leading-[0] transition px-2 py-0;

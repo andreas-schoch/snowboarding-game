@@ -53,6 +53,10 @@ export class EditorScene extends Phaser.Scene {
       this.scene.stop(SCENE_EDITOR);
       this.scene.start(SCENE_GAME);
     });
+
+    EditorInfo.observer.on('darkmode_toggled', (enabled: boolean) => {
+      this.backdrop.init();
+    });
   }
 
   update(time: number, delta: number) {

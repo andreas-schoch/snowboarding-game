@@ -19,7 +19,7 @@ export const Canvas: Component<ResizeProps> = props => {
   });
 
   return <>
-    <Pane title="" class="" {...props} >
+    <Pane title="Canvas" class="" {...props} >
 
       <div class="absolute inset-0 overflow-hidden rounded-md" ref={el => wrapperRef = el} />
     </Pane>

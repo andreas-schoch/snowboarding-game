@@ -3,6 +3,7 @@ import './index.css';
 import './kobalte/Menubar.css';
 import './kobalte/Tabs.css';
 import './kobalte/Pagination.css';
+import './kobalte/Checkbox.css';
 import {Match, Switch} from 'solid-js';
 import {render} from 'solid-js/web';
 import {PersistedStore} from '../PersistedStore';

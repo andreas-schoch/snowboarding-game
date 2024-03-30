@@ -10,6 +10,7 @@ import {Select, SelectCommandArgs} from './Select';
 export interface ICommand {
   execute(): void;
   unExecute(): void;
+  id: string;
 }
 
 type CommandArgs = SelectCommandArgs | AddCommandArgs | PasteCommandArgs | DeleteCommandArgs | MoveCommandArgs | RotateCommandArgs | RenameCommandArgs | DepthCommandArgs;
@@ -49,5 +50,9 @@ export class Commander {
       command.execute();
       this.undoStack.push(command);
     }
+  }
+
+  static lastCommandId() {
+    return this.undoStack[this.undoStack.length - 1]?.id;
   }
 }

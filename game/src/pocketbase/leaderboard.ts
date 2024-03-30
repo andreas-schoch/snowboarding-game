@@ -63,13 +63,10 @@ export class Leaderboard {
     if (score.pointsTotal !== 0 && GameInfo.tsl.length === 0) throw new Error('Missing tsl');
 
     const tslString = scoreLogSerializer.encode(GameInfo.tsl);
-    // downloadBlob(tslString, 'tsl.bin', 'application/octet-stream');
     const blob = stringToBlob(tslString, 'application/octet-stream');
 
     // @ts-expect-error to upload the TSL pocketbase expects a Blob. It gets stored as a file and the filename is referenced as score.tsl
     score.tsl = blob;
-
-    if (!score.tsl) throw new Error('Missing tsl');
     score.user = loggedInUser.id;
     score.level = PersistedStore.currentLevel();
 

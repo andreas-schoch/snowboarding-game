@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {ICommand} from './Commander';
 
@@ -7,7 +8,11 @@ export type PasteCommandArgs = {
 };
 
 export class Paste implements ICommand {
-  constructor(private args: PasteCommandArgs) { }
+  id: string;
+
+  constructor(private args: PasteCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     // TODO

@@ -1,10 +1,10 @@
-import {Menubar} from '@kobalte/core';
-import {Component, For} from 'solid-js';
-import {pb, rubeFileSerializer} from '../..';
+import {Checkbox, Menubar} from '@kobalte/core';
+import {Component, For, createEffect, createSignal, on} from 'solid-js';
+import {game, pb, rubeFileSerializer} from '../..';
 import {EditorInfo} from '../../EditorInfo';
 import {PersistedStore} from '../../PersistedStore';
 import {Commander} from '../../editor/command/Commander';
-import {EDITOR_EXIT, EDITOR_RESET_RENDERED, RUBE_FILE_LOADED} from '../../eventTypes';
+import {EDITOR_EXIT, EDITOR_RESET_RENDERED, EDITOR_SET_FIXTURE_OUTLINE, EDITOR_SET_GRID_VISIBLE, RUBE_FILE_LOADED} from '../../eventTypes';
 import {arrayBufferToString, downloadBlob} from '../../helpers/binaryTransform';
 import {openFileSelector} from '../../helpers/openFileSelector';
 import {ILevel, ILevelNew, isLevel} from '../../levels';
@@ -12,14 +12,128 @@ import {RubeFile} from '../../physics/RUBE/RubeFile';
 import {RubeMetaLoader} from '../../physics/RUBE/RubeMetaLoader';
 import {editorItemsToRubefile} from '../../physics/RUBE/RubeMetaSerializer';
 import {registerNewLevel} from '../../physics/RUBE/generateEmptyRubeFile';
-import {editorItems, recentLevels, setActiveDialogName, setEditorItems} from './globalSignals';
+import {editorItems, recentLevels, setActiveDialogName, setEditorItems, triggerResetLayout} from './globalSignals';
 
+// TODO implement detect changes to properly (broken right now) update save button state for
+//  - Changes after saved level loaded
+//  - Changes made before refreshing page are preserved even when save button not clicked
+//  - Saving changes should disable button and update backend
+//  - If local changes are behind backend, indicate the discerpancy and allow user to pull latest changes from backend
 export const Actionbar: Component = () => {
+  let saveBtnRef: HTMLButtonElement | null = null;
 
-  const handleOpenGame = () => {
+  const [label, setLabel] = createSignal<'Clone' | 'Upload New' | 'Save Changes' | 'Saved'>('Save Changes');
+
+  const [levelRemote, setLevelRemote] = createSignal<ILevel | null>(null);
+  const [lastCommand, setLastCommand] = createSignal(Commander.lastCommandId());
+  // const hasChanges = () => lastCommand() !== Commander.lastCommandId();
+
+  const alreadyUploaded = () => isLevel(editorItems().level);
+  const isOwner = () => editorItems()!.level.user === pb.auth.loggedInUser()!.id;
+
+  // const labelSaveButton = () => {
+  //   if (!isOwner()) return 'Clone';
+  //   else if (!alreadyUploaded()) return 'Upload New';
+  //   else if (hasChanges()) return 'Save Changes';
+  //   return 'Saved';
+  // };
+
+  createEffect(on(editorItems, async () => {
+    const items = editorItems();
+    let remote = levelRemote();
+
+    if (isLevel(items.level) && !remote) {
+      remote = await pb.level.get(items.level.id);
+      setLevelRemote(remote);
+      // if (fetched && fetched.id === items.level.id) return;
+    }
+
+    const hasChanges = remote && new Date(items.level.localLastUpdated) > new Date(remote!.updated);
+
+    if (!isOwner()) setLabel('Clone');
+    else if (!alreadyUploaded()) setLabel('Upload New');
+    else if (hasChanges) setLabel('Save Changes');
+    else setLabel('Saved');
+
+    if (label() === 'Saved') saveBtnRef!.setAttribute('disabled', 'true');
+    else saveBtnRef!.removeAttribute('disabled');
+
+    // const label = labelSaveButton();
+    // console.log('changed', label, lastCommand(), Commander.lastCommandId());
+
+    // if (label === 'Saved') saveBtnRef!.setAttribute('disabled', 'true');
+    // else saveBtnRef!.removeAttribute('disabled');
+
+    // const commandId = Commander.lastCommandId();
+    // // const lastCommandId = lastCommand();
+    // // if (commandId !== lastCommandId) saveBtnRef!.setAttribute('disabled', 'true');
+    // setLastCommand(commandId);
+  }));
+
+  // createEffect(() => {
+  //   const levelLocal = editorItems().level;
+  //   if (isLevel(levelLocal)) {
+  //     const remote = levelRemote();
+  //     if (remote && remote.id === levelLocal.id) return;
+  //     pb.level.get(levelLocal.id).then(level => {
+  //       setLevelRemote(level);
+  //       setHasChanges(hasChanges());
+  //       // saveBtnRef?.removeAttribute('disabled');
+  //     });
+  //   }
+  // });
+
+  function handleOpenGame() {
     EditorInfo.observer.emit(EDITOR_EXIT);
     PersistedStore.set('editorOpen', 'false');
-  };
+  }
+
+  function saveChanges() {
+    const currentLabel = label();
+
+    if (currentLabel === 'Saved') return;
+
+    game.renderer.snapshot(async thumbnail => {
+      if (!(thumbnail instanceof HTMLImageElement)) throw new Error('Expected HTMLImageElement but got something else');
+      let items = editorItems();
+      let rubefile = editorItemsToRubefile(items);
+      let response: ILevel;
+
+      switch (currentLabel) {
+      case 'Upload New':
+        response = await pb.level.create(items.level, rubefile, thumbnail.src);
+        break;
+      case 'Save Changes':
+        if (!isLevel(items.level)) throw new Error('Only the owner can save changes');
+        response = await pb.level.update(items.level, rubefile, thumbnail.src);
+        break;
+      case 'Clone': {
+        const [clonedLevel, clonedRubefile] = registerNewLevel(rubefile);
+        rubefile = clonedRubefile;
+        clonedLevel.name = `Clone of ${items.level.name}`.slice(0, 32);
+        items = RubeMetaLoader.load(clonedLevel, clonedRubefile);
+        PersistedStore.addEditorRecentLevel(clonedLevel, clonedRubefile);
+        EditorInfo.observer.emit(EDITOR_RESET_RENDERED);
+        EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+        response = await pb.level.create(clonedLevel, clonedRubefile, thumbnail.src);
+        break;
+      }
+      default:
+        throw new Error('Invalid label');
+      }
+
+      items.level = response;
+      setEditorItems(items);
+      PersistedStore.addEditorRecentLevel(response, rubefile); // Makes sure the id is set based on the localId and any changes are present
+    }, 'image/jpeg', 0.7);
+  }
+
+  function renameLevel(val: Event) {
+    const input = val.target as HTMLInputElement;
+    const items = editorItems();
+    items.level.name = input.value;
+    setEditorItems(items);
+  }
 
   return <>
     <header class="absolute inset-x-0 top-0 flex h-[76px] items-center border-b border-stone-600 bg-stone-900 text-white">
@@ -29,7 +143,15 @@ export const Actionbar: Component = () => {
       </div>
 
       <div class="flex h-full flex-col pt-2">
-        <div contentEditable class="rounded-sm border border-transparent p-1 text-sm transition-all hover:border-stone-600">{editorItems().level.name}</div>
+        <input
+          type="text"
+          maxLength={32}
+          class="rounded-sm border border-transparent bg-transparent p-1 text-sm transition-all hover:border-stone-600"
+          value={editorItems().level.name}
+          onChange={val => renameLevel(val)}
+          // onfocus={}
+          aria-label='level name'
+        />
 
         <Menubar.Root class="menubar__root mt-auto flex items-center gap-x-6 pr-5">
           <MenuFile />
@@ -38,12 +160,17 @@ export const Actionbar: Component = () => {
           <MenuActions />
           <MenuHelp />
         </Menubar.Root>
-
       </div>
 
-      <button class="btn-menu-item !w-auto">
+      <button class="btn-menu-item ml-auto mr-4 !w-auto">
         <i class="material-icons text-green-600">play_arrow</i>
+        <span>Preview</span>
       </button>
+
+      <button class="btn-primary mr-3" onClick={() => saveChanges()} ref={el => saveBtnRef = el} >
+        {label()}
+      </button>
+
     </header>
   </>;
 };
@@ -244,14 +371,62 @@ const MenuEdit: Component = () => {
 };
 
 const MenuView: Component = () => {
+  const [showGrid, setShowGrid] = createSignal(PersistedStore.editorShowGrid());
+  const [showFixtureOutline, setShowFixtureOutline] = createSignal(PersistedStore.editorShowFixture());
+  const [darkmodeEnabled, setDarkMode] = createSignal(PersistedStore.darkmodeEnabled());
+
+  createEffect(on(showGrid, () => {
+    const showGridValue = showGrid();
+    PersistedStore.set('editor_show_grid', String(showGridValue));
+    EditorInfo.observer.emit(EDITOR_SET_GRID_VISIBLE, showGridValue);
+  }));
+
+  createEffect(on(showFixtureOutline, () => {
+    const showFixtureOutlineValue = showFixtureOutline();
+    // TODO
+    EditorInfo.observer.emit(EDITOR_SET_FIXTURE_OUTLINE, showFixtureOutlineValue);
+  }));
+
+  // TODO fix issue with backdrop not updating correctly
+  createEffect(on(darkmodeEnabled, () => {
+    const darkmodeEnabledValue = darkmodeEnabled();
+    const items = editorItems();
+    PersistedStore.set('darkmodeEnabled', String(darkmodeEnabledValue));
+    EditorInfo.observer.emit(EDITOR_RESET_RENDERED, darkmodeEnabledValue);
+    EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+    EditorInfo.observer.emit('darkmode_toggled', darkmodeEnabledValue);
+  }));
+
   return <>
     <Menubar.Menu>
       <Menubar.Trigger class="menubar__trigger">View</Menubar.Trigger>
 
       <Menubar.Portal>
-        <Menubar.Content class="menubar__content">
-
-          TODO
+        <Menubar.Content class="menubar__content flex flex-col gap-2 !px-6 !py-3">
+          {/* TOGGLE SHOW GRID */}
+          <Checkbox.Root class="checkbox block" checked={showGrid()} onChange={setShowGrid}>
+            <Checkbox.Input class="checkbox__input" />
+            <Checkbox.Control class="checkbox__control">
+              <Checkbox.Indicator><i class="material-icons text-[18px]">check</i></Checkbox.Indicator>
+            </Checkbox.Control>
+            <Checkbox.Label class="checkbox__label">Show grid</Checkbox.Label>
+          </Checkbox.Root>
+          {/* TOGGLE SHOW FIXTURE */}
+          <Checkbox.Root class="checkbox block" checked={showFixtureOutline()} onChange={setShowFixtureOutline}>
+            <Checkbox.Input class="checkbox__input" />
+            <Checkbox.Control class="checkbox__control">
+              <Checkbox.Indicator><i class="material-icons text-[18px]">check</i></Checkbox.Indicator>
+            </Checkbox.Control>
+            <Checkbox.Label class="checkbox__label">Show Fixture outline</Checkbox.Label>
+          </Checkbox.Root>
+          {/* TOGGLE DARKMODE */}
+          <Checkbox.Root class="checkbox block" checked={darkmodeEnabled()} onChange={setDarkMode}>
+            <Checkbox.Input class="checkbox__input" />
+            <Checkbox.Control class="checkbox__control">
+              <Checkbox.Indicator><i class="material-icons text-[18px]">check</i></Checkbox.Indicator>
+            </Checkbox.Control>
+            <Checkbox.Label class="checkbox__label">Enable Darkmode</Checkbox.Label>
+          </Checkbox.Root>
 
         </Menubar.Content>
       </Menubar.Portal>
@@ -267,7 +442,9 @@ const MenuActions: Component = () => {
       <Menubar.Portal>
         <Menubar.Content class="menubar__content">
 
-          TODO
+          <Menubar.Item class="menubar__item" onSelect={() => triggerResetLayout()}>
+            Reset Layout
+          </Menubar.Item>
 
         </Menubar.Content>
       </Menubar.Portal>

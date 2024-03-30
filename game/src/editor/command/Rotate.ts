@@ -1,3 +1,4 @@
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {ICommand} from './Commander';
 
@@ -9,7 +10,11 @@ export type RotateCommandArgs = {
 };
 
 export class Rotate implements ICommand {
-  constructor(private args: RotateCommandArgs) {}
+  id: string;
+
+  constructor(private args: RotateCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     this.args.item.setAngle(this.args.newAngle);

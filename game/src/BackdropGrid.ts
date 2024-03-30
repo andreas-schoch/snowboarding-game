@@ -1,8 +1,12 @@
+import {EditorInfo} from './EditorInfo';
+import {EDITOR_SET_GRID_VISIBLE} from './eventTypes';
+
 export class BackdropGrid {
   private scene: Phaser.Scene;
   private grid: Phaser.GameObjects.TileSprite;
   private cellSize = 40 * 8; // 8 meters
   private cellScale = 2;
+  private shouldShowGrid = true;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -20,6 +24,11 @@ export class BackdropGrid {
       .setDepth(-200)
       .setScale(this.cellScale)
       .setAlpha(0.1);
+
+    EditorInfo.observer.on(EDITOR_SET_GRID_VISIBLE, (shouldShowGrid: boolean) => {
+      this.shouldShowGrid = shouldShowGrid;
+      this.grid.setVisible(shouldShowGrid);
+    });
   }
 
   update() {
@@ -30,6 +39,7 @@ export class BackdropGrid {
     this.grid.y = -Phaser.Math.Wrap(scrollY, 0, scaledCellSize) + (scaledCellSize * 1);
 
     // grid won't be able to fit the screen if zoomed more than this.
-    this.grid.setVisible(this.scene.cameras.main.zoom > 0.2);
+    if (this.shouldShowGrid) this.grid.setVisible(this.scene.cameras.main.zoom > 0.2);
+    else this.grid.setVisible(false);
   }
 }

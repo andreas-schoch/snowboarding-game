@@ -1,4 +1,5 @@
 import {BrowserItem} from '../../UI/EditorUI/Browser';
+import {pseudoRandomId} from '../../helpers/pseudoRandomId';
 import {EditorItem} from '../../physics/RUBE/RubeMetaLoader';
 import {EditorItemTracker} from '../items/ItemTracker';
 import {ICommand} from './Commander';
@@ -11,8 +12,12 @@ export type AddCommandArgs = {
 };
 
 export class Add implements ICommand {
+  id: string;
   createdItem: EditorItem | null = null;
-  constructor(private args: AddCommandArgs) { }
+
+  constructor(private args: AddCommandArgs) {
+    this.id = pseudoRandomId();
+  }
 
   execute(): void {
     console.debug('Add.execute', this.args);
