@@ -1,4 +1,4 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
@@ -9,11 +9,8 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
-import {downloadBlob} from '../helpers/binaryTransform';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
-import {RubeFile} from '../physics/RUBE/RubeFile';
-import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -110,18 +107,18 @@ export class GameScene extends Phaser.Scene {
     initSolidUI('root-ui');
 
     // TODO remove. Temporary to serialize open level
-    this.input.keyboard!.on('keydown-SEVEN', () => {
-      // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
-      //  Can be removed once we have the editor in place to do that properly
-      // TODO make this possible via cli script
-      const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-      for (const level of levels) {
-        const parsed: RubeFile = this.cache.json.get(level);
-        const sanitized = sanitizeRubeFile(parsed);
-        const encoded = rubeFileSerializer.encode(sanitized);
-        downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
-      }
-    });
+    // this.input.keyboard!.on('keydown-SEVEN', () => {
+    //   // TODO remove. Temporary to serialize open level and upload to pocketbase via admin panel
+    //   //  Can be removed once we have the editor in place to do that properly
+    //   // TODO make this possible via cli script
+    //   const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
+    //   for (const level of levels) {
+    //     const parsed: RubeFile = this.cache.json.get(level);
+    //     const sanitized = sanitizeRubeFile(parsed);
+    //     const encoded = rubeFileSerializer.encode(sanitized);
+    //     downloadBlob(encoded, `${level}.bin`, 'application/octet-stream');
+    //   }
+    // });
   }
 }
 

@@ -6,7 +6,6 @@ import sfxSnowboardSlide04 from '../../assets/audio/sfx/nox_sound/snowboard_slid
 import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
 import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
 import {PersistedStore} from '../PersistedStore';
-import {BackgroundMusicKeys} from '../SoundManager';
 import {SCENE_EDITOR, SCENE_GAME, SCENE_PRELOAD} from '../index';
 
 export class PreloadScene extends Phaser.Scene {
@@ -33,7 +32,6 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   private loadAudio() {
-    Object.values(BackgroundMusicKeys).forEach(key => this.load.audio(key, `assets/audio/music/${key}.mp3`));
     this.load.audio('pickup_present', sfxPickupCoins);
     this.load.audio('death', sfxDeath);
     this.load.audio('grunt', sfxGrunt);

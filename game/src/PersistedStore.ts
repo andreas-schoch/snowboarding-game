@@ -126,7 +126,7 @@ export class PersistedStore {
 
   static volumeMusic(): number {
     const volume = PersistedStore.getRaw('volumeMusic');
-    return volume !== null ? Number(volume) : 0;
+    return volume !== null ? Math.round(Number(volume)) : 0;
   }
 
   static volumeSfx(): number {

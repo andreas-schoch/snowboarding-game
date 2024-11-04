@@ -52,7 +52,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     // Unless we limit the scores per level to less than e.g. 200 and if it is lower than lowest, player remains unranked
     const loggedInUser = pb.auth.loggedInUser();
     if (!loggedInUser) return;
-    const scores = await pb.leaderboard.scoresFromLogs(PersistedStore.currentLevel(), 1, 200);
+    const scores = await pb.leaderboard.scores(PersistedStore.currentLevel(), 1, 500);
     const yourRank = scores.findIndex(s => s.user === loggedInUser.id);
     setYourRank(yourRank + 1);
     setTotalRanks(scores.length);

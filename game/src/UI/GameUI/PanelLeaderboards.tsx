@@ -10,7 +10,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   const ownScorePseudoStyles = 'after:content-["You"] after:text-[white] after:bg-blue-900 after:text-xs after:ml-2 after:px-2 after:py-1 after:rounded-md';
 
   onMount(async () => {
-    const scores: IScore[] = await pb.leaderboard.scoresFromLogs(PersistedStore.currentLevel(), 1, 200);
+    const scores: IScore[] = await pb.leaderboard.scores(PersistedStore.currentLevel(), 1, 200);
     setScores(scores);
   });
 

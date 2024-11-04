@@ -5,7 +5,7 @@ import {IScore} from './pocketbase/types';
 import {GameScene} from './scenes/GameScene';
 
 export class SoundManager {
-  private music: Phaser.Sound.BaseSound;
+  private music?: Phaser.Sound.BaseSound;
   private sfx_pickup_present: Phaser.Sound.BaseSound;
   private sfx_death: Phaser.Sound.BaseSound;
   private sfx_grunt: Phaser.Sound.BaseSound;
@@ -16,10 +16,8 @@ export class SoundManager {
   private sfx_snowboardSlide: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
   constructor(private scene: GameScene) {
-    const musicVolume = PersistedStore.volumeMusic() / 100;
     const randomMusicKey = Object.values(BackgroundMusicKeys)[Math.floor(Math.random() * Object.values(BackgroundMusicKeys).length)];
-    this.music = this.scene.sound.add(randomMusicKey, {loop: true, volume: musicVolume * 0.5, rate: 1, delay: 1, detune: 0});
-    this.music.play();
+    this.playMusic(randomMusicKey);
     const sfxVolume = PersistedStore.volumeSfx() / 100;
     this.sfx_pickup_present = this.scene.sound.add('pickup_present', {detune: 0, rate: 1, volume: sfxVolume * 0.6});
     this.sfx_death = this.scene.sound.add('death', {detune: 700, rate: 1.25, volume: sfxVolume * 0.8});
@@ -33,20 +31,43 @@ export class SoundManager {
     this.initListeners();
   }
 
+  playMusic(key: BackgroundMusicKey) {
+    const musicVolume = PersistedStore.volumeMusic() / 100;
+    if (musicVolume === 0) return;
+    if (this.music !== undefined) return;
+
+    if (this.scene.cache.audio.exists(key)) {
+      console.debug('Music already loaded:', key);
+      this.music = this.scene.sound.add(key, {loop: true, volume: musicVolume * 0.3, rate: 1, delay: 1, detune: 0});
+      this.music.play();
+      return;
+    }
+
+    setTimeout(() => {
+      const songLoader = this.scene.load.audio(key, `assets/audio/music/${key}.mp3`);
+      songLoader.on('filecomplete', () => {
+        console.debug('Music loaded:'),
+        this.music = this.scene.sound.add(key, {loop: true, volume: musicVolume * 0.3, rate: 1, delay: 1, detune: 0});
+        this.music.play();
+      });
+      songLoader.start();
+    }, 50);
+  }
+
   private initListeners() {
     let musicWasPlaying = true;
     let sfxSlideWasPlaying = true;
     let sfxWindWasPlaying = true;
     GameInfo.observer.on(SET_PAUSE_GAME, (isPaused: boolean) => {
       if (isPaused) {
-        musicWasPlaying = this.music.isPlaying;
+        musicWasPlaying = this.music !== undefined && this.music.isPlaying;
         sfxSlideWasPlaying = this.sfx_snowboardSlide.isPlaying;
         sfxWindWasPlaying = this.sfx_windNoise.isPlaying;
-        if (musicWasPlaying) this.music.pause();
+        if (musicWasPlaying) this.music?.pause();
         if (sfxSlideWasPlaying) this.sfx_snowboardSlide.pause();
         if (sfxWindWasPlaying) this.sfx_windNoise.pause();
       } else {
-        if (musicWasPlaying) this.music.resume();
+        if (musicWasPlaying) this.music?.resume();
         if (sfxSlideWasPlaying) this.sfx_snowboardSlide.resume();
         if (sfxWindWasPlaying) this.sfx_windNoise.resume();
       }
@@ -64,7 +85,7 @@ export class SoundManager {
         detune: -500,
         rate: 0.5,
         duration: 750,
-        onComplete: async () => this.music.stop(),
+        onComplete: async () => this.music?.stop,
       });
     });
 
@@ -75,7 +96,7 @@ export class SoundManager {
         targets: this.music,
         duration: 2000,
         volume: 0,
-        onComplete: async () => this.music.stop(),
+        onComplete: async () => this.music?.stop(),
       });
     });
 
@@ -109,7 +130,7 @@ export class SoundManager {
     });
 
     GameInfo.observer.on(RESTART_GAME, () => {
-      this.music.destroy();
+      this.music?.destroy();
       this.sfx_game_over_demon.destroy();
       this.sfx_applause.destroy();
       this.sfx_snowboardSlide.destroy();
@@ -127,4 +148,6 @@ export const BackgroundMusicKeys = {
   RainsWillFall: 'KevinMacLeod/Rains Will Fall',
   SadTrio: 'KevinMacLeod/Sad Trio',
   StagesOfGrief: 'KevinMacLeod/Stages of Grief',
-};
+} as const;
+
+type BackgroundMusicKey = typeof BackgroundMusicKeys[keyof typeof BackgroundMusicKeys];
