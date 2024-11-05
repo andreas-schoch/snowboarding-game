@@ -50,11 +50,12 @@ export class Physics {
     return loadedScene;
   }
 
-  update() {
-    const {isPaused, debugDrawEnabled, world, stepsPerSecond, velocityIterations, positionIterations, entityData} = this.worldEntity;
+  update(timeStep: number) {
+    const {isPaused, debugDrawEnabled, world, velocityIterations, positionIterations, entityData} = this.worldEntity;
     if (isPaused) return;
-    world.Step(1 / stepsPerSecond, velocityIterations, positionIterations);
+    world.Step(timeStep, velocityIterations, positionIterations);
     if (debugDrawEnabled) world.DebugDraw();
+
     for (const body of iterBodies(world)) {
       const bodyEntity = entityData.get(body);
       if (bodyEntity?.type !== 'body') throw new Error('Expected bodyEntity to be of type "body"');

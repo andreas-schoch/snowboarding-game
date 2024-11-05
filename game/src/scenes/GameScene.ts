@@ -25,9 +25,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   update() {
-    if (!this.ready) return;
+    if (!this.ready || this.b2Physics.worldEntity.isPaused) return;
 
-    this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
+    // physics simulation will running with a fixed timestep for the majority of users.
+    // However, for users which have a higher refresh rate we use a variable timestep.
+    // This is not ideal but attempts to use accumulation and interpolation felt choppy.
+    const fps = Math.round(this.game.loop.actualFps);
+    const timeStep = fps < 65 ? 1 / 60 : 1 / fps;
+
+    this.b2Physics.update(timeStep);
     Character.instances.forEach(character => character.update());
     this.playerController.update();
     this.backdrop.update();

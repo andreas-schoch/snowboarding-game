@@ -30,7 +30,7 @@ export const DEFAULT_HEIGHT = 720;
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '2.0.1',
+  version: '2.1.0',
   type: Phaser.WEBGL,
   backgroundColor: PersistedStore.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,
@@ -38,7 +38,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   // dom: { createContainer: true }, // Not using inbuilt way to display UI as it sucks with dynamic scaling and resizing
   fps: {
     target: 60,
-    min: 55,
+    min: 60,
     smoothStep: true,
   },
   scale: {
