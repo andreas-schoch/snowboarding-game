@@ -26,12 +26,11 @@ export class GameScene extends Phaser.Scene {
 
   update() {
     if (!this.ready) return;
-    // console.time('update');
+
     this.b2Physics.update(); // needs to happen before update of player character inputs otherwise b2Body.GetPosition() inaccurate
     Character.instances.forEach(character => character.update());
     this.playerController.update();
     this.backdrop.update();
-    // console.timeEnd('update');
   }
 
   private preload() {

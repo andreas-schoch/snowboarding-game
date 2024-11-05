@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: ['./game/src/index.ts'],
@@ -68,6 +69,7 @@ module.exports = {
     },
   },
   plugins: [
+    new BundleAnalyzerPlugin(),
     new Dotenv(),
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({template: 'game/index.html'}),

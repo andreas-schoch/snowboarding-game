@@ -3,7 +3,7 @@ import sfxDeath from '../../assets/audio/sfx/crash/death.mp3';
 import sfxGrunt from '../../assets/audio/sfx/crash_grunt/grunt.mp3';
 import sfxGameOverDemon from '../../assets/audio/sfx/game_over_demon/game_over_demon.mp3';
 import sfxSnowboardSlide04 from '../../assets/audio/sfx/nox_sound/snowboard_slide_loop_04.mp3';
-import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.wav';
+import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.mp3';
 import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
 import {PersistedStore} from '../PersistedStore';
 import {SCENE_EDITOR, SCENE_GAME, SCENE_PRELOAD} from '../index';
