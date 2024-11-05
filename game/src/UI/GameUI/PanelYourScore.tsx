@@ -67,7 +67,6 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
       await pb.user.updateUsername(name);
     }
 
-    // Settings.set('userName', usernameInput.value);
     await pb.leaderboard.submit(props.score);
     submitScoreForm.classList.add('hidden');
     refreshRank();

@@ -25,6 +25,13 @@ export class Level {
     });
   }
 
+  async byNumber(number: ILevel['number']): Promise<ILevel | null> {
+    return this.pb.collection<ILevel>(this.collectionName).getList(1, 1, {
+      filter: 'number=' + number,
+      expand: 'user'
+    }).then(res => res.items[0] || null).catch(() => null);
+  }
+
   async listMine(page: number): Promise<ListResult<ILevel>> {
     const loggedInUser = this.auth.loggedInUser();
     if (!loggedInUser) throw new Error('No user logged in. This should never happen');
@@ -46,7 +53,7 @@ export class Level {
   }
 
   async get(id: ILevel['id']): Promise<ILevel | null> {
-    return await this.pb.collection(this.collectionName).getOne<ILevel>(id, {expand: 'owner'}).catch(() => null);
+    return this.pb.collection(this.collectionName).getOne<ILevel | null>(id, {expand: 'owner'}).catch(() => null);
   }
 
   async create(level: ILevelNew, rubefile: RubeFile, base64Thumbnail: string): Promise<ILevel> {

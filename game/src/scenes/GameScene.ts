@@ -9,6 +9,7 @@ import {initSolidUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
+import {waitUntil} from '../helpers/waitUntil';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
 import {IScoreNew} from '../pocketbase/types';
@@ -56,13 +57,14 @@ export class GameScene extends Phaser.Scene {
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
-    // TODO adjust everything for either 32 or 64 pixels per meter so we can better make use of PoW2 textures when chunking terrain 
-    this.b2Physics = new Physics(this, {gravityX: 0, gravityY: -10, debugDrawEnabled: false});
-    new SoundManager(this);
-    this.backdrop = new Backdrop(this);
 
-    pb.level.get(PersistedStore.currentLevel()).then(async level => {
-      if (!level) throw new Error('Level not found: ' + PersistedStore.currentLevel());
+    waitUntil(() => pb.auth.loggedInUser()).then(async () => {
+      this.b2Physics = new Physics(this, {gravityX: 0, gravityY: -10, debugDrawEnabled: false});
+      this.backdrop = new Backdrop(this);
+      new SoundManager(this);
+      let level = await pb.level.get(PersistedStore.currentLevel());
+      if (!level) level = await pb.level.byNumber(1);
+      if (!level) throw new Error('Level fallback not found');
 
       const rubeFile = await pb.level.getRubeFile(level);
       if (!rubeFile) throw new Error('RubeFile not found for level: ' + PersistedStore.currentLevel());
