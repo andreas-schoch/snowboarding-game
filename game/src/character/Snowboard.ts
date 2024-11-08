@@ -150,7 +150,7 @@ export class Snowboard {
       timeScale: 1,
       alpha: 1,
       angle: {min: 0, max: 360},
-      lifespan: {min: 600, max: 1250},
+      lifespan: {min: 750, max: 1250},
       quantity: {min: 2, max: 10},
       scale: {ease: 'Linear', min: 0.1, max: 0.25},
       speed: {min: 25, max: 100},

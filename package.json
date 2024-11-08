@@ -66,7 +66,7 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
-    "@kobalte/core": "^0.12.1",
+    "@kobalte/core": "^0.13.7",
     "box2d-wasm": "^7.0.0",
     "fflate": "^0.8.1",
     "phaser": "^3.70.0",

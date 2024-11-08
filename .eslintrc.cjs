@@ -96,7 +96,7 @@ module.exports = {
     'tailwindcss/enforces-negative-arbitrary-values': 'error',
     'tailwindcss/enforces-shorthand': 'error',
     'tailwindcss/no-custom-classname': ['warn', {
-      whitelist: ['material-icons', 'resizer', 'row', 'col', 'scrollbar']
+      whitelist: ['material-icons', 'resizer', 'row', 'col', 'scrollbar', 'level-item']
     }],
   }
 };

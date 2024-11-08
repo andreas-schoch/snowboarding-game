@@ -1,6 +1,7 @@
 import {Component, onMount} from 'solid-js';
 import {PersistedStore} from '../../PersistedStore';
 import {ButtonPrimary} from '../general/Button';
+import {BackToMenuBtn} from './BackBtn';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
 
@@ -25,9 +26,9 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
   };
 
   return (
-    <BasePanel id='panel-settings' title='Settings' backBtn={true} setPanel={props.setPanel} class="!w-[600px] !text-[10px]">
+    <BasePanel id='panel-settings' title='Settings' class="!w-[600px] !text-[10px]">
 
-      <form name="settings-form" id="settings-form"class="mb-[-10px] leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
+      <form name="settings-form" id="settings-form"class="scrollbar leading-4" ref={el => submitForm = el} onSubmit={evt => handleSaveSettings(evt)}>
         {/* <!-- RESOLUTION --> */}
         <div class="row">
           <span class="col col-3">Resolution</span>
@@ -106,7 +107,11 @@ export const PanelSettings: Component<{setPanel: (id: PanelId) => void}> = props
             <ButtonPrimary type='submit'>Save Settings</ButtonPrimary>
           </div>
         </div>
+
+        <div class="text-center text-[8px] italic text-red-500">Saving settings reloads the game!</div>
       </form>
+
+      <BackToMenuBtn setPanel={props.setPanel} />
     </BasePanel>
   );
 };

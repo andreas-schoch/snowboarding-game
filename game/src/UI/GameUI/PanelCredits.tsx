@@ -1,11 +1,12 @@
 import {Component, ParentComponent} from 'solid-js';
+import {BackToMenuBtn} from './BackBtn';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
 
 export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props => (
-  <BasePanel id='panel-credits' title='Credits' backBtn={true} setPanel={props.setPanel} class="!w-[600px] !leading-normal !text-stone-500" >
+  <BasePanel id='panel-credits' title='Credits' class="!w-[600px] !pr-2 !leading-normal !text-stone-500" >
 
-    <div class='scrollbar max-h-[400px] px-0 py-4 text-xs'>
+    <div class='scrollbar max-h-[400px] py-4 pr-2 text-xs'>
 
       <CreditsTitle>Developed by</CreditsTitle>
       <CreditsEntry name='Andreas Schoch' source='https://github.com/andreas-schoch/snowboarding-game' website='https://www.linkedin.com/in/andreas-schoch/' />
@@ -49,6 +50,7 @@ export const PanelCredits: Component<{setPanel: (id: PanelId) => void}> = props 
       <span class="row"><span class="col col-12">If you are interested to contribute feel free to contact <a
         href="mailto: andreas_schoch@outlook.com">Andreas Schoch</a>.</span></span>
     </div>
+    <BackToMenuBtn setPanel={props.setPanel} />
   </BasePanel>
 );
 

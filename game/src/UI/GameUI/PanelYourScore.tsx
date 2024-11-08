@@ -1,10 +1,10 @@
-import {Component, createSignal, onMount} from 'solid-js';
+import {Component, createSignal, onMount, Show} from 'solid-js';
 import {pb} from '../..';
 import {GameInfo} from '../../GameInfo';
 import {PersistedStore} from '../../PersistedStore';
 import {RESTART_GAME} from '../../eventTypes';
 import {pseudoRandomId} from '../../helpers/pseudoRandomId';
-import {IScoreNew} from '../../pocketbase/types';
+import {IRank, IScoreNew} from '../../pocketbase/types';
 import {ButtonBorderless, ButtonPrimary} from '../general/Button';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
@@ -12,13 +12,17 @@ import {PanelId} from './GameUI';
 export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: IScoreNew}> = props => {
   let submitScoreForm: HTMLElement;
   let usernameInput: HTMLInputElement;
-  const [yourRank, setYourRank] = createSignal(-1);
+  const [yourRank, setYourRank] = createSignal<IRank | null | undefined>();
   const [totalRanks, setTotalRanks] = createSignal(-1);
+  const [isNewPersonalBest, setIsNewPersonalBest] = createSignal(false);
 
   const rankText = () => {
     const rank = yourRank();
-    if (rank > 0) return `You are ranked ${rank}/${totalRanks()} on this level!`;
-    else return 'You do not have a rank yet. Please submit a score first.';
+    const loggedInUser = pb.auth.loggedInUser();
+    if (!loggedInUser?.usernameChanged) return 'Choose a name and submit to see your rank.';
+    if (rank === undefined) return 'Loading rank...';
+    if (rank === null) return 'You do not have a rank yet. Please submit a score first.';
+    return `You are ranked ${rank.rank}/${totalRanks()} on this level!`;
   };
 
   onMount(async () => {
@@ -31,7 +35,8 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
         usernameInput.setAttribute('value', usernameInput.value); // to make floating label move up
       } else {
         submitScoreForm?.classList.add('hidden');
-        await pb.leaderboard.submit(props.score);
+        const [_, wasUpdated] = await pb.leaderboard.submit(props.score);
+        setIsNewPersonalBest(wasUpdated);
       }
       return;
     }
@@ -42,20 +47,23 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
     if (loggedInUser.username && loggedInUser.usernameChanged) {
       // Score is submitted automatically for users that submitted a score once before from this device and browser.
       submitScoreForm?.classList.add('hidden');
-      await pb.leaderboard.submit(props.score);
+      const [_, wasUpdated] = await pb.leaderboard.submit(props.score);
+      setIsNewPersonalBest(wasUpdated);
       refreshRank();
     }
   });
 
   const refreshRank = async () => {
-    // FIXME I need a better way to figure out the rank of the current user. It is not sustainable to potentially load all scores just to find it.
-    // Unless we limit the scores per level to less than e.g. 200 and if it is lower than lowest, player remains unranked
     const loggedInUser = pb.auth.loggedInUser();
     if (!loggedInUser) return;
-    const scores = await pb.leaderboard.scores(PersistedStore.currentLevel(), 1, 500);
-    const yourRank = scores.findIndex(s => s.user === loggedInUser.id);
-    setYourRank(yourRank + 1);
-    setTotalRanks(scores.length);
+
+    Promise.all([
+      pb.leaderboard.getOwnRank(PersistedStore.currentLevel()),
+      pb.leaderboard.getTotalRanks(PersistedStore.currentLevel())
+    ]).then(([rank, total]) => {
+      setYourRank(rank);
+      setTotalRanks(total);
+    });
   };
 
   const handleInitialSubmit = async () => {
@@ -67,81 +75,87 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
       await pb.user.updateUsername(name);
     }
 
-    await pb.leaderboard.submit(props.score);
+    const [_, wasUpdated] = await pb.leaderboard.submit(props.score);
+    setIsNewPersonalBest(wasUpdated);
     submitScoreForm.classList.add('hidden');
     refreshRank();
   };
 
   return (
-    <BasePanel id='panel-your-score' title='Your Score' backBtn={false} setPanel={props.setPanel} class="!pb-4">
+    <BasePanel id='panel-your-score' title='Your Score' class="!pb-0 !pr-2">
 
-      <TrickScoreSummary score={props.score} />
+      <div class="scrollbar pr-2">
 
-      <div class="row my-16 text-sm leading-4 text-stone-400">
-        <span class="col col-12 text-center">{rankText()}</span>
-      </div>
+        <TrickScoreSummary score={props.score} />
 
-      {/* <!--  SUBMIT SCORE --> */}
-      <div class="" ref={el => submitScoreForm = el}>
-        <div class="row mt-8 border-t-2 border-solid border-t-stone-500 pt-6 text-[10px] leading-normal text-gray-600"><span class="col col-12">You haven't submitted a score yet.
+        <Show when={isNewPersonalBest()}>
+          <div class="-mt-4 text-right text-red-600">New Personal Best!</div>
+        </Show>
+
+        <div class="row mb-16 mt-12 text-sm leading-4 text-stone-400">
+          <span class="col col-12 text-center">{rankText()}</span>
+        </div>
+
+        {/* <!--  SUBMIT SCORE --> */}
+        <div class="" ref={el => submitScoreForm = el}>
+          <div class="row mt-8 border-t-2 border-solid border-t-stone-500 pt-6 text-[10px] leading-normal text-gray-600"><span class="col col-12">You haven't submitted a score yet.
           Please choose your name.
           The next time you finish a level, this will happen automatically.</span></div>
-        {/* <div class="row text-[10px] leading-normal text-gray-700"><span class="col col-12">This version of the game has online
-          leaderboards disabled. Keep in mind that your scores are only saved locally for now.</span></div> */}
-        <div class="row" id="your-score-name-form">
-          <div class="col col-8">
-            <div class="form-group">
-              <input id="username" class="form-text-input text-gray-500" name="username" value="" type="text" autofocus
+          <div class="row" id="your-score-name-form">
+            <div class="col col-8 !pl-2">
+              <div class="form-group">
+                <input id="username" class="form-text-input text-gray-500" name="username" value="" type="text" autofocus
                 // @ts-expect-error oldschool hack for floating label
                 // eslint-disable-next-line solid/event-handlers
-                autocomplete="off" onkeyup="this.setAttribute('value', this.value)" ref={el => usernameInput = el} />
-              <label for="username" class="floating-label">Your name</label>
+                  autocomplete="off" onkeyup="this.setAttribute('value', this.value)" ref={el => usernameInput = el} />
+                <label for="username" class="floating-label">Your name</label>
+              </div>
             </div>
+            <ButtonPrimary class="col col-4 mr-2" onClick={() => handleInitialSubmit()}>Submit Score</ButtonPrimary>
           </div>
-          <ButtonPrimary class="col col-4" onClick={() => handleInitialSubmit()}>Submit Score</ButtonPrimary>
         </div>
       </div>
+
       {/* <!-- BACK / REPLAY --> */}
-      <div class="row mb-0">
-        <div class="col col-12">
-          <ButtonBorderless class="col col-6" onClick={() => props.setPanel('panel-select-level')}>
-            <i class="material-icons mr-2">chevron_left</i>
-            <span>Select Level</span>
-          </ButtonBorderless>
-          <ButtonBorderless class="col col-6" onClick={() => GameInfo.observer.emit(RESTART_GAME)}>
-            <i class="material-icons mr-2">replay</i>
-            <span>Replay Level</span>
-          </ButtonBorderless>
-        </div>
+      <div class="grid h-12 grid-cols-2">
+        <ButtonBorderless class="" onClick={() => props.setPanel('panel-select-level')}>
+          <i class="material-icons mr-2">chevron_left</i>
+          <span>Select Level</span>
+        </ButtonBorderless>
+        <ButtonBorderless class="" onClick={() => GameInfo.observer.emit(RESTART_GAME)}>
+          <i class="material-icons mr-2">replay</i>
+          <span>Replay Level</span>
+        </ButtonBorderless>
       </div>
     </BasePanel>
   );
 };
 
 function TrickScoreSummary(props: {score: IScoreNew}) {
+  return (
+    <div class="grid h-[175px] grid-rows-[1fr_1fr_1fr_2fr] items-center px-2">
+      <div class="grid grid-cols-[8fr_4fr] text-sm leading-4 text-stone-400">
+        <span class="text-left">Coins</span>
+        <span class="text-right">{props.score.pointsCoin}</span>
+      </div>
 
-  return <>
-    <div class="row text-sm leading-4 text-stone-400">
-      <span class="col col-8 text-left">Coins</span>
-      <span class="col col-4 text-right">{props.score.pointsCoin}</span>
-    </div>
+      <div class="grid grid-cols-[8fr_4fr] text-sm leading-4 text-stone-400">
+        <span class="text-left">Tricks</span>
+        <span class="text-right">{props.score.pointsTrick}</span>
+      </div>
 
-    <div class="row text-sm leading-4 text-stone-400">
-      <span class="col col-8 text-left">Tricks</span>
-      <span class="col col-4 text-right">{props.score.pointsTrick}</span>
-    </div>
+      <div class="grid grid-cols-[8fr_4fr] text-sm leading-4 text-stone-400">
+        <span class="text-left">
+          <span>Combos</span>
+          <span class="text-[10px]"> (Best: <span>{props.score.pointsComboBest}</span>)</span>
+        </span>
+        <span class="text-right">{props.score.pointsCombo}</span>
+      </div>
 
-    <div class="row text-sm leading-4 text-stone-400">
-      <span class="col col-8 text-left">
-        <span>Combos</span>
-        <span class="text-[10px]"> (Best Combo: <span>{props.score.pointsComboBest}</span>)</span>
-      </span>
-      <span class="col col-4 text-right">{props.score.pointsCombo}</span>
+      <div class="bolder grid grid-cols-[8fr_4fr] text-2xl text-white">
+        <span class="">Total</span>
+        <span class="text-right">{props.score.pointsTotal}</span>
+      </div>
     </div>
-
-    <div class="row bolder mt-8 text-2xl text-white">
-      <span class="col col-8">Total</span>
-      <span class="col col-4 text-right">{props.score.pointsTotal}</span>
-    </div>
-  </>;
+  );
 }

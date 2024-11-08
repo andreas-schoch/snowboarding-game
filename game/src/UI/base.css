@@ -769,46 +769,26 @@ input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
   content: attr(data-necessity);
 }
 
-/* ========================= */
-/* = Auto hiding scrollbar = */
-/* ========================= */
 .scrollbar {
-  overflow-y: auto;
-  max-height: 700px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
-  background-color: var(--grey-400);
+  @apply !overflow-auto !h-full;
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 8px;
-  background-color: var(--grey-400);
-}
-
-.scrollbar {
-  /* Auto hiding scrollbar based on: https://css-tricks.com/scrollbars-on-hover/ */
-  /* Custom scrollbar templates: https://codepen.io/devstreak/pen/dMYgeO */
-  mask-image: linear-gradient(to top, transparent, black),
-  linear-gradient(to left, transparent 17px, black 17px);
-  mask-size: 100% 20000px;
-  mask-position: left bottom;
-  -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 17px, black 17px);
-  -webkit-mask-size: 100% 20000px;
-  -webkit-mask-position: left bottom;
-  transition: mask-position 0.3s, -webkit-mask-position 0.3s;
-  /*scrollbar-width: 8px;*/
-}
-
-.scrollbar:hover {
-  -webkit-mask-position: left top;
-  mask-position: left top;
+  @apply !w-1.5 !h-1.5 relative;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  cursor: grab;
-  border-radius: 4px;
-  background-color: var(--grey-600);
+  @apply bg-gray-400 rounded-md;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-300;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent rounded;
+}
+
+.scrollbar::-webkit-scrollbar-corner {
+  @apply bg-transparent;
 }

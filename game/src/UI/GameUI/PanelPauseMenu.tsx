@@ -24,7 +24,7 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
   };
 
   return <>
-    <BasePanel id='panel-pause-menu' title='Pause Menu' backBtn={false} setPanel={props.setPanel} class="!w-[500px]">
+    <BasePanel id='panel-pause-menu' title='Pause Menu' class="!w-[500px]">
       <div class="flex grow flex-col gap-4">
         <button class="col col-12 btn-primary" onClick={() => handleResumeGame()}>Resume Level</button>
         <button class="col col-12 btn-secondary" onClick={() => props.setPanel('panel-select-level')}>Select Level</button>
@@ -37,7 +37,7 @@ export const PanelPauseMenu: Component<{setPanel: (id: PanelId) => void}> = prop
         <button class="col col-12 btn-secondary" onClick={() => props.setPanel('panel-credits')}>Credits</button>
       </div>
 
-      <div class="absolute bottom-3 left-1/2 translate-x-[-50%] text-[10px] text-stone-500">v{gameConfig.version}</div>
+      <div class="flex h-14 items-center justify-center text-center text-[10px] text-stone-500">v{gameConfig.version}</div>
 
     </BasePanel>
   </>;

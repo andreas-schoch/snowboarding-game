@@ -1,54 +1,124 @@
-import {Component, For, Show, createSignal, onMount} from 'solid-js';
+import {ListResult} from 'pocketbase';
+import {Component, For, Suspense, createMemo, createResource, createSignal} from 'solid-js';
 import {pb} from '../..';
 import {PersistedStore} from '../../PersistedStore';
-import {IScore, isUser} from '../../pocketbase/types';
+import {waitUntil} from '../../helpers/waitUntil';
+import {IRank} from '../../pocketbase/types';
+import {BackToMenuBtn} from './BackBtn';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
 
+const PER_PAGE = 50;
+
+// while user doesn't close the leaderboard and switches back to already visited pages, it should not fetch the same page again
+function createCachedFetchRanks() {
+  const cached: Record<number, ListResult<IRank>> = {};
+  const fetchedOrInprogress: Set<number> = new Set();
+  return function fetchRanksWrapped(page: number) {
+    if (cached[page]) return cached[page];
+    if (fetchedOrInprogress.has(page)) return waitUntil(() => cached[page], 5000, 25).catch(() => null);
+    fetchedOrInprogress.add(page);
+    return pb.leaderboard.list(PersistedStore.currentLevel(), page, PER_PAGE).then(list => cached[page] = list);
+  };
+}
+
 export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = props => {
-  const [scores, setScores] = createSignal<IScore[]>([]);
+  let scrollbarRef: HTMLElement;
+  const [page, setPage] = createSignal(1);
+  const fetchRanks = createCachedFetchRanks();
+  const [ranks] = createResource(page, fetchRanks);
+  const pageOffset = () => (page() - 1) * PER_PAGE;
+  const totalPages = () => ranks()?.totalPages || 1;
+
   const ownScorePseudoStyles = 'after:content-["You"] after:text-[white] after:bg-blue-900 after:text-xs after:ml-2 after:px-2 after:py-1 after:rounded-md';
 
-  onMount(async () => {
-    const scores: IScore[] = await pb.leaderboard.scores(PersistedStore.currentLevel(), 1, 200);
-    setScores(scores);
+  const pagesToDisplay = createMemo(() => {
+    const total = totalPages();
+    const current = page();
+    let startPage = 1;
+    let endPage = total;
+
+    if (total <= 5) {
+      startPage = 1;
+      endPage = total;
+    } else if (current <= 3) {
+      startPage = 1;
+      endPage = 5;
+    } else if (current >= total - 2) {
+      startPage = total - 4;
+      endPage = total;
+    } else {
+      startPage = current - 2;
+      endPage = current + 2;
+    }
+
+    const pages: number[] = [];
+    for (let i = startPage; i <= endPage; i++) pages.push(i);
+    return pages;
   });
 
-  const getUsername = (score: IScore): string => {
-    if (!score.expand?.user) throw new Error('Score.expand.user is missing');
-    if (!isUser(score.expand.user)) throw new Error('Score.expand.user is not a user');
-    return score.expand.user.username;
-  };
+  function handleSetPage(page: number): void {
+    const list = ranks();
+    if (!list) return;
+    if (page >= 1 && page <= list.totalPages) {
+      setPage(page);
+      scrollbarRef.scrollTop = 0;
+    }
+  }
+
+  function preloadPage(page: number): void {
+    const total = totalPages();
+    if (page < 1 || page > total) return;
+    fetchRanks(page);
+  }
 
   return (
-    <BasePanel id='panel-leaderboards' title='Leaderboards' backBtn={true} setPanel={props.setPanel} class="!w-[600px]">
+    <BasePanel id='panel-leaderboards' title='Leaderboards' class="h-[560px]">
 
-      <Show when={!pb.auth.loggedInUser()}>
-        <div class="row">
-          <div class="col col-12 text-sm leading-normal text-[color:var(--grey-700)]">
-            Current version of the game doesn't have the online leaderboards enabled. You will only see your own past
-            high-scores below.
-          </div>
+      <div class="grid h-full grid-rows-[28px_1fr_32px] items-center gap-2">
+
+        <div class="row !m-0 grid grid-cols-[2fr_7fr_3fr] pl-3 pr-4 text-sm">
+          <span class="bolder">#</span>
+          <span class="bolder">Name</span>
+          <span class="bolder text-right">Score</span>
         </div>
-      </Show>
 
-      <div class="row text-sm">
-        <span class="col col-2 bolder">#</span>
-        <span class="col col-7 bolder">Name</span>
-        <span class="col col-3 bolder flex-right">Score</span>
+        <div ref={el => scrollbarRef = el} class="scrollbar" id="leaderboard-item-container">
+          <Suspense fallback={<div class="text-center">fetching leaderboard data</div>}>
+            <For each={ranks()?.items} fallback={<div>Loading...</div>}>
+              {(rank, index) => (
+                <div class="mb-5 grid grid-cols-[2fr_7fr_3fr] pl-3 pr-4 text-sm">
+                  <span class="" id="leaderboard-item-rank">{(index() + 1) + pageOffset()}</span>
+                  <span classList={{[ownScorePseudoStyles]: pb.auth.loggedInUser()?.id === rank.userId}} class="overflow-hidden text-ellipsis">{rank.username}</span>
+                  <span class="text-right" id="leaderboard-item-score">{rank.pointsTotal}</span>
+                </div>
+              )}
+            </For>
+          </Suspense>
+        </div>
+
+        {/* <!-- PAGINATION --> */}
+        <div class="grid grid-cols-[2fr_1fr_6fr_1fr_2fr] items-center">
+          <span class="" />
+          <button class="btn-menu !justify-end" onClick={() => handleSetPage(page() - 1)} onMouseOver={() => preloadPage(page() - 1)}>
+            <i class="material-icons mr-2">chevron_left</i>
+          </button>
+
+          <div class="flex flex-row justify-center text-[11px]">
+            <For each={pagesToDisplay()}>
+              {num => <span class="basis-10 cursor-pointer text-center" classList={{'text-white underline': num === page()}} onClick={() => handleSetPage(num)} onMouseOver={() => preloadPage(num)}>{num}</span>}
+            </For>
+          </div>
+
+          <button class="btn-menu !justify-start" onClick={() => handleSetPage(page() + 1)} onMouseOver={() => preloadPage(page() + 1)}>
+            <i class="material-icons mr-2">chevron_right</i>
+          </button>
+          <span class="" />
+        </div>
       </div>
 
-      <div class="scrollbar max-h-[350px]" id="leaderboard-item-container">
-        <For each={scores()} fallback={<div>Loading...</div>}>
-          {(score, index) => (
-            <div class="row pr-2 text-sm">
-              <span class="col col-2" id="leaderboard-item-rank">{index() + 1}</span>
-              <span classList={{[ownScorePseudoStyles]: pb.auth.loggedInUser()?.id === score.user}} class="col col-7 overflow-hidden text-ellipsis">{getUsername(score)}</span>
-              <span class="col col-3 flex-right" id="leaderboard-item-score">{score.pointsTotal}</span>
-            </div>
-          )}
-        </For>
-      </div>
+      <BackToMenuBtn setPanel={props.setPanel} />
+
     </BasePanel>
   );
 };

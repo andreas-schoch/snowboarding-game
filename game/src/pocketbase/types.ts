@@ -79,9 +79,19 @@ export interface IScoreNew {
   pointsCombo: number;
   pointsComboBest: number;
   pointsTotal: number; // derived from others
-  // RACE MODE
+  // RACE MODE (this isn't really used right now)
   distance: number;
   time: number;
 }
 
 export type IScore = IScoreNew & RecordModel;
+
+// A read-only collection created out of all IScores for a specific level. Contains all data needed for the leaderboards
+export interface IRank {
+  id: string;
+  levelId: string;
+  userId: string;
+  username: string;
+  pointsTotal: number;
+  rank: number;
+}

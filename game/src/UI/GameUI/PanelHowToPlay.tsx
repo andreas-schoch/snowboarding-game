@@ -6,11 +6,12 @@ import ArrowUpKeyLight from '../../../assets/img/controls/Arrow_Up_Key_Light.png
 import EscKeyLight from '../../../assets/img/controls/Esc_Key_Light.png';
 import SpaceKeyLight from '../../../assets/img/controls/Space_Key_Light.png';
 import ComboCounter from '../../../assets/img/controls/combo_counter.png';
+import {BackToMenuBtn} from './BackBtn';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
 
 export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = props => (
-  <BasePanel id='panel-how-to-play' title='How To Play' backBtn={true} setPanel={props.setPanel} class="!w-[600px] !text-sm !text-stone-500" >
+  <BasePanel id='panel-how-to-play' title='How To Play' class="!w-[600px] !pr-2 !text-sm !text-stone-500" >
 
     <div class='scrollbar max-h-[500px] px-0 py-4'>
 
@@ -57,6 +58,7 @@ export const PanelHowToPlay: Component<{setPanel: (id: PanelId) => void}> = prop
       Keeping the combo counter up is the key to high scores!
       </span></span>
     </div>
+    <BackToMenuBtn setPanel={props.setPanel} />
   </BasePanel>
 );
 
