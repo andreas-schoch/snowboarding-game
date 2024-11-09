@@ -1,11 +1,6 @@
-import {b2, rubeFileSerializer} from '..';
-import {PersistedStore} from '../PersistedStore';
-import {arrayBufferToString} from '../helpers/binaryTransform';
-import {Physics} from '../physics/Physics';
+import {b2} from '..';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
-import {RubeFile} from '../physics/RUBE/RubeFile';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
-import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {Snowboard} from './Snowboard';
 import {State} from './State';
 
@@ -98,7 +93,8 @@ export class Character {
 
   jump() {
     // prevents player from jumping too quickly after a landing
-    if (this.scene.game.getFrame() - this.state.numFramesGrounded < 12) return;
+    if (this.scene.game.getTime() - this.state.timeGrounded < 200) return;
+    console.debug('jumping');
 
     const {isTailGrounded, isCenterGrounded, isNoseGrounded} = this.board;
     if (isCenterGrounded || isTailGrounded || isNoseGrounded) {
@@ -106,34 +102,12 @@ export class Character {
         ? vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.35)), {x: 0, y: this.jumpForce * 1.2})
         : vec2Util.Add(this.body.GetWorldVector(new b2.b2Vec2(0, this.jumpForce * 0.55)), {x: 0, y: this.jumpForce * 0.8});
 
-      // const velocity = this.body.GetLinearVelocity();
-      // const perpendicular = new b2.b2Vec2(-velocity.y, velocity.x);
-      // const bodyUp = vec2Util.Clone(this.body.GetWorldVector(this.UP));
-      // bodyUp.Normalize();
-      // perpendicular.Normalize();
-      // if (isCenterGrounded) {
-      //   vec2Util.Scale(perpendicular, this.jumpForce * 1.25);
-      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.3);
-      // } else {
-      //   vec2Util.Scale(perpendicular, this.jumpForce * 0.5);
-      //   vec2Util.Scale(bodyUp, this.jumpForce * 0.85);
-      // }
-      // let jumpVector = vec2Util.Add(perpendicular, bodyUp);
-
       this.body.ApplyLinearImpulseToCenter(jumpVector, true);
     }
   }
 
   isPartOfMe(body: Box2D.b2Body): boolean {
     return Boolean(this.rubeScene.entityData.get(body));
-  }
-
-  private loadCharacter(x: number, y: number): LoadedScene {
-    const buffer = this.scene.cache.binary.get(PersistedStore.selectedCharacter());
-    const encoded = arrayBufferToString(buffer);
-    let characterRubeFile: RubeFile = rubeFileSerializer.decode(encoded);
-    characterRubeFile = sanitizeRubeFile(characterRubeFile);
-    return Physics.instance.load(characterRubeFile, x, y);
   }
 
   private setLegLength(left: number, right: number) {

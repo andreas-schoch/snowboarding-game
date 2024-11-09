@@ -31,9 +31,22 @@ export class GameScene extends Phaser.Scene {
     // However, for users which have a higher refresh rate we use a variable timestep.
     // This is not ideal but attempts to use accumulation and interpolation felt choppy.
     const fps = Math.round(this.game.loop.actualFps);
-    const timeStep = fps < 65 ? 1 / 60 : 1 / fps;
 
-    this.b2Physics.update(timeStep);
+    if (fps < 70) {
+      // 60FPS
+      this.b2Physics.update(1/120);
+      this.b2Physics.update(1/120);
+    } else if (fps > 100 && fps < 130) {
+      // 120FPS
+      this.b2Physics.update(1/120);
+    } else if (fps >= 130 && fps < 150) {
+      // 144FPS
+      this.b2Physics.update(1/144);
+    } else {
+      // Fallback for anything else
+      this.b2Physics.update(1/fps);
+    }
+
     Character.instances.forEach(character => character.update());
     this.playerController.update();
     this.backdrop.update();
@@ -45,14 +58,14 @@ export class GameScene extends Phaser.Scene {
     // this.load.json('level_003.rube', 'assets/levels/level_003.rube');
     // this.load.json('level_004.rube', 'assets/levels/level_004.rube');
     // this.load.json('level_005.rube', 'assets/levels/level_005.rube');
-    // this.load.json('saw.rube', 'assets/levels/prefabs/saw.rube');
+    // this.load.json('character_v02.rube', 'assets/levels/character_v02.rube');
   }
 
   private create() {
     // TODO make a node script to automatically convert .rube into .bin (and maybe upload to pocketbase)
     //  Now I just uncomment this whenever I need to update the levels then upload via pocketbase admin UI
-    // const levels = ['level_001', 'level_002', 'level_003', 'level_004', 'level_005'];
-    // for (const level of ['level_005']) {
+    // const levels = ['character_v02'];
+    // for (const level of levels) {
     //   const parsed: RubeFile = this.cache.json.get(level + '.rube');
     //   const sanitized = sanitizeRubeFile(parsed);
     //   const encoded = rubeFileSerializer.encode(sanitized);
@@ -62,6 +75,7 @@ export class GameScene extends Phaser.Scene {
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
+    initSolidUI('root-ui');
 
     waitUntil(() => pb.auth.loggedInUser()).then(async () => {
       this.b2Physics = new Physics(this, {gravityX: 0, gravityY: -10, debugDrawEnabled: false});
@@ -110,8 +124,6 @@ export class GameScene extends Phaser.Scene {
       freeLeaked();
       this.scene.restart();
     });
-
-    initSolidUI('root-ui');
 
     // TODO remove. Temporary to serialize open level
     // this.input.keyboard!.on('keydown-SEVEN', () => {

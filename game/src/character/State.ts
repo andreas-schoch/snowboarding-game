@@ -13,7 +13,7 @@ export class State {
   levelUnpausedFrames = 0;
   isLevelFinished = false;
   isCrashed = false;
-  numFramesGrounded = 0;
+  timeGrounded = 0;
 
   private readonly pickupsToProcess: Set<Box2D.b2Body> = new Set();
   private readonly seenSensors: Set<Box2D.b2Body> = new Set();
@@ -97,7 +97,7 @@ export class State {
 
     // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
     GameInfo.observer.on(ENTER_GROUNDED, () => {
-      this.numFramesGrounded = this.character.scene.game.getFrame();
+      this.timeGrounded = this.character.scene.game.getTime();
 
       const numFlips = this.pendingBackFlips + this.pendingFrontFlips;
       if (numFlips >= 1) {

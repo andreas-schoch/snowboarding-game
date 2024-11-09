@@ -41,7 +41,7 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
 
   function updateCircleLoader(value: number) {
     if (value === 0) setCombo('');
-    if (comboLeewayRef) comboLeewayRef.style.backgroundImage = `conic-gradient(red ${value}deg, transparent 0deg)`;
+    if (comboLeewayRef) comboLeewayRef.style.backgroundImage = `conic-gradient(#1e3a8a ${value}deg, transparent 0deg)`;
   }
 
   function animateCombo(accumulated: number, multiplier: number, state: ComboState) {
@@ -103,7 +103,7 @@ export const HUD: Component<{panel: PanelId, setPanel: (id: PanelId) => void}> =
     const animationRunning = animationName !== 'none' && animationPlayState === 'running';
 
     if (!animationRunning) {
-      scoreTextRef.style.color = '#36de36';
+      scoreTextRef.style.color = '#60a5fa';
       scoreTextRef.classList.add(name);
 
       scoreTextRef.onanimationend = () => {

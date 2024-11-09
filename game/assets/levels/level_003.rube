@@ -327,7 +327,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 1,
             "name" : "BridgeSegment",
@@ -381,13 +381,13 @@
         "id" : 1,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -407,7 +407,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 3,
             "name" : "BridgeSegment",
@@ -461,13 +461,13 @@
         "id" : 2,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -487,7 +487,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 5,
             "name" : "BridgeSegment",
@@ -541,13 +541,13 @@
         "id" : 3,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -567,7 +567,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 7,
             "name" : "BridgeSegment",
@@ -621,13 +621,13 @@
         "id" : 4,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -647,7 +647,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 11,
             "name" : "BridgeSegment",
@@ -701,13 +701,13 @@
         "id" : 5,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -727,7 +727,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 12,
             "name" : "BridgeSegment",
@@ -781,13 +781,13 @@
         "id" : 6,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -807,7 +807,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 13,
             "name" : "BridgeSegment",
@@ -861,13 +861,13 @@
         "id" : 7,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -887,7 +887,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 14,
             "name" : "BridgeSegment",
@@ -941,13 +941,13 @@
         "id" : 8,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -967,7 +967,7 @@
         [
           
           {
-            "density" : 14.87261676788330,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 15,
             "name" : "BridgeSegment",
@@ -1021,13 +1021,13 @@
         "id" : 9,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103493690490723,
+        "massData-I" : 0.9390224814414978,
         "massData-center" : 
         {
-          "x" : 2.582868035005959e-07,
-          "y" : 3.228585043757448e-08
+          "x" : 2.626598529786861e-07,
+          "y" : 3.283248162233576e-08
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630834102630615,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1047,7 +1047,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 16,
             "name" : "BridgeSegment",
@@ -1101,13 +1101,13 @@
         "id" : 10,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1127,7 +1127,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 17,
             "name" : "BridgeSegment",
@@ -1181,13 +1181,13 @@
         "id" : 11,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1207,7 +1207,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 18,
             "name" : "BridgeSegment",
@@ -1261,13 +1261,13 @@
         "id" : 12,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1287,7 +1287,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 19,
             "name" : "BridgeSegment",
@@ -1341,13 +1341,13 @@
         "id" : 13,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1367,7 +1367,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 20,
             "name" : "BridgeSegment",
@@ -1421,13 +1421,13 @@
         "id" : 14,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1447,7 +1447,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 21,
             "name" : "BridgeSegment",
@@ -1501,13 +1501,13 @@
         "id" : 15,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1527,7 +1527,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 22,
             "name" : "BridgeSegment",
@@ -1581,13 +1581,13 @@
         "id" : 16,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1607,7 +1607,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 23,
             "name" : "BridgeSegment",
@@ -1661,13 +1661,13 @@
         "id" : 17,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1687,7 +1687,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 24,
             "name" : "BridgeSegment",
@@ -1741,13 +1741,13 @@
         "id" : 18,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1767,7 +1767,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 25,
             "name" : "BridgeSegment",
@@ -1821,13 +1821,13 @@
         "id" : 19,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1847,7 +1847,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 26,
             "name" : "BridgeSegment",
@@ -1901,13 +1901,13 @@
         "id" : 20,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -1927,7 +1927,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 27,
             "name" : "BridgeSegment",
@@ -1981,13 +1981,13 @@
         "id" : 21,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2007,7 +2007,7 @@
         [
           
           {
-            "density" : 14.87261676788330,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 28,
             "name" : "BridgeSegment",
@@ -2061,13 +2061,13 @@
         "id" : 22,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103493690490723,
+        "massData-I" : 0.9390224814414978,
         "massData-center" : 
         {
-          "x" : 2.582868035005959e-07,
-          "y" : 3.228585043757448e-08
+          "x" : 2.626598529786861e-07,
+          "y" : 3.283248162233576e-08
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630834102630615,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2087,7 +2087,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 29,
             "name" : "BridgeSegment",
@@ -2141,13 +2141,13 @@
         "id" : 23,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2167,7 +2167,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 30,
             "name" : "BridgeSegment",
@@ -2221,13 +2221,13 @@
         "id" : 24,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2247,7 +2247,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 31,
             "name" : "BridgeSegment",
@@ -2301,13 +2301,13 @@
         "id" : 25,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2327,7 +2327,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 32,
             "name" : "BridgeSegment",
@@ -2381,13 +2381,13 @@
         "id" : 26,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2407,7 +2407,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 33,
             "name" : "BridgeSegment",
@@ -2461,13 +2461,13 @@
         "id" : 27,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2487,7 +2487,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 34,
             "name" : "BridgeSegment",
@@ -2541,13 +2541,13 @@
         "id" : 28,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2567,7 +2567,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 35,
             "name" : "BridgeSegment",
@@ -2621,13 +2621,13 @@
         "id" : 29,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2647,7 +2647,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 36,
             "name" : "BridgeSegment",
@@ -2701,13 +2701,13 @@
         "id" : 30,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2727,7 +2727,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 37,
             "name" : "BridgeSegment",
@@ -2781,13 +2781,13 @@
         "id" : 31,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2807,7 +2807,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 38,
             "name" : "BridgeSegment",
@@ -2861,13 +2861,13 @@
         "id" : 32,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2887,7 +2887,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 39,
             "name" : "BridgeSegment",
@@ -2941,13 +2941,13 @@
         "id" : 33,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -2967,7 +2967,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 40,
             "name" : "BridgeSegment",
@@ -3021,13 +3021,13 @@
         "id" : 34,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3047,7 +3047,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 41,
             "name" : "BridgeSegment",
@@ -3101,13 +3101,13 @@
         "id" : 35,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3127,7 +3127,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 42,
             "name" : "BridgeSegment",
@@ -3181,13 +3181,13 @@
         "id" : 36,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3342,7 +3342,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 43,
             "name" : "BridgeSegment",
@@ -3396,13 +3396,13 @@
         "id" : 38,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3422,7 +3422,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 44,
             "name" : "BridgeSegment",
@@ -3476,13 +3476,13 @@
         "id" : 39,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3502,7 +3502,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 45,
             "name" : "BridgeSegment",
@@ -3556,13 +3556,13 @@
         "id" : 40,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3582,7 +3582,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 46,
             "name" : "BridgeSegment",
@@ -3636,13 +3636,13 @@
         "id" : 41,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3662,7 +3662,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 47,
             "name" : "BridgeSegment",
@@ -3716,13 +3716,13 @@
         "id" : 42,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3742,7 +3742,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 48,
             "name" : "BridgeSegment",
@@ -3796,13 +3796,13 @@
         "id" : 43,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3822,7 +3822,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 49,
             "name" : "BridgeSegment",
@@ -3876,13 +3876,13 @@
         "id" : 44,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3902,7 +3902,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 50,
             "name" : "BridgeSegment",
@@ -3956,13 +3956,13 @@
         "id" : 45,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -3982,7 +3982,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 51,
             "name" : "BridgeSegment",
@@ -4036,13 +4036,13 @@
         "id" : 46,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4062,7 +4062,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 52,
             "name" : "BridgeSegment",
@@ -4116,13 +4116,13 @@
         "id" : 47,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4142,7 +4142,7 @@
         [
           
           {
-            "density" : 14.87261676788330,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 53,
             "name" : "BridgeSegment",
@@ -4196,13 +4196,13 @@
         "id" : 48,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103493690490723,
+        "massData-I" : 0.9390224814414978,
         "massData-center" : 
         {
-          "x" : 2.582868035005959e-07,
-          "y" : 3.228585043757448e-08
+          "x" : 2.626598529786861e-07,
+          "y" : 3.283248162233576e-08
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630834102630615,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4222,7 +4222,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 54,
             "name" : "BridgeSegment",
@@ -4276,13 +4276,13 @@
         "id" : 49,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4302,7 +4302,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 55,
             "name" : "BridgeSegment",
@@ -4356,13 +4356,13 @@
         "id" : 50,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4382,7 +4382,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 56,
             "name" : "BridgeSegment",
@@ -4436,13 +4436,13 @@
         "id" : 51,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4462,7 +4462,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 57,
             "name" : "BridgeSegment",
@@ -4516,13 +4516,13 @@
         "id" : 52,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4542,7 +4542,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 58,
             "name" : "BridgeSegment",
@@ -4596,13 +4596,13 @@
         "id" : 53,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4622,7 +4622,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 59,
             "name" : "BridgeSegment",
@@ -4676,13 +4676,13 @@
         "id" : 54,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4702,7 +4702,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 60,
             "name" : "BridgeSegment",
@@ -4756,13 +4756,13 @@
         "id" : 55,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4782,7 +4782,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 61,
             "name" : "BridgeSegment",
@@ -4836,13 +4836,13 @@
         "id" : 56,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4862,7 +4862,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 62,
             "name" : "BridgeSegment",
@@ -4916,13 +4916,13 @@
         "id" : 57,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -4942,7 +4942,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 63,
             "name" : "BridgeSegment",
@@ -4996,13 +4996,13 @@
         "id" : 58,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -5022,7 +5022,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 64,
             "name" : "BridgeSegment",
@@ -5076,13 +5076,13 @@
         "id" : 59,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -5102,7 +5102,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 65,
             "name" : "BridgeSegment",
@@ -5156,13 +5156,13 @@
         "id" : 60,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -5182,7 +5182,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 66,
             "name" : "BridgeSegment",
@@ -5236,13 +5236,13 @@
         "id" : 61,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6281,7 +6281,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 126,
             "name" : "BridgeSegment",
@@ -6335,13 +6335,13 @@
         "id" : 124,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6361,7 +6361,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 127,
             "name" : "BridgeSegment",
@@ -6415,13 +6415,13 @@
         "id" : 125,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6441,7 +6441,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 132,
             "name" : "BridgeSegment",
@@ -6495,13 +6495,13 @@
         "id" : 130,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6521,7 +6521,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 134,
             "name" : "BridgeSegment",
@@ -6575,13 +6575,13 @@
         "id" : 132,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6601,7 +6601,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 135,
             "name" : "BridgeSegment",
@@ -6655,13 +6655,13 @@
         "id" : 133,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6681,7 +6681,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 136,
             "name" : "BridgeSegment",
@@ -6735,13 +6735,13 @@
         "id" : 134,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6761,7 +6761,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 137,
             "name" : "BridgeSegment",
@@ -6815,13 +6815,13 @@
         "id" : 135,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6841,7 +6841,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 138,
             "name" : "BridgeSegment",
@@ -6895,13 +6895,13 @@
         "id" : 136,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -6921,7 +6921,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 139,
             "name" : "BridgeSegment",
@@ -6975,13 +6975,13 @@
         "id" : 137,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7001,7 +7001,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 140,
             "name" : "BridgeSegment",
@@ -7055,13 +7055,13 @@
         "id" : 138,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7081,7 +7081,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 141,
             "name" : "BridgeSegment",
@@ -7135,13 +7135,13 @@
         "id" : 139,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7161,7 +7161,7 @@
         [
           
           {
-            "density" : 14.87261199951172,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 142,
             "name" : "BridgeSegment",
@@ -7215,13 +7215,13 @@
         "id" : 140,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103496074676514,
+        "massData-I" : 0.9390234947204590,
         "massData-center" : 
         {
-          "x" : -1.986821551724915e-08,
-          "y" : 2.483526939656144e-09
+          "x" : -3.283247096419473e-08,
+          "y" : 2.052029435262170e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630835056304932,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7241,7 +7241,7 @@
         [
           
           {
-            "density" : 14.87261676788330,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 143,
             "name" : "BridgeSegment",
@@ -7295,13 +7295,13 @@
         "id" : 141,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103493690490723,
+        "massData-I" : 0.9390224814414978,
         "massData-center" : 
         {
-          "x" : 2.582868035005959e-07,
-          "y" : 3.228585043757448e-08
+          "x" : 2.626598529786861e-07,
+          "y" : 3.283248162233576e-08
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630834102630615,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7321,7 +7321,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 144,
             "name" : "BridgeSegment",
@@ -7375,13 +7375,13 @@
         "id" : 142,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7401,7 +7401,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 145,
             "name" : "BridgeSegment",
@@ -7455,13 +7455,13 @@
         "id" : 143,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7481,7 +7481,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 146,
             "name" : "BridgeSegment",
@@ -7535,13 +7535,13 @@
         "id" : 144,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7561,7 +7561,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 147,
             "name" : "BridgeSegment",
@@ -7615,13 +7615,13 @@
         "id" : 145,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7641,7 +7641,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 149,
             "name" : "BridgeSegment",
@@ -7695,13 +7695,13 @@
         "id" : 147,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7721,7 +7721,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 150,
             "name" : "BridgeSegment",
@@ -7775,13 +7775,13 @@
         "id" : 148,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -7801,7 +7801,7 @@
         [
           
           {
-            "density" : 14.87261962890625,
+            "density" : 4.5,
             "friction" : 0.2,
             "id" : 151,
             "name" : "BridgeSegment",
@@ -7855,13 +7855,13 @@
         "id" : 149,
         "linearDamping" : 0.2,
         "linearVelocity" : 0,
-        "massData-I" : 3.103491306304932,
+        "massData-I" : 0.9390216469764709,
         "massData-center" : 
         {
-          "x" : 1.986821551724915e-08,
-          "y" : 0
+          "x" : 1.641624436388156e-08,
+          "y" : -2.052030545485195e-09
         },
-        "massData-mass" : 12.0,
+        "massData-mass" : 3.630833148956299,
         "name" : "BridgeSegment",
         "position" : 
         {
@@ -14784,8 +14784,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 78.87246704101562,
-          "y" : -13.72773551940918
+          "x" : 80.70001983642578,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -14798,8 +14798,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 78.87246704101562,
-          "y" : -15.12772941589355
+          "x" : 80.70001983642578,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -14812,8 +14812,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 78.87246704101562,
-          "y" : -12.32773399353027
+          "x" : 80.70001983642578,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14826,8 +14826,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 80.27243041992188,
-          "y" : -13.72773551940918
+          "x" : 82.09998321533203,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -14840,8 +14840,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 81.67245483398438,
-          "y" : -13.72773551940918
+          "x" : 83.50000762939453,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -14854,8 +14854,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 81.67245483398438,
-          "y" : -15.12772941589355
+          "x" : 83.50000762939453,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -14868,8 +14868,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 80.27243041992188,
-          "y" : -15.12772941589355
+          "x" : 82.09998321533203,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -14882,8 +14882,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 80.27243041992188,
-          "y" : -12.32773399353027
+          "x" : 82.09998321533203,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14896,8 +14896,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 81.67245483398438,
-          "y" : -12.32773399353027
+          "x" : 83.50000762939453,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14910,8 +14910,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 73.27243041992188,
-          "y" : -12.32773399353027
+          "x" : 75.09998321533203,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14924,8 +14924,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 77.47244262695312,
-          "y" : -12.32773399353027
+          "x" : 79.29999542236328,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14938,8 +14938,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 76.07241821289062,
-          "y" : -15.12772941589355
+          "x" : 77.89997100830078,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -14952,8 +14952,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 74.67245483398438,
-          "y" : -12.32773399353027
+          "x" : 76.50000762939453,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14966,8 +14966,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 77.47244262695312,
-          "y" : -13.72773551940918
+          "x" : 79.29999542236328,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -14980,8 +14980,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 76.07241821289062,
-          "y" : -12.32773399353027
+          "x" : 77.89997100830078,
+          "y" : -13.15230846405029
         },
         "scale" : 1
       },
@@ -14994,8 +14994,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 74.67245483398438,
-          "y" : -15.12772941589355
+          "x" : 76.50000762939453,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -15008,8 +15008,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 76.07241821289062,
-          "y" : -13.72773551940918
+          "x" : 77.89997100830078,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -15022,8 +15022,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 74.67245483398438,
-          "y" : -13.72773551940918
+          "x" : 76.50000762939453,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -15036,8 +15036,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 73.27243041992188,
-          "y" : -15.12772941589355
+          "x" : 75.09998321533203,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -15050,8 +15050,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 73.27243041992188,
-          "y" : -13.72773551940918
+          "x" : 75.09998321533203,
+          "y" : -14.55230998992920
         },
         "scale" : 1
       },
@@ -15064,8 +15064,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 77.47244262695312,
-          "y" : -15.12772941589355
+          "x" : 79.29999542236328,
+          "y" : -15.95230388641357
         },
         "scale" : 1
       },
@@ -15078,8 +15078,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 93.38516998291016,
-          "y" : -16.55470275878906
+          "x" : 97.58705902099609,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15092,8 +15092,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 91.98520660400391,
-          "y" : -13.75470733642578
+          "x" : 96.18709564208984,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15106,8 +15106,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 94.78519439697266,
-          "y" : -15.15470886230469
+          "x" : 98.98708343505859,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15120,8 +15120,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 93.38516998291016,
-          "y" : -15.15470886230469
+          "x" : 97.58705902099609,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15134,8 +15134,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 94.78519439697266,
-          "y" : -16.55470275878906
+          "x" : 98.98708343505859,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15148,8 +15148,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 93.38516998291016,
-          "y" : -13.75470733642578
+          "x" : 97.58705902099609,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15162,8 +15162,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 94.78519439697266,
-          "y" : -13.75470733642578
+          "x" : 98.98708343505859,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15176,8 +15176,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 86.38516998291016,
-          "y" : -13.75470733642578
+          "x" : 90.58705902099609,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15190,8 +15190,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 90.58518218994141,
-          "y" : -13.75470733642578
+          "x" : 94.78707122802734,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15204,8 +15204,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 89.18515777587891,
-          "y" : -16.55470275878906
+          "x" : 93.38704681396484,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15218,8 +15218,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 90.58518218994141,
-          "y" : -15.15470886230469
+          "x" : 94.78707122802734,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15232,8 +15232,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 89.18515777587891,
-          "y" : -13.75470733642578
+          "x" : 93.38704681396484,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15246,8 +15246,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 87.78519439697266,
-          "y" : -13.75470733642578
+          "x" : 91.98708343505859,
+          "y" : -15.42312335968018
         },
         "scale" : 1
       },
@@ -15260,8 +15260,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 87.78519439697266,
-          "y" : -15.15470886230469
+          "x" : 91.98708343505859,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15274,8 +15274,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 87.78519439697266,
-          "y" : -16.55470275878906
+          "x" : 91.98708343505859,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15288,8 +15288,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 89.18515777587891,
-          "y" : -15.15470886230469
+          "x" : 93.38704681396484,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15302,8 +15302,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 86.38516998291016,
-          "y" : -15.15470886230469
+          "x" : 90.58705902099609,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15316,8 +15316,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 86.38516998291016,
-          "y" : -16.55470275878906
+          "x" : 90.58705902099609,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15330,8 +15330,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 90.58518218994141,
-          "y" : -16.55470275878906
+          "x" : 94.78707122802734,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15344,8 +15344,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 91.98520660400391,
-          "y" : -16.55470275878906
+          "x" : 96.18709564208984,
+          "y" : -18.22311782836914
         },
         "scale" : 1
       },
@@ -15358,8 +15358,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 91.98520660400391,
-          "y" : -15.15470886230469
+          "x" : 96.18709564208984,
+          "y" : -16.82312393188477
         },
         "scale" : 1
       },
@@ -15956,306 +15956,12 @@
         "angle" : 0,
         "file" : "prefabs/coin.rube",
         "flip" : false,
-        "id" : 128,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 365.9618530273438,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 129,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 367.3618774414062,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 130,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 367.3618774414062,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 131,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 364.5618896484375,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 132,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 365.9618530273438,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 133,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 367.3618774414062,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 134,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 358.9618530273438,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 135,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 361.7618408203125,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 136,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 365.9618530273438,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 137,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 360.3618774414062,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 138,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 360.3618774414062,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 139,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 361.7618408203125,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 140,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 363.1618652343750,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 141,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 363.1618652343750,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 142,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 360.3618774414062,
-          "y" : -75.43762969970703
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 143,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 363.1618652343750,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 144,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 364.5618896484375,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 145,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 358.9618530273438,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 146,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 358.9618530273438,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 147,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 361.7618408203125,
-          "y" : -76.83762359619141
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 148,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 364.5618896484375,
-          "y" : -78.23761749267578
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
         "id" : 149,
         "name" : "Coin",
         "position" : 
         {
-          "x" : 365.9618530273438,
-          "y" : -82.63761901855469
+          "x" : 366.1832275390625,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16268,8 +15974,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 367.3618774414062,
-          "y" : -81.23762512207031
+          "x" : 367.5832519531250,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16282,8 +15988,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 361.7618408203125,
-          "y" : -82.63761901855469
+          "x" : 361.9832153320312,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16296,8 +16002,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 367.3618774414062,
-          "y" : -79.83763122558594
+          "x" : 367.5832519531250,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16310,8 +16016,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 367.3618774414062,
-          "y" : -82.63761901855469
+          "x" : 367.5832519531250,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16324,8 +16030,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 364.5618896484375,
-          "y" : -79.83763122558594
+          "x" : 364.7832641601562,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16338,8 +16044,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 365.9618530273438,
-          "y" : -81.23762512207031
+          "x" : 366.1832275390625,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16352,8 +16058,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 358.9618530273438,
-          "y" : -79.83763122558594
+          "x" : 359.1832275390625,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16366,8 +16072,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 360.3618774414062,
-          "y" : -82.63761901855469
+          "x" : 360.5832519531250,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16380,8 +16086,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 361.7618408203125,
-          "y" : -79.83763122558594
+          "x" : 361.9832153320312,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16394,8 +16100,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 365.9618530273438,
-          "y" : -79.83763122558594
+          "x" : 366.1832275390625,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16408,8 +16114,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 360.3618774414062,
-          "y" : -81.23762512207031
+          "x" : 360.5832519531250,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16422,8 +16128,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 363.1618652343750,
-          "y" : -79.83763122558594
+          "x" : 363.3832397460938,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16436,8 +16142,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 358.9618530273438,
-          "y" : -82.63761901855469
+          "x" : 359.1832275390625,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16450,8 +16156,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 358.9618530273438,
-          "y" : -81.23762512207031
+          "x" : 359.1832275390625,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16464,8 +16170,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 363.1618652343750,
-          "y" : -82.63761901855469
+          "x" : 363.3832397460938,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16478,8 +16184,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 364.5618896484375,
-          "y" : -81.23762512207031
+          "x" : 364.7832641601562,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16492,8 +16198,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 360.3618774414062,
-          "y" : -79.83763122558594
+          "x" : 360.5832519531250,
+          "y" : -83.91043853759766
         },
         "scale" : 1
       },
@@ -16506,8 +16212,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 363.1618652343750,
-          "y" : -81.23762512207031
+          "x" : 363.3832397460938,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16520,8 +16226,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 361.7618408203125,
-          "y" : -81.23762512207031
+          "x" : 361.9832153320312,
+          "y" : -85.31043243408203
         },
         "scale" : 1
       },
@@ -16534,302 +16240,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 364.5618896484375,
-          "y" : -82.63761901855469
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 170,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 337.5842590332031,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 171,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 338.9842834472656,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 172,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 333.3842468261719,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 173,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 338.9842834472656,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 174,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 338.9842834472656,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 175,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 336.1842956542969,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 176,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 337.5842590332031,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 177,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 330.5842590332031,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 178,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 331.9842834472656,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 179,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 333.3842468261719,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 180,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 337.5842590332031,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 181,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 331.9842834472656,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 182,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 334.7842712402344,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 183,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 330.5842590332031,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 184,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 330.5842590332031,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 185,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 334.7842712402344,
-          "y" : -79.1276855468750
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 186,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 336.1842956542969,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 187,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 331.9842834472656,
-          "y" : -76.32769775390625
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 188,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 334.7842712402344,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 189,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 333.3842468261719,
-          "y" : -77.72769165039062
-        },
-        "scale" : 1
-      },
-      
-      {
-        "angle" : 0,
-        "file" : "prefabs/coin.rube",
-        "flip" : false,
-        "id" : 190,
-        "name" : "Coin",
-        "position" : 
-        {
-          "x" : 336.1842956542969,
-          "y" : -79.1276855468750
+          "x" : 364.7832641601562,
+          "y" : -86.71042633056641
         },
         "scale" : 1
       },
@@ -16842,8 +16254,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 337.5842590332031,
-          "y" : -83.52768707275391
+          "x" : 339.7934265136719,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -16856,8 +16268,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 333.3842468261719,
-          "y" : -83.52768707275391
+          "x" : 335.5934143066406,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -16870,8 +16282,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 338.9842834472656,
-          "y" : -82.12769317626953
+          "x" : 341.1934509277344,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -16884,8 +16296,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 338.9842834472656,
-          "y" : -80.72769927978516
+          "x" : 341.1934509277344,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -16898,8 +16310,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 338.9842834472656,
-          "y" : -83.52768707275391
+          "x" : 341.1934509277344,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -16912,8 +16324,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 336.1842956542969,
-          "y" : -80.72769927978516
+          "x" : 338.3934631347656,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -16926,8 +16338,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 337.5842590332031,
-          "y" : -82.12769317626953
+          "x" : 339.7934265136719,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -16940,8 +16352,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 331.9842834472656,
-          "y" : -83.52768707275391
+          "x" : 334.1934509277344,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -16954,8 +16366,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 337.5842590332031,
-          "y" : -80.72769927978516
+          "x" : 339.7934265136719,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -16968,8 +16380,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 333.3842468261719,
-          "y" : -80.72769927978516
+          "x" : 335.5934143066406,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -16982,8 +16394,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 330.5842590332031,
-          "y" : -80.72769927978516
+          "x" : 332.7934265136719,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -16996,8 +16408,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 336.1842956542969,
-          "y" : -82.12769317626953
+          "x" : 338.3934631347656,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -17010,8 +16422,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 331.9842834472656,
-          "y" : -82.12769317626953
+          "x" : 334.1934509277344,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -17024,8 +16436,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 334.7842712402344,
-          "y" : -80.72769927978516
+          "x" : 336.9934387207031,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -17038,8 +16450,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 330.5842590332031,
-          "y" : -83.52768707275391
+          "x" : 332.7934265136719,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -17052,8 +16464,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 330.5842590332031,
-          "y" : -82.12769317626953
+          "x" : 332.7934265136719,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -17066,8 +16478,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 334.7842712402344,
-          "y" : -83.52768707275391
+          "x" : 336.9934387207031,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -17080,8 +16492,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 331.9842834472656,
-          "y" : -80.72769927978516
+          "x" : 334.1934509277344,
+          "y" : -82.44255828857422
         },
         "scale" : 1
       },
@@ -17094,8 +16506,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 333.3842468261719,
-          "y" : -82.12769317626953
+          "x" : 335.5934143066406,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },
@@ -17108,8 +16520,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 336.1842956542969,
-          "y" : -83.52768707275391
+          "x" : 338.3934631347656,
+          "y" : -85.24254608154297
         },
         "scale" : 1
       },
@@ -17122,8 +16534,8 @@
         "name" : "Coin",
         "position" : 
         {
-          "x" : 334.7842712402344,
-          "y" : -82.12769317626953
+          "x" : 336.9934387207031,
+          "y" : -83.84255218505859
         },
         "scale" : 1
       },

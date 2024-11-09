@@ -7,6 +7,7 @@ import {IRank} from '../../pocketbase/types';
 import {BackToMenuBtn} from './BackBtn';
 import {BasePanel} from './BasePanel';
 import {PanelId} from './GameUI';
+import {Spinner} from './Spinner';
 
 const PER_PAGE = 50;
 
@@ -73,7 +74,7 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
   }
 
   return (
-    <BasePanel id='panel-leaderboards' title='Leaderboards' class="h-[560px]">
+    <BasePanel id='panel-leaderboards' title='Leaderboards' class="h-[560px] pr-2">
 
       <div class="grid h-full grid-rows-[28px_1fr_32px] items-center gap-2">
 
@@ -83,8 +84,8 @@ export const PanelLeaderboards: Component<{setPanel: (id: PanelId) => void}> = p
           <span class="bolder text-right">Score</span>
         </div>
 
-        <div ref={el => scrollbarRef = el} class="scrollbar" id="leaderboard-item-container">
-          <Suspense fallback={<div class="text-center">fetching leaderboard data</div>}>
+        <div ref={el => scrollbarRef = el} class="scrollbar relative" id="leaderboard-item-container">
+          <Suspense fallback={<div class="flex justify-center"><Spinner /></div>}>
             <For each={ranks()?.items} fallback={<div>Loading...</div>}>
               {(rank, index) => (
                 <div class="mb-5 grid grid-cols-[2fr_7fr_3fr] pl-3 pr-4 text-sm">

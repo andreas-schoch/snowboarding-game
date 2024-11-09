@@ -4,7 +4,7 @@ migrate((db) => {
     {
       "id": "_pb_users_auth_",
       "created": "2024-01-16 16:04:09.774Z",
-      "updated": "2024-01-28 10:28:44.418Z",
+      "updated": "2024-10-21 12:18:32.537Z",
       "name": "users",
       "type": "auth",
       "system": false,
@@ -41,7 +41,7 @@ migrate((db) => {
     {
       "id": "3x4pms5xedktw1m",
       "created": "2024-01-16 16:17:08.493Z",
-      "updated": "2024-01-28 14:57:18.536Z",
+      "updated": "2024-11-06 01:24:14.104Z",
       "name": "Score",
       "type": "base",
       "system": false,
@@ -215,7 +215,9 @@ migrate((db) => {
           }
         }
       ],
-      "indexes": [],
+      "indexes": [
+        "CREATE UNIQUE INDEX `idx_7sXiB7w` ON `Score` (\n  `user`,\n  `level`\n)"
+      ],
       "listRule": "@request.auth.id != \"\"",
       "viewRule": "@request.auth.id != \"\"",
       "createRule": "@request.auth.id != '' && @request.data.user = @request.auth.id",
@@ -226,7 +228,7 @@ migrate((db) => {
     {
       "id": "izinoaotvb2ehif",
       "created": "2024-01-17 08:59:14.326Z",
-      "updated": "2024-01-28 10:28:44.421Z",
+      "updated": "2024-10-21 12:18:32.557Z",
       "name": "levels",
       "type": "base",
       "system": false,
@@ -310,6 +312,99 @@ migrate((db) => {
             "maxSize": 500000,
             "protected": false
           }
+        },
+        {
+          "system": false,
+          "id": "kfj1xmey",
+          "name": "localId",
+          "type": "text",
+          "required": true,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": 5,
+            "max": 24,
+            "pattern": ""
+          }
+        }
+      ],
+      "indexes": [],
+      "listRule": "@request.auth.id != \"\"",
+      "viewRule": "@request.auth.id != \"\"",
+      "createRule": "@request.auth.id != '' && @request.data.user = @request.auth.id",
+      "updateRule": "@request.auth.id != \"\" && @request.auth.id = user",
+      "deleteRule": null,
+      "options": {}
+    },
+    {
+      "id": "ua09o0d55gti5zz",
+      "created": "2024-11-06 00:57:32.260Z",
+      "updated": "2024-11-06 03:18:14.628Z",
+      "name": "Ranks",
+      "type": "view",
+      "system": false,
+      "schema": [
+        {
+          "system": false,
+          "id": "fofduuia",
+          "name": "username",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "78yab5sf",
+          "name": "levelId",
+          "type": "json",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "maxSize": 1
+          }
+        },
+        {
+          "system": false,
+          "id": "4wt9gm17",
+          "name": "userId",
+          "type": "json",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "maxSize": 1
+          }
+        },
+        {
+          "system": false,
+          "id": "l0qsqmga",
+          "name": "pointsTotal",
+          "type": "json",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "maxSize": 1
+          }
+        },
+        {
+          "system": false,
+          "id": "swjxb7dc",
+          "name": "rank",
+          "type": "json",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "maxSize": 1
+          }
         }
       ],
       "indexes": [],
@@ -318,7 +413,9 @@ migrate((db) => {
       "createRule": null,
       "updateRule": null,
       "deleteRule": null,
-      "options": {}
+      "options": {
+        "query": "SELECT\n  s.id,\n  u.username,\n  s.level as levelId,\n  s.user as userId,\n  s.pointsTotal,\n  s.updated,\n  (\n    SELECT COUNT(*) + 1\n    FROM score s2\n    WHERE s2.level = s.level\n      AND s2.pointsTotal > s.pointsTotal\n  ) AS rank\nFROM\n  score s\nJOIN\n  users u ON s.user = u.id;\n"
+      }
     }
   ];
 

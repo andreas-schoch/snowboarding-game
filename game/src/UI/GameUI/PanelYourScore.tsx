@@ -89,7 +89,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
         <TrickScoreSummary score={props.score} />
 
         <Show when={isNewPersonalBest()}>
-          <div class="-mt-4 text-right text-red-600">New Personal Best!</div>
+          <div class="-mt-4 text-right text-blue-600">New Personal Best!</div>
         </Show>
 
         <div class="row mb-16 mt-12 text-sm leading-4 text-stone-400">
