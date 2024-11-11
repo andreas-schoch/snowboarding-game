@@ -624,7 +624,7 @@
               }
             ],
             "density" : 3,
-            "friction" : 1,
+            "friction" : 0.99,
             "id" : 11,
             "name" : "boardSegmentTailFriction",
             "shapes" : 
@@ -648,10 +648,10 @@
         "massData-I" : 0.02599081955850124,
         "massData-center" : 
         {
-          "x" : -0.005478516686707735,
-          "y" : 5.947679015960716e-10
+          "x" : -0.005478515289723873,
+          "y" : 5.947678460849204e-10
         },
-        "massData-mass" : 1.565858840942383,
+        "massData-mass" : 1.565858960151672,
         "name" : "boardSegmentTail",
         "position" : 
         {
@@ -842,7 +842,7 @@
               }
             ],
             "density" : 3,
-            "friction" : 1,
+            "friction" : 0.99,
             "id" : 16,
             "name" : "boardSegmentNoseFriction",
             "shapes" : 
@@ -2301,7 +2301,7 @@
         "bodyB" : 2,
         "collideConnected" : false,
         "dampingRatio" : 0.5,
-        "frequency" : 36.0,
+        "frequency" : 34.0,
         "id" : 1,
         "name" : "weldBoard",
         "referenceAngle" : 0.1047197580337524,
@@ -2323,7 +2323,7 @@
         "bodyB" : 7,
         "collideConnected" : false,
         "dampingRatio" : 0.5,
-        "frequency" : 36.0,
+        "frequency" : 34.0,
         "id" : 2,
         "name" : "weldBoard",
         "referenceAngle" : 0.1047197580337524,
@@ -2389,10 +2389,10 @@
         "bodyB" : 4,
         "collideConnected" : false,
         "dampingRatio" : 0.5,
-        "frequency" : 38.0,
+        "frequency" : 36.0,
         "id" : 5,
         "name" : "weldBoard",
-        "referenceAngle" : -0.05235987901687622,
+        "referenceAngle" : -0.01745329238474369,
         "type" : "weld"
       },
       
@@ -2411,10 +2411,10 @@
         "bodyB" : 6,
         "collideConnected" : false,
         "dampingRatio" : 0.5,
-        "frequency" : 38.0,
+        "frequency" : 36.0,
         "id" : 6,
         "name" : "weldBoard",
-        "referenceAngle" : -0.05235987901687622,
+        "referenceAngle" : -0.01745329238474369,
         "type" : "weld"
       },
       

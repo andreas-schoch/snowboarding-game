@@ -1,4 +1,4 @@
-import 'phaser';
+/// <reference types="phaser" />
 import Box2DFactory from 'box2d-wasm';
 import {simd} from 'wasm-feature-detect';
 import {PersistedStore} from './PersistedStore';
@@ -30,7 +30,7 @@ export const DEFAULT_HEIGHT = 720;
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Snowboarding Game',
-  version: '2.1.0',
+  version: '2.2.0',
   type: Phaser.WEBGL,
   backgroundColor: PersistedStore.darkmodeEnabled() ? '0x666666' : '0x3470c6',
   disableContextMenu: true,

@@ -11,6 +11,8 @@
 
 # production
 /build
+dist
+phaser-butcher-build
 
 # misc
 .DS_Store
@@ -26,7 +28,6 @@ yarn-error.log*
 localhost.crt
 localhost.key
 
-dist
 .cache
 
 /game/assets/levels/*.rube-backups/

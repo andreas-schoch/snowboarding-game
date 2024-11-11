@@ -9,7 +9,7 @@ import {Details} from './Details';
 import {Explorer} from './Explorer';
 import {activeDialog, selected, setActiveDialogName} from './globalSignals';
 
-export const EditorUI: Component = () => {
+const EditorUI: Component = () => {
 
   createEffect(() => {
     const item = selected();
@@ -38,3 +38,6 @@ export const EditorUI: Component = () => {
     </Portal>
   </>;
 };
+
+// eslint-disable-next-line import/no-default-export
+export default EditorUI;

@@ -11,7 +11,7 @@ import {PanelSelectLevel} from './PanelSelectLevel';
 import {PanelSettings} from './PanelSettings';
 import {PanelYourScore} from './PanelYourScore';
 
-export const GameUI: Component = () => {
+const GameUI: Component = () => {
   const [panel, setPanel] = createSignal<PanelId>('none');
   const [score, setScore] = createSignal<IScoreNew>(GameInfo.score!);
 
@@ -45,3 +45,6 @@ export const GameUI: Component = () => {
 };
 
 export type PanelId = 'panel-pause-menu' | 'panel-select-level' | 'panel-leaderboards' | 'panel-how-to-play' | 'panel-settings' | 'panel-credits' | 'panel-your-score' | 'none';
+
+// eslint-disable-next-line import/no-default-export
+export default GameUI;

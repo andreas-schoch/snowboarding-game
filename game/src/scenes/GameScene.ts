@@ -1,17 +1,20 @@
-import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb} from '..';
+import {SCENE_EDITOR, SCENE_GAME , freeLeaked, pb, rubeFileSerializer} from '..';
 import {Backdrop} from '../Backdrop';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {PersistedStore} from '../PersistedStore';
 import {SoundManager} from '../SoundManager';
 import {Terrain} from '../Terrain';
-import {initSolidUI} from '../UI';
+import {initEditorUI, initGameUI} from '../UI';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
+import {downloadBlob} from '../helpers/binaryTransform';
 import {waitUntil} from '../helpers/waitUntil';
 import {ILevel} from '../levels';
 import {Physics} from '../physics/Physics';
+import {RubeFile} from '../physics/RUBE/RubeFile';
+import {sanitizeRubeFile} from '../physics/RUBE/sanitizeRubeFile';
 import {IScoreNew} from '../pocketbase/types';
 
 export class GameScene extends Phaser.Scene {
@@ -75,7 +78,7 @@ export class GameScene extends Phaser.Scene {
     if (EditorInfo.observer) EditorInfo.observer.destroy(); // clear previous runs
     if (GameInfo.observer) GameInfo.observer.destroy(); // clear previous runs
     GameInfo.observer = new Phaser.Events.EventEmitter();
-    initSolidUI('root-ui');
+    initGameUI('root-ui');
 
     waitUntil(() => pb.auth.loggedInUser()).then(async () => {
       this.b2Physics = new Physics(this, {gravityX: 0, gravityY: -10, debugDrawEnabled: false});

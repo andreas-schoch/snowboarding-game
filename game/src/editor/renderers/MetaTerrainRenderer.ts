@@ -72,7 +72,7 @@ export class MetaTerrainRenderer {
     graphics.removeAllListeners();
     graphics.setPosition(minX, minY);
     const pointsLocal = new Phaser.Geom.Polygon(pointsWorld.map(point => ({x: point.x - minX, y: point.y - minY})));
-    graphics.setInteractive(pointsLocal, Phaser.Geom.Polygon.Contains);
+    // graphics.setInteractive(pointsLocal, Phaser.Geom.Polygon.Contains);
 
     // TODO fix select for rotated terrain (or just disable rotation for terrain?)
     onSelectItem(graphics, () => {

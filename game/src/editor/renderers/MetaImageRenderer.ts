@@ -1,6 +1,7 @@
 import {ppm} from '../..';
 import {PersistedStore} from '../../PersistedStore';
 import {selected, setSelected} from '../../UI/EditorUI/globalSignals';
+import {normalizeRadians} from '../../helpers/angle';
 import {throttle} from '../../helpers/debounce';
 import {EditorImage} from '../items/EditorImage';
 import {EditorObject} from '../items/EditorObject';
@@ -35,10 +36,7 @@ export class MetaImageRenderer {
       const position = editorImage.getPosition();
       const angle = editorImage.getAngle();
 
-      const twoPI = Math.PI * 2;
-      let actualAngle = (angle || 0) + offsetAngle;
-      if (actualAngle > twoPI) actualAngle -= twoPI;
-      if (actualAngle < 0) actualAngle += twoPI;
+      const actualAngle = normalizeRadians((angle || 0) + offsetAngle); // TODO verify if correct after change
 
       const image = context.image;
       image.setTexture(textureAtlas || textureFrame, textureFrame);

@@ -104,7 +104,7 @@ export const PanelYourScore: Component<{setPanel: (id: PanelId) => void, score: 
           <div class="row" id="your-score-name-form">
             <div class="col col-8 !pl-2">
               <div class="form-group">
-                <input id="username" class="form-text-input text-gray-500" name="username" value="" type="text" autofocus
+                <input maxLength={20} id="username" class="form-text-input text-gray-500" name="username" value="" type="text" autofocus
                 // @ts-expect-error oldschool hack for floating label
                 // eslint-disable-next-line solid/event-handlers
                   autocomplete="off" onkeyup="this.setAttribute('value', this.value)" ref={el => usernameInput = el} />

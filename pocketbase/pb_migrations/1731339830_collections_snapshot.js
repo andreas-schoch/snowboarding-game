@@ -4,7 +4,7 @@ migrate((db) => {
     {
       "id": "_pb_users_auth_",
       "created": "2024-01-16 16:04:09.774Z",
-      "updated": "2024-10-21 12:18:32.537Z",
+      "updated": "2024-11-08 14:44:01.953Z",
       "name": "users",
       "type": "auth",
       "system": false,
@@ -41,7 +41,7 @@ migrate((db) => {
     {
       "id": "3x4pms5xedktw1m",
       "created": "2024-01-16 16:17:08.493Z",
-      "updated": "2024-11-06 01:24:14.104Z",
+      "updated": "2024-11-08 14:44:01.953Z",
       "name": "Score",
       "type": "base",
       "system": false,
@@ -228,7 +228,7 @@ migrate((db) => {
     {
       "id": "izinoaotvb2ehif",
       "created": "2024-01-17 08:59:14.326Z",
-      "updated": "2024-10-21 12:18:32.557Z",
+      "updated": "2024-11-10 12:18:06.222Z",
       "name": "levels",
       "type": "base",
       "system": false,
@@ -275,9 +275,11 @@ migrate((db) => {
             "mimeTypes": [
               "image/jpeg"
             ],
-            "thumbs": [],
+            "thumbs": [
+              "320x180"
+            ],
             "maxSelect": 1,
-            "maxSize": 1000000,
+            "maxSize": 256000,
             "protected": false
           }
         },
@@ -339,14 +341,14 @@ migrate((db) => {
     {
       "id": "ua09o0d55gti5zz",
       "created": "2024-11-06 00:57:32.260Z",
-      "updated": "2024-11-06 03:18:14.628Z",
+      "updated": "2024-11-08 14:44:01.966Z",
       "name": "Ranks",
       "type": "view",
       "system": false,
       "schema": [
         {
           "system": false,
-          "id": "fofduuia",
+          "id": "v7sx4cwt",
           "name": "username",
           "type": "text",
           "required": false,
@@ -360,7 +362,7 @@ migrate((db) => {
         },
         {
           "system": false,
-          "id": "78yab5sf",
+          "id": "gx6gr3up",
           "name": "levelId",
           "type": "json",
           "required": false,
@@ -372,7 +374,7 @@ migrate((db) => {
         },
         {
           "system": false,
-          "id": "4wt9gm17",
+          "id": "mgwbqxzh",
           "name": "userId",
           "type": "json",
           "required": false,
@@ -384,7 +386,7 @@ migrate((db) => {
         },
         {
           "system": false,
-          "id": "l0qsqmga",
+          "id": "cpcq1fa4",
           "name": "pointsTotal",
           "type": "json",
           "required": false,
@@ -396,7 +398,7 @@ migrate((db) => {
         },
         {
           "system": false,
-          "id": "swjxb7dc",
+          "id": "prxgzqho",
           "name": "rank",
           "type": "json",
           "required": false,

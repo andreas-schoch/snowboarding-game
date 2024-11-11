@@ -15,8 +15,8 @@ dependencies:
     specifier: ^0.8.1
     version: 0.8.1
   phaser:
-    specifier: ^3.70.0
-    version: 3.70.0
+    specifier: ^3.86.0
+    version: 3.86.0
   pocketbase:
     specifier: ^0.20.3
     version: 0.20.3
@@ -5377,8 +5377,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /phaser@3.70.0:
-    resolution: {integrity: sha512-2g+gh+Jp9f/Ho9FOXOYbIJMGf3UZXyMbW2iLScFaLQw11e/LqVyxj/YmaBauWbHabeTnZjiWkPklDnxhesMH0g==}
+  /phaser@3.86.0:
+    resolution: {integrity: sha512-A7rog3GhXYcWsPimteQmudyY6W0fx0eviOoo9Cwpzae1RPeJBDkhmWv5IFrQO9dL+T907E4dprQPnd2D4WhoEw==}
     dependencies:
       eventemitter3: 5.0.1
     dev: false

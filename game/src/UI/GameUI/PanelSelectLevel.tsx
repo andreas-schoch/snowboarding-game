@@ -44,7 +44,7 @@ export const PanelSelectLevel: Component<{setPanel: (id: PanelId) => void}> = pr
       <div class='scrollbar grid grid-cols-1 gap-3 overflow-auto pr-3 sm:grid-cols-2'>
         <For each={items()} fallback={<div>Loading...</div>}>
           {item => (
-            <div onClick={() => handleSelectLevel(item.id as LocalLevelKeys)} style={{'background-image': `url("${pb.getUrl(item, item.thumbnail)}`}} class="level-item relative inline-block overflow-hidden rounded-lg border-2 border-black bg-cover p-2 transition hover:border-gray-200">
+            <div onClick={() => handleSelectLevel(item.id as LocalLevelKeys)} style={{'background-image': `url("${pb.getUrl(item, item.thumbnail, {thumb: '320x180'})}`}} class="level-item relative inline-block overflow-hidden rounded-lg border-2 border-black bg-cover p-2 transition hover:border-gray-200">
               <span id={item.id} class="absolute -inset-px cursor-pointer rounded-lg" />
               <div class="leading-[1.15] text-neutral-400">Level {String(item.number).padStart(3, '0')}</div>
               <div class="text-xs leading-6 text-neutral-300 [text-shadow:_1px_2px_0_black]">{item.name}</div>

@@ -2,6 +2,7 @@ import './Details.css';
 import {Component, Show} from 'solid-js';
 import {Commander} from '../../editor/command/Commander';
 import {EditorImage} from '../../editor/items/EditorImage';
+import {normalizeRadians} from '../../helpers/angle';
 import {DraggableInput} from './DraggableInput';
 import {Pane, ResizeProps} from './Pane';
 import {iconMap, selected} from './globalSignals';
@@ -30,9 +31,10 @@ export const Details: Component<ResizeProps> = props => {
 
   const onAngleChange = (newAngle: number, startAngle: number, final: boolean) => {
     const item = selected();
+    const normalized = normalizeRadians(newAngle);
     if (!item) throw new Error('It should never be possible to update angle when nothing is selected');
-    if (final) Commander.exec({type: 'rotate', prevAngle: startAngle, newAngle, item});
-    else item.setAngle(newAngle);
+    if (final) Commander.exec({type: 'rotate', prevAngle: startAngle, newAngle: normalized, item});
+    else item.setAngle(normalized);
   };
 
   const onDepthChange = (newDepth: number, startDepth: number, final: boolean) => {

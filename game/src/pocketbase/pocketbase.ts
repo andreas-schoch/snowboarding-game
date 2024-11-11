@@ -1,5 +1,5 @@
 
-import PocketBase, {RecordModel} from 'pocketbase';
+import PocketBase, {FileOptions, RecordModel} from 'pocketbase';
 import {PersistedStore} from '../PersistedStore';
 import {env} from '../environment';
 import {Level} from './Level';
@@ -35,7 +35,7 @@ export class PocketbaseService {
     this.auth.login().then(() => console.debug('logged in'));
   }
 
-  getUrl(record: RecordModel, filename: string) {
-    return this.pb.files.getUrl(record, filename);
+  getUrl(record: RecordModel, filename: string, queryParams?: FileOptions) {
+    return this.pb.files.getUrl(record, filename, queryParams);
   }
 }

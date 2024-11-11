@@ -4,11 +4,12 @@ import {BackdropGrid} from '../BackdropGrid';
 import {EditorInfo} from '../EditorInfo';
 import {GameInfo} from '../GameInfo';
 import {PersistedStore} from '../PersistedStore';
-import {initSolidUI} from '../UI';
+import {initEditorUI} from '../UI';
 import {setEditorItems} from '../UI/EditorUI/globalSignals';
 import {EditorController} from '../controllers/EditorController';
 import {EditorRenderer} from '../editor/renderers/EditorRenderer';
 import {EDITOR_EXIT, RUBE_FILE_LOADED} from '../eventTypes';
+import {waitUntil} from '../helpers/waitUntil';
 import {ILevel, ILevelNew, isLevel} from '../levels';
 import {RubeFile} from '../physics/RUBE/RubeFile';
 import {RubeMetaLoader} from '../physics/RUBE/RubeMetaLoader';
@@ -18,6 +19,7 @@ export class EditorScene extends Phaser.Scene {
   private backdrop: Backdrop;
   private backdropGrid: BackdropGrid;
   private controller: EditorController;
+  private ready = false;
 
   constructor() {
     super({key: SCENE_EDITOR});
@@ -34,18 +36,21 @@ export class EditorScene extends Phaser.Scene {
     EditorInfo.camera = this.cameras.main;
     EditorInfo.phaserScene = this;
     EditorInfo.metaLoader = new RubeMetaLoader();
-
     this.backdrop = new Backdrop(this);
-    this.backdropGrid = new BackdropGrid(this);
-    this.controller = new EditorController(this);
 
-    initSolidUI('root-ui');
+    initEditorUI('root-ui');
     new EditorRenderer(this);
 
-    this.getRubefile().then(([level, rubeFile]) => {
+    waitUntil(() => pb.auth.loggedInUser()).then(async () => {
+      const [level, rubeFile] = await this.getRubefile();
+
+      this.backdropGrid = new BackdropGrid(this);
+      this.controller = new EditorController(this);
+
       const items = RubeMetaLoader.load(level, rubeFile);
       setEditorItems(items);
       EditorInfo.observer.emit(RUBE_FILE_LOADED, items);
+      this.ready = true;
     });
 
     EditorInfo.observer.on(EDITOR_EXIT, () => {
@@ -60,6 +65,7 @@ export class EditorScene extends Phaser.Scene {
   }
 
   update(time: number, delta: number) {
+    if (!this.ready) return;
     this.controller.update(time, delta);
     this.backdrop.update();
     this.backdropGrid.update();

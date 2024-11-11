@@ -1,3 +1,4 @@
+import {normalizeRadians} from '../../helpers/angle';
 import {throttle} from '../../helpers/debounce';
 import {EditorObject} from '../items/EditorObject';
 import {MetaImageRenderer} from './MetaImageRenderer';
@@ -42,10 +43,7 @@ export class MetaObjectRenderer {
     const y = position.y + offsetY;
 
     // the angle is in radians and clamped to 6.28 (2 * PI). I need to make sure it overflows  correctly. When 7.28, it should be 1.0
-    const twoPI = Math.PI * 2;
-    let angle = object.getAngle() + offsetAngle;
-    if (angle > twoPI) angle -= twoPI;
-    if (angle < 0) angle += twoPI;
+    const angle = normalizeRadians(object.getAngle() + offsetAngle); // TODO check if correct after change
 
     this.terrainRenderer.render(Object.values(object.items.terrain), x, y, angle);
 
