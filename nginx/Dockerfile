@@ -13,7 +13,7 @@ WORKDIR /usr/src/app
 COPY ../pnpm-lock.yaml ./
 RUN pnpm fetch
 COPY ../ ./
-RUN pnpm install -r --offline && pnpm run build-ci
+RUN pnpm install -r --offline && pnpm run butcher && pnpm run build-ci
 
 
 # STAGE 2: Setup nginx and copy frontend build files
