@@ -1,4 +1,10 @@
+import sfxApplause from '../../assets/audio/sfx/applause/applause.mp3';
+import sfxDeath from '../../assets/audio/sfx/crash/death.mp3';
+import sfxGrunt from '../../assets/audio/sfx/crash_grunt/grunt.mp3';
+import sfxGameOverDemon from '../../assets/audio/sfx/game_over_demon/game_over_demon.mp3';
+import sfxSnowboardSlide04 from '../../assets/audio/sfx/nox_sound/snowboard_slide_loop_04.mp3';
 import sfxPickupCoins from '../../assets/audio/sfx/pickup/pickup_coins.mp3';
+import sfxWind from '../../assets/audio/sfx/wind/wind-seamless-02.mp3';
 import {PersistedStore} from '../PersistedStore';
 import {SCENE_EDITOR, SCENE_GAME, SCENE_PRELOAD} from '../index';
 
@@ -27,7 +33,12 @@ export class PreloadScene extends Phaser.Scene {
 
   private loadAudio() {
     this.load.audio('pickup_present', sfxPickupCoins);
-  }
+    this.load.audio('death', sfxDeath);
+    this.load.audio('grunt', sfxGrunt);
+    this.load.audio('applause', sfxApplause);
+    this.load.audio('game_over_demon', sfxGameOverDemon);
+    this.load.audio('snowboard_slide_04', sfxSnowboardSlide04);
+    this.load.audio('wind', sfxWind); }
 
   private loadImg() {
     const height = PersistedStore.heightScaled();
