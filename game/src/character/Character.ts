@@ -2,7 +2,7 @@ import {b2} from '..';
 import {LoadedScene} from '../physics/RUBE/EntityTypes';
 import {vec2Util} from '../physics/RUBE/Vec2Math';
 import {Snowboard} from './Snowboard';
-import {State} from './State';
+import {CharacterState} from './State';
 
 export class Character {
   static instances: Character[] = [];
@@ -42,7 +42,7 @@ export class Character {
 
   id: string;
   board: Snowboard;
-  state: State;
+  state: CharacterState;
 
   private readonly FORWARD: Box2D.b2Vec2 = new b2.b2Vec2(1, 0);
   private readonly ZERO: Box2D.b2Vec2 = new b2.b2Vec2(0, 0);
@@ -53,7 +53,7 @@ export class Character {
   constructor(public scene: Phaser.Scene, public rubeScene: LoadedScene) {
     this.id = rubeScene.id;
     this.initBodyParts();
-    this.state = new State(this);
+    this.state = new CharacterState(this);
     this.board = new Snowboard(this);
     Character.instances.push(this);
   }

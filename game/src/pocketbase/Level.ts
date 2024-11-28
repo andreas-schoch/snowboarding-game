@@ -9,7 +9,7 @@ import {IUser} from './types';
 
 export class Level {
   private collectionName = 'levels';
-  private pageSize = 5;
+  private pageSize = 10;
 
   constructor(private pb: PocketBase, private auth: Auth) { }
 

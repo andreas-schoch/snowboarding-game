@@ -5,29 +5,50 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 254,
-				"h": 325
+				"h": 393
 			},
 			"scale": 0.125,
 			"frames": [
 				{
-					"filename": "cane.png",
+					"filename": "springboard_top.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 156,
-						"h": 17
+						"h": 64
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 156,
-						"h": 17
+						"h": 64
 					},
 					"frame": {
 						"x": 3,
 						"y": 3,
 						"w": 156,
-						"h": 17
+						"h": 64
+					}
+				},
+				{
+					"filename": "springboard_bottom.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 156,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 37,
+						"y": 5,
+						"w": 82,
+						"h": 59
+					},
+					"frame": {
+						"x": 163,
+						"y": 3,
+						"w": 82,
+						"h": 59
 					}
 				},
 				{
@@ -46,9 +67,30 @@
 					},
 					"frame": {
 						"x": 163,
-						"y": 3,
+						"y": 66,
 						"w": 39,
 						"h": 31
+					}
+				},
+				{
+					"filename": "cane.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 156,
+						"h": 17
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 156,
+						"h": 17
+					},
+					"frame": {
+						"x": 3,
+						"y": 71,
+						"w": 156,
+						"h": 17
 					}
 				},
 				{
@@ -67,7 +109,7 @@
 					},
 					"frame": {
 						"x": 3,
-						"y": 24,
+						"y": 92,
 						"w": 156,
 						"h": 8
 					}
@@ -88,7 +130,7 @@
 					},
 					"frame": {
 						"x": 206,
-						"y": 3,
+						"y": 66,
 						"w": 39,
 						"h": 28
 					}
@@ -109,7 +151,28 @@
 					},
 					"frame": {
 						"x": 206,
-						"y": 35,
+						"y": 98,
+						"w": 34,
+						"h": 34
+					}
+				},
+				{
+					"filename": "wooden_crate.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 34
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 34
+					},
+					"frame": {
+						"x": 163,
+						"y": 101,
 						"w": 34,
 						"h": 34
 					}
@@ -130,30 +193,9 @@
 					},
 					"frame": {
 						"x": 3,
-						"y": 36,
+						"y": 104,
 						"w": 138,
 						"h": 144
-					}
-				},
-				{
-					"filename": "wooden_crate.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 34,
-						"h": 34
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 34,
-						"h": 34
-					},
-					"frame": {
-						"x": 145,
-						"y": 38,
-						"w": 34,
-						"h": 34
 					}
 				},
 				{
@@ -171,8 +213,8 @@
 						"h": 8
 					},
 					"frame": {
-						"x": 183,
-						"y": 73,
+						"x": 201,
+						"y": 136,
 						"w": 31,
 						"h": 8
 					}
@@ -193,7 +235,7 @@
 					},
 					"frame": {
 						"x": 145,
-						"y": 76,
+						"y": 139,
 						"w": 28,
 						"h": 8
 					}
@@ -213,8 +255,8 @@
 						"h": 8
 					},
 					"frame": {
-						"x": 218,
-						"y": 73,
+						"x": 177,
+						"y": 148,
 						"w": 25,
 						"h": 8
 					}
@@ -234,31 +276,10 @@
 						"h": 25
 					},
 					"frame": {
-						"x": 177,
-						"y": 85,
+						"x": 145,
+						"y": 151,
 						"w": 24,
 						"h": 25
-					}
-				},
-				{
-					"filename": "saw.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 128,
-						"h": 128
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 128,
-						"h": 128
-					},
-					"frame": {
-						"x": 3,
-						"y": 184,
-						"w": 128,
-						"h": 128
 					}
 				},
 				{
@@ -276,10 +297,31 @@
 						"h": 138
 					},
 					"frame": {
-						"x": 135,
-						"y": 184,
+						"x": 3,
+						"y": 252,
 						"w": 116,
 						"h": 138
+					}
+				},
+				{
+					"filename": "saw.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 128
+					},
+					"frame": {
+						"x": 123,
+						"y": 252,
+						"w": 128,
+						"h": 128
 					}
 				}
 			]
@@ -288,6 +330,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d99da7bff302730ce3b603c60a0a3da3:7aa4f350422d3a4667ed70af1f2a75b3:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:5f8069138fc17a25dd5d5e823cc4efbc:fb4a098a499bcfbeb06ee4b497c2d8d3:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

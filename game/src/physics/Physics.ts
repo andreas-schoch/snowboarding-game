@@ -51,9 +51,9 @@ export class Physics {
   }
 
   update(timeStep: number) {
-    const {isPaused, debugDrawEnabled, world, velocityIterations, positionIterations, entityData} = this.worldEntity;
+    const {isPaused, debugDrawEnabled, world, entityData} = this.worldEntity;
     if (isPaused) return;
-    world.Step(timeStep, velocityIterations, positionIterations);
+    world.Step(timeStep, 12, 12);
     if (debugDrawEnabled) world.DebugDraw();
 
     for (const body of iterBodies(world)) {
@@ -86,9 +86,6 @@ export class Physics {
       debugDrawer: new DebugDrawer(this.scene, 1),
       observer: new Phaser.Events.EventEmitter(), // TODO get rid of phaser dependency
       entityData: new Map(),
-      stepsPerSecond: 60,
-      positionIterations: 12,
-      velocityIterations: 12,
       isPaused: false
     };
 

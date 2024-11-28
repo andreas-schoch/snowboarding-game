@@ -5,7 +5,7 @@ import {GameInfo} from '../GameInfo';
 import {PersistedStore} from '../PersistedStore';
 import {SoundManager} from '../SoundManager';
 import {Terrain} from '../Terrain';
-import {initEditorUI, initGameUI} from '../UI';
+import {initGameUI} from '../UI/index';
 import {Character} from '../character/Character';
 import {CharacterController} from '../controllers/PlayerController';
 import {EDITOR_OPEN, RESTART_GAME} from '../eventTypes';
@@ -56,18 +56,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private preload() {
-    // this.load.json('level_001.rube', 'assets/levels/level_001.rube');
-    // this.load.json('level_002.rube', 'assets/levels/level_002.rube');
-    // this.load.json('level_003.rube', 'assets/levels/level_003.rube');
-    // this.load.json('level_004.rube', 'assets/levels/level_004.rube');
-    // this.load.json('level_005.rube', 'assets/levels/level_005.rube');
+    this.load.json('springboard.rube', 'assets/levels/prefabs/springboard.rube');
+    this.load.json('level_006.rube', 'assets/levels/level_006.rube');
     // this.load.json('character_v02.rube', 'assets/levels/character_v02.rube');
   }
 
   private create() {
     // TODO make a node script to automatically convert .rube into .bin (and maybe upload to pocketbase)
     //  Now I just uncomment this whenever I need to update the levels then upload via pocketbase admin UI
-    // const levels = ['character_v02'];
+    // const levels = ['level_006'];
     // for (const level of levels) {
     //   const parsed: RubeFile = this.cache.json.get(level + '.rube');
     //   const sanitized = sanitizeRubeFile(parsed);

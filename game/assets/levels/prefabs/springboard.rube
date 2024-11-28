@@ -1,0 +1,568 @@
+
+{
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "default",
+      "snowboard",
+      "body",
+      "body_leg_lower",
+      "obstacle",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "customPropertyDefs" : 
+  [
+    
+    {
+      "class" : "object",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "static"
+        },
+        
+        {
+          "entry" : "dynamic"
+        },
+        
+        {
+          "entry" : "kinematic"
+        }
+      ],
+      "displayName" : "modBodyType",
+      "name" : "modBodyType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "atlas_santa"
+        },
+        
+        {
+          "entry" : "atlas_environment"
+        }
+      ],
+      "displayName" : "phaserTexture",
+      "name" : "phaserTexture",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "snow"
+        },
+        
+        {
+          "entry" : "ice"
+        },
+        
+        {
+          "entry" : "metal"
+        },
+        
+        {
+          "entry" : "rock"
+        }
+      ],
+      "displayName" : "surfaceType",
+      "name" : "surfaceType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "body"
+        },
+        
+        {
+          "entry" : "head"
+        },
+        
+        {
+          "entry" : "armUpperLeft"
+        },
+        
+        {
+          "entry" : "armUpperRight"
+        },
+        
+        {
+          "entry" : "armLowerLeft"
+        },
+        
+        {
+          "entry" : "armLowerRight"
+        },
+        
+        {
+          "entry" : "legUpperLeft"
+        },
+        
+        {
+          "entry" : "legUpperRight"
+        },
+        
+        {
+          "entry" : "legLowerLeft"
+        },
+        
+        {
+          "entry" : "legLowerRight"
+        },
+        
+        {
+          "entry" : "boardSegment"
+        },
+        
+        {
+          "entry" : "boardSegmentNose"
+        }
+      ],
+      "displayName" : "phaserPlayerBodyPart",
+      "name" : "phaserPlayerCharacterPart",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "joint",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "distanceLegLeft"
+        },
+        
+        {
+          "entry" : "distanceLegRight"
+        },
+        
+        {
+          "entry" : "weldCenter"
+        },
+        
+        {
+          "entry" : "bindingLeft"
+        },
+        
+        {
+          "entry" : "bindingRight"
+        },
+        
+        {
+          "entry" : "prismatic"
+        }
+      ],
+      "displayName" : "phaserPlayerCharacterSpring",
+      "name" : "phaserPlayerCharacterSpring",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "image",
+      "displayName" : "phaserTextureFrame",
+      "name" : "phaserTextureFrame",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "fixture",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "pickup_present"
+        },
+        
+        {
+          "entry" : "level_finish"
+        },
+        
+        {
+          "entry" : "level_deathzone"
+        }
+      ],
+      "displayName" : "phaserSensorType",
+      "name" : "phaserSensorType",
+      "type" : "string"
+    },
+    
+    {
+      "class" : "body",
+      "comboboxEntries" : 
+      [
+        
+        {
+          "entry" : "0"
+        },
+        
+        {
+          "entry" : "1"
+        },
+        
+        {
+          "entry" : "2"
+        },
+        
+        {
+          "entry" : "3"
+        },
+        
+        {
+          "entry" : "4"
+        },
+        
+        {
+          "entry" : "5"
+        },
+        
+        {
+          "entry" : "6"
+        },
+        
+        {
+          "entry" : "7"
+        },
+        
+        {
+          "entry" : "8"
+        },
+        
+        {
+          "entry" : "9"
+        }
+      ],
+      "displayName" : "phaserBoardSegmentIndex",
+      "name" : "phaserBoardSegmentIndex",
+      "type" : "int"
+    },
+    
+    {
+      "class" : "fixture",
+      "displayName" : "phaserBoardEdge",
+      "name" : "phaserBoardEdge",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "light",
+      "name" : "light",
+      "type" : "bool"
+    },
+    
+    {
+      "class" : "body",
+      "displayName" : "phaserCameraFollow",
+      "name" : "phaserCameraFollow",
+      "type" : "bool"
+    }
+  ],
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : false,
+      "saveFullPathForImages" : false,
+      "saveFullPathForSamplerOutput" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "saveSamplerOutputPathsRelativeToRUBEFile" : false,
+      "useGsonFormat" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 
+    {
+      "x" : 0,
+      "y" : -10
+    },
+    "metabody" : 
+    [
+      
+      {
+        "angle" : 0,
+        "angularDamping" : 1,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "bullet" : true,
+        "fixedRotation" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 30.0,
+            "filter-categoryBits" : 16,
+            "filter-maskBits" : 30,
+            "friction" : 0.2,
+            "id" : 1,
+            "name" : "springobard_top",
+            "restitution" : 0.8,
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -3.335000038146973,
+                -3.2,
+                -0.1650020033121109,
+                -0.1654710024595261,
+                0.0,
+                0.1654710024595261,
+                0.1659359931945801,
+                3.2,
+                3.335000038146973,
+                3.335000038146973,
+                3.2,
+                -3.2,
+                -3.335000038146973
+              ],
+              "y" : 
+              [
+                1.127758264541626,
+                1.040255308151245,
+                1.040255308151245,
+                -1.230341672897339,
+                -1.360461711883545,
+                -1.230341672897339,
+                1.040255308151245,
+                1.040255308151245,
+                1.127758264541626,
+                1.277758359909058,
+                1.365261316299438,
+                1.365261316299438,
+                1.277758359909058
+              ]
+            }
+          }
+        ],
+        "id" : 1,
+        "linearDamping" : 0.1,
+        "linearVelocity" : 0,
+        "massData-I" : 63.25469207763672,
+        "massData-center" : 
+        {
+          "x" : 6.015373219270259e-05,
+          "y" : 0.8501744866371155
+        },
+        "massData-mass" : 87.51380920410156,
+        "name" : "springboard_top",
+        "position" : 
+        {
+          "x" : 0,
+          "y" : 0.4
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixedRotation" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "filter-categoryBits" : 16,
+            "filter-maskBits" : 30,
+            "friction" : 0.2,
+            "id" : 2,
+            "name" : "springboard_bottom",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                0.2398820072412491,
+                0.4689309895038605,
+                0.4355570077896118,
+                -0.4355570077896118,
+                -0.4689309895038605,
+                -0.2398820072412491,
+                -1.656270027160645,
+                1.656270027160645
+              ],
+              "y" : 
+              [
+                0.7378875017166138,
+                1.018617510795593,
+                1.081347584724426,
+                1.081347584724426,
+                1.018617510795593,
+                0.7378875017166138,
+                -1.368213772773743,
+                -1.368213772773743
+              ]
+            }
+          }
+        ],
+        "id" : 2,
+        "linearVelocity" : 0,
+        "name" : "springboard_bottom",
+        "position" : 0,
+        "type" : "static"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "aspectScale" : 1,
+        "body" : 1,
+        "center" : 0,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../../img/springboard_top.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 2,
+        "name" : "springboard_top",
+        "opacity" : 1,
+        "scale" : 2.744380235671997
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 2,
+        "center" : 0,
+        "customProperties" : 
+        [
+          
+          {
+            "name" : "phaserTexture",
+            "string" : "atlas_environment"
+          }
+        ],
+        "file" : "../../img/springboard_bottom.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 3,
+        "name" : "springboard_bottom",
+        "opacity" : 1,
+        "renderOrder" : 1,
+        "scale" : 2.762979984283447
+      }
+    ],
+    "metajoint" : 
+    [
+      
+      {
+        "anchorA" : 
+        {
+          "x" : 0,
+          "y" : 0.15
+        },
+        "anchorB" : 
+        {
+          "x" : 0,
+          "y" : -0.15
+        },
+        "bodyA" : 2,
+        "bodyB" : 1,
+        "collideConnected" : false,
+        "enableLimit" : true,
+        "enableMotor" : false,
+        "id" : 2,
+        "localAxisA" : 
+        {
+          "x" : 0,
+          "y" : 1
+        },
+        "lowerLimit" : -0.1,
+        "maxMotorForce" : 0,
+        "motorSpeed" : 0,
+        "name" : "prismatic",
+        "referenceAngle" : 0,
+        "type" : "prismatic",
+        "upperLimit" : 1.7
+      },
+      
+      {
+        "anchorA" : 0,
+        "anchorB" : 
+        {
+          "x" : 0,
+          "y" : -0.15
+        },
+        "bodyA" : 2,
+        "bodyB" : 1,
+        "collideConnected" : false,
+        "dampingRatio" : 0.5,
+        "frequency" : 3,
+        "id" : 3,
+        "length" : 0.2,
+        "name" : "distance",
+        "type" : "distance"
+      }
+    ],
+    "positionIterations" : 12,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 12,
+    "warmStarting" : true
+  }
+}

@@ -249,7 +249,9 @@ export class RubeLoader {
       jd.enableLimit = Boolean(jointJson.enableLimit);
       jd.lowerTranslation = jointJson.lowerLimit || 0;
       jd.upperTranslation = jointJson.upperLimit || 0;
-      jd.enableLimit = Boolean(jointJson.enableMotor);
+      jd.localAxisA = rubeToVec2(jointJson.localAxisA);
+      jd.enableLimit = Boolean(jointJson.enableLimit);
+      jd.enableMotor = Boolean(jointJson.enableMotor);
       jd.maxMotorForce = jointJson.maxMotorForce || 0;
       jd.motorSpeed = jointJson.motorSpeed || 0;
       joint = this.worldEntity.world.CreateJoint(jd);

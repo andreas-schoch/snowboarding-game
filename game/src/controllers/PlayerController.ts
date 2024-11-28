@@ -51,14 +51,6 @@ export class CharacterController {
     const image = bodyEntityData?.image?.image as Phaser.GameObjects.Image | undefined;
     if (!image) return;
     camera.startFollow(image, false, 0.5, 0.5);
-
-    // if (DARKMODE_ENABLED) {
-    //   const glowingBodies = this.scene.b2Physics.loader.getBodiesByCustomProperty('light', true);
-    //   glowingBodies.forEach(body => {
-    //     const pos = recordLeak(body.GetPosition());
-    //     this.scene.lights.addLight(pos.x * 40, -pos.y * 40, 80, 0xffffff, 0.07);
-    //   });
-    // }
   }
 
   update() {
@@ -134,6 +126,5 @@ export class CharacterController {
     if (this.character.state.isCrashed || this.character.state.isLevelFinished) return; // can only pause during an active run. After crash or finish, the "Your score" panel is shown.
     this.scene.b2Physics.worldEntity.isPaused = !this.scene.b2Physics.worldEntity.isPaused;
     this.character.state.updateComboLeeway(); // otherwise it continues during pause.
-    // GameInfo.observer.emit(TOGGLE_PAUSE, this.scene.b2Physics.worldEntity.isPaused, activePanel);
   }
 }

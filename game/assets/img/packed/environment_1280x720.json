@@ -5,29 +5,50 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 498,
-				"h": 630
+				"h": 762
 			},
 			"scale": 0.25,
 			"frames": [
 				{
-					"filename": "cane.png",
+					"filename": "springboard_top.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
 						"w": 313,
-						"h": 33
+						"h": 128
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
 						"w": 313,
-						"h": 33
+						"h": 128
 					},
 					"frame": {
 						"x": 3,
 						"y": 3,
 						"w": 313,
-						"h": 33
+						"h": 128
+					}
+				},
+				{
+					"filename": "springboard_bottom.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 313,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 76,
+						"y": 12,
+						"w": 161,
+						"h": 116
+					},
+					"frame": {
+						"x": 320,
+						"y": 3,
+						"w": 161,
+						"h": 116
 					}
 				},
 				{
@@ -46,9 +67,30 @@
 					},
 					"frame": {
 						"x": 320,
-						"y": 3,
+						"y": 123,
 						"w": 78,
 						"h": 63
+					}
+				},
+				{
+					"filename": "cane.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 313,
+						"h": 33
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 313,
+						"h": 33
+					},
+					"frame": {
+						"x": 3,
+						"y": 135,
+						"w": 313,
+						"h": 33
 					}
 				},
 				{
@@ -67,7 +109,7 @@
 					},
 					"frame": {
 						"x": 3,
-						"y": 40,
+						"y": 172,
 						"w": 313,
 						"h": 16
 					}
@@ -88,30 +130,9 @@
 					},
 					"frame": {
 						"x": 402,
-						"y": 3,
+						"y": 123,
 						"w": 78,
 						"h": 56
-					}
-				},
-				{
-					"filename": "cottage.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 275,
-						"h": 288
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 275,
-						"h": 288
-					},
-					"frame": {
-						"x": 3,
-						"y": 60,
-						"w": 275,
-						"h": 288
 					}
 				},
 				{
@@ -130,7 +151,7 @@
 					},
 					"frame": {
 						"x": 402,
-						"y": 63,
+						"y": 183,
 						"w": 69,
 						"h": 69
 					}
@@ -150,10 +171,73 @@
 						"h": 69
 					},
 					"frame": {
-						"x": 282,
-						"y": 70,
+						"x": 320,
+						"y": 190,
 						"w": 69,
 						"h": 69
+					}
+				},
+				{
+					"filename": "cottage.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 275,
+						"h": 288
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 275,
+						"h": 288
+					},
+					"frame": {
+						"x": 3,
+						"y": 192,
+						"w": 275,
+						"h": 288
+					}
+				},
+				{
+					"filename": "tree_01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 232,
+						"h": 275
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 232,
+						"h": 275
+					},
+					"frame": {
+						"x": 3,
+						"y": 484,
+						"w": 232,
+						"h": 275
+					}
+				},
+				{
+					"filename": "saw.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 239,
+						"y": 484,
+						"w": 256,
+						"h": 256
 					}
 				},
 				{
@@ -171,8 +255,8 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 355,
-						"y": 136,
+						"x": 393,
+						"y": 256,
 						"w": 61,
 						"h": 16
 					}
@@ -193,7 +277,7 @@
 					},
 					"frame": {
 						"x": 282,
-						"y": 143,
+						"y": 263,
 						"w": 53,
 						"h": 16
 					}
@@ -213,8 +297,8 @@
 						"h": 50
 					},
 					"frame": {
-						"x": 420,
-						"y": 136,
+						"x": 339,
+						"y": 263,
 						"w": 46,
 						"h": 50
 					}
@@ -234,52 +318,10 @@
 						"h": 16
 					},
 					"frame": {
-						"x": 339,
-						"y": 156,
+						"x": 282,
+						"y": 283,
 						"w": 45,
 						"h": 16
-					}
-				},
-				{
-					"filename": "saw.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 3,
-						"y": 352,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "tree_01.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 232,
-						"h": 275
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 232,
-						"h": 275
-					},
-					"frame": {
-						"x": 263,
-						"y": 352,
-						"w": 232,
-						"h": 275
 					}
 				}
 			]
@@ -288,6 +330,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d99da7bff302730ce3b603c60a0a3da3:7aa4f350422d3a4667ed70af1f2a75b3:f0fdb3729fc83b4a0988f565044acabf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:5f8069138fc17a25dd5d5e823cc4efbc:fb4a098a499bcfbeb06ee4b497c2d8d3:f0fdb3729fc83b4a0988f565044acabf$"
 	}
 }

@@ -1,16 +1,17 @@
-import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, pb, ppm} from '..';
+import {BASE_FLIP_POINTS, HEAD_MAX_IMPULSE, TRICK_POINTS_COMBO_FRACTION, b2, pb, ppm} from '..';
 import {GameInfo} from '../GameInfo';
 import {ComboState} from '../UI/GameUI/HUD';
 import {B2_BEGIN_CONTACT, B2_POST_SOLVE, COMBO_CHANGE, COMBO_LEEWAY_UPDATE, ENTER_CRASHED, ENTER_GROUNDED, ENTER_IN_AIR, LEVEL_FINISH, COLLECT_COIN, SCORE_CHANGE, TIME_CHANGE} from '../eventTypes';
+import {iterBodyJoints} from '../helpers/B2Iterators';
 import {normalizeRadians} from '../helpers/angle';
 import {framesToTime} from '../helpers/framesToTime';
 import {generateScoreFromLogs} from '../helpers/generateScoreFromLogs';
 import {IBeginContactEvent, IPostSolveEvent} from '../physics/Physics';
-import {BodyEntityData} from '../physics/RUBE/EntityTypes';
-import {IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
+import {BodyEntityData, JointEntityData} from '../physics/RUBE/EntityTypes';
+import {IFlipTrickScore, IScoreNew, IStartTrickScore, TrickScoreType} from '../pocketbase/types';
 import {Character} from './Character';
 
-export class State {
+export class CharacterState {
   levelUnpausedFrames = 0;
   isLevelFinished = false;
   isCrashed = false;
@@ -86,17 +87,44 @@ export class State {
       }
     });
 
+    const triggeredSpringboards = new Set<Box2D.b2Body>();
     observer.on(B2_POST_SOLVE, ({fixtureA, fixtureB, impulse}: IPostSolveEvent) => {
       if (this.isCrashed) return;
       const bodyA = fixtureA.GetBody();
       const bodyB = fixtureB.GetBody();
       if (bodyA === bodyB) return;
+
       let largestImpulse: number = -1;
       for (let i = 0; i < impulse.count; i++) largestImpulse = Math.max(largestImpulse, impulse.get_normalImpulses(i));
-      if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) this.setCrashed();
+      if ((bodyA === this.character.head || bodyB === this.character.head) && largestImpulse > HEAD_MAX_IMPULSE) return this.setCrashed();
+
+      const bodyAEntity = entityData.get(bodyA) as BodyEntityData;
+      const bodyBEntity = entityData.get(bodyB) as BodyEntityData;
+      // Questionable if this belongs here. The idea was to only trigger when body part or snowboard of player touches the springboard
+      if (bodyAEntity.name === 'springboard_top' || bodyBEntity.name === 'springboard_top') {
+        const entity = bodyAEntity.name === 'springboard_top' ? bodyAEntity : bodyBEntity;
+        for (const j of iterBodyJoints(entity.body)) {
+          const jointEntity = entityData.get(j) as JointEntityData;
+          if (jointEntity.name === 'distance') {
+            const distanceJoint = b2.castObject(j, b2.b2DistanceJoint);
+            if (distanceJoint.GetLength() > 1) return;
+            if (triggeredSpringboards.has(entity.body)) return;
+
+            triggeredSpringboards.add(entity.body);
+            distanceJoint.SetMaxLength(1.7);
+
+            setTimeout(() => {
+              distanceJoint.SetLength(1.5);
+              setTimeout(() => {
+                distanceJoint.SetLength(0.2);
+                triggeredSpringboards.delete(entity.body);
+              }, 1000);
+            }, 200);
+          }
+        }
+      }
     });
 
-    // GameInfo.observer.on(ENTER_IN_AIR, () => this.isGrounded = false);
     GameInfo.observer.on(ENTER_GROUNDED, () => {
       this.timeGrounded = this.character.scene.game.getTime();
 

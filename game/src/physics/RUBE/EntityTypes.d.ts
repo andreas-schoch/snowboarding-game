@@ -9,9 +9,6 @@ export interface WorldEntityData {
   isPaused: boolean;
   gravityX: number;
   gravityY: number;
-  stepsPerSecond: number;
-  positionIterations: number;
-  velocityIterations: number;
   entityData: Map<Entity, EntityData>;
 }
 
@@ -52,13 +49,6 @@ export interface ImageEntityData extends BaseEntityData {
 
 export type Entity = Box2D.b2Body | Box2D.b2Fixture | Box2D.b2Joint | unknown; // unknown represents the image
 export type EntityData = BodyEntityData | FixtureEntityData | JointEntityData | ImageEntityData;
-
-// export interface LoadedScene {
-//   id: string;
-//   bodies: (Box2D.b2Body | null)[];
-//   joints: (Box2D.b2Joint | null)[];
-//   images: (unknown | null)[];
-// }
 
 export interface LoadedScene {
   id: string;

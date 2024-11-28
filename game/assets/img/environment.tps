@@ -344,6 +344,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">springboard_bottom.png</key>
+            <key type="filename">springboard_top.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>313,128,625,256</rect>
+                <key>scale9Paddings</key>
+                <rect>313,128,625,256</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">svgsilh/cottage.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -394,6 +410,8 @@
                     <filename>cane.png</filename>
                     <filename>plank.png</filename>
                     <filename>saw.png</filename>
+                    <filename>springboard_top.png</filename>
+                    <filename>springboard_bottom.png</filename>
                 </array>
             </struct>
         </map>
